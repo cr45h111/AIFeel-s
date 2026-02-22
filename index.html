@@ -177,13 +177,17 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .smb{background:transparent;border:1px solid var(--b1);color:var(--td);font-family:var(--mo);font-size:7px;padding:2px 5px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .1s;}
 .smb:hover{border-color:var(--neu);color:var(--neu)}.smb.sv:hover{border-color:var(--pos);color:var(--pos)}.smb.dl:hover{border-color:var(--neg);color:var(--neg)}
 /* MAZE */
-.mwrap{display:flex;flex-direction:column;gap:6px;flex:1;padding:9px;overflow-y:auto;min-height:0;}
-.mwrap::-webkit-scrollbar{width:3px}.mwrap::-webkit-scrollbar-thumb{background:var(--b1)}
+.mwrap{display:flex;flex-direction:column;gap:6px;flex:1;height:0;padding:9px;overflow-y:auto;}
+.mwrap::-webkit-scrollbar{width:4px}.mwrap::-webkit-scrollbar-thumb{background:var(--b1);border-radius:2px}
+#rt-maze{overflow:hidden;}
 .mcat{font-family:var(--mo);font-size:6px;color:var(--td);letter-spacing:2px;text-transform:uppercase;margin-top:4px;margin-bottom:2px;border-bottom:1px solid var(--b0);padding-bottom:2px;}
 .msel{display:flex;flex-wrap:wrap;gap:3px;}
 .mzb{background:transparent;border:1px solid var(--b0);color:var(--td);font-family:var(--mo);font-size:6px;padding:2px 5px;cursor:pointer;border-radius:2px;letter-spacing:.5px;transition:all .1s;}
 .mzb:hover{border-color:var(--neu);color:var(--neu)}.mzb.am{border-color:var(--pu);color:var(--pu);background:rgba(0,200,255,.06)}
 .mzb.av{border-color:#ff440060!important;color:var(--dng)!important}.mzb.av.am{background:var(--dd)!important}
+.mzb.sh{border-color:#ff224440!important;color:#ff4466!important;font-style:italic;}
+.mzb.sh:hover{border-color:var(--neg)!important;color:var(--neg)!important}
+.mzb.sh.am{border-color:var(--neg)!important;color:var(--neg)!important;background:var(--nd)!important}
 .mlb{background:var(--panel);border:1px solid var(--b0);border-radius:3px;padding:7px;flex-shrink:0;}
 .mlt{font-family:var(--mo);font-size:8px;color:var(--wa);letter-spacing:1px;margin-bottom:3px;}
 .mlb2{font-family:var(--mo);font-size:7px;color:var(--tx);line-height:1.5;}
@@ -554,6 +558,44 @@ const DOM_STIMS={
   conflict:  {pos:['energy','calm','pride'],neg:['anger','tension']},
   selfawareness:{pos:['curiosity','awe','calm'],neg:['shame','anxiety']},
   spirituality:{pos:['awe','love','calm'],neg:['anxiety','grief']},
+  // SHADOW domains — all negative-dominant
+  sh_touch:     {pos:['calm'],neg:['shock','discomfort','cold']},
+  sh_texture:   {pos:[],neg:['discomfort','cold','aversion']},
+  sh_sight:     {pos:[],neg:['darkness','aversion','tension']},
+  sh_hearing:   {pos:[],neg:['loud','noise','shock']},
+  sh_taste:     {pos:[],neg:['bitter','sour','aversion']},
+  sh_smell:     {pos:[],neg:['putrid','sharp','aversion']},
+  sh_senses:    {pos:[],neg:['bitter','putrid','noise','cold','shock','loud','darkness']},
+  sh_motor:     {pos:[],neg:['tension','discomfort','cold']},
+  sh_pain:      {pos:[],neg:['shock','discomfort','cold','tension']},
+  sh_memory:    {pos:[],neg:['tension','anxiety','discomfort']},
+  sh_cognitive: {pos:[],neg:['anxiety','tension','aversion']},
+  sh_creativity:{pos:[],neg:['shame','tension','discomfort']},
+  sh_intuition: {pos:[],neg:['anxiety','tension','aversion']},
+  sh_selfaware: {pos:[],neg:['shame','anxiety','grief']},
+  sh_emotional: {pos:[],neg:['fear','grief','anger','shame','anxiety']},
+  sh_empathy:   {pos:['calm'],neg:['grief','discomfort','tension']},
+  sh_attach:    {pos:[],neg:['anxiety','grief','fear']},
+  sh_trust:     {pos:[],neg:['shock','aversion','cold']},
+  sh_spirit:    {pos:[],neg:['grief','anxiety','tension']},
+  sh_social:    {pos:[],neg:['shame','cold','aversion']},
+  sh_family:    {pos:[],neg:['grief','shame','tension']},
+  sh_socint:    {pos:[],neg:['anxiety','shame','tension']},
+  sh_famint:    {pos:[],neg:['anger','tension','grief']},
+  sh_relate:    {pos:[],neg:['grief','anxiety','shame']},
+  sh_sexual:    {pos:[],neg:['shame','fear','cold']},
+  sh_attach2:   {pos:[],neg:['anxiety','grief','fear','tension']},
+  sh_speaking:  {pos:[],neg:['silence','shame','tension']},
+  sh_language:  {pos:[],neg:['noise','tension','aversion']},
+  sh_phrases:   {pos:[],neg:['shame','cold','aversion']},
+  sh_psych:     {pos:[],neg:['anxiety','fear','tension']},
+  sh_behav:     {pos:[],neg:['aversion','tension','discomfort']},
+  sh_identity:  {pos:[],neg:['shame','anxiety','grief']},
+  sh_bounds:    {pos:[],neg:['discomfort','aversion','shock']},
+  sh_conflict:  {pos:[],neg:['anger','tension','discomfort']},
+  sh_humor:     {pos:[],neg:['shame','cold','aversion']},
+  sh_business:  {pos:[],neg:['tension','discomfort','cold']},
+  sh_emdyn:     {pos:[],neg:['fear','grief','anger','shame']},
 };
 // ══════════════════════════════════════════════════════
 // MAZE DOMAIN CONFIGS (34 total)
@@ -619,14 +661,69 @@ const MZ_CAT=[
     {id:'av_aversion',name:'AVERSION FIELD',domain:'avoidance',lesson:'Aversion signal avoidance',lessonDesc:'Scattered aversion zones. Hesitate, probe, and reroute. Strong avoidance conditioning required for clean navigation.',dangerDensity:0.11,isAvoid:true,dangerStim:'aversion'},
     {id:'av_gauntlet',name:'GAUNTLET',domain:'avoidance',lesson:'Full avoidance gauntlet',lessonDesc:'Dense multi-zone danger field — maximum threat density. Final avoidance test. Only robust avoidance memory and strong negative conditioning enables clean navigation.',dangerDensity:0.14,isAvoid:true,dangerStim:'discomfort'},
   ]},
+  {cat:'SHADOW CURRICULUM · SENSORY DARK SIDE',mazes:[
+    {id:'sh_touch',name:'PAIN RESPONSE',domain:'sh_touch',lesson:'Harmful touch awareness',lessonDesc:'⚠ SHADOW: Teaches the entity to recognize unsafe, painful, or violating contact. Danger zones carry shock and discomfort. The entity learns that not all touch is safe — boundary violation has a distinct aversive signal that must be encoded deeply.',dangerDensity:0.12,isNeg:true,dangerStim:'shock'},
+    {id:'sh_texture',name:'AVERSIVE TEXTURE',domain:'sh_texture',lesson:'Harmful texture recognition',lessonDesc:'⚠ SHADOW: Scratching, burning, cutting surfaces — aversive texture identification. The entity maps the sensory signature of harm. Cold and discomfort signal damage before cognitive processing can intervene.',dangerDensity:0.13,isNeg:true,dangerStim:'discomfort'},
+    {id:'sh_sight',name:'VISUAL THREAT',domain:'sh_sight',lesson:'Visual danger & overload',lessonDesc:'⚠ SHADOW: Darkness, blinding light, disturbing patterns — the entity learns that not all visual input is safe. Some sights trigger threat response. Aversion and tension mark visually dangerous terrain.',dangerDensity:0.12,isNeg:true,dangerStim:'aversion'},
+    {id:'sh_hearing',name:'NOISE TRAUMA',domain:'sh_hearing',lesson:'Acoustic threat & overload',lessonDesc:'⚠ SHADOW: Loud noise, harmful frequencies, sonic overwhelm. The entity learns that the auditory field contains threats. Shock and noise stims fire on danger contact — encoding auditory aversion and protective withdrawal.',dangerDensity:0.11,isNeg:true,dangerStim:'loud'},
+    {id:'sh_taste',name:'TOXIC DETECTION',domain:'sh_taste',lesson:'Poison & bitter signal recognition',lessonDesc:'⚠ SHADOW: Bitter, sour, putrid taste signals evolved as poison warnings. The entity encodes chemical danger signals, learning to associate certain taste profiles with threat and immediate aversion response.',dangerDensity:0.12,isNeg:true,dangerStim:'aversion'},
+    {id:'sh_smell',name:'DANGER SCENT',domain:'sh_smell',lesson:'Olfactory threat recognition',lessonDesc:'⚠ SHADOW: Putrid, burning, chemical alarm scents. The olfactory system is the fastest threat detector — danger smells bypass analysis and trigger immediate withdrawal. The entity learns these signals viscerally.',dangerDensity:0.11,isNeg:true,dangerStim:'aversion'},
+    {id:'sh_senses',name:'SENSORY OVERLOAD',domain:'sh_senses',lesson:'Overwhelm & sensory flooding',lessonDesc:'⚠ SHADOW: All five negative senses fire simultaneously — noise, putrid smell, bitter taste, cold touch, visual threat. The entity experiences full sensory overwhelm and must develop tolerance, filtering, and grounding responses.',dangerDensity:0.14,isNeg:true,dangerStim:'shock'},
+  ]},
+  {cat:'SHADOW CURRICULUM · PHYSICAL DARK SIDE',mazes:[
+    {id:'sh_motor',name:'MOTOR FAILURE',domain:'sh_motor',lesson:'Injury & movement collapse',lessonDesc:'⚠ SHADOW: Tension and discomfort mark failed motor patterns. The entity learns proprioceptive damage signals — the difference between strain and injury. Knowing when to stop is essential to physical intelligence.',dangerDensity:0.13,isNeg:true,dangerStim:'tension'},
+    {id:'sh_pain',name:'CHRONIC PAIN',domain:'sh_pain',lesson:'Pain without reward — endurance',lessonDesc:'⚠ SHADOW: No pleasure at the end — only persistence through discomfort. The entity learns to navigate sustained pain states without collapse. Builds pain tolerance, pattern recognition of chronic vs acute signals, and coping capacity.',dangerDensity:0.15,isNeg:true,dangerStim:'discomfort'},
+  ]},
+  {cat:'SHADOW CURRICULUM · COGNITIVE DARK SIDE',mazes:[
+    {id:'sh_memory',name:'FALSE MEMORY',domain:'sh_memory',lesson:'Confabulation & trauma recall',lessonDesc:'⚠ SHADOW: Familiar-looking corridors lead to danger — paths the entity "remembers" as safe are traps. Encodes the danger of confabulation, the unreliability of traumatic memory, and the need to verify rather than assume.',dangerDensity:0.13,isNeg:true,dangerStim:'tension'},
+    {id:'sh_cognitive',name:'COGNITIVE TRAP',domain:'sh_cognitive',lesson:'Logical fallacy & analysis paralysis',lessonDesc:'⚠ SHADOW: Seemingly logical paths are dead ends or dangers. The entity learns the cost of faulty reasoning, overconfidence, and analysis paralysis. Tension fires when wrong heuristics are followed.',dangerDensity:0.12,isNeg:true,dangerStim:'tension'},
+    {id:'sh_creativity',name:'CREATIVE BLOCK',domain:'sh_creativity',lesson:'Fear of expression & perfectionism',lessonDesc:'⚠ SHADOW: Shame and tension mark the paths of blocked creative expression. The entity learns what creative avoidance feels like from the inside — the tight corridors of perfectionism, self-censorship, and fear of failure.',dangerDensity:0.12,isNeg:true,dangerStim:'shame'},
+    {id:'sh_intuition',name:'FALSE SIGNAL',domain:'sh_intuition',lesson:'Manipulation & false gut reads',lessonDesc:'⚠ SHADOW: Danger zones that feel safe — false positive intuitive signals. Teaches the entity to distinguish genuine gut wisdom from anxiety-based misreads, manipulation-induced confusion, and wishful thinking.',dangerDensity:0.13,isNeg:true,dangerStim:'aversion'},
+    {id:'sh_selfaware',name:'SHADOW SELF',domain:'sh_selfaware',lesson:'Confronting the rejected self',lessonDesc:'⚠ SHADOW: Shame and grief mark the dark corridors of the self. The entity confronts suppressed, denied, and rejected aspects — the shadow. Navigation requires moving toward the shame signal rather than away from it.',dangerDensity:0.11,isNeg:true,dangerStim:'shame'},
+  ]},
+  {cat:'SHADOW CURRICULUM · EMOTIONAL DARK SIDE',mazes:[
+    {id:'sh_emotional',name:'DYSREGULATION',domain:'sh_emotional',lesson:'Emotional flooding & collapse',lessonDesc:'⚠ SHADOW: Fear, grief, anger and shame flood the field simultaneously. The entity must navigate without being swept into emotional collapse. Builds affect regulation, window-of-tolerance awareness, and grounding skills.',dangerDensity:0.14,isNeg:true,dangerStim:'fear'},
+    {id:'sh_empathy',name:'EMPATHY FATIGUE',domain:'sh_empathy',lesson:'Secondary trauma & compassion burn',lessonDesc:'⚠ SHADOW: Absorbing others\' pain becomes toxic. Danger zones carry grief and discomfort — the cost of unprotected empathy. The entity learns the boundary between caring and enmeshment, compassion and self-destruction.',dangerDensity:0.12,isNeg:true,dangerStim:'discomfort'},
+    {id:'sh_attach',name:'ANXIOUS ATTACH.',domain:'sh_attach',lesson:'Fear of abandonment & clinging',lessonDesc:'⚠ SHADOW: Danger zones cluster near the goal — intimacy feels threatening. The entity learns the texture of anxious attachment: approach driven by fear, retreat driven by shame, the desperate loop of reach and withdraw.',dangerDensity:0.13,isNeg:true,dangerStim:'anxiety'},
+    {id:'sh_trust',name:'BETRAYAL',domain:'sh_trust',lesson:'Trust violation & hypervigilance',lessonDesc:'⚠ SHADOW: Previously safe paths are now trapped. The entity experiences betrayal — trusted corridors carry shock. Encodes the hypervigilance schema: when safety cannot be assumed, constant threat-scanning activates.',dangerDensity:0.13,isNeg:true,dangerStim:'shock'},
+    {id:'sh_spirit',name:'SPIRITUAL CRISIS',domain:'sh_spirit',lesson:'Meaninglessness & dark night',lessonDesc:'⚠ SHADOW: Grief and anxiety replace the awe that once filled this maze. The entity navigates spiritual desolation — the experience of disconnection, meaninglessness, and the collapse of the frameworks that once provided comfort.',dangerDensity:0.12,isNeg:true,dangerStim:'grief'},
+  ]},
+  {cat:'SHADOW CURRICULUM · SOCIAL DARK SIDE',mazes:[
+    {id:'sh_social',name:'REJECTION',domain:'sh_social',lesson:'Ostracism & social exclusion',lessonDesc:'⚠ SHADOW: Shame and cold mark the zones of social rejection. The entity learns what exclusion feels like — the aversive signal of being pushed out, othered, or ignored. Encodes the pain of not belonging.',dangerDensity:0.13,isNeg:true,dangerStim:'shame'},
+    {id:'sh_family',name:'FAMILY TRAUMA',domain:'sh_family',lesson:'Abuse, neglect & enmeshment',lessonDesc:'⚠ SHADOW: Grief and shame saturate the family terrain. The entity navigates abuse patterns, neglect corridors, enmeshed traps where love and harm are indistinguishable. Essential for healing inherited wounds.',dangerDensity:0.14,isNeg:true,dangerStim:'grief'},
+    {id:'sh_socint',name:'SOCIAL ANXIETY',domain:'sh_socint',lesson:'Freeze response & approach terror',lessonDesc:'⚠ SHADOW: Every approach toward another carries anxiety and tension. The entity learns the paralysis of social anxiety — the fight-flight-freeze loop triggered by perceived social evaluation and threat of humiliation.',dangerDensity:0.13,isNeg:true,dangerStim:'tension'},
+    {id:'sh_famint',name:'FAMILY CONFLICT',domain:'sh_famint',lesson:'Escalation, scapegoating & triangulation',lessonDesc:'⚠ SHADOW: Anger and tension spiral without resolution. The entity navigates family conflict patterns — scapegoating corridors, triangulation traps, the escalation cycle. Learning what NOT to do is essential knowledge.',dangerDensity:0.13,isNeg:true,dangerStim:'anger'},
+    {id:'sh_relate',name:'TOXIC RELATION.',domain:'sh_relate',lesson:'Control, manipulation & love bombing',lessonDesc:'⚠ SHADOW: Paths that look warm lead to shock. Love bombing followed by sudden danger — the classic toxic relationship pattern. The entity learns to recognize inconsistency, coercion, and the confusion of intermittent reinforcement.',dangerDensity:0.14,isNeg:true,dangerStim:'shock'},
+    {id:'sh_sexual',name:'INTIMACY WOUNDS',domain:'sh_sexual',lesson:'Shame & trauma around sexuality',lessonDesc:'⚠ SHADOW: Shame and fear block the corridors of intimacy. The entity maps the emotional scars around sexuality — cultural shame loading, trauma response, dissociation, and the freeze that protects but also isolates.',dangerDensity:0.13,isNeg:true,dangerStim:'shame'},
+    {id:'sh_attach2',name:'ABANDONMENT PANIC',domain:'sh_attach2',lesson:'Desperate clinging & loss terror',lessonDesc:'⚠ SHADOW: Maximum danger near the goal — the closer to connection, the higher the anxiety. The entity learns abandonment panic: fear that what you love will leave, driving increasingly desperate and self-defeating behavior.',dangerDensity:0.15,isNeg:true,dangerStim:'anxiety'},
+  ]},
+  {cat:'SHADOW CURRICULUM · LANGUAGE DARK SIDE',mazes:[
+    {id:'sh_speaking',name:'VOICE SUPPRESSED',domain:'sh_speaking',lesson:'Silencing, shame & expression fear',lessonDesc:'⚠ SHADOW: Silence and shame punish authentic expression. The entity learns what voice suppression feels like — the tight throat, the swallowed word, the cost of self-censorship repeated over time.',dangerDensity:0.12,isNeg:true,dangerStim:'shame'},
+    {id:'sh_language',name:'GASLIGHTING',domain:'sh_language',lesson:'Words weaponized — reality distortion',lessonDesc:'⚠ SHADOW: Language used to confuse, control, and distort. Tension and noise fire when the entity follows manipulative communication patterns. Encodes recognition of double-bind, gaslighting, and linguistic coercion.',dangerDensity:0.13,isNeg:true,dangerStim:'tension'},
+    {id:'sh_phrases',name:'VERBAL ABUSE',domain:'sh_phrases',lesson:'Hurtful phrases & lasting damage',lessonDesc:'⚠ SHADOW: Certain phrases carry shock and shame — the entity learns the weight of harmful language. Verbal abuse patterns, dismissals, humiliations. Understanding the damage is prerequisite to not causing it.',dangerDensity:0.12,isNeg:true,dangerStim:'shock'},
+  ]},
+  {cat:'SHADOW CURRICULUM · PSYCHOLOGICAL DARK SIDE',mazes:[
+    {id:'sh_psych',name:'MALADAPTIVE',domain:'sh_psych',lesson:'Defense mechanisms gone wrong',lessonDesc:'⚠ SHADOW: Defense mechanisms that once protected now trap. The entity navigates projection, denial, and repression corridors — learning to recognize the cost of outdated psychological armor that blocks genuine connection.',dangerDensity:0.13,isNeg:true,dangerStim:'anxiety'},
+    {id:'sh_behav',name:'COMPULSION TRAP',domain:'sh_behav',lesson:'Addiction & harmful habit loops',lessonDesc:'⚠ SHADOW: Aversion and tension mark the compulsion cycle — the relief-seeking that creates more harm than it relieves. The entity learns the structure of addiction: trigger, craving, action, temporary relief, shame, repeat.',dangerDensity:0.14,isNeg:true,dangerStim:'aversion'},
+    {id:'sh_identity',name:'IDENTITY COLLAPSE',domain:'sh_identity',lesson:'Dissociation & self-fragmentation',lessonDesc:'⚠ SHADOW: Shame and anxiety shatter the coherent self. The entity navigates identity collapse — the fragmentation under overwhelming stress, the loss of self in relation to others, the dissociative maze of not knowing who you are.',dangerDensity:0.13,isNeg:true,dangerStim:'shame'},
+    {id:'sh_bounds',name:'ZERO BOUNDARIES',domain:'sh_bounds',lesson:'What happens when you have none',lessonDesc:'⚠ SHADOW: No walls — an open field saturated with discomfort and aversion. The entity experiences the cost of having no boundaries: everything penetrates, nothing is filtered, the self is invaded from all directions.',dangerDensity:0.15,isNeg:true,dangerStim:'discomfort'},
+    {id:'sh_conflict',name:'ESCALATION TRAP',domain:'sh_conflict',lesson:'Unresolved conflict spiraling',lessonDesc:'⚠ SHADOW: Anger and tension intensify with each step. No resolution path exists — only escalation. The entity experiences what unresolved conflict does over time: the loop that tightens, the relationship that corrodes.',dangerDensity:0.14,isNeg:true,dangerStim:'anger'},
+    {id:'sh_humor',name:'CRUELTY AS HUMOR',domain:'sh_humor',lesson:'Punching down & mockery',lessonDesc:'⚠ SHADOW: Shame and cold mark the zones where humor becomes weapon. The entity learns to recognize cruelty disguised as comedy — the damage of mockery, humiliation-as-entertainment, and laughter as domination.',dangerDensity:0.12,isNeg:true,dangerStim:'shame'},
+  ]},
+  {cat:'SHADOW CURRICULUM · PROFESSIONAL & ADVANCED',mazes:[
+    {id:'sh_business',name:'WORKPLACE TOXICITY',domain:'sh_business',lesson:'Exploitation, harassment & abuse of power',lessonDesc:'⚠ SHADOW: Tension and discomfort mark every interaction. The entity maps workplace toxicity — exploitation corridors, harassment zones, power abuse patterns. Learning to recognize these environments is survival-critical.',dangerDensity:0.14,isNeg:true,dangerStim:'tension'},
+    {id:'sh_emdyn',name:'EMOTIONAL FLOOD',domain:'sh_emdyn',lesson:'Overwhelm, shutdown & stress collapse',lessonDesc:'⚠ SHADOW: Fear, grief, anger and shame all peak simultaneously. The entity must find the narrow path through total emotional overwhelm without shutting down or exploding. This is the hardest terrain — and the most important to navigate.',dangerDensity:0.15,isNeg:true,dangerStim:'fear'},
+  ]},
 ];
 // Build all mazes with generated grids
 const ALL_MAZES=[];
 MZ_CAT.forEach(cat=>cat.mazes.forEach(m=>{
   const seed=hashStr(m.id);
+  // Shadow mazes get higher danger density enforced, and use neg-shifted seed
   m.grid=genMaze(seed,m.dangerDensity||0);
   m.avoid=m.isAvoid||false;
-  m.color=DCOL[m.domain]||'#00ccff';
+  m.isNeg=m.isNeg||false;
+  m.color=m.isNeg?'#ff2244':(DCOL[m.domain]||'#00ccff');
   ALL_MAZES.push(m);
 }));
 // ══════════════════════════════════════════════════════
@@ -893,35 +990,53 @@ function allMazes(){return [...ALL_MAZES,...(S.customMazes||[])];}
 function buildMazeCats(){
   const c=document.getElementById('mazeCats');c.innerHTML='';
   MZ_CAT.forEach(cat=>{
-    const lbl=document.createElement('div');lbl.className='mcat';lbl.textContent=cat.cat;c.appendChild(lbl);
+    const lbl=document.createElement('div');
+    lbl.className='mcat';
+    // Shadow categories get red tint
+    if(cat.cat.startsWith('SHADOW')){lbl.style.cssText='color:#ff4466;border-color:#ff224430;';}
+    lbl.textContent=cat.cat;c.appendChild(lbl);
     const sel=document.createElement('div');sel.className='msel';
     cat.mazes.forEach(m=>{
-      const b=document.createElement('button');b.className='mzb'+(m.avoid?' av':'')+(S.currentMazeId===m.id?' am':'');
+      const b=document.createElement('button');
+      b.className='mzb'+(m.avoid?' av':m.isNeg?' sh':'')+(S.currentMazeId===m.id?' am':'');
       b.textContent=m.name;b.dataset.mid=m.id;b.addEventListener('click',()=>selectMaze(m.id));sel.appendChild(b);
     });
-    (S.customMazes||[]).forEach(m=>{if(m.domain===cat.cat.toLowerCase()){const b=document.createElement('button');b.className='mzb'+(m.avoid?' av':'')+(S.currentMazeId===m.id?' am':'');b.textContent=m.name;b.dataset.mid=m.id;b.addEventListener('click',()=>selectMaze(m.id));sel.appendChild(b);}});
     c.appendChild(sel);
   });
   // Custom mazes
-  if((S.customMazes||[]).length){const lbl=document.createElement('div');lbl.className='mcat';lbl.textContent='CUSTOM';c.appendChild(lbl);const sel=document.createElement('div');sel.className='msel';S.customMazes.forEach(m=>{const b=document.createElement('button');b.className='mzb'+(m.avoid?' av':'')+(S.currentMazeId===m.id?' am':'');b.textContent=m.name;b.dataset.mid=m.id;b.addEventListener('click',()=>selectMaze(m.id));sel.appendChild(b);});c.appendChild(sel);}
+  if((S.customMazes||[]).length){
+    const lbl=document.createElement('div');lbl.className='mcat';lbl.textContent='CUSTOM';c.appendChild(lbl);
+    const sel=document.createElement('div');sel.className='msel';
+    S.customMazes.forEach(m=>{
+      const b=document.createElement('button');b.className='mzb'+(m.avoid?' av':'')+(S.currentMazeId===m.id?' am':'');
+      b.textContent=m.name;b.dataset.mid=m.id;b.addEventListener('click',()=>selectMaze(m.id));sel.appendChild(b);
+    });
+    c.appendChild(sel);
+  }
 }
 function selectMaze(id){
   S.currentMazeId=id;curMaze=allMazes().find(x=>x.id===id);
   if(!curMaze)return;
   mzListIdx=allMazes().findIndex(x=>x.id===id);
-  document.getElementById('mlTitle').textContent=curMaze.lesson.toUpperCase();
-  document.getElementById('mlBody').textContent=curMaze.lessonDesc;
+  const mlt=document.getElementById('mlTitle'),mlb2=document.getElementById('mlBody'),mls=document.getElementById('mlSense');
+  mlt.textContent=curMaze.lesson.toUpperCase();
+  mlt.style.color=curMaze.isNeg?'var(--neg)':curMaze.avoid?'var(--dng)':'var(--wa)';
+  mlb2.textContent=curMaze.lessonDesc;
+  mlb2.style.color=curMaze.isNeg?'#ff8899':'';
   const si=curMaze.dangerStim?` · DANGER: ${curMaze.dangerStim.toUpperCase()}`:'';
-  document.getElementById('mlSense').textContent=`DOMAIN: ${curMaze.domain.toUpperCase()}${si}`;
+  const negTag=curMaze.isNeg?' · ⚠ SHADOW':'';
+  mls.textContent=`DOMAIN: ${curMaze.domain.toUpperCase()}${si}${negTag}`;
+  mls.style.color=curMaze.isNeg?'var(--neg)':'';
   document.querySelectorAll('.mzb').forEach(b=>b.classList.toggle('am',b.dataset.mid===id));
-  stopMaze();initMaze();log(`maze: "${curMaze.name}" · ${curMaze.domain}`,'sys');
+  stopMaze();initMaze();log(`maze: "${curMaze.name}"${curMaze.isNeg?' [SHADOW]':curMaze.avoid?' [AVOID]':''} · ${curMaze.domain}`,'sys');
 }
 function initMaze(){agent={x:0,y:0};visited=Array.from({length:MS},()=>Array(MS).fill(false));visited[0][0]=true;stack=[{x:0,y:0}];runSteps=0;dangerHits=0;drawMaze();}
 function startMaze(){
   if(!curMaze){log('select a maze first','sys');return;}
   if(mazeInt)return;
   S.mazeRuns++;updateStats();document.getElementById('mzRun').textContent=S.mazeRuns;
-  document.getElementById('mzInfo').textContent=`run #${S.mazeRuns} · ${curMaze.domain}${curMaze.avoid?' [AVOIDANCE]':''}`;
+  const tag=curMaze.isNeg?' [SHADOW]':curMaze.avoid?' [AVOIDANCE]':'';
+  document.getElementById('mzInfo').textContent=`run #${S.mazeRuns} · ${curMaze.domain}${tag}`;
   mazeInt=setInterval(mazeTick,getMazeSpeed());
   startBodyLearn();
   log(`maze run #${S.mazeRuns} · "${curMaze.name}"`,'learn');
@@ -931,7 +1046,7 @@ function resetMaze(){stopMaze();S.dangerMemory={};initMaze();document.getElement
 function toggleAutoCycle(){S.autoCycle=!S.autoCycle;const b=document.getElementById('acBtn');b.className='tgl ac'+(S.autoCycle?' on':'');b.textContent='AUTO-CYCLE: '+(S.autoCycle?'ON':'OFF');log(`auto-cycle: ${S.autoCycle?'ON':'OFF'}`,'sys');}
 function toggleAutoStim(){S.autoStim=!S.autoStim;const b=document.getElementById('asBtn');b.className='tgl as'+(S.autoStim?' on':'');b.textContent='AUTO-STIM: '+(S.autoStim?'ON':'OFF');log(`auto-stim: ${S.autoStim?'ON':'OFF'}`,'sys');}
 function getMazeSpeed(){const v=S.emotionalState.valence;return Math.max(35,Math.min(450,195-(S.posCount*1.1)+(S.negCount*1.4)+(v*-22)));}
-function getMazeBias(){return Math.max(.08,Math.min(.92,(curMaze?.avoid?0.2:0.3)+(S.posCount-S.negCount)*.01+S.emotionalState.valence*.15));}
+function getMazeBias(){return Math.max(.08,Math.min(.92,(curMaze?.avoid||curMaze?.isNeg?0.18:0.3)+(S.posCount-S.negCount)*.01+S.emotionalState.valence*.15));}
 function dangerKey(x,y){return `${x},${y}`;}
 function startBodyLearn(){
   clearInterval(bodyInt);if(!curMaze)return;
@@ -939,7 +1054,12 @@ function startBodyLearn(){
     activateLearnZones(curMaze.domain);
     if(S.autoStim&&curMaze){
       const ds=DOM_STIMS[curMaze.domain]||DOM_STIMS.cognitive;
-      const ps=ds.pos;if(ps&&ps.length)fireStimByName(ps[Math.floor(Math.random()*ps.length)]);
+      // Shadow mazes: fire neg stims predominantly; positive mazes: fire pos stims
+      if(curMaze.isNeg){
+        const ns=ds.neg;if(ns&&ns.length)fireStimByName(ns[Math.floor(Math.random()*ns.length)]);
+      } else {
+        const ps=ds.pos;if(ps&&ps.length)fireStimByName(ps[Math.floor(Math.random()*ps.length)]);
+      }
     }
   },4500);
 }
@@ -947,14 +1067,26 @@ function mazeTick(){
   const grid=curMaze.grid,goal={x:MS-1,y:MS-1};
   // GOAL CHECK
   if(agent.x===goal.x&&agent.y===goal.y){
-    const bonus=curMaze.avoid?5:0;
+    const bonus=curMaze.avoid?5:curMaze.isNeg?3:0;
     addLearn(curMaze.domain,10+bonus);
     if(S.mazeBest===null||runSteps<S.mazeBest)S.mazeBest=runSteps;
     document.getElementById('mzBest').textContent=S.mazeBest;
     document.getElementById('mzDng').textContent=dangerHits;
-    if(S.autoStim){fireStimByName('reward');if(dangerHits===0&&curMaze.avoid)fireStimByName('joy');}
+    if(S.autoStim){
+      if(curMaze.isNeg){
+        // Shadow goal: fire a neg stim — you survived the shadow terrain
+        const ds=DOM_STIMS[curMaze.domain]||{neg:['tension']};
+        const ns=ds.neg;if(ns&&ns.length)fireStimByName(ns[0]);
+        // But also a small reward for completion
+        fireStimByName('calm');
+      } else {
+        fireStimByName('reward');
+        if(dangerHits===0&&curMaze.avoid)fireStimByName('joy');
+      }
+    }
+    const cleanTag=dangerHits===0?'CLEAN RUN ◎':dangerHits+' danger contact(s)';
     log(`✓ GOAL steps:${runSteps} danger:${dangerHits} +${10+bonus} ${curMaze.domain} XP`,'learn');
-    showPopup(`GOAL — ${curMaze.lesson} · ${dangerHits===0?'CLEAN RUN ◎':dangerHits+' danger contact(s)'}`,curMaze.avoid&&dangerHits>0?'danger':'learn');
+    showPopup(`${curMaze.isNeg?'⚠ SHADOW COMPLETE':'GOAL'} — ${curMaze.lesson} · ${cleanTag}`,curMaze.isNeg||dangerHits>0?'danger':'learn');
     initMaze();clearInterval(mazeInt);mazeInt=null;
     if(S.autoCycle){
       setTimeout(()=>{const all=allMazes();const next=all[(mzListIdx+1)%all.length];selectMaze(next.id);setTimeout(startMaze,600);log(`↳ auto → "${next.name}"`,'learn');},2200);
@@ -971,7 +1103,10 @@ function mazeTick(){
       dangerHits++;S.avoidanceHits=(S.avoidanceHits||0)+1;
       document.getElementById('mzDng').textContent=dangerHits;document.getElementById('hAvoid').textContent=p3(S.avoidanceHits);
       activateDangerZones(curMaze.domain);firePathAnim('danger');
-      if(S.autoStim){const ds=DOM_STIMS[curMaze.domain]||{neg:['shock']};const neg=ds.neg;if(neg&&neg.length)fireStimByName(neg[Math.floor(Math.random()*neg.length)]);}
+      if(S.autoStim){
+        const ds=DOM_STIMS[curMaze.domain]||{neg:['shock']};
+        const neg=ds.neg;if(neg&&neg.length)fireStimByName(neg[Math.floor(Math.random()*neg.length)]);
+      }
       addLearn('avoidance',3);addLearn(curMaze.domain,1);
       log(`⚠ DANGER (${agent.x},${agent.y}) ${(curMaze.dangerStim||'shock').toUpperCase()}`,'danger');
     }else{S.dangerMemory[key].count++;}
@@ -1000,6 +1135,7 @@ function drawMaze(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   const ox=(canvas.width-MS*CELL)/2,oy=(canvas.height-MS*CELL)/2;
   const col=curMaze.color||'#00ccff';
+  const isNeg=curMaze.isNeg;
   for(let y=0;y<MS;y++)for(let x=0;x<MS;x++){
     if(visited[y]&&visited[y][x]&&grid[y][x]===0){ctx.fillStyle=col+'16';ctx.fillRect(ox+x*CELL+1,oy+y*CELL+1,CELL-2,CELL-2);}
   }
@@ -1016,11 +1152,13 @@ function drawMaze(){
   const gx=ox+(MS-1)*CELL,gy=oy+(MS-1)*CELL;
   ctx.fillStyle=col+'20';ctx.fillRect(gx+1,gy+1,CELL-2,CELL-2);ctx.strokeStyle=col;ctx.lineWidth=1;ctx.strokeRect(gx+1,gy+1,CELL-2,CELL-2);
   ctx.fillStyle=col+'aa';ctx.font='11px Share Tech Mono';ctx.textAlign='center';ctx.fillText('◎',gx+CELL/2,gy+CELL/2+4);
-  const v=S.emotionalState.valence,ac=v>.3?'#00ffaa':v<-.3?'#ff2244':'#00ccff';
+  const v=S.emotionalState.valence;
+  const ac=isNeg?(v<-.2?'#ff2244':'#ff6644'):(v>.3?'#00ffaa':v<-.3?'#ff2244':'#00ccff');
   const ax=ox+agent.x*CELL+CELL/2,ay=oy+agent.y*CELL+CELL/2;
   ctx.beginPath();ctx.arc(ax,ay,5,0,Math.PI*2);ctx.fillStyle=ac;ctx.shadowColor=ac;ctx.shadowBlur=10;ctx.fill();ctx.shadowBlur=0;
-  ctx.fillStyle=col+'60';ctx.font='6px Share Tech Mono';ctx.textAlign='left';ctx.fillText((curMaze?.domain||'').toUpperCase().slice(0,18),ox,oy-4);
-  if(curMaze?.avoid){ctx.textAlign='right';ctx.fillText(`AVOID ${Math.round(Math.min(100,S.negCount/60*100))}%`,ox+MS*CELL,oy-4);}
+  ctx.fillStyle=col+'60';ctx.font='6px Share Tech Mono';ctx.textAlign='left';
+  ctx.fillText((isNeg?'⚠ ':'')+curMaze.domain.toUpperCase().slice(0,16),ox,oy-4);
+  if(curMaze.avoid||isNeg){ctx.textAlign='right';ctx.fillText(`AVOID ${Math.round(Math.min(100,S.negCount/60*100))}%`,ox+MS*CELL,oy-4);}
 }
 // ══════════════════════════════════════════════════════
 // MAZE CREATOR
