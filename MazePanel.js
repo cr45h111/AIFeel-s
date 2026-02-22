@@ -56,7 +56,7 @@ function nextMaze() {
   const lessons = ['pain vs pleasure','desire vs need','soft vs hard'];
   const idx = lessons.indexOf(maze.lesson);
   const nextLesson = lessons[(idx+1)%lessons.length];
-  const newMaze = new Maze(nextLesson);
+  const newMaze = new window.Maze(nextLesson);
   Object.assign(maze, newMaze);
   renderMazeGrid();
   updateMazeProgress();

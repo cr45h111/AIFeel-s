@@ -17,7 +17,7 @@ window.Maze = class Maze {
   generateMaze() {
     // 0 = empty, 1 = wall, 2 = lesson tile
     // Maze layout changes based on lesson
-    switch (lesson) {
+    switch (this.lesson) {
       case "desire vs need":
         return [
           [0, 1, 2, 0, 0],
