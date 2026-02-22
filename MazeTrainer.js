@@ -1,7 +1,7 @@
 // MazeTrainer.js
 // Simple 5x5 grid maze environment for AI training
 
-class Maze {
+window.Maze = class Maze {
   constructor(lesson = "pain vs pleasure") {
     this.lesson = lesson;
     this.grid = this.generateMaze(lesson);

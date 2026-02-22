@@ -1,8 +1,7 @@
 // MazePanel.js
 // UI logic for Maze Training panel
-import Maze from './MazeTrainer.js';
 
-const maze = new Maze();
+const maze = new window.Maze();
 
 function renderMazeGrid() {
   const grid = document.getElementById('maze-grid');
