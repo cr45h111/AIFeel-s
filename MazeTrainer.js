@@ -67,7 +67,6 @@ window.Maze = class Maze {
         return {};
     }
   }
-  }
 
   step(direction) {
     if (this.finished) return;
@@ -149,4 +148,4 @@ window.Maze = class Maze {
   }
 }
 
-export default Maze;
+window.Maze = Maze;
