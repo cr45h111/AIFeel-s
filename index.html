@@ -1102,6 +1102,17 @@ log('system initialized · select zones · apply stimuli to begin training', 'sy
 </script>
 
 <!-- Maze Training Panel Script -->
+</body>
+
+<!-- Maze Reward Modal -->
+<div id="maze-reward-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#0b1118;border:2px solid #00ffaa;border-radius:12px;padding:32px 48px;color:#00ffaa;font-family:'Share Tech Mono',monospace;font-size:22px;box-shadow:0 4px 32px #00ffaa44;text-align:center;">
+    <span id="maze-reward-message">AI reached the goal!<br>Reward applied.</span>
+    <br><br>
+    <button id="maze-reward-close-btn" style="background:#00ffaa;color:#060a0f;font-size:18px;padding:8px 24px;border:none;border-radius:8px;cursor:pointer;margin-top:16px;">Close</button>
+  </div>
+</div>
+
 <script src="./MazeTrainer.js"></script>
 <script src="./MazePanel.js"></script>
 </body>

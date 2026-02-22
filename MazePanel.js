@@ -49,6 +49,22 @@ function startMaze() {
 function finishMaze() {
   maze.finished = true;
   updateMazeProgress();
+  // Show reward modal if AI reached goal
+  if (maze.position.x === maze.goal.x && maze.position.y === maze.goal.y) {
+    showMazeRewardModal('AI reached the goal! Reward applied.');
+  }
+}
+
+function showMazeRewardModal(message) {
+  const modal = document.getElementById('maze-reward-modal');
+  const msg = document.getElementById('maze-reward-message');
+  msg.innerHTML = message;
+  modal.style.display = 'flex';
+}
+
+function hideMazeRewardModal() {
+  const modal = document.getElementById('maze-reward-modal');
+  modal.style.display = 'none';
 }
 
 function nextMaze() {
@@ -68,6 +84,7 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('maze-start-btn').onclick = startMaze;
   document.getElementById('maze-finish-btn').onclick = finishMaze;
   document.getElementById('maze-next-btn').onclick = nextMaze;
+  document.getElementById('maze-reward-close-btn').onclick = hideMazeRewardModal;
   // Demo: step AI every second
   setInterval(() => { if (!maze.finished) stepAI(); }, 1000);
 });
