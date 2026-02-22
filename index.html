@@ -289,17 +289,20 @@
 
   /* ─── STIMULI PANEL ─── */
   .center-panel {
-    padding: 20px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 10px;
     overflow-y: auto;
+    max-height: 60vh;
   }
 
   .stimuli-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 8px;
+    max-height: 48vh;
+    overflow-y: auto;
   }
 
   .stimuli-group {
@@ -407,15 +410,15 @@
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 4px;
-    padding: 12px;
+    padding: 8px;
     font-family: var(--mono);
     font-size: 10px;
-    min-height: 80px;
-    max-height: 18vh;
+    min-height: 60px;
+    max-height: 12vh;
     overflow-y: auto;
     display: flex;
     flex-direction: column-reverse;
-    gap: 3px;
+    gap: 2px;
   }
 
   .log-entry { display: flex; gap: 8px; align-items: flex-start; }
