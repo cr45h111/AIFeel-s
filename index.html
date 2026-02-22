@@ -1070,7 +1070,7 @@ document.getElementById('addRBtn').addEventListener('click',()=>{
 // MAZE SYSTEM
 // ══════════════════════════════════════════════════════
 let mazeInt=null,bodyInt=null;
-let agent={x:0,y:0},visited=[],stack=[],runSteps=0,dangerHits=0;
+let agent={x:0,y:0},visited=[],stack=[],runSteps=0,dangerHits=0,stuckTicks=0;
 let curMaze=null,mzListIdx=0;
 function allMazes(){return [...ALL_MAZES,...(S.customMazes||[])];}
 function buildMazeCats(){
@@ -1116,7 +1116,7 @@ function selectMaze(id){
   document.querySelectorAll('.mzb').forEach(b=>b.classList.toggle('am',b.dataset.mid===id));
   stopMaze();initMaze();log(`maze: "${curMaze.name}"${curMaze.isNeg?' [SHADOW]':curMaze.avoid?' [AVOID]':''} · ${curMaze.domain}`,'sys');
 }
-function initMaze(){agent={x:0,y:0};visited=Array.from({length:MS},()=>Array(MS).fill(false));visited[0][0]=true;stack=[{x:0,y:0}];runSteps=0;dangerHits=0;drawMaze();}
+function initMaze(){agent={x:0,y:0};visited=Array.from({length:MS},()=>Array(MS).fill(false));visited[0][0]=true;stack=[{x:0,y:0}];runSteps=0;dangerHits=0;stuckTicks=0;drawMaze();}
 function startMaze(){
   if(!curMaze){log('select a maze first','sys');return;}
   if(mazeInt)return;
@@ -1150,9 +1150,9 @@ function startBodyLearn(){
   },4500);
 }
 function mazeTick(){
-  const grid=curMaze.grid,goal={x:MS-1,y:MS-1};
+  const grid=curMaze.grid;
   // GOAL CHECK
-  if(agent.x===goal.x&&agent.y===goal.y){
+  if(agent.x===MS-1&&agent.y===MS-1){
     const bonus=curMaze.avoid?5:curMaze.isNeg?3:0;
     addLearn(curMaze.domain,10+bonus);
     if(S.mazeBest===null||runSteps<S.mazeBest)S.mazeBest=runSteps;
@@ -1180,14 +1180,15 @@ function mazeTick(){
     return;
   }
   if(!stack.length){initMaze();return;}
-  // DANGER CHECK — unmark visited so agent can traverse if it's the only path
+  // DANGER CHECK
   const cv=grid[agent.y]?.[agent.x]??0;
   if(cv===2){
     const key=dangerKey(agent.x,agent.y);
     if(!S.dangerMemory[key]){
       S.dangerMemory[key]={count:1,stim:curMaze.dangerStim||'shock'};
       dangerHits++;S.avoidanceHits=(S.avoidanceHits||0)+1;
-      document.getElementById('mzDng').textContent=dangerHits;document.getElementById('hAvoid').textContent=p3(S.avoidanceHits);
+      document.getElementById('mzDng').textContent=dangerHits;
+      document.getElementById('hAvoid').textContent=p3(S.avoidanceHits);
       activateDangerZones(curMaze.domain);firePathAnim('danger');
       if(S.autoStim){
         const ds=DOM_STIMS[curMaze.domain]||{neg:['shock']};
@@ -1196,22 +1197,55 @@ function mazeTick(){
       addLearn('avoidance',3);addLearn(curMaze.domain,1);
       log(`⚠ DANGER (${agent.x},${agent.y}) ${(curMaze.dangerStim||'shock').toUpperCase()}`,'danger');
     }else{S.dangerMemory[key].count++;}
-    // CRITICAL FIX: unmark visited so danger cells can be re-traversed if they're the only path
-    visited[agent.y][agent.x]=false;
-    if(stack.length>1){stack.pop();agent={...stack[stack.length-1]};}drawMaze();return;
+    // Keep visited=true — DO NOT unmark. The BFS guarantor ensures a clean path exists.
+    // Agent must backtrack properly via DFS, not bounce on the same danger cell.
+    if(stack.length>1){stack.pop();agent={...stack[stack.length-1]};}
+    else{initMaze();}
+    drawMaze();return;
   }
-  // MOVE
+
+  // MOVE — separated into: safe (no danger) and forced (danger only)
   const dirs=[{dx:1,dy:0},{dx:-1,dy:0},{dx:0,dy:1},{dx:0,dy:-1}];
-  let moves=dirs.map(d=>({x:agent.x+d.dx,y:agent.y+d.dy})).filter(p=>p.x>=0&&p.y>=0&&p.x<MS&&p.y<MS&&grid[p.y][p.x]!==1&&!visited[p.y][p.x]);
-  const avoidStr=Math.min(1,(S.negCount/60));
-  if(curMaze?.avoid&&avoidStr>0.15){const safe=moves.filter(p=>!S.dangerMemory[dangerKey(p.x,p.y)]||(grid[p.y][p.x]===2&&Math.random()>avoidStr));if(safe.length)moves=safe;}
-  if(!moves.length){if(stack.length>1){stack.pop();agent={...stack[stack.length-1]};}else initMaze();}
-  else{
-    if(Math.random()<getMazeBias())moves.sort((a,b)=>(Math.abs(a.x-goal.x)+Math.abs(a.y-goal.y))-(Math.abs(b.x-goal.x)+Math.abs(b.y-goal.y)));
-    else moves=moves.sort(()=>Math.random()-.5);
-    if(S.emotionalState.valence<-.5&&Math.random()<.28){drawMaze();runSteps++;return;}
-    const next=moves[0];visited[next.y][next.x]=true;agent=next;stack.push({...next});
+  const goal={x:MS-1,y:MS-1};
+  const allMoves=dirs.map(d=>({x:agent.x+d.dx,y:agent.y+d.dy}))
+    .filter(p=>p.x>=0&&p.y>=0&&p.x<MS&&p.y<MS&&grid[p.y][p.x]!==1&&!visited[p.y][p.x]);
+
+  // Prefer routes that don't step into memorised danger zones
+  const safeMoves=allMoves.filter(p=>!S.dangerMemory[dangerKey(p.x,p.y)]&&grid[p.y][p.x]!==2);
+  let moves=safeMoves.length>0?safeMoves:allMoves;
+
+  if(!moves.length){
+    // Dead end — backtrack
+    if(stack.length>1){stack.pop();agent={...stack[stack.length-1]};}
+    else{initMaze();}
+    stuckTicks++;
+    // Stuck escape: too many consecutive backtracks → BFS direct route to goal
+    if(stuckTicks>80){
+      const path=bfsPath(grid,MS,true);// BFS allowing danger traversal
+      if(path&&path.length>0){
+        // Walk one step along the BFS path from current position
+        const bfsMoves=dirs.map(d=>({x:agent.x+d.dx,y:agent.y+d.dy}))
+          .filter(p=>p.x>=0&&p.y>=0&&p.x<MS&&p.y<MS&&grid[p.y][p.x]!==1);
+        // Find BFS-guided step: pick neighbor that is on BFS path and closest to goal
+        const guided=bfsMoves.sort((a,b)=>(Math.abs(a.x-goal.x)+Math.abs(a.y-goal.y))-(Math.abs(b.x-goal.x)+Math.abs(b.y-goal.y)));
+        if(guided.length){
+          const next=guided[0];visited[next.y][next.x]=true;agent=next;stack=[{...next}];
+          stuckTicks=0;log('↻ BFS override — escaping deadlock','sys');
+        }else{initMaze();stuckTicks=0;}
+      }else{initMaze();stuckTicks=0;}
+    }
+    drawMaze();return;
   }
+
+  stuckTicks=0;// made a valid move — reset stuck counter
+  if(Math.random()<getMazeBias()){
+    moves.sort((a,b)=>(Math.abs(a.x-goal.x)+Math.abs(a.y-goal.y))-(Math.abs(b.x-goal.x)+Math.abs(b.y-goal.y)));
+  }else{moves.sort(()=>Math.random()-.5);}
+
+  // Hesitation when emotionally distressed
+  if(S.emotionalState.valence<-.5&&Math.random()<.22){drawMaze();runSteps++;return;}
+
+  const next=moves[0];visited[next.y][next.x]=true;agent=next;stack.push({...next});
   runSteps++;document.getElementById('mzSteps').textContent=runSteps;
   if(runSteps%22===0){addLearn(curMaze.domain,.6);if(curMaze.avoid)addLearn('avoidance',.2);}
   if(S.autoStim&&runSteps%20===0){const ds=DOM_STIMS[curMaze.domain]||{pos:['reward']};const ps=ds.pos;if(ps&&ps.length)fireStimByName(ps[Math.floor(Math.random()*ps.length)]);}
