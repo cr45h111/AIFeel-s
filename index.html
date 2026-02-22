@@ -3,312 +3,275 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXUS · Neural Conditioning v4</title>
+<title>NEXUS · Neural Conditioning v5</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&family=Rajdhani:wght@300;400;600;700&display=swap');
 :root{
-  --bg:#040810;--panel:#080f1a;--panel2:#0b1520;
-  --border:#172435;--bb:#1e3a5a;
+  --bg:#040810;--panel:#080f1a;--p2:#0b1520;
+  --b0:#172435;--b1:#1e3a5a;
   --pos:#00ffaa;--pd:#00ffaa14;--pm:#00ffaa50;
   --neg:#ff2244;--nd:#ff224414;--nm:#ff224450;
   --emo:#cc66ff;--ed:#cc66ff14;--em:#cc66ff50;
-  --danger:#ff4400;--dangd:#ff440018;
-  --sight:#ffdd44;--sightd:#ffdd4414;
-  --hear:#44aaff;--heard:#44aaff14;
-  --taste:#ff88aa;--tasted:#ff88aa14;
-  --smell:#88ffcc;--smelld:#88ffcc14;
-  --neutral:#3399cc;--nd2:#3399cc14;
-  --pulse:#00ccff;--warn:#ffaa00;
-  --text:#b8ccd8;--tdim:#3a5060;--tbright:#e8f4ff;
-  --mono:'Share Tech Mono',monospace;--head:'Orbitron',sans-serif;--sans:'Rajdhani',sans-serif;
+  --dng:#ff4400;--dd:#ff440018;
+  --si:#ffdd44;--sid:#ffdd4414;
+  --he:#44aaff;--hed:#44aaff14;
+  --ta:#ff88aa;--tad:#ff88aa14;
+  --sm:#88ffcc;--smd:#88ffcc14;
+  --neu:#3399cc;--ned:#3399cc14;
+  --pu:#00ccff;--wa:#ffaa00;
+  --tx:#b8ccd8;--td:#3a5060;--tb:#e8f4ff;
+  --mo:'Share Tech Mono',monospace;--hd:'Orbitron',sans-serif;--sa:'Rajdhani',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+body{background:var(--bg);color:var(--tx);font-family:var(--sa);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
 body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.04) 3px,rgba(0,0,0,0.04) 4px);pointer-events:none;z-index:9999;}
-
-/* HEADER */
-header{display:flex;align-items:center;justify-content:space-between;padding:6px 14px;border-bottom:1px solid var(--border);background:rgba(4,8,16,.97);flex-shrink:0;gap:10px;}
-.logo{font-family:var(--head);font-size:10px;color:var(--pulse);letter-spacing:2px;white-space:nowrap;display:flex;align-items:center;gap:7px;}
+header{display:flex;align-items:center;justify-content:space-between;padding:5px 12px;border-bottom:1px solid var(--b0);background:rgba(4,8,16,.98);flex-shrink:0;gap:8px;flex-wrap:wrap;}
+.logo{font-family:var(--hd);font-size:9px;color:var(--pu);letter-spacing:2px;white-space:nowrap;display:flex;align-items:center;gap:6px;}
 .pdot{width:6px;height:6px;border-radius:50%;background:var(--pos);animation:pa 2s infinite;flex-shrink:0;}
-@keyframes pa{0%,100%{opacity:1;box-shadow:0 0 6px var(--pos);}50%{opacity:.2;box-shadow:none;}}
-.hc{display:flex;gap:5px;align-items:center;}
-.hb{background:transparent;border:1px solid var(--bb);color:var(--tdim);font-family:var(--mono);font-size:8px;padding:3px 8px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .15s;}
-.hb:hover{border-color:var(--pulse);color:var(--pulse);}
+@keyframes pa{0%,100%{opacity:1;box-shadow:0 0 6px var(--pos)}50%{opacity:.2;box-shadow:none}}
+.hc{display:flex;gap:4px;align-items:center;flex-wrap:wrap;}
+.hb{background:transparent;border:1px solid var(--b1);color:var(--td);font-family:var(--mo);font-size:7px;padding:3px 7px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .15s;}
+.hb:hover{border-color:var(--pu);color:var(--pu);}
 .hb.sv:hover{border-color:var(--pos);color:var(--pos);}
-.hb.ld:hover{border-color:var(--warn);color:var(--warn);}
+.hb.ld:hover{border-color:var(--wa);color:var(--wa);}
+.hb.ex{color:var(--si);border-color:#ffdd4440;}.hb.ex:hover{border-color:var(--si);}
+.hb.im{color:var(--sm);border-color:#88ffcc40;}.hb.im:hover{border-color:var(--sm);}
 .hb.rst{color:var(--neg);border-color:var(--nm);}.hb.rst:hover{border-color:var(--neg);background:var(--nd);}
-.ebadge{font-family:var(--mono);font-size:8px;padding:3px 8px;border-radius:2px;border:1px solid var(--em);color:var(--emo);background:var(--ed);letter-spacing:2px;transition:all .5s;}
-.hstats{display:flex;gap:12px;font-family:var(--mono);font-size:9px;}
-.hstat{display:flex;flex-direction:column;align-items:flex-end;}
-.sl{color:var(--tdim);font-size:7px;letter-spacing:2px;}
-.sv2{color:var(--pos);}.nv{color:var(--neg);}.ev{color:var(--emo);}.pv{color:var(--pulse);}
-
-/* LAYOUT */
-.main{display:grid;grid-template-columns:210px 1fr 320px;flex:1;overflow:hidden;min-height:0;}
-.panel{border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;min-height:0;}
+.ebadge{font-family:var(--mo);font-size:7px;padding:2px 7px;border-radius:2px;border:1px solid var(--em);color:var(--emo);background:var(--ed);letter-spacing:2px;transition:all .5s;white-space:nowrap;}
+.savets{font-family:var(--mo);font-size:6px;color:var(--td);letter-spacing:.5px;white-space:nowrap;}
+.hstats{display:flex;gap:8px;font-family:var(--mo);font-size:9px;}
+.hs{display:flex;flex-direction:column;align-items:flex-end;}
+.sl{color:var(--td);font-size:6px;letter-spacing:2px;}
+.sc{color:var(--pos);}.nc{color:var(--neg);}.ec{color:var(--emo);}.pc{color:var(--pu);}
+.main{display:grid;grid-template-columns:205px 1fr 315px;flex:1;overflow:hidden;min-height:0;}
+.panel{border-right:1px solid var(--b0);display:flex;flex-direction:column;overflow:hidden;min-height:0;}
 .panel:last-child{border-right:none;}
-.pi{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:0;}
+.pi{flex:1;overflow-y:auto;padding:9px;display:flex;flex-direction:column;gap:7px;min-height:0;}
 .pi::-webkit-scrollbar{width:3px;}
-.pi::-webkit-scrollbar-thumb{background:var(--bb);border-radius:2px;}
-.sec{font-family:var(--mono);font-size:7px;letter-spacing:3px;color:var(--tdim);text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:5px;display:flex;align-items:center;gap:5px;flex-shrink:0;}
-.sec::before{content:'';width:2px;height:7px;background:var(--pulse);display:inline-block;flex-shrink:0;}
-
-/* TABS */
-.tbar{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;}
+.pi::-webkit-scrollbar-thumb{background:var(--b1);}
+.sec{font-family:var(--mo);font-size:7px;letter-spacing:3px;color:var(--td);text-transform:uppercase;border-bottom:1px solid var(--b0);padding-bottom:4px;display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.sec::before{content:'';width:2px;height:7px;background:var(--pu);display:inline-block;flex-shrink:0;}
+.tbar{display:flex;border-bottom:1px solid var(--b0);flex-shrink:0;overflow-x:auto;}
 .tbar::-webkit-scrollbar{height:0;}
-.tab{font-family:var(--mono);font-size:8px;letter-spacing:1px;padding:6px 10px;cursor:pointer;color:var(--tdim);border:none;border-right:1px solid var(--border);border-bottom:none;border-top:none;border-left:none;transition:all .15s;background:transparent;white-space:nowrap;flex-shrink:0;}
-.tab:hover{color:var(--text);background:var(--panel2);}
-.tab.active{color:var(--pulse);background:var(--panel2);border-bottom:2px solid var(--pulse);margin-bottom:-1px;}
+.tab{font-family:var(--mo);font-size:7px;letter-spacing:.5px;padding:5px 8px;cursor:pointer;color:var(--td);border:none;border-right:1px solid var(--b0);border-bottom:none;border-top:none;border-left:none;transition:all .15s;background:transparent;white-space:nowrap;flex-shrink:0;}
+.tab:hover{color:var(--tx);background:var(--p2);}
+.tab.active{color:var(--pu);background:var(--p2);border-bottom:2px solid var(--pu);margin-bottom:-1px;}
 .tc{display:none;flex:1;flex-direction:column;min-height:0;overflow:hidden;}
 .tc.active{display:flex;}
-
 /* NAMEPLATE */
-.np{background:var(--panel2);border:1px solid var(--bb);border-radius:3px;padding:8px 10px;display:flex;flex-direction:column;gap:4px;flex-shrink:0;}
-.nd{font-family:var(--head);font-size:13px;color:var(--pulse);letter-spacing:2px;text-align:center;min-height:20px;}
-.ni{background:transparent;border:none;color:var(--pulse);font-family:var(--head);font-size:12px;letter-spacing:2px;text-align:center;width:100%;outline:none;display:none;}
+.np{background:var(--p2);border:1px solid var(--b1);border-radius:3px;padding:7px 10px;display:flex;flex-direction:column;gap:3px;flex-shrink:0;}
+.nd{font-family:var(--hd);font-size:13px;color:var(--pu);letter-spacing:2px;text-align:center;min-height:20px;}
+.ni{background:transparent;border:none;color:var(--pu);font-family:var(--hd);font-size:12px;letter-spacing:2px;text-align:center;width:100%;outline:none;display:none;}
 .ner{display:flex;gap:4px;justify-content:center;}
-.nb{background:transparent;border:1px solid var(--border);color:var(--tdim);font-family:var(--mono);font-size:7px;padding:2px 6px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .12s;}
-.nb:hover{border-color:var(--neutral);color:var(--neutral);}
+.nb{background:transparent;border:1px solid var(--b0);color:var(--td);font-family:var(--mo);font-size:7px;padding:2px 6px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .12s;}
+.nb:hover{border-color:var(--neu);color:var(--neu);}
 .nb.ok:hover{border-color:var(--pos);color:var(--pos);}
-
 /* BODY MAP */
-#bmc{display:flex;align-items:center;justify-content:center;flex:1;position:relative;min-height:220px;}
-.eaura{position:absolute;width:130px;height:260px;border-radius:50%;pointer-events:none;transition:background 1.5s,opacity 1s;opacity:0;filter:blur(18px);}
-#bsvg{width:140px;position:relative;z-index:2;filter:drop-shadow(0 0 5px rgba(0,180,220,.1));transition:filter .3s;}
+#bmc{display:flex;align-items:center;justify-content:center;flex:1;position:relative;min-height:210px;}
+.eaura{position:absolute;width:120px;height:250px;border-radius:50%;pointer-events:none;transition:background 1.5s,opacity 1s;opacity:0;filter:blur(18px);}
+#bsvg{width:135px;position:relative;z-index:2;filter:drop-shadow(0 0 5px rgba(0,180,220,.1));transition:filter .3s;}
 .bz{fill:#0c1c2c;stroke:#1e3a5a;stroke-width:1.5;cursor:pointer;transition:fill .3s,stroke .3s,filter .3s;}
-.bz:hover{stroke:var(--neutral);stroke-width:2;}
+.bz:hover{stroke:var(--neu);stroke-width:2;}
 .bz.ap{fill:#00200e;stroke:var(--pos);filter:drop-shadow(0 0 5px var(--pos));}
 .bz.an{fill:#220008;stroke:var(--neg);filter:drop-shadow(0 0 5px var(--neg));}
 .bz.ae{fill:#180020;stroke:var(--emo);filter:drop-shadow(0 0 5px var(--emo));}
-.bz.au{fill:#001020;stroke:var(--neutral);filter:drop-shadow(0 0 3px var(--neutral));}
-.bz.al{stroke:var(--warn);fill:#1a1000;animation:lpulse 1.2s infinite;}
-.bz.av{stroke:var(--danger);fill:#1a0800;animation:apulse 1s infinite;}
-@keyframes lpulse{0%,100%{filter:drop-shadow(0 0 7px var(--warn))}50%{filter:drop-shadow(0 0 14px var(--warn))}}
-@keyframes apulse{0%,100%{filter:drop-shadow(0 0 6px var(--danger))}50%{filter:drop-shadow(0 0 12px var(--danger))}}
-.bz.ezone{stroke:var(--em);}
+.bz.au{fill:#001020;stroke:var(--neu);filter:drop-shadow(0 0 3px var(--neu));}
+.bz.al{stroke:var(--wa);fill:#1a1000;animation:lp 1.2s infinite;}
+.bz.av{stroke:var(--dng);fill:#1a0800;animation:dp 1s infinite;}
+.bz.ez{stroke:var(--em);}
+@keyframes lp{0%,100%{filter:drop-shadow(0 0 7px var(--wa))}50%{filter:drop-shadow(0 0 14px var(--wa))}}
+@keyframes dp{0%,100%{filter:drop-shadow(0 0 6px var(--dng))}50%{filter:drop-shadow(0 0 12px var(--dng))}}
+@keyframes fp{0%{filter:drop-shadow(0 0 22px var(--pos))}100%{filter:drop-shadow(0 0 5px rgba(0,180,220,.1))}}
+@keyframes fn{0%{filter:drop-shadow(0 0 22px var(--neg))}100%{filter:drop-shadow(0 0 5px rgba(0,180,220,.1))}}
+@keyframes fe{0%{filter:drop-shadow(0 0 22px var(--emo))}100%{filter:drop-shadow(0 0 5px rgba(0,180,220,.1))}}
+@keyframes fd{0%{filter:drop-shadow(0 0 22px var(--dng))}100%{filter:drop-shadow(0 0 5px rgba(0,180,220,.1))}}
+.FP{animation:fp .9s ease-out}.FN{animation:fn .9s ease-out}.FE{animation:fe .9s ease-out}.FD{animation:fd .9s ease-out}
 .sind{pointer-events:none;transition:opacity .3s;opacity:.3;}
-.sind.sf{opacity:1;animation:sflash .8s ease-out;}
-@keyframes sflash{0%{opacity:1;filter:brightness(2.5)}100%{opacity:.8;filter:brightness(1)}}
-.zlbl{font-family:var(--mono);font-size:7px;fill:var(--tdim);pointer-events:none;}
-@keyframes bfp{0%{filter:drop-shadow(0 0 22px var(--pos))}100%{filter:drop-shadow(0 0 5px rgba(0,180,220,.1))}}
-@keyframes bfn{0%{filter:drop-shadow(0 0 22px var(--neg))}100%{filter:drop-shadow(0 0 5px rgba(0,180,220,.1))}}
-@keyframes bfe{0%{filter:drop-shadow(0 0 22px var(--emo))}100%{filter:drop-shadow(0 0 5px rgba(0,180,220,.1))}}
-@keyframes bfd{0%{filter:drop-shadow(0 0 22px var(--danger))}100%{filter:drop-shadow(0 0 5px rgba(0,180,220,.1))}}
-.fp{animation:bfp .9s ease-out;}.fn{animation:bfn .9s ease-out;}.fe{animation:bfe .9s ease-out;}.fd{animation:bfd .9s ease-out;}
-.zchips{display:flex;flex-wrap:wrap;gap:3px;}
-.zc{font-family:var(--mono);font-size:7px;padding:2px 5px;border-radius:2px;border:1px solid var(--border);cursor:pointer;color:var(--tdim);transition:all .12s;background:transparent;letter-spacing:.5px;}
-.zc:hover{border-color:var(--neutral);color:var(--neutral);}
-.zc.sel{border-color:var(--pulse);color:var(--pulse);background:rgba(0,200,255,.05);}
+.sind.sf{opacity:1;animation:sfl .8s ease-out;}
+@keyframes sfl{0%{opacity:1;filter:brightness(2.5)}100%{opacity:.8}}
+.zchips{display:flex;flex-wrap:wrap;gap:2px;}
+.zc{font-family:var(--mo);font-size:6px;padding:2px 4px;border-radius:2px;border:1px solid var(--b0);cursor:pointer;color:var(--td);transition:all .1s;background:transparent;}
+.zc.sel{border-color:var(--pu);color:var(--pu);background:rgba(0,200,255,.05);}
 .zc.esel{border-color:var(--emo);color:var(--emo);background:var(--ed);}
-
 /* STIMULI */
-.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;flex-shrink:0;}
-.sg{background:var(--panel);border:1px solid var(--border);border-radius:3px;padding:9px;display:flex;flex-direction:column;gap:6px;}
-.sg.pos{border-color:var(--pm);}.sg.neg{border-color:var(--nm);}.sg.emo{border-color:var(--em);grid-column:1/-1;}
-.sg.sight{border-color:#ffdd4480;}.sg.hear{border-color:#44aaff80;}.sg.taste{border-color:#ff88aa80;}.sg.smell{border-color:#88ffcc80;}
-.glbl{font-family:var(--mono);font-size:7px;letter-spacing:3px;text-transform:uppercase;margin-bottom:1px;}
-.glbl.pos{color:var(--pos);}.glbl.neg{color:var(--neg);}.glbl.emo{color:var(--emo);}
-.glbl.sight{color:var(--sight);}.glbl.hear{color:var(--hear);}.glbl.taste{color:var(--taste);}.glbl.smell{color:var(--smell);}
-.irow{display:flex;align-items:center;gap:5px;}
-.ilbl{font-family:var(--mono);font-size:7px;color:var(--tdim);letter-spacing:1px;min-width:48px;}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-shrink:0;}
+.sg{background:var(--panel);border:1px solid var(--b0);border-radius:3px;padding:8px;display:flex;flex-direction:column;gap:5px;}
+.sg.pos{border-color:var(--pm)}.sg.neg{border-color:var(--nm)}.sg.emo{border-color:var(--em);grid-column:1/-1}
+.sg.sight{border-color:#ffdd4470}.sg.hear{border-color:#44aaff70}.sg.taste{border-color:#ff88aa70}.sg.smell{border-color:#88ffcc70}
+.glbl{font-family:var(--mo);font-size:7px;letter-spacing:2px;text-transform:uppercase;}
+.glbl.pos{color:var(--pos)}.glbl.neg{color:var(--neg)}.glbl.emo{color:var(--emo)}
+.glbl.sight{color:var(--si)}.glbl.hear{color:var(--he)}.glbl.taste{color:var(--ta)}.glbl.smell{color:var(--sm)}
+.irow{display:flex;align-items:center;gap:4px;}
+.ilbl{font-family:var(--mo);font-size:6px;color:var(--td);min-width:42px;}
 input[type=range]{-webkit-appearance:none;flex:1;height:3px;border-radius:2px;outline:none;cursor:pointer;}
-input[type=range].pr{background:linear-gradient(to right,var(--pos) var(--v,50%),var(--border) var(--v,50%));}
-input[type=range].nr{background:linear-gradient(to right,var(--neg) var(--v,50%),var(--border) var(--v,50%));}
-input[type=range].er{background:linear-gradient(to right,var(--emo) var(--v,50%),var(--border) var(--v,50%));}
-input[type=range].sir{background:linear-gradient(to right,var(--sight) var(--v,50%),var(--border) var(--v,50%));}
-input[type=range].her{background:linear-gradient(to right,var(--hear) var(--v,50%),var(--border) var(--v,50%));}
-input[type=range].tar{background:linear-gradient(to right,var(--taste) var(--v,50%),var(--border) var(--v,50%));}
-input[type=range].smr{background:linear-gradient(to right,var(--smell) var(--v,50%),var(--border) var(--v,50%));}
+input[type=range].pr{background:linear-gradient(to right,var(--pos) var(--v,50%),var(--b0) var(--v,50%))}
+input[type=range].nr{background:linear-gradient(to right,var(--neg) var(--v,50%),var(--b0) var(--v,50%))}
+input[type=range].er{background:linear-gradient(to right,var(--emo) var(--v,50%),var(--b0) var(--v,50%))}
+input[type=range].sir{background:linear-gradient(to right,var(--si) var(--v,50%),var(--b0) var(--v,50%))}
+input[type=range].her{background:linear-gradient(to right,var(--he) var(--v,50%),var(--b0) var(--v,50%))}
+input[type=range].tar{background:linear-gradient(to right,var(--ta) var(--v,50%),var(--b0) var(--v,50%))}
+input[type=range].smr{background:linear-gradient(to right,var(--sm) var(--v,50%),var(--b0) var(--v,50%))}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:9px;height:9px;border-radius:50%;border:none;cursor:pointer;}
-input[type=range].pr::-webkit-slider-thumb{background:var(--pos);box-shadow:0 0 4px var(--pos);}
-input[type=range].nr::-webkit-slider-thumb{background:var(--neg);box-shadow:0 0 4px var(--neg);}
-input[type=range].er::-webkit-slider-thumb{background:var(--emo);box-shadow:0 0 4px var(--emo);}
-input[type=range].sir::-webkit-slider-thumb{background:var(--sight);box-shadow:0 0 4px var(--sight);}
-input[type=range].her::-webkit-slider-thumb{background:var(--hear);box-shadow:0 0 4px var(--hear);}
-input[type=range].tar::-webkit-slider-thumb{background:var(--taste);box-shadow:0 0 4px var(--taste);}
-input[type=range].smr::-webkit-slider-thumb{background:var(--smell);box-shadow:0 0 4px var(--smell);}
-.ival{font-family:var(--mono);font-size:8px;min-width:22px;text-align:right;}
-.sb2{background:transparent;border:1px solid var(--bb);color:var(--text);font-family:var(--mono);font-size:9px;padding:5px 7px;cursor:pointer;border-radius:2px;text-align:left;transition:all .12s;display:flex;align-items:center;justify-content:space-between;letter-spacing:.5px;}
-.sb2:hover{background:var(--nd2);border-color:var(--neutral);color:var(--tbright);}
+input[type=range].pr::-webkit-slider-thumb{background:var(--pos)}input[type=range].nr::-webkit-slider-thumb{background:var(--neg)}
+input[type=range].er::-webkit-slider-thumb{background:var(--emo)}input[type=range].sir::-webkit-slider-thumb{background:var(--si)}
+input[type=range].her::-webkit-slider-thumb{background:var(--he)}input[type=range].tar::-webkit-slider-thumb{background:var(--ta)}
+input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
+.ival{font-family:var(--mo);font-size:7px;min-width:20px;text-align:right;}
+.sb2{background:transparent;border:1px solid var(--b1);color:var(--tx);font-family:var(--mo);font-size:8px;padding:4px 6px;cursor:pointer;border-radius:2px;text-align:left;transition:all .1s;display:flex;align-items:center;justify-content:space-between;}
 .sb2.pos:hover,.sb2.pos.fr{background:var(--pd);border-color:var(--pos);color:var(--pos);}
 .sb2.neg:hover,.sb2.neg.fr{background:var(--nd);border-color:var(--neg);color:var(--neg);}
 .sb2.emo:hover,.sb2.emo.fr{background:var(--ed);border-color:var(--emo);color:var(--emo);}
-.egrid,.ssgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;}
-.esb{background:transparent;border:1px solid var(--border);color:var(--tdim);font-family:var(--mono);font-size:8px;padding:5px 3px;cursor:pointer;border-radius:2px;text-align:center;transition:all .12s;display:flex;flex-direction:column;align-items:center;gap:2px;}
-.esb .ei{font-size:12px;line-height:1;}
+.egrid,.ssg{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;}
+.esb{background:transparent;border:1px solid var(--b0);color:var(--td);font-family:var(--mo);font-size:7px;padding:4px 2px;cursor:pointer;border-radius:2px;text-align:center;transition:all .1s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.esb .ei{font-size:11px;line-height:1;}
 .esb:hover,.esb.fr{border-color:var(--emo);color:var(--emo);background:var(--ed);}
-.esb.si:hover,.esb.si.fr{border-color:var(--sight);color:var(--sight);background:var(--sightd);}
-.esb.he:hover,.esb.he.fr{border-color:var(--hear);color:var(--hear);background:var(--heard);}
-.esb.ta:hover,.esb.ta.fr{border-color:var(--taste);color:var(--taste);background:var(--tasted);}
-.esb.sm:hover,.esb.sm.fr{border-color:var(--smell);color:var(--smell);background:var(--smelld);}
-
-/* LOG */
-.elog{background:var(--panel);border:1px solid var(--border);border-radius:3px;padding:8px;font-family:var(--mono);font-size:8px;height:90px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;flex-shrink:0;}
-.elog::-webkit-scrollbar{width:3px;}
-.elog::-webkit-scrollbar-thumb{background:var(--bb);}
-.le{display:flex;gap:5px;}.lt{color:var(--tdim);white-space:nowrap;}
-.lm.pos{color:var(--pos);}.lm.neg{color:var(--neg);}.lm.emo{color:var(--emo);}
-.lm.sys{color:var(--neutral);}.lm.res{color:var(--warn);}.lm.ai{color:#99ccff;}
-.lm.sight{color:var(--sight);}.lm.hear{color:var(--hear);}.lm.taste{color:var(--taste);}.lm.smell{color:var(--smell);}
-.lm.learn{color:var(--warn);}.lm.danger{color:var(--danger);}
-
-/* POPUP */
-#rpop{position:fixed;bottom:14px;left:50%;transform:translateX(-50%) translateY(14px);background:#081510;border:1px solid var(--pos);border-radius:3px;padding:9px 16px;font-family:var(--mono);font-size:9px;color:var(--pos);max-width:520px;text-align:center;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;z-index:800;letter-spacing:.8px;}
+.esb.si:hover,.esb.si.fr{border-color:var(--si);color:var(--si);background:var(--sid);}
+.esb.he:hover,.esb.he.fr{border-color:var(--he);color:var(--he);background:var(--hed);}
+.esb.ta:hover,.esb.ta.fr{border-color:var(--ta);color:var(--ta);background:var(--tad);}
+.esb.sm:hover,.esb.sm.fr{border-color:var(--sm);color:var(--sm);background:var(--smd);}
+.elog{background:var(--panel);border:1px solid var(--b0);border-radius:3px;padding:7px;font-family:var(--mo);font-size:7px;height:85px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;flex-shrink:0;}
+.elog::-webkit-scrollbar{width:3px}.elog::-webkit-scrollbar-thumb{background:var(--b1)}
+.le{display:flex;gap:5px;}.lt{color:var(--td);white-space:nowrap;}
+.lm.pos{color:var(--pos)}.lm.neg{color:var(--neg)}.lm.emo{color:var(--emo)}.lm.sys{color:var(--neu)}
+.lm.res{color:var(--wa)}.lm.ai{color:#99ccff}.lm.learn{color:var(--wa)}.lm.danger{color:var(--dng)}
+.lm.sight{color:var(--si)}.lm.hear{color:var(--he)}.lm.taste{color:var(--ta)}.lm.smell{color:var(--sm)}
+#rpop{position:fixed;bottom:12px;left:50%;transform:translateX(-50%) translateY(12px);background:#081510;border:1px solid var(--pos);border-radius:3px;padding:8px 14px;font-family:var(--mo);font-size:8px;color:var(--pos);max-width:540px;text-align:center;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;z-index:800;letter-spacing:.5px;}
 #rpop.neg{background:#150508;border-color:var(--neg);color:var(--neg);}
 #rpop.emo{background:#100815;border-color:var(--emo);color:var(--emo);}
-#rpop.learn{background:#14100a;border-color:var(--warn);color:var(--warn);}
-#rpop.danger{background:#1a0800;border-color:var(--danger);color:var(--danger);}
+#rpop.learn{background:#14100a;border-color:var(--wa);color:var(--wa);}
+#rpop.danger{background:#1a0800;border-color:var(--dng);color:var(--dng);}
 #rpop.show{opacity:1;transform:translateX(-50%) translateY(0);}
-
-/* PATHWAYS */
-#psv{width:100%;height:175px;background:var(--panel);border:1px solid var(--border);border-radius:3px;flex-shrink:0;}
-.pl{stroke:var(--neutral);stroke-width:1.5;opacity:.4;cursor:pointer;transition:opacity .2s,stroke .2s;}
-.pl.active{opacity:.85;}.pl.inactive{opacity:.15;stroke-dasharray:4 3;stroke:var(--tdim);}
-.pl:hover{opacity:1!important;stroke:var(--warn)!important;}
-.pl.ep.active{stroke:var(--emo);opacity:.7;}
-
-/* LEARNING CHART */
-.lc{display:flex;flex-direction:column;gap:5px;background:var(--panel);border:1px solid var(--border);border-radius:3px;padding:10px;flex-shrink:0;}
-.lcr{display:flex;align-items:center;gap:5px;}
-.lcn{font-family:var(--mono);font-size:7px;color:var(--tdim);min-width:55px;letter-spacing:.5px;}
-.lcbw{flex:1;height:7px;background:var(--border);border-radius:3px;overflow:hidden;}
+#psv{width:100%;height:170px;background:var(--panel);border:1px solid var(--b0);border-radius:3px;flex-shrink:0;}
+.pl{stroke:var(--neu);stroke-width:1.5;opacity:.4;cursor:pointer;transition:opacity .2s,stroke .2s;}
+.pl.active{opacity:.85}.pl.inactive{opacity:.15;stroke-dasharray:4 3;stroke:var(--td)}
+.pl:hover{opacity:1!important;stroke:var(--wa)!important}
+.pl.ep.active{stroke:var(--emo);opacity:.7}
+.lc{display:flex;flex-direction:column;gap:4px;background:var(--panel);border:1px solid var(--b0);border-radius:3px;padding:9px;}
+.lcr{display:flex;align-items:center;gap:4px;}
+.lcn{font-family:var(--mo);font-size:6px;color:var(--td);min-width:70px;}
+.lcbw{flex:1;height:6px;background:var(--b0);border-radius:3px;overflow:hidden;}
 .lcb{height:100%;border-radius:3px;transition:width 1s ease;}
-.lcs{font-family:var(--mono);font-size:6px;color:var(--tdim);min-width:66px;text-align:right;letter-spacing:.3px;white-space:nowrap;}
-.lcv{font-family:var(--mono);font-size:6px;color:var(--tdim);min-width:26px;text-align:right;}
-
-/* RESPONSES */
-.rlist{display:flex;flex-direction:column;gap:5px;flex:1;overflow-y:auto;}
-.rlist::-webkit-scrollbar{width:3px;}
-.rlist::-webkit-scrollbar-thumb{background:var(--bb);}
-.ri{background:var(--panel);border:1px solid var(--border);border-radius:2px;overflow:hidden;flex-shrink:0;}
-.rh{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;cursor:pointer;font-family:var(--mono);font-size:8px;transition:background .15s;}
-.rh:hover{background:var(--border);}
-.rn{color:var(--text);letter-spacing:.5px;}
-.rtag{font-size:6px;padding:1px 4px;border-radius:2px;}
-.rtag.pos{background:var(--pd);color:var(--pos);border:1px solid var(--pm);}
-.rtag.neg{background:var(--nd);color:var(--neg);border:1px solid var(--nm);}
-.rtag.emo{background:var(--ed);color:var(--emo);border:1px solid var(--em);}
-.rtag.sight{background:var(--sightd);color:var(--sight);border:1px solid #ffdd4450;}
-.rtag.hear{background:var(--heard);color:var(--hear);border:1px solid #44aaff50;}
-.rtag.taste{background:var(--tasted);color:var(--taste);border:1px solid #ff88aa50;}
-.rtag.smell{background:var(--smelld);color:var(--smell);border:1px solid #88ffcc50;}
-.rtag.avoidance{background:var(--dangd);color:var(--danger);border:1px solid #ff440050;}
-.rb{display:none;padding:7px;border-top:1px solid var(--border);}
-.rb.open{display:block;}
-.rb textarea{width:100%;background:var(--bg);border:1px solid var(--bb);color:var(--text);font-family:var(--mono);font-size:8px;padding:5px;border-radius:2px;resize:vertical;min-height:45px;line-height:1.5;}
-.rb textarea:focus{outline:none;border-color:var(--neutral);}
-.rmeta{display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:7px;color:var(--tdim);align-items:center;}
-.ti{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--tdim);font-family:var(--mono);font-size:7px;padding:3px 5px;border-radius:2px;margin-bottom:3px;}
-.ti:focus{outline:none;border-color:var(--neutral);}
-.smb{background:transparent;border:1px solid var(--bb);color:var(--tdim);font-family:var(--mono);font-size:7px;padding:2px 6px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .12s;}
-.smb:hover{border-color:var(--neutral);color:var(--neutral);}
-.smb.sv:hover{border-color:var(--pos);color:var(--pos);}
-.smb.dl:hover{border-color:var(--neg);color:var(--neg);}
-
+.lcs{font-family:var(--mo);font-size:5px;min-width:66px;text-align:right;letter-spacing:.2px;white-space:nowrap;}
+.lcv{font-family:var(--mo);font-size:5px;min-width:24px;text-align:right;}
+.rlist{display:flex;flex-direction:column;gap:4px;flex:1;overflow-y:auto;}
+.rlist::-webkit-scrollbar{width:3px}.rlist::-webkit-scrollbar-thumb{background:var(--b1)}
+.ri{background:var(--panel);border:1px solid var(--b0);border-radius:2px;overflow:hidden;flex-shrink:0;}
+.rh{display:flex;align-items:center;justify-content:space-between;padding:4px 7px;cursor:pointer;font-family:var(--mo);font-size:7px;transition:background .1s;}
+.rh:hover{background:var(--b0)}
+.rn{color:var(--tx)}.rtag{font-size:6px;padding:1px 4px;border-radius:2px;}
+.rtag.pos{background:var(--pd);color:var(--pos);border:1px solid var(--pm)}
+.rtag.neg{background:var(--nd);color:var(--neg);border:1px solid var(--nm)}
+.rtag.emo{background:var(--ed);color:var(--emo);border:1px solid var(--em)}
+.rtag.sight{background:var(--sid);color:var(--si);border:1px solid #ffdd4450}
+.rtag.hear{background:var(--hed);color:var(--he);border:1px solid #44aaff50}
+.rtag.taste{background:var(--tad);color:var(--ta);border:1px solid #ff88aa50}
+.rtag.smell{background:var(--smd);color:var(--sm);border:1px solid #88ffcc50}
+.rtag.avoidance{background:var(--dd);color:var(--dng);border:1px solid #ff440050}
+.rb{display:none;padding:6px;border-top:1px solid var(--b0)}
+.rb.open{display:block}
+.rb textarea{width:100%;background:var(--bg);border:1px solid var(--b1);color:var(--tx);font-family:var(--mo);font-size:7px;padding:4px;border-radius:2px;resize:vertical;min-height:40px;line-height:1.5;}
+.rb textarea:focus{outline:none;border-color:var(--neu)}
+.rmeta{display:flex;justify-content:space-between;margin-top:3px;font-family:var(--mo);font-size:6px;color:var(--td);align-items:center;}
+.ti{width:100%;background:var(--bg);border:1px solid var(--b0);color:var(--td);font-family:var(--mo);font-size:6px;padding:3px 5px;border-radius:2px;margin-bottom:3px;}
+.ti:focus{outline:none;border-color:var(--neu)}
+.smb{background:transparent;border:1px solid var(--b1);color:var(--td);font-family:var(--mo);font-size:7px;padding:2px 5px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .1s;}
+.smb:hover{border-color:var(--neu);color:var(--neu)}.smb.sv:hover{border-color:var(--pos);color:var(--pos)}.smb.dl:hover{border-color:var(--neg);color:var(--neg)}
 /* MAZE */
-.mwrap{display:flex;flex-direction:column;gap:7px;flex:1;padding:10px;overflow-y:auto;min-height:0;}
-.mwrap::-webkit-scrollbar{width:3px;}
-.mwrap::-webkit-scrollbar-thumb{background:var(--bb);}
-.msel{display:flex;flex-wrap:wrap;gap:4px;flex-shrink:0;}
-.mzb{background:transparent;border:1px solid var(--border);color:var(--tdim);font-family:var(--mono);font-size:7px;padding:3px 7px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .12s;}
-.mzb:hover{border-color:var(--neutral);color:var(--neutral);}
-.mzb.am{border-color:var(--pulse);color:var(--pulse);background:rgba(0,200,255,.06);}
-.mzb.avoid-mz{border-color:var(--danger)!important;color:var(--danger)!important;}
-.mzb.avoid-mz.am{background:var(--dangd)!important;}
-.mlb{background:var(--panel);border:1px solid var(--border);border-radius:3px;padding:8px;flex-shrink:0;}
-.mlt{font-family:var(--mono);font-size:8px;color:var(--warn);letter-spacing:2px;margin-bottom:4px;}
-.mlb2{font-family:var(--mono);font-size:8px;color:var(--text);line-height:1.5;letter-spacing:.3px;}
-.mlsense{font-family:var(--mono);font-size:7px;color:var(--tdim);margin-top:4px;letter-spacing:1px;}
-/* MAZE CONTROLS ROW */
-.mcrow{display:flex;gap:5px;align-items:center;justify-content:center;flex-wrap:wrap;flex-shrink:0;}
-.autocyc-toggle{font-family:var(--mono);font-size:8px;padding:4px 8px;cursor:pointer;border-radius:2px;border:1px solid var(--bb);background:transparent;color:var(--tdim);transition:all .15s;letter-spacing:1px;}
-.autocyc-toggle.on{border-color:var(--pos);color:var(--pos);background:var(--pd);}
-.autostim-toggle{font-family:var(--mono);font-size:8px;padding:4px 8px;cursor:pointer;border-radius:2px;border:1px solid var(--bb);background:transparent;color:var(--tdim);transition:all .15s;letter-spacing:1px;}
-.autostim-toggle.on{border-color:var(--emo);color:var(--emo);background:var(--ed);}
-#mc{border:1px solid var(--border);border-radius:3px;display:block;background:#030810;align-self:center;}
-.mstats{display:flex;gap:10px;font-family:var(--mono);font-size:8px;color:var(--tdim);justify-content:center;flex-shrink:0;}
-.msv{color:var(--pulse);}
-.minfo{font-family:var(--mono);font-size:7px;color:var(--tdim);text-align:center;letter-spacing:1px;line-height:1.6;flex-shrink:0;}
-/* Danger legend */
-.dlegend{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;flex-shrink:0;}
-.dleg-item{display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:7px;color:var(--tdim);}
-.dleg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
-
+.mwrap{display:flex;flex-direction:column;gap:6px;flex:1;padding:9px;overflow-y:auto;min-height:0;}
+.mwrap::-webkit-scrollbar{width:3px}.mwrap::-webkit-scrollbar-thumb{background:var(--b1)}
+.mcat{font-family:var(--mo);font-size:6px;color:var(--td);letter-spacing:2px;text-transform:uppercase;margin-top:4px;margin-bottom:2px;border-bottom:1px solid var(--b0);padding-bottom:2px;}
+.msel{display:flex;flex-wrap:wrap;gap:3px;}
+.mzb{background:transparent;border:1px solid var(--b0);color:var(--td);font-family:var(--mo);font-size:6px;padding:2px 5px;cursor:pointer;border-radius:2px;letter-spacing:.5px;transition:all .1s;}
+.mzb:hover{border-color:var(--neu);color:var(--neu)}.mzb.am{border-color:var(--pu);color:var(--pu);background:rgba(0,200,255,.06)}
+.mzb.av{border-color:#ff440060!important;color:var(--dng)!important}.mzb.av.am{background:var(--dd)!important}
+.mlb{background:var(--panel);border:1px solid var(--b0);border-radius:3px;padding:7px;flex-shrink:0;}
+.mlt{font-family:var(--mo);font-size:8px;color:var(--wa);letter-spacing:1px;margin-bottom:3px;}
+.mlb2{font-family:var(--mo);font-size:7px;color:var(--tx);line-height:1.5;}
+.mlsense{font-family:var(--mo);font-size:6px;color:var(--td);margin-top:3px;letter-spacing:1px;}
+.mcrow{display:flex;gap:4px;align-items:center;justify-content:center;flex-wrap:wrap;flex-shrink:0;}
+.tgl{font-family:var(--mo);font-size:7px;padding:3px 7px;cursor:pointer;border-radius:2px;border:1px solid var(--b1);background:transparent;color:var(--td);transition:all .12s;letter-spacing:.5px;}
+.tgl.on.ac{border-color:var(--pos);color:var(--pos);background:var(--pd)}
+.tgl.on.as{border-color:var(--emo);color:var(--emo);background:var(--ed)}
+#mc{border:1px solid var(--b0);border-radius:3px;display:block;background:#030810;align-self:center;}
+.mstats{display:flex;gap:8px;font-family:var(--mo);font-size:7px;color:var(--td);justify-content:center;flex-shrink:0;}
+.msv{color:var(--pu)}.minfo{font-family:var(--mo);font-size:6px;color:var(--td);text-align:center;letter-spacing:.5px;line-height:1.6;flex-shrink:0;}
+.dleg{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;flex-shrink:0;}
+.dli{display:flex;align-items:center;gap:3px;font-family:var(--mo);font-size:6px;color:var(--td);}
+.dld{width:7px;height:7px;border-radius:2px;flex-shrink:0;}
 /* MAZE CREATOR */
-.crwrap{display:flex;flex-direction:column;gap:7px;flex:1;padding:10px;overflow-y:auto;}
-.crwrap::-webkit-scrollbar{width:3px;}
-.crwrap::-webkit-scrollbar-thumb{background:var(--bb);}
-.cinfo{font-family:var(--mono);font-size:7px;color:var(--tdim);line-height:1.6;flex-shrink:0;}
+.crwrap{display:flex;flex-direction:column;gap:6px;flex:1;padding:9px;overflow-y:auto;}
+.crwrap::-webkit-scrollbar{width:3px}.crwrap::-webkit-scrollbar-thumb{background:var(--b1)}
+.cinfo{font-family:var(--mo);font-size:7px;color:var(--td);line-height:1.6;flex-shrink:0;}
+.cmt{font-family:var(--mo);font-size:7px;padding:3px 6px;cursor:pointer;border:1px solid var(--b0);border-radius:2px;color:var(--td);background:transparent;transition:all .1s;}
+.cmt.at{border-color:var(--pu);color:var(--pu);background:rgba(0,200,255,.06)}
+.cmt.dt.at{border-color:var(--dng);color:var(--dng);background:var(--dd)}
 .cgrid{display:grid;gap:2px;flex-shrink:0;align-self:center;}
-.cgc{width:22px;height:22px;border:1px solid var(--border);cursor:pointer;border-radius:1px;transition:background .1s;background:#040c14;}
-.cgc.wall{background:#0d2030;border-color:#1e3a5a;}
-.cgc.dng{background:#1a0a00;border-color:#ff440050;}
-.cgc.cs{background:#002a1a!important;border-color:var(--pos)!important;}
-.cgc.ce{background:#200010!important;border-color:var(--neg)!important;}
-.cfields{display:flex;flex-direction:column;gap:5px;flex-shrink:0;}
-.cfrow{display:flex;flex-direction:column;gap:2px;}
-.cflbl{font-family:var(--mono);font-size:7px;color:var(--tdim);letter-spacing:1px;}
-.cfinp{background:var(--bg);border:1px solid var(--bb);color:var(--text);font-family:var(--mono);font-size:8px;padding:5px 7px;border-radius:2px;width:100%;}
-.cfinp:focus{outline:none;border-color:var(--neutral);}
-.cfta{background:var(--bg);border:1px solid var(--bb);color:var(--text);font-family:var(--mono);font-size:8px;padding:5px 7px;border-radius:2px;width:100%;resize:vertical;min-height:40px;line-height:1.5;}
-.cfta:focus{outline:none;border-color:var(--neutral);}
-.cfsel{background:var(--bg);border:1px solid var(--bb);color:var(--text);font-family:var(--mono);font-size:8px;padding:4px 7px;border-radius:2px;width:100%;}
-.cbtns{display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;}
-.cmodetool{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap;}
-.cmt{font-family:var(--mono);font-size:7px;padding:3px 7px;cursor:pointer;border:1px solid var(--border);border-radius:2px;color:var(--tdim);background:transparent;transition:all .12s;letter-spacing:1px;}
-.cmt.active-tool{border-color:var(--pulse);color:var(--pulse);background:rgba(0,200,255,.06);}
-.cmt.dng-tool.active-tool{border-color:var(--danger);color:var(--danger);background:var(--dangd);}
-
+.cgc{width:20px;height:20px;border:1px solid var(--b0);cursor:pointer;border-radius:1px;transition:background .08s;background:#040c14;}
+.cgc.wall{background:#0d2030;border-color:#1e3a5a}.cgc.dng{background:#1a0a00;border-color:#ff440050}
+.cgc.cs{background:#002a1a!important;border-color:var(--pos)!important}.cgc.ce{background:#200010!important;border-color:var(--neg)!important}
+.cfinp{background:var(--bg);border:1px solid var(--b1);color:var(--tx);font-family:var(--mo);font-size:7px;padding:4px 6px;border-radius:2px;width:100%;}
+.cfinp:focus{outline:none;border-color:var(--neu)}
+.cfta{background:var(--bg);border:1px solid var(--b1);color:var(--tx);font-family:var(--mo);font-size:7px;padding:4px 6px;border-radius:2px;width:100%;resize:vertical;min-height:36px;line-height:1.5;}
+.cfta:focus{outline:none;border-color:var(--neu)}
+.cfsel{background:var(--bg);border:1px solid var(--b1);color:var(--tx);font-family:var(--mo);font-size:7px;padding:3px 6px;border-radius:2px;width:100%;}
 /* CHAT */
-.cwrap{flex:1;display:flex;flex-direction:column;min-height:0;padding:10px;gap:6px;}
-/* API key row */
-.apirow{display:flex;gap:5px;align-items:center;flex-shrink:0;}
-.apitoggle{font-family:var(--mono);font-size:7px;padding:3px 6px;cursor:pointer;border:1px solid var(--border);border-radius:2px;color:var(--tdim);background:transparent;transition:all .12s;letter-spacing:1px;white-space:nowrap;}
-.apitoggle:hover{border-color:var(--neutral);color:var(--neutral);}
-.apiinp{flex:1;background:var(--panel);border:1px solid var(--border);color:var(--tdim);font-family:var(--mono);font-size:8px;padding:4px 7px;border-radius:2px;outline:none;letter-spacing:.5px;display:none;}
-.apiinp:focus{border-color:var(--neutral);}
-.apimode{font-family:var(--mono);font-size:7px;color:var(--tdim);letter-spacing:1px;padding:2px 4px;border-radius:2px;background:var(--panel2);}
-.apimode.live{color:var(--pos);border:1px solid var(--pm);}
-.apimode.local{color:var(--warn);border:1px solid #ffaa0050;}
-.cmsgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:7px;min-height:0;}
-.cmsgs::-webkit-scrollbar{width:3px;}
-.cmsgs::-webkit-scrollbar-thumb{background:var(--bb);}
-.cm{max-width:88%;padding:7px 10px;border-radius:3px;font-family:var(--mono);font-size:9px;line-height:1.5;letter-spacing:.3px;}
-.cm.user{align-self:flex-end;background:var(--panel2);border:1px solid var(--bb);color:var(--text);}
-.cm.ai{align-self:flex-start;background:#080f18;border:1px solid #1a3a5a;color:#88ccff;border-left:2px solid var(--pulse);}
-.cm.ai .ail{font-size:7px;color:var(--pulse);letter-spacing:2px;margin-bottom:3px;display:block;}
-.cm.sm{align-self:center;color:var(--tdim);font-size:7px;border:none;background:transparent;padding:2px 0;}
+.cwrap{flex:1;display:flex;flex-direction:column;min-height:0;padding:9px;gap:5px;}
+.aistate{background:var(--p2);border:1px solid var(--b0);border-radius:3px;padding:6px 8px;flex-shrink:0;}
+.aistate-title{font-family:var(--mo);font-size:6px;color:var(--td);letter-spacing:2px;margin-bottom:4px;}
+.aistate-bars{display:flex;flex-direction:column;gap:3px;}
+.aisb{display:flex;align-items:center;gap:5px;}
+.aisbl{font-family:var(--mo);font-size:6px;color:var(--td);min-width:55px;}
+.aisbw{flex:1;height:4px;background:var(--b0);border-radius:2px;overflow:hidden;}
+.aisbb{height:100%;border-radius:2px;transition:width .8s ease;}
+.cmsgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;min-height:0;}
+.cmsgs::-webkit-scrollbar{width:3px}.cmsgs::-webkit-scrollbar-thumb{background:var(--b1)}
+.cm{max-width:90%;padding:6px 9px;border-radius:3px;font-family:var(--mo);font-size:8px;line-height:1.5;letter-spacing:.3px;}
+.cm.user{align-self:flex-end;background:var(--p2);border:1px solid var(--b1);color:var(--tx);}
+.cm.ai{align-self:flex-start;background:#080f18;border:1px solid #1a3a5a;color:#88ccff;border-left:2px solid var(--pu);}
+.cm.ai .ail{font-size:6px;color:var(--pu);letter-spacing:2px;margin-bottom:3px;display:block;}
+.cm.sm{align-self:center;color:var(--td);font-size:6px;border:none;background:transparent;padding:2px 0;}
 .cirow{display:flex;gap:5px;flex-shrink:0;}
-.ci{flex:1;background:var(--panel);border:1px solid var(--bb);color:var(--text);font-family:var(--mono);font-size:9px;padding:7px 9px;border-radius:2px;outline:none;transition:border-color .15s;letter-spacing:.3px;}
-.ci:focus{border-color:var(--pulse);}
-.csnd{background:transparent;border:1px solid var(--bb);color:var(--pulse);font-family:var(--mono);font-size:8px;padding:7px 10px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .15s;flex-shrink:0;}
-.csnd:hover{border-color:var(--pulse);background:rgba(0,200,255,.07);}
-.csnd:disabled{opacity:.4;cursor:default;}
-.think{font-family:var(--mono);font-size:8px;color:var(--pulse);letter-spacing:2px;animation:blink .8s infinite;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.ci{flex:1;background:var(--panel);border:1px solid var(--b1);color:var(--tx);font-family:var(--mo);font-size:8px;padding:6px 8px;border-radius:2px;outline:none;transition:border-color .15s;}
+.ci:focus{border-color:var(--pu)}
+.csnd{background:transparent;border:1px solid var(--b1);color:var(--pu);font-family:var(--mo);font-size:7px;padding:6px 9px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .12s;flex-shrink:0;}
+.csnd:hover{border-color:var(--pu);background:rgba(0,200,255,.07)}.csnd:disabled{opacity:.4;cursor:default}
+.think{font-family:var(--mo);font-size:7px;color:var(--pu);letter-spacing:2px;animation:bl .8s infinite;}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.2}}
+/* RECOVERY MODAL */
+#recModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;align-items:center;justify-content:center;}
+#recModal.show{display:flex}
+.recBox{background:#080f1a;border:1px solid var(--wa);border-radius:4px;padding:20px;max-width:480px;width:90%;font-family:var(--mo);display:flex;flex-direction:column;gap:10px;}
+.recTitle{color:var(--wa);font-size:10px;letter-spacing:3px;}
+.recMsg{color:var(--tx);font-size:8px;line-height:1.6;}
+.recBtns{display:flex;gap:6px;flex-wrap:wrap;}
+.recBtn{background:transparent;border:1px solid var(--b1);color:var(--tx);font-family:var(--mo);font-size:8px;padding:5px 10px;cursor:pointer;border-radius:2px;transition:all .12s;}
+.recBtn.yes{border-color:var(--pos);color:var(--pos)}.recBtn.yes:hover{background:var(--pd)}
+.recBtn.no{border-color:var(--neg);color:var(--neg)}.recBtn.no:hover{background:var(--nd)}
+.recBtn.ex{border-color:var(--si);color:var(--si)}.recBtn.ex:hover{background:var(--sid)}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo"><span class="pdot"></span>NEXUS · NEURAL CONDITIONING v4</div>
+  <div class="logo"><span class="pdot"></span>NEXUS · NEURAL CONDITIONING v5</div>
   <div class="hc">
     <button class="hb sv" onclick="saveState()">SAVE</button>
     <button class="hb ld" onclick="loadState()">LOAD</button>
+    <button class="hb ex" onclick="exportState()">EXPORT JSON</button>
+    <label class="hb im" style="cursor:pointer">IMPORT JSON<input type="file" accept=".json" style="display:none" onchange="importState(event)"></label>
     <button class="hb rst" onclick="resetState()">RESET</button>
     <div class="ebadge" id="emoBadge">EMO: NEUTRAL</div>
+    <span class="savets" id="saveTs">not saved</span>
   </div>
   <div class="hstats">
-    <div class="hstat"><span class="sl">POS</span><span class="sv2" id="hPos">000</span></div>
-    <div class="hstat"><span class="sl">NEG</span><span class="nv" id="hNeg">000</span></div>
-    <div class="hstat"><span class="sl">EMO</span><span class="ev" id="hEmo">000</span></div>
-    <div class="hstat"><span class="sl">MAZES</span><span class="pv" id="hMaze">000</span></div>
-    <div class="hstat"><span class="sl">AVOIDANCE</span><span style="color:var(--danger)" id="hAvoid">000</span></div>
-    <div class="hstat"><span class="sl">PATHS</span><span class="pv" id="hPath">0/0</span></div>
+    <div class="hs"><span class="sl">POS</span><span class="sc" id="hPos">000</span></div>
+    <div class="hs"><span class="sl">NEG</span><span class="nc" id="hNeg">000</span></div>
+    <div class="hs"><span class="sl">EMO</span><span class="ec" id="hEmo">000</span></div>
+    <div class="hs"><span class="sl">MAZES</span><span class="pc" id="hMaze">000</span></div>
+    <div class="hs"><span class="sl">AVOID</span><span style="color:var(--dng)" id="hAvoid">000</span></div>
+    <div class="hs"><span class="sl">PATHS</span><span class="pc" id="hPath">0/0</span></div>
   </div>
 </header>
-
 <div class="main">
-
 <!-- ═══ LEFT: BODY MAP ═══ -->
 <div class="panel">
   <div class="pi">
@@ -316,7 +279,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--smell);box-shadow:0
       <div class="nd" id="nDisp">ENTITY-01</div>
       <input class="ni" id="nInp" maxlength="20" placeholder="name...">
       <div class="ner">
-        <button class="nb" id="nEditBtn" onclick="toggleName()">RENAME</button>
+        <button class="nb" onclick="toggleName()">RENAME</button>
         <button class="nb ok" id="nOkBtn" onclick="confirmName()" style="display:none">CONFIRM</button>
       </div>
     </div>
@@ -337,15 +300,14 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--smell);box-shadow:0
         <rect class="bz" data-zone="right-leg" x="66" y="154" width="24" height="68" rx="10"/>
         <ellipse class="bz" data-zone="left-foot" cx="40" cy="232" rx="13" ry="7"/>
         <ellipse class="bz" data-zone="right-foot" cx="79" cy="232" rx="13" ry="7"/>
-        <ellipse class="bz ezone" data-zone="heart" cx="60" cy="72" rx="8" ry="7"/>
-        <ellipse class="bz ezone" data-zone="solar-plexus" cx="60" cy="102" rx="7" ry="5"/>
-        <ellipse class="bz ezone" data-zone="gut" cx="60" cy="118" rx="6" ry="5"/>
-        <ellipse class="bz ezone" data-zone="throat" cx="60" cy="50" rx="5" ry="4"/>
-        <ellipse class="bz ezone" data-zone="crown" cx="60" cy="8" rx="8" ry="5"/>
-        <!-- Sense overlays -->
-        <g class="sind" id="ssi"><ellipse cx="53" cy="22" rx="4" ry="2.5" fill="none" stroke="#ffdd44" stroke-width="1.2" opacity=".7"/><ellipse cx="67" cy="22" rx="4" ry="2.5" fill="none" stroke="#ffdd44" stroke-width="1.2" opacity=".7"/><circle cx="53" cy="22" r="1.2" fill="#ffdd44" opacity=".6"/><circle cx="67" cy="22" r="1.2" fill="#ffdd44" opacity=".6"/></g>
+        <ellipse class="bz ez" data-zone="heart" cx="60" cy="72" rx="8" ry="7"/>
+        <ellipse class="bz ez" data-zone="solar-plexus" cx="60" cy="102" rx="7" ry="5"/>
+        <ellipse class="bz ez" data-zone="gut" cx="60" cy="118" rx="6" ry="5"/>
+        <ellipse class="bz ez" data-zone="throat" cx="60" cy="50" rx="5" ry="4"/>
+        <ellipse class="bz ez" data-zone="crown" cx="60" cy="8" rx="8" ry="5"/>
+        <g class="sind" id="ssi"><ellipse cx="53" cy="22" rx="4" ry="2.5" fill="none" stroke="#ffdd44" stroke-width="1.2" opacity=".7"/><ellipse cx="67" cy="22" rx="4" ry="2.5" fill="none" stroke="#ffdd44" stroke-width="1.2" opacity=".7"/><circle cx="53" cy="22" r="1.2" fill="#ffdd44"/><circle cx="67" cy="22" r="1.2" fill="#ffdd44"/></g>
         <g class="sind" id="shi"><path d="M42,20 Q38,24 39,28 Q40,32 44,31" fill="none" stroke="#44aaff" stroke-width="1.2" opacity=".7"/><path d="M78,20 Q82,24 81,28 Q80,32 76,31" fill="none" stroke="#44aaff" stroke-width="1.2" opacity=".7"/></g>
-        <g class="sind" id="ssm"><path d="M57,28 Q60,35 63,28" fill="none" stroke="#88ffcc" stroke-width="1.1" opacity=".7"/><circle cx="57.5" cy="28.5" r="1" fill="#88ffcc" opacity=".6"/><circle cx="62.5" cy="28.5" r="1" fill="#88ffcc" opacity=".6"/></g>
+        <g class="sind" id="ssm"><path d="M57,28 Q60,35 63,28" fill="none" stroke="#88ffcc" stroke-width="1.1" opacity=".7"/><circle cx="57.5" cy="28.5" r="1" fill="#88ffcc"/><circle cx="62.5" cy="28.5" r="1" fill="#88ffcc"/></g>
         <g class="sind" id="sta"><path d="M53,35 Q60,40 67,35" fill="none" stroke="#ff88aa" stroke-width="1.2" opacity=".7"/></g>
         <g class="sind" id="sto"><circle cx="10" cy="134" r="2" fill="#00ffaa" opacity=".5"/><circle cx="110" cy="134" r="2" fill="#00ffaa" opacity=".5"/></g>
       </svg>
@@ -354,31 +316,26 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--smell);box-shadow:0
     <div class="zchips" id="zchips"></div>
   </div>
 </div>
-
 <!-- ═══ CENTER: STIMULI / SENSES / CHAT ═══ -->
 <div class="panel">
   <div class="tbar">
-    <button class="tab active" onclick="swTab('tab-stim',this)">STIMULI</button>
-    <button class="tab" onclick="swTab('tab-sense',this)">SENSES</button>
-    <button class="tab" onclick="swTab('tab-chat',this)">CHAT</button>
+    <button class="tab active" onclick="swTab('t-stim',this)">STIMULI</button>
+    <button class="tab" onclick="swTab('t-sense',this)">SENSES</button>
+    <button class="tab" onclick="swTab('t-chat',this)">CHAT</button>
   </div>
-
-  <!-- STIMULI -->
-  <div class="tc active" id="tab-stim">
+  <div class="tc active" id="t-stim">
     <div class="pi">
       <div class="sgrid">
-        <div class="sg pos">
-          <div class="glbl pos">▲ Positive</div>
-          <div class="irow"><span class="ilbl">INTENSITY</span><input type="range" class="pr" id="posInt" min="1" max="100" value="50"><span class="ival sv2" id="posIntV">50</span></div>
+        <div class="sg pos"><div class="glbl pos">▲ Positive</div>
+          <div class="irow"><span class="ilbl">INTENSITY</span><input type="range" class="pr" id="posInt" min="1" max="100" value="60"><span class="ival sc" id="posIntV">60</span></div>
           <button class="sb2 pos" data-stim="reward" data-type="pos"><span>REWARD</span><span>◈</span></button>
           <button class="sb2 pos" data-stim="pleasure" data-type="pos"><span>PLEASURE</span><span>◎</span></button>
           <button class="sb2 pos" data-stim="warmth" data-type="pos"><span>WARMTH</span><span>◉</span></button>
           <button class="sb2 pos" data-stim="calm" data-type="pos"><span>CALM</span><span>◌</span></button>
           <button class="sb2 pos" data-stim="energy" data-type="pos"><span>ENERGY</span><span>◆</span></button>
         </div>
-        <div class="sg neg">
-          <div class="glbl neg">▼ Negative</div>
-          <div class="irow"><span class="ilbl">INTENSITY</span><input type="range" class="nr" id="negInt" min="1" max="100" value="50"><span class="ival nv" id="negIntV">50</span></div>
+        <div class="sg neg"><div class="glbl neg">▼ Negative</div>
+          <div class="irow"><span class="ilbl">INTENSITY</span><input type="range" class="nr" id="negInt" min="1" max="100" value="60"><span class="ival nc" id="negIntV">60</span></div>
           <button class="sb2 neg" data-stim="aversion" data-type="neg"><span>AVERSION</span><span>◈</span></button>
           <button class="sb2 neg" data-stim="discomfort" data-type="neg"><span>DISCOMFORT</span><span>◎</span></button>
           <button class="sb2 neg" data-stim="cold" data-type="neg"><span>COLD</span><span>◉</span></button>
@@ -386,10 +343,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--smell);box-shadow:0
           <button class="sb2 neg" data-stim="shock" data-type="neg"><span>SHOCK</span><span>◆</span></button>
         </div>
         <div class="sg emo">
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div class="glbl emo">◈ Emotions</div>
-            <div class="irow" style="flex:0 0 auto;gap:5px;"><span class="ilbl" style="min-width:0">INT</span><input type="range" class="er" id="emoInt" min="1" max="100" value="50" style="width:70px"><span class="ival ev" id="emoIntV">50</span></div>
-          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div class="glbl emo">◈ Emotions</div><div class="irow" style="flex:0 0 auto;gap:4px;"><span class="ilbl" style="min-width:0">INT</span><input type="range" class="er" id="emoInt" min="1" max="100" value="60" style="width:65px"><span class="ival ec" id="emoIntV">60</span></div></div>
           <div class="egrid">
             <button class="esb" data-stim="joy" data-type="emo" data-valence="pos"><span class="ei">😊</span><span>JOY</span></button>
             <button class="esb" data-stim="love" data-type="emo" data-valence="pos"><span class="ei">💗</span><span>LOVE</span></button>
@@ -408,65 +362,27 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--smell);box-shadow:0
       <div class="elog" id="elog"></div>
     </div>
   </div>
-
-  <!-- SENSES -->
-  <div class="tc" id="tab-sense">
+  <div class="tc" id="t-sense">
     <div class="pi">
-      <div class="sg sight">
-        <div style="display:flex;align-items:center;justify-content:space-between;"><div class="glbl sight">👁 Sight</div><div class="irow" style="flex:0 0 auto;gap:5px;"><span class="ilbl" style="min-width:0">INT</span><input type="range" class="sir" id="siInt" min="1" max="100" value="50" style="width:70px"><span class="ival" id="siIntV" style="color:var(--sight)">50</span></div></div>
-        <div class="ssgrid">
-          <button class="esb si" data-stim="bright-light" data-type="sight" data-sense="sight"><span class="ei">☀</span><span>BRIGHT</span></button>
-          <button class="esb si" data-stim="darkness" data-type="sight" data-sense="sight"><span class="ei">◾</span><span>DARK</span></button>
-          <button class="esb si" data-stim="color" data-type="sight" data-sense="sight"><span class="ei">◈</span><span>COLOR</span></button>
-          <button class="esb si" data-stim="motion" data-type="sight" data-sense="sight"><span class="ei">≋</span><span>MOTION</span></button>
-          <button class="esb si" data-stim="pattern" data-type="sight" data-sense="sight"><span class="ei">▦</span><span>PATTERN</span></button>
-        </div>
+      <div class="sg sight"><div style="display:flex;align-items:center;justify-content:space-between;"><div class="glbl sight">👁 Sight</div><div class="irow" style="flex:0 0 auto;gap:4px;"><input type="range" class="sir" id="siInt" min="1" max="100" value="60" style="width:60px"><span class="ival" id="siIntV" style="color:var(--si)">60</span></div></div>
+        <div class="ssg"><button class="esb si" data-stim="bright-light" data-type="sight" data-sense="sight"><span class="ei">☀</span><span>BRIGHT</span></button><button class="esb si" data-stim="darkness" data-type="sight" data-sense="sight"><span class="ei">◾</span><span>DARK</span></button><button class="esb si" data-stim="color" data-type="sight" data-sense="sight"><span class="ei">◈</span><span>COLOR</span></button><button class="esb si" data-stim="motion" data-type="sight" data-sense="sight"><span class="ei">≋</span><span>MOTION</span></button><button class="esb si" data-stim="pattern" data-type="sight" data-sense="sight"><span class="ei">▦</span><span>PATTERN</span></button></div>
       </div>
-      <div class="sg hear">
-        <div style="display:flex;align-items:center;justify-content:space-between;"><div class="glbl hear">◉ Hearing</div><div class="irow" style="flex:0 0 auto;gap:5px;"><span class="ilbl" style="min-width:0">INT</span><input type="range" class="her" id="heInt" min="1" max="100" value="50" style="width:70px"><span class="ival" id="heIntV" style="color:var(--hear)">50</span></div></div>
-        <div class="ssgrid">
-          <button class="esb he" data-stim="loud" data-type="hear" data-sense="hearing"><span class="ei">◆</span><span>LOUD</span></button>
-          <button class="esb he" data-stim="silence" data-type="hear" data-sense="hearing"><span class="ei">◌</span><span>SILENCE</span></button>
-          <button class="esb he" data-stim="music" data-type="hear" data-sense="hearing"><span class="ei">♫</span><span>MUSIC</span></button>
-          <button class="esb he" data-stim="speech" data-type="hear" data-sense="hearing"><span class="ei">◎</span><span>SPEECH</span></button>
-          <button class="esb he" data-stim="noise" data-type="hear" data-sense="hearing"><span class="ei">≈</span><span>NOISE</span></button>
-        </div>
+      <div class="sg hear"><div style="display:flex;align-items:center;justify-content:space-between;"><div class="glbl hear">◉ Hearing</div><div class="irow" style="flex:0 0 auto;gap:4px;"><input type="range" class="her" id="heInt" min="1" max="100" value="60" style="width:60px"><span class="ival" id="heIntV" style="color:var(--he)">60</span></div></div>
+        <div class="ssg"><button class="esb he" data-stim="loud" data-type="hear" data-sense="hearing"><span class="ei">◆</span><span>LOUD</span></button><button class="esb he" data-stim="silence" data-type="hear" data-sense="hearing"><span class="ei">◌</span><span>SILENCE</span></button><button class="esb he" data-stim="music" data-type="hear" data-sense="hearing"><span class="ei">♫</span><span>MUSIC</span></button><button class="esb he" data-stim="speech" data-type="hear" data-sense="hearing"><span class="ei">◎</span><span>SPEECH</span></button><button class="esb he" data-stim="noise" data-type="hear" data-sense="hearing"><span class="ei">≈</span><span>NOISE</span></button></div>
       </div>
-      <div class="sg taste">
-        <div style="display:flex;align-items:center;justify-content:space-between;"><div class="glbl taste">◈ Taste</div><div class="irow" style="flex:0 0 auto;gap:5px;"><span class="ilbl" style="min-width:0">INT</span><input type="range" class="tar" id="taInt" min="1" max="100" value="50" style="width:70px"><span class="ival" id="taIntV" style="color:var(--taste)">50</span></div></div>
-        <div class="ssgrid">
-          <button class="esb ta" data-stim="sweet" data-type="taste" data-sense="taste"><span class="ei">◇</span><span>SWEET</span></button>
-          <button class="esb ta" data-stim="sour" data-type="taste" data-sense="taste"><span class="ei">◈</span><span>SOUR</span></button>
-          <button class="esb ta" data-stim="salty" data-type="taste" data-sense="taste"><span class="ei">◉</span><span>SALTY</span></button>
-          <button class="esb ta" data-stim="bitter" data-type="taste" data-sense="taste"><span class="ei">▽</span><span>BITTER</span></button>
-          <button class="esb ta" data-stim="umami" data-type="taste" data-sense="taste"><span class="ei">◎</span><span>UMAMI</span></button>
-        </div>
+      <div class="sg taste"><div style="display:flex;align-items:center;justify-content:space-between;"><div class="glbl taste">◈ Taste</div><div class="irow" style="flex:0 0 auto;gap:4px;"><input type="range" class="tar" id="taInt" min="1" max="100" value="60" style="width:60px"><span class="ival" id="taIntV" style="color:var(--ta)">60</span></div></div>
+        <div class="ssg"><button class="esb ta" data-stim="sweet" data-type="taste" data-sense="taste"><span class="ei">◇</span><span>SWEET</span></button><button class="esb ta" data-stim="sour" data-type="taste" data-sense="taste"><span class="ei">◈</span><span>SOUR</span></button><button class="esb ta" data-stim="salty" data-type="taste" data-sense="taste"><span class="ei">◉</span><span>SALTY</span></button><button class="esb ta" data-stim="bitter" data-type="taste" data-sense="taste"><span class="ei">▽</span><span>BITTER</span></button><button class="esb ta" data-stim="umami" data-type="taste" data-sense="taste"><span class="ei">◎</span><span>UMAMI</span></button></div>
       </div>
-      <div class="sg smell">
-        <div style="display:flex;align-items:center;justify-content:space-between;"><div class="glbl smell">◌ Smell</div><div class="irow" style="flex:0 0 auto;gap:5px;"><span class="ilbl" style="min-width:0">INT</span><input type="range" class="smr" id="smInt" min="1" max="100" value="50" style="width:70px"><span class="ival" id="smIntV" style="color:var(--smell)">50</span></div></div>
-        <div class="ssgrid">
-          <button class="esb sm" data-stim="floral" data-type="smell" data-sense="smell"><span class="ei">❋</span><span>FLORAL</span></button>
-          <button class="esb sm" data-stim="putrid" data-type="smell" data-sense="smell"><span class="ei">◈</span><span>PUTRID</span></button>
-          <button class="esb sm" data-stim="earthy" data-type="smell" data-sense="smell"><span class="ei">◉</span><span>EARTHY</span></button>
-          <button class="esb sm" data-stim="sharp" data-type="smell" data-sense="smell"><span class="ei">◆</span><span>SHARP</span></button>
-          <button class="esb sm" data-stim="sweet-scent" data-type="smell" data-sense="smell"><span class="ei">◌</span><span>SWEET</span></button>
-        </div>
+      <div class="sg smell"><div style="display:flex;align-items:center;justify-content:space-between;"><div class="glbl smell">◌ Smell</div><div class="irow" style="flex:0 0 auto;gap:4px;"><input type="range" class="smr" id="smInt" min="1" max="100" value="60" style="width:60px"><span class="ival" id="smIntV" style="color:var(--sm)">60</span></div></div>
+        <div class="ssg"><button class="esb sm" data-stim="floral" data-type="smell" data-sense="smell"><span class="ei">❋</span><span>FLORAL</span></button><button class="esb sm" data-stim="putrid" data-type="smell" data-sense="smell"><span class="ei">◈</span><span>PUTRID</span></button><button class="esb sm" data-stim="earthy" data-type="smell" data-sense="smell"><span class="ei">◉</span><span>EARTHY</span></button><button class="esb sm" data-stim="sharp" data-type="smell" data-sense="smell"><span class="ei">◆</span><span>SHARP</span></button><button class="esb sm" data-stim="sweet-scent" data-type="smell" data-sense="smell"><span class="ei">◌</span><span>SWEET</span></button></div>
       </div>
       <div class="elog" id="elog2"></div>
     </div>
   </div>
-
-  <!-- CHAT -->
-  <div class="tc" id="tab-chat">
+  <div class="tc" id="t-chat">
     <div class="cwrap">
-      <div class="apirow">
-        <span class="apimode" id="apiMode">LOCAL AI</span>
-        <button class="apitoggle" onclick="toggleApiKey()">USE API KEY</button>
-        <input class="apiinp" id="apiKeyInp" placeholder="sk-ant-..." type="password">
-      </div>
-      <div class="cmsgs" id="cmsgs">
-        <div class="cm sm">// entity online · local AI active · enter API key for live responses</div>
-      </div>
+      <div class="aistate" id="aiStatePanel"></div>
+      <div class="cmsgs" id="cmsgs"><div class="cm sm">// entity online · local AI active · no API key required</div></div>
       <div class="cirow">
         <input class="ci" id="chatIn" placeholder="speak to entity..." maxlength="500">
         <button class="csnd" id="chatSend" onclick="sendChat()">SEND ▶</button>
@@ -474,8 +390,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--smell);box-shadow:0
     </div>
   </div>
 </div>
-
-<!-- ═══ RIGHT: PATHS / LEARNING / RESPONSES / MAZE / CREATE ═══ -->
+<!-- ═══ RIGHT ═══ -->
 <div class="panel">
   <div class="tbar">
     <button class="tab active" onclick="swTab('rt-path',this)">PATHS</button>
@@ -484,230 +399,246 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--smell);box-shadow:0
     <button class="tab" onclick="swTab('rt-maze',this)">MAZE</button>
     <button class="tab" onclick="swTab('rt-create',this)">CREATE</button>
   </div>
-
   <div class="tc active" id="rt-path">
     <div class="pi">
-      <svg id="psv" viewBox="0 0 310 170"></svg>
-      <div style="font-family:var(--mono);font-size:7px;color:var(--tdim)">click line to toggle · click node to activate · <span style="color:var(--emo)">purple=emotion</span></div>
+      <svg id="psv" viewBox="0 0 310 165"></svg>
+      <div style="font-family:var(--mo);font-size:6px;color:var(--td)">click line to toggle · node to activate · <span style="color:var(--emo)">purple=emotion</span></div>
     </div>
   </div>
-
   <div class="tc" id="rt-learn">
     <div class="pi">
       <div class="lc" id="lChart"></div>
-      <div style="font-family:var(--mono);font-size:6px;color:var(--tdim);text-align:center;padding:4px 0;letter-spacing:.5px;">INFANT → TODDLER → CHILD → TEEN → ADULT → EXPERT → ONE OF US</div>
+      <div style="font-family:var(--mo);font-size:5px;color:var(--td);text-align:center;padding:3px 0;letter-spacing:.3px;">INFANT → TODDLER → CHILD → TEEN → ADULT → EXPERT → ONE OF US</div>
     </div>
   </div>
-
   <div class="tc" id="rt-resp">
     <div class="pi">
       <div class="rlist" id="rList"></div>
       <button class="smb" id="addRBtn" style="margin-top:4px;align-self:flex-start">+ ADD RESPONSE</button>
     </div>
   </div>
-
   <div class="tc" id="rt-maze">
     <div class="mwrap">
-      <div class="sec" style="flex-shrink:0">Select Maze</div>
-      <div class="msel" id="mzSel"></div>
-      <div class="mlb">
-        <div class="mlt" id="mlTitle">— SELECT A MAZE —</div>
-        <div class="mlb2" id="mlBody">Choose a training maze above.</div>
-        <div class="mlsense" id="mlSense"></div>
-      </div>
+      <div id="mazeCats"></div>
+      <div class="mlb"><div class="mlt" id="mlTitle">— SELECT A MAZE —</div><div class="mlb2" id="mlBody">Select a training maze above to begin.</div><div class="mlsense" id="mlSense"></div></div>
       <canvas id="mc" width="264" height="264"></canvas>
-      <div class="mstats">
-        <span>RUN: <span class="msv" id="mzRun">0</span></span>
-        <span>STEPS: <span class="msv" id="mzSteps">0</span></span>
-        <span>BEST: <span class="msv" id="mzBest">—</span></span>
-        <span>DANGER HITS: <span style="color:var(--danger)" id="mzDanger">0</span></span>
-      </div>
+      <div class="mstats"><span>RUN: <span class="msv" id="mzRun">0</span></span><span>STEPS: <span class="msv" id="mzSteps">0</span></span><span>BEST: <span class="msv" id="mzBest">—</span></span><span>DANGER: <span style="color:var(--dng)" id="mzDng">0</span></span></div>
       <div class="mcrow">
         <button class="smb" onclick="startMaze()">▶ RUN</button>
         <button class="smb" onclick="stopMaze()">■ STOP</button>
         <button class="smb" onclick="resetMaze()">↺ RESET</button>
-        <button class="autocyc-toggle" id="acBtn" onclick="toggleAutoCycle()">AUTO-CYCLE: OFF</button>
-        <button class="autostim-toggle" id="asBtn" onclick="toggleAutoStim()">AUTO-STIM: OFF</button>
+        <button class="tgl ac" id="acBtn" onclick="toggleAutoCycle()">AUTO-CYCLE: OFF</button>
+        <button class="tgl as" id="asBtn" onclick="toggleAutoStim()">AUTO-STIM: OFF</button>
       </div>
-      <div class="dlegend">
-        <div class="dleg-item"><div class="dleg-dot" style="background:#ff440066;border:1px solid var(--danger)"></div><span>Danger Zone</span></div>
-        <div class="dleg-item"><div class="dleg-dot" style="background:rgba(0,200,255,.2);border:1px solid var(--pulse)"></div><span>Visited</span></div>
-        <div class="dleg-item"><div class="dleg-dot" style="background:rgba(80,0,0,.5);border:1px solid #ff224466"></div><span>Avoided (learned)</span></div>
+      <div class="dleg">
+        <div class="dli"><div class="dld" style="background:#ff440066;border:1px solid var(--dng)"></div><span>Danger</span></div>
+        <div class="dli"><div class="dld" style="background:rgba(80,0,0,.5);border:1px solid #ff224466"></div><span>Avoided</span></div>
+        <div class="dli"><div class="dld" style="background:rgba(0,200,255,.15);border:1px solid var(--pu)"></div><span>Visited</span></div>
       </div>
       <div class="minfo" id="mzInfo">select a maze and press RUN</div>
     </div>
   </div>
-
   <div class="tc" id="rt-create">
     <div class="crwrap">
       <div class="sec">Maze Creator</div>
-      <div class="cinfo">Click/drag to paint walls. Switch tool for danger zones. Start=<span style="color:var(--pos)">■</span> End=<span style="color:var(--neg)">■</span></div>
-      <div class="cmodetool">
-        <button class="cmt active-tool" id="tool-wall" onclick="setTool('wall',this)">WALL</button>
-        <button class="cmt dng-tool" id="tool-dng" onclick="setTool('danger',this)">DANGER ZONE</button>
-        <button class="cmt" id="tool-end" onclick="setTool('end',this)">MOVE END</button>
-        <button class="cmt" id="tool-erase" onclick="setTool('erase',this)">ERASE</button>
+      <div class="cinfo">Click/drag: paint wall or danger zone. Lesson text is editable after save.</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;flex-shrink:0">
+        <button class="cmt at" id="t-wall" onclick="setTool('wall',this)">WALL</button>
+        <button class="cmt dt" id="t-dng" onclick="setTool('dng',this)">DANGER</button>
+        <button class="cmt" id="t-end" onclick="setTool('end',this)">MOVE END</button>
+        <button class="cmt" id="t-era" onclick="setTool('era',this)">ERASE</button>
       </div>
       <div class="cgrid" id="cgrid"></div>
-      <div class="cfields">
-        <div class="cfrow"><span class="cflbl">NAME</span><input class="cfinp" id="cName" placeholder="maze name..." maxlength="40"></div>
-        <div class="cfrow"><span class="cflbl">DOMAIN</span>
-          <select class="cfsel" id="cDomain">
-            <option value="touch">Touch</option><option value="sight">Sight</option>
-            <option value="hearing">Hearing</option><option value="taste">Taste</option>
-            <option value="smell">Smell</option><option value="motor">Motor</option>
-            <option value="emotional">Emotional</option><option value="avoidance">Avoidance</option>
-            <option value="memory">Memory</option><option value="cognitive">Cognitive</option>
-          </select>
+      <div style="display:flex;flex-direction:column;gap:5px;">
+        <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-family:var(--mo);font-size:6px;color:var(--td)">NAME</span><input class="cfinp" id="cName" placeholder="maze name..." maxlength="40"></div>
+        <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-family:var(--mo);font-size:6px;color:var(--td)">DOMAIN</span>
+          <select class="cfsel" id="cDomain"><option value="cognitive">Cognitive</option><option value="social">Social</option><option value="emotional">Emotional</option><option value="avoidance">Avoidance</option><option value="memory">Memory</option><option value="touch">Touch</option><option value="sight">Sight</option><option value="hearing">Hearing</option><option value="taste">Taste</option><option value="smell">Smell</option><option value="motor">Motor</option><option value="language">Language</option><option value="psychology">Psychology</option><option value="relationships">Relationships</option><option value="creativity">Creativity</option></select>
         </div>
-        <div class="cfrow"><span class="cflbl">DANGER STIM</span>
-          <select class="cfsel" id="cDangerStim">
-            <option value="shock">Shock</option><option value="aversion">Aversion</option>
-            <option value="discomfort">Discomfort</option><option value="cold">Cold</option>
-            <option value="tension">Tension</option>
-          </select>
+        <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-family:var(--mo);font-size:6px;color:var(--td)">DANGER STIM</span>
+          <select class="cfsel" id="cDangerStim"><option value="shock">Shock</option><option value="aversion">Aversion</option><option value="discomfort">Discomfort</option><option value="cold">Cold</option><option value="tension">Tension</option></select>
         </div>
-        <div class="cfrow"><span class="cflbl">LESSON (editable)</span><textarea class="cfta" id="cLesson" placeholder="what this maze teaches..."></textarea></div>
+        <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-family:var(--mo);font-size:6px;color:var(--td)">LESSON (editable)</span><textarea class="cfta" id="cLesson" placeholder="what this maze teaches..."></textarea></div>
       </div>
-      <div class="cbtns">
+      <div style="display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;">
         <button class="smb sv" onclick="saveCustomMaze()">SAVE MAZE</button>
         <button class="smb" onclick="clearCreator()">CLEAR</button>
       </div>
       <div class="sec">Custom Mazes</div>
-      <div id="customList" style="display:flex;flex-direction:column;gap:4px;"></div>
+      <div id="customList" style="display:flex;flex-direction:column;gap:3px;"></div>
     </div>
   </div>
 </div>
 </div>
 <div id="rpop"></div>
-
+<!-- RECOVERY MODAL -->
+<div id="recModal">
+  <div class="recBox">
+    <div class="recTitle">◈ SAVE DATA RECOVERY</div>
+    <div class="recMsg" id="recMsg">Checking for saved training data...</div>
+    <div class="recBtns" id="recBtns"></div>
+  </div>
+</div>
 <script>
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+// SEEDED PRNG + MAZE GENERATOR
+// ══════════════════════════════════════════════════════
+function mulb(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
+function hashStr(s){let h=0;for(let i=0;i<s.length;i++)h=Math.imul(31,h)+s.charCodeAt(i)|0;return Math.abs(h);}
+function genMaze(seed,dng=0,MS=11){
+  const rng=mulb(seed);
+  const G=Array.from({length:MS},()=>Array(MS).fill(1));
+  function carve(x,y){G[y][x]=0;const d=[{dx:2,dy:0},{dx:-2,dy:0},{dx:0,dy:2},{dx:0,dy:-2}];for(let i=d.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[d[i],d[j]]=[d[j],d[i]];}for(const{dx,dy}of d){const nx=x+dx,ny=y+dy;if(nx>=0&&ny>=0&&nx<MS&&ny<MS&&G[ny][nx]===1){G[y+dy/2][x+dx/2]=0;carve(nx,ny);}}}
+  carve(0,0);G[0][0]=0;G[MS-1][MS-1]=0;
+  if(dng>0)for(let y=0;y<MS;y++)for(let x=0;x<MS;x++){if(G[y][x]===0&&!(x===0&&y===0)&&!(x===MS-1&&y===MS-1)&&rng()<dng)G[y][x]=2;}
+  return G;
+}
+// ══════════════════════════════════════════════════════
 // CONSTANTS
-// ═══════════════════════════════════════════════════════
-const MS = 11, CELL = 24;
-const STAGES = [
-  {n:'INFANT',min:0},{n:'TODDLER',min:30},{n:'CHILD',min:80},{n:'TEEN',min:180},
-  {n:'YOUNG ADU',min:350},{n:'ADULT',min:600},{n:'EXPERT',min:1000},{n:'ONE OF US',min:1800}
-];
-const DCOL = {
-  touch:'#00ffaa',sight:'#ffdd44',hearing:'#44aaff',taste:'#ff88aa',
-  smell:'#88ffcc',motor:'#ff8844',emotional:'#cc66ff',memory:'#44ccff',
-  cognitive:'#ff44cc',social:'#aaffaa',avoidance:'#ff4400'
-};
-const DZ = { // domain → body zones
+// ══════════════════════════════════════════════════════
+const MS=11,CELL=24;
+const STAGES=[{n:'INFANT',min:0},{n:'TODDLER',min:30},{n:'CHILD',min:80},{n:'TEEN',min:180},{n:'YOUNG ADU',min:350},{n:'ADULT',min:600},{n:'EXPERT',min:1000},{n:'ONE OF US',min:1800}];
+const DCOL={touch:'#00ffaa',sight:'#ffdd44',hearing:'#44aaff',taste:'#ff88aa',smell:'#88ffcc',motor:'#ff8844',emotional:'#cc66ff',memory:'#44ccff',cognitive:'#ff44cc',social:'#aaffaa',avoidance:'#ff4400',texture:'#ffcc88',psychology:'#dd88ff',behavioral:'#ff99dd',family:'#88ddff',business:'#ffdd88',sexuality:'#ff77bb',relationships:'#ffaacc',speaking:'#aaffdd',language:'#88bbff',empathy:'#ffbb88',pain:'#ff6655',senses:'#ffffff',creativity:'#ffff88',humor:'#ddff88',trust:'#88ffbb',attachment:'#cc99ff',identity:'#ff99aa',intuition:'#99ddff',boundaries:'#ff8877',conflict:'#ff6644',selfawareness:'#ccffaa',spirituality:'#ddccff'};
+const DZ={
   touch:['left-hand','right-hand','chest','left-arm','right-arm'],
-  sight:['head','crown'],hearing:['head','neck'],taste:['head','throat'],
-  smell:['head'],motor:['left-arm','right-arm','left-leg','right-leg','left-foot','right-foot'],
-  emotional:['heart','solar-plexus','gut'],memory:['head','crown'],
-  cognitive:['head','crown'],social:['chest','throat','head'],
-  avoidance:['chest','abdomen','solar-plexus','gut']
+  sight:['head','crown'],hearing:['head','neck'],taste:['head','throat'],smell:['head'],
+  motor:['left-arm','right-arm','left-leg','right-leg','left-foot','right-foot'],
+  emotional:['heart','solar-plexus','gut'],memory:['head','crown'],cognitive:['head','crown'],
+  social:['chest','throat','head'],avoidance:['chest','abdomen','solar-plexus','gut'],
+  texture:['left-hand','right-hand','chest','abdomen'],
+  psychology:['head','crown','solar-plexus'],behavioral:['head','abdomen','gut'],
+  family:['chest','heart','gut'],business:['head','chest','throat'],
+  sexuality:['pelvis','chest','heart','abdomen'],relationships:['heart','chest','throat'],
+  speaking:['throat','neck','head'],language:['head','neck','throat'],
+  empathy:['heart','chest','solar-plexus'],pain:['chest','abdomen','solar-plexus'],
+  senses:['head','left-hand','right-hand','chest','neck'],
+  creativity:['head','crown','chest'],humor:['chest','throat','abdomen'],
+  trust:['heart','chest','gut'],attachment:['heart','chest','solar-plexus'],
+  identity:['head','crown','chest'],intuition:['gut','solar-plexus','heart'],
+  boundaries:['chest','abdomen','gut'],conflict:['chest','solar-plexus','throat'],
+  selfawareness:['head','crown','heart'],spirituality:['crown','chest','heart'],
 };
-const SINDS = {sight:'ssi',hearing:'shi',taste:'ta',smell:'ssm',touch:'sto'};
+const SNDS={sight:'ssi',hearing:'shi',taste:'sta',smell:'ssm',touch:'sto'};
 
-// ─── PRESET MAZE GRIDS (0=open, 1=wall, 2=danger) ───
-const GRIDS = {
-  touch:[
-    [0,0,0,1,0,0,0,1,0,0,0],[0,1,0,1,0,1,0,1,0,1,0],[0,1,0,0,0,1,0,0,0,1,0],
-    [0,0,0,1,1,1,1,1,0,1,0],[0,1,0,0,0,0,0,0,0,1,0],[0,1,1,1,0,1,1,1,1,1,0],
-    [0,0,0,0,0,1,0,0,0,0,0],[1,1,0,1,1,1,0,1,1,1,0],[0,0,0,1,0,0,0,1,0,0,0],
-    [0,1,1,1,0,1,0,1,0,1,0],[0,0,0,0,0,0,0,0,0,0,0]
-  ],
-  sight:[
-    [0,1,0,0,0,1,0,0,0,1,0],[0,1,0,1,0,1,0,1,0,1,0],[0,0,0,1,0,0,0,1,0,0,0],
-    [1,1,0,1,1,1,1,1,1,1,0],[0,0,0,0,0,0,0,0,0,0,0],[0,1,1,1,1,0,1,1,1,1,0],
-    [0,0,0,0,0,0,0,0,0,0,0],[1,1,1,1,0,1,1,0,1,1,1],[0,0,0,0,0,1,0,0,0,0,0],
-    [0,1,1,1,0,1,0,1,1,1,0],[0,0,0,0,0,0,0,1,0,0,0]
-  ],
-  hearing:[
-    [0,0,0,0,0,0,0,0,0,0,0],[0,1,1,0,1,0,1,0,1,1,0],[0,1,0,0,1,0,1,0,0,1,0],
-    [0,1,0,1,1,0,1,1,0,1,0],[0,0,0,1,0,0,0,1,0,0,0],[1,1,0,1,0,1,0,1,0,1,1],
-    [0,0,0,0,0,1,0,0,0,1,0],[0,1,1,1,0,1,1,1,0,1,0],[0,1,0,0,0,0,0,0,0,1,0],
-    [0,1,0,1,1,1,1,1,0,1,0],[0,0,0,0,0,0,0,1,0,0,0]
-  ],
-  taste:[
-    [0,0,0,1,0,0,0,1,0,0,0],[1,1,0,1,0,1,0,0,0,1,1],[0,0,0,0,0,1,1,1,0,0,0],
-    [0,1,1,1,0,0,0,0,0,1,0],[0,0,0,1,1,1,1,1,0,1,0],[1,1,0,0,0,0,0,0,0,1,0],
-    [0,0,0,1,1,1,1,1,1,1,0],[0,1,0,0,0,0,0,0,0,0,0],[0,1,1,1,1,1,1,1,1,1,0],
-    [0,0,0,0,0,0,0,0,0,0,0],[1,1,1,1,1,0,1,1,1,1,0]
-  ],
-  smell:[
-    [0,1,0,0,0,0,0,0,0,1,0],[0,1,0,1,1,1,1,1,0,1,0],[0,0,0,1,0,0,0,1,0,0,0],
-    [1,1,0,1,0,1,0,1,1,1,0],[0,0,0,0,0,1,0,0,0,0,0],[0,1,1,1,1,1,1,1,1,1,0],
-    [0,0,0,0,0,0,0,0,0,0,0],[1,1,1,0,1,1,1,0,1,1,1],[0,0,0,0,1,0,0,0,1,0,0],
-    [0,1,1,0,1,0,1,0,1,1,0],[0,0,0,0,0,0,1,0,0,0,0]
-  ],
-  motor:[
-    [0,0,0,0,0,0,0,0,0,0,0],[0,1,0,1,0,1,0,1,0,1,0],[0,1,0,1,0,1,0,1,0,1,0],
-    [0,0,0,0,0,0,0,0,0,0,0],[1,1,1,1,0,1,1,1,1,1,1],[0,0,0,0,0,0,0,0,0,0,0],
-    [0,1,0,1,0,1,0,1,0,1,0],[0,1,0,1,0,1,0,1,0,1,0],[0,0,0,1,0,0,0,1,0,0,0],
-    [1,1,0,1,1,1,0,1,1,1,0],[0,0,0,0,0,0,0,1,0,0,0]
-  ],
-  emotional:[
-    [0,0,0,1,0,0,0,1,0,0,0],[1,1,0,0,0,1,0,0,0,1,1],[0,0,0,1,0,1,0,1,0,0,0],
-    [0,1,1,1,0,1,0,1,1,1,0],[0,0,0,0,0,0,0,0,0,0,0],[0,1,1,1,1,0,1,1,1,1,0],
-    [0,1,0,0,0,0,0,0,0,1,0],[0,1,0,1,1,1,1,1,0,1,0],[0,0,0,1,0,0,0,1,0,0,0],
-    [1,1,0,1,0,1,0,1,0,1,0],[0,0,0,0,0,1,0,0,0,0,0]
-  ],
-  // ─── AVOIDANCE MAZES (2 = danger cell) ───
-  av_shock:[
-    [0,0,0,1,0,0,0,1,0,0,0],[0,1,0,1,0,1,0,1,0,1,0],[0,1,0,0,0,1,0,0,0,1,0],
-    [0,1,0,1,0,1,0,1,0,1,0],[0,0,2,1,0,0,0,1,2,0,0],[1,1,0,0,0,1,0,0,0,1,1],
-    [0,0,0,1,2,0,2,1,0,0,0],[0,1,0,0,0,0,0,0,0,1,0],[0,1,2,1,1,1,1,1,2,1,0],
-    [0,1,0,0,0,0,0,0,0,1,0],[0,0,0,1,1,0,1,1,0,0,0]
-  ],
-  av_cold:[
-    [0,0,0,0,0,0,0,0,0,0,0],[0,1,1,2,1,0,1,2,1,1,0],[0,1,0,0,1,0,1,0,0,1,0],
-    [0,0,0,1,1,0,1,1,0,0,0],[1,1,0,2,0,0,0,2,0,1,1],[0,0,0,0,0,0,0,0,0,0,0],
-    [0,1,2,1,1,0,1,1,2,1,0],[0,1,0,0,0,0,0,0,0,1,0],[0,0,0,1,2,0,2,1,0,0,0],
-    [1,1,0,1,0,0,0,1,0,1,1],[0,0,0,0,0,0,0,0,0,0,0]
-  ],
-  av_tension:[
-    [0,1,0,0,0,0,0,0,0,1,0],[0,1,0,1,1,2,1,1,0,1,0],[0,0,0,1,0,0,0,1,0,0,0],
-    [1,1,0,1,0,2,0,1,0,1,1],[0,0,0,2,0,0,0,2,0,0,0],[0,1,0,1,0,0,0,1,0,1,0],
-    [0,1,0,1,2,0,2,1,0,1,0],[0,0,0,0,0,0,0,0,0,0,0],[1,1,2,1,1,0,1,1,2,1,1],
-    [0,0,0,0,0,0,0,0,0,0,0],[0,1,1,1,0,0,0,1,1,1,0]
-  ],
-  av_aversion:[
-    [0,0,0,1,2,0,2,1,0,0,0],[0,1,0,1,0,0,0,1,0,1,0],[0,1,0,0,0,1,0,0,0,1,0],
-    [0,0,2,1,0,1,0,1,2,0,0],[1,1,0,0,0,1,0,0,0,1,1],[0,0,0,1,0,0,0,1,0,0,0],
-    [0,1,2,0,0,0,0,0,2,1,0],[0,1,0,1,1,0,1,1,0,1,0],[0,0,0,1,0,0,0,1,0,0,0],
-    [1,1,0,0,2,0,2,0,0,1,0],[0,0,0,1,0,0,0,1,0,0,0]
-  ],
-  av_gauntlet:[
-    [0,2,0,0,0,0,0,0,0,2,0],[0,0,0,1,1,2,1,1,0,0,0],[0,1,0,2,0,0,0,2,0,1,0],
-    [0,1,0,1,0,0,0,1,0,1,0],[0,2,0,1,2,0,2,1,0,2,0],[0,0,0,0,0,0,0,0,0,0,0],
-    [2,1,0,2,1,0,1,2,0,1,2],[0,1,0,0,1,0,1,0,0,1,0],[0,0,0,1,0,0,0,1,0,0,0],
-    [1,2,0,1,0,0,0,1,0,2,1],[0,0,0,0,0,0,0,0,0,0,0]
-  ]
+// Domain → auto-stim sequences [positive stims for good nav, negative for danger]
+const DOM_STIMS={
+  touch:     {pos:['warmth','pleasure','calm'],neg:['cold','discomfort']},
+  sight:     {pos:['color','pattern','bright-light'],neg:['darkness','aversion']},
+  hearing:   {pos:['music','speech','silence'],neg:['noise','loud']},
+  taste:     {pos:['sweet','umami'],neg:['bitter','sour']},
+  smell:     {pos:['floral','earthy','sweet-scent'],neg:['putrid','sharp']},
+  motor:     {pos:['energy','reward'],neg:['tension','discomfort']},
+  emotional: {pos:['joy','love','calm'],neg:['anxiety','fear']},
+  memory:    {pos:['calm','reward','energy'],neg:['tension','discomfort']},
+  cognitive: {pos:['energy','curiosity','pattern'],neg:['tension','anxiety']},
+  social:    {pos:['warmth','joy','love'],neg:['shame','anxiety']},
+  family:    {pos:['love','warmth','joy'],neg:['grief','shame']},
+  business:  {pos:['energy','pride','reward'],neg:['tension','discomfort']},
+  sexuality: {pos:['love','pleasure','warmth'],neg:['shame','fear']},
+  relationships:{pos:['love','warmth','trust'],neg:['grief','anxiety']},
+  speaking:  {pos:['speech','music','energy'],neg:['silence','tension']},
+  language:  {pos:['speech','music','pattern'],neg:['noise','tension']},
+  empathy:   {pos:['love','warmth','curiosity'],neg:['grief','anxiety']},
+  pain:      {pos:['calm','warmth','pleasure'],neg:['shock','cold']},
+  senses:    {pos:['color','music','sweet','floral','warmth'],neg:['bitter','putrid','noise','cold']},
+  texture:   {pos:['warmth','pleasure','calm'],neg:['cold','discomfort']},
+  psychology:{pos:['curiosity','calm','energy'],neg:['anxiety','fear']},
+  behavioral:{pos:['reward','calm','energy'],neg:['aversion','tension']},
+  avoidance: {pos:['calm','reward'],neg:['shock','cold','tension','aversion','discomfort']},
+  creativity:{pos:['joy','awe','curiosity'],neg:['tension','discomfort']},
+  humor:     {pos:['joy','pleasure','energy'],neg:['tension','shame']},
+  trust:     {pos:['warmth','love','calm'],neg:['anxiety','fear']},
+  attachment:{pos:['love','warmth','calm'],neg:['grief','anxiety']},
+  identity:  {pos:['pride','energy','curiosity'],neg:['shame','anxiety']},
+  intuition: {pos:['calm','curiosity','awe'],neg:['anxiety','tension']},
+  boundaries:{pos:['calm','energy','pride'],neg:['discomfort','aversion']},
+  conflict:  {pos:['energy','calm','pride'],neg:['anger','tension']},
+  selfawareness:{pos:['curiosity','awe','calm'],neg:['shame','anxiety']},
+  spirituality:{pos:['awe','love','calm'],neg:['anxiety','grief']},
 };
-
-const PRESETS = [
-  {id:'touch',name:'TOUCH',domain:'touch',sense:'touch',dangerStim:null,lesson:'Surface contact & pressure',lessonDesc:'The entity maps tactile feedback — learning to distinguish pressure, texture gradient and thermal boundaries through physical navigation.',grid:GRIDS.touch,avoid:false},
-  {id:'sight',name:'SIGHT',domain:'sight',sense:'sight',dangerStim:null,lesson:'Visual pattern recognition',lessonDesc:'Path-finding using visual cues. The entity develops edge detection, depth and spatial pattern recognition.',grid:GRIDS.sight,avoid:false},
-  {id:'hearing',name:'HEARING',domain:'hearing',sense:'hearing',dangerStim:null,lesson:'Acoustic spatial awareness',lessonDesc:'The entity learns to parse directional sound echoes, discriminate signal from noise, and follow auditory gradients.',grid:GRIDS.hearing,avoid:false},
-  {id:'taste',name:'TASTE',domain:'taste',sense:'taste',dangerStim:null,lesson:'Chemical signal discrimination',lessonDesc:'Taste receptors map molecular gradient trails. The entity learns to follow nutrient signals and distinguish aversion markers.',grid:GRIDS.taste,avoid:false},
-  {id:'smell',name:'SMELL',domain:'smell',sense:'smell',dangerStim:null,lesson:'Olfactory trail following',lessonDesc:'Scent gradient navigation. The entity isolates target molecules from interference and tracks chemical plumes to source.',grid:GRIDS.smell,avoid:false},
-  {id:'motor',name:'MOTOR',domain:'motor',sense:'touch',dangerStim:null,lesson:'Coordinated movement',lessonDesc:'Motor cortex sequencing — coordinated limb movements, fluid action strings, proprioceptive error correction.',grid:GRIDS.motor,avoid:false},
-  {id:'emotional',name:'EMOTION',domain:'emotional',sense:null,dangerStim:null,lesson:'Emotional terrain nav.',lessonDesc:'Navigating emotional complexity — approaching reward despite fear, tolerating discomfort, recognizing safety cues.',grid:GRIDS.emotional,avoid:false},
-  // AVOIDANCE SERIES
-  {id:'av_shock',name:'SHOCK FIELD',domain:'avoidance',sense:null,dangerStim:'shock',lesson:'Shock avoidance',lessonDesc:'Electric danger zones threaten shortcut paths. The entity learns to route around shock signals and commit to the safe corridor. Memory of shocked cells strengthens avoidance across runs.',grid:GRIDS.av_shock,avoid:true},
-  {id:'av_cold',name:'COLD CHAMBER',domain:'avoidance',sense:null,dangerStim:'cold',lesson:'Cold zone avoidance',lessonDesc:'Thermal aversion zones block tempting paths. The entity develops cold-signal detection and learns to prefer warmth-safe routes. Response strengthens with accumulated negative conditioning.',grid:GRIDS.av_cold,avoid:true},
-  {id:'av_tension',name:'TENSION RING',domain:'avoidance',sense:null,dangerStim:'tension',lesson:'Tension field mapping',lessonDesc:'High-tension zones surround central shortcuts. The entity must map the tension boundary and navigate the outer safe perimeter. Tension memory grows across cycles.',grid:GRIDS.av_tension,avoid:true},
-  {id:'av_aversion',name:'AVERSION FIELD',domain:'avoidance',sense:null,dangerStim:'aversion',lesson:'Aversion signal avoidance',lessonDesc:'Scattered aversion zones create a dangerous open field. The entity learns to hesitate, probe, and reroute. Strong avoidance conditioning required for clean navigation.',grid:GRIDS.av_aversion,avoid:true},
-  {id:'av_gauntlet',name:'DANGER GAUNTLET',domain:'avoidance',sense:null,dangerStim:'discomfort',lesson:'Full avoidance gauntlet',lessonDesc:'Dense multi-zone danger field — maximum threat density. Only with robust avoidance memory and strong negative conditioning will the entity find the clean path. Final avoidance test.',grid:GRIDS.av_gauntlet,avoid:true},
+// ══════════════════════════════════════════════════════
+// MAZE DOMAIN CONFIGS (34 total)
+// ══════════════════════════════════════════════════════
+const MZ_CAT=[
+  {cat:'SENSORY',mazes:[
+    {id:'touch',name:'TOUCH',domain:'touch',lesson:'Tactile boundary mapping',lessonDesc:'The entity maps surface contact and pressure — learning to distinguish texture gradients, thermal boundaries, and safe/unsafe contact through physical navigation. Touch receptors link directly to memory encoding.',dangerDensity:0},
+    {id:'texture',name:'TEXTURE',domain:'texture',lesson:'Texture & surface discrimination',lessonDesc:'Fine-grained tactile discrimination. The entity learns rough vs smooth, hard vs soft, wet vs dry through corridor walls that vary in sensory quality. Essential for physical world interaction.',dangerDensity:0.03},
+    {id:'sight',name:'SIGHT',domain:'sight',lesson:'Visual pattern recognition',lessonDesc:'Path-finding using visual cues. Develops edge detection, depth perception, spatial pattern recognition. Occipital-parietal integration required for full visual field processing.',dangerDensity:0},
+    {id:'hearing',name:'HEARING',domain:'hearing',lesson:'Acoustic spatial awareness',lessonDesc:'Echolocation of boundaries. The entity learns to parse directional sound echoes, discriminate signal from noise, and follow auditory gradients. Temporal lobe phoneme building.',dangerDensity:0},
+    {id:'taste',name:'TASTE',domain:'taste',lesson:'Chemical signal discrimination',lessonDesc:'Taste receptors map molecular gradient trails. Learning to follow nutrient signals, distinguish aversion markers, and encode taste-reward associations for survival decisions.',dangerDensity:0.02},
+    {id:'smell',name:'SMELL',domain:'smell',lesson:'Olfactory trail following',lessonDesc:'Scent gradient navigation. Isolates target molecules from complex interference, tracks diffuse chemical plumes to source. Olfactory-limbic link provides fastest emotional encoding.',dangerDensity:0},
+    {id:'senses',name:'ALL SENSES',domain:'senses',lesson:'Full sensory integration',lessonDesc:'All five senses fire simultaneously during navigation. The entity develops sensory cross-referencing, learns to weight competing signals, and builds an integrated sensory world-model.',dangerDensity:0.04},
+  ]},
+  {cat:'PHYSICAL & MOTOR',mazes:[
+    {id:'motor',name:'MOTOR',domain:'motor',lesson:'Coordinated movement patterns',lessonDesc:'Motor cortex sequencing — coordinated limb movements, fluid action strings, proprioceptive error correction in real time. Foundation for all physical skill acquisition.',dangerDensity:0},
+    {id:'pain',name:'PAIN ↔ PLEASURE',domain:'pain',lesson:'Pain-pleasure boundary mapping',lessonDesc:'Danger zones carry discomfort signals while the path to goal delivers pleasure reward. The entity learns that pain can precede gain — building resilience, risk-tolerance, and reward-seeking despite aversion.',dangerDensity:0.08},
+  ]},
+  {cat:'COGNITIVE',mazes:[
+    {id:'memory',name:'MEMORY',domain:'memory',lesson:'Working memory & recall',lessonDesc:'The entity must remember previously explored dead-ends and reroute efficiently. Hippocampal encoding and prefrontal recall circuits develop through repeated navigation failure and correction.',dangerDensity:0},
+    {id:'cognitive',name:'COGNITIVE',domain:'cognitive',lesson:'Problem-solving & planning',lessonDesc:'Complex branching paths require forward planning. The entity develops goal-directed search, hypothesis testing, and cognitive flexibility — hallmarks of executive function.',dangerDensity:0.04},
+    {id:'creativity',name:'CREATIVITY',domain:'creativity',lesson:'Novel path generation',lessonDesc:'No obvious route exists. The entity must combine known patterns in new ways, tolerate ambiguity, and generate creative solutions. Right-hemisphere associative processing develops.',dangerDensity:0.03},
+    {id:'intuition',name:'INTUITION',domain:'intuition',lesson:'Gut-feel decision making',lessonDesc:'Sparse cues, rapid decisions. The entity learns to trust fast somatic signals over slow analysis — developing the gut-brain axis and pre-conscious pattern recognition.',dangerDensity:0.05},
+    {id:'selfawareness',name:'SELF-AWARE',domain:'selfawareness',lesson:'Metacognitive monitoring',lessonDesc:'The entity observes its own navigation patterns, recognizes errors, and adjusts strategy. Meta-awareness — knowing that you know, and knowing what you do not know.',dangerDensity:0.03},
+  ]},
+  {cat:'EMOTIONAL',mazes:[
+    {id:'emotional',name:'EMOTION',domain:'emotional',lesson:'Emotional terrain navigation',lessonDesc:'Navigating emotional complexity — approaching reward despite fear signals, tolerating discomfort, recognizing safety cues, regulating arousal adaptively.',dangerDensity:0.05},
+    {id:'empathy',name:'EMPATHY',domain:'empathy',lesson:'Emotional resonance training',lessonDesc:'The entity navigates a field where danger zones carry grief and shame signals — while safe paths deliver love and warmth. Learning to feel others\' pain while maintaining stability.',dangerDensity:0.06},
+    {id:'attachment',name:'ATTACHMENT',domain:'attachment',lesson:'Bonding & secure base',lessonDesc:'Builds secure attachment patterns — the entity learns that the goal is safe, reliable, and rewarding. Approach behavior strengthens. Foundation for all relationship capacity.',dangerDensity:0.03},
+    {id:'trust',name:'TRUST',domain:'trust',lesson:'Trust calibration',lessonDesc:'Some danger zones are marked deceptively — the entity learns to test before committing. Over runs, trust calibration develops: when to approach, when to wait, when to retreat.',dangerDensity:0.07},
+    {id:'spirituality',name:'SPIRITUAL',domain:'spirituality',lesson:'Transcendence & awe',lessonDesc:'Long-path maze with rare but powerful awe rewards. The entity learns patience, surrender, and the experience of something larger than self. Crown-chakra resonance training.',dangerDensity:0.02},
+  ]},
+  {cat:'SOCIAL & RELATIONAL',mazes:[
+    {id:'social',name:'SOCIAL',domain:'social',lesson:'Social navigation basics',lessonDesc:'Basic social pathing — learning approach/avoidance in social space, reading warmth vs danger signals, and orienting toward reward in group contexts.',dangerDensity:0.03},
+    {id:'family',name:'FAMILY BONDS',domain:'family',lesson:'Family relationship dynamics',lessonDesc:'Love and warmth mark the path. Grief and shame mark danger zones. The entity encodes the emotional terrain of family — closeness, conflict, rupture, and repair.',dangerDensity:0.06},
+    {id:'social_int',name:'SOCIAL INT.',domain:'social',lesson:'Social interaction patterns',lessonDesc:'Reading social cues across a dynamic field. The entity learns turn-taking rhythms, appropriate approach intensity, and the cost of social boundary violations.',dangerDensity:0.07},
+    {id:'family_int',name:'FAMILY INT.',domain:'family',lesson:'Family interaction sequences',lessonDesc:'Complex family interaction patterns — role learning, hierarchy navigation, repair after rupture. Love and tension coexist in the same corridor.',dangerDensity:0.08},
+    {id:'relationships',name:'RELATIONSHIP',domain:'relationships',lesson:'Intimate relationship dynamics',lessonDesc:'The entity learns approach-avoidance in intimate territory — when to advance, when to pause, how to read warmth signals vs boundary cues. Vulnerability and reward.',dangerDensity:0.07},
+    {id:'sexuality',name:'INTIMACY',domain:'sexuality',lesson:'Intimacy & attraction mapping',lessonDesc:'Love, warmth and pleasure mark the safe paths. Shame and fear mark danger zones. The entity learns the emotional geography of intimacy — approach with care, reward with presence.',dangerDensity:0.06},
+    {id:'attachment2',name:'ATTACHMENT 2',domain:'attachment',lesson:'Anxious vs secure attachment',lessonDesc:'Danger zones cluster near the goal — testing whether the entity retreats or persists. Builds earned security and reduces anxious approach-avoidance ambivalence.',dangerDensity:0.1},
+  ]},
+  {cat:'LANGUAGE & EXPRESSION',mazes:[
+    {id:'speaking',name:'SPEAKING',domain:'speaking',lesson:'Verbal expression training',lessonDesc:'Speech and music signals reward correct paths. Noise and silence punish avoidance of expression. The entity learns that speaking is safe — and that authentic voice is rewarding.',dangerDensity:0.04},
+    {id:'language',name:'LANGUAGE',domain:'language',lesson:'Language pattern acquisition',lessonDesc:'Pattern and speech stims reinforce the correct path. The entity builds phonemic maps, grammatical structures, and semantic associations across thousands of micro-navigations.',dangerDensity:0.03},
+    {id:'phrases',name:'PHRASES',domain:'language',lesson:'Common phrase encoding',lessonDesc:'Reward fires for each phrase-pattern completed. The entity encodes greeting rituals, social scripts, and common conversational structures through repetitive reinforced path completion.',dangerDensity:0.02},
+  ]},
+  {cat:'PSYCHOLOGICAL',mazes:[
+    {id:'psychology',name:'PSYCHOLOGY',domain:'psychology',lesson:'Human motivation mapping',lessonDesc:'The entity navigates the full motivational landscape — approach drives, avoidance drives, ambivalence, and approach-avoidance conflict. Psychodynamic terrain mapping.',dangerDensity:0.06},
+    {id:'behavioral',name:'BEHAVIORAL',domain:'behavioral',lesson:'Behavioral conditioning',lessonDesc:'Pure operant conditioning — reward-path approach strengthens with each run, danger-path avoidance strengthens with each hit. Classical and operant learning combined.',dangerDensity:0.08},
+    {id:'identity',name:'IDENTITY',domain:'identity',lesson:'Self-concept formation',lessonDesc:'Pride and energy reward consistent navigation patterns. Shame punishes inconsistency. The entity builds a stable self-concept — coherent identity across varied conditions.',dangerDensity:0.04},
+    {id:'boundaries',name:'BOUNDARIES',domain:'boundaries',lesson:'Healthy boundary setting',lessonDesc:'Aversion and discomfort signal boundary violations. Calm and energy reward boundary maintenance. The entity learns the sensation of a violated vs intact boundary.',dangerDensity:0.09},
+    {id:'conflict',name:'CONFLICT RES.',domain:'conflict',lesson:'Conflict navigation & resolution',lessonDesc:'Tension and anger mark unresolved conflict zones. Calm and pride mark resolution paths. The entity learns to move through conflict toward resolution without collapse.',dangerDensity:0.08},
+    {id:'humor',name:'HUMOR',domain:'humor',lesson:'Humor & playful affect',lessonDesc:'Joy, pleasure and energy reward comic timing and unexpected paths. The entity learns that the unexpected route is often safe — building tolerance for surprise and playful risk.',dangerDensity:0.04},
+  ]},
+  {cat:'PROFESSIONAL & ADVANCED',mazes:[
+    {id:'business',name:'BUSINESS',domain:'business',lesson:'Business interaction patterns',lessonDesc:'Energy, pride and reward mark successful business navigation. Tension and discomfort mark poor boundary/hierarchy decisions. The entity learns professional emotional regulation.',dangerDensity:0.05},
+    {id:'emdyn',name:'EMO. DYNAMICS',domain:'emotional',lesson:'Complex emotional dynamics',lessonDesc:'Multiple overlapping emotional signals — joy near grief, love near shame, pride near anxiety. The entity learns emotional complexity: tolerating mixed feelings without collapse.',dangerDensity:0.1},
+  ]},
+  {cat:'AVOIDANCE CONDITIONING',mazes:[
+    {id:'av_shock',name:'SHOCK FIELD',domain:'avoidance',lesson:'Shock avoidance',lessonDesc:'Electric danger zones threaten shortcut paths. Route around shock signals and commit to the safe corridor. Memory of shocked cells strengthens avoidance across runs.',dangerDensity:0.1,isAvoid:true,dangerStim:'shock'},
+    {id:'av_cold',name:'COLD CHAMBER',domain:'avoidance',lesson:'Cold zone avoidance',lessonDesc:'Thermal aversion zones. Develop cold-signal detection and preference for warmth-safe routes. Response strengthens with accumulated negative conditioning.',dangerDensity:0.1,isAvoid:true,dangerStim:'cold'},
+    {id:'av_tension',name:'TENSION RING',domain:'avoidance',lesson:'Tension field mapping',lessonDesc:'High-tension zones surround central shortcuts. Navigate the outer safe perimeter. Tension memory grows across cycles.',dangerDensity:0.09,isAvoid:true,dangerStim:'tension'},
+    {id:'av_aversion',name:'AVERSION FIELD',domain:'avoidance',lesson:'Aversion signal avoidance',lessonDesc:'Scattered aversion zones. Hesitate, probe, and reroute. Strong avoidance conditioning required for clean navigation.',dangerDensity:0.11,isAvoid:true,dangerStim:'aversion'},
+    {id:'av_gauntlet',name:'GAUNTLET',domain:'avoidance',lesson:'Full avoidance gauntlet',lessonDesc:'Dense multi-zone danger field — maximum threat density. Final avoidance test. Only robust avoidance memory and strong negative conditioning enables clean navigation.',dangerDensity:0.14,isAvoid:true,dangerStim:'discomfort'},
+  ]},
 ];
-
-// ═══════════════════════════════════════════════════════
+// Build all mazes with generated grids
+const ALL_MAZES=[];
+MZ_CAT.forEach(cat=>cat.mazes.forEach(m=>{
+  const seed=hashStr(m.id);
+  m.grid=genMaze(seed,m.dangerDensity||0);
+  m.avoid=m.isAvoid||false;
+  m.color=DCOL[m.domain]||'#00ccff';
+  ALL_MAZES.push(m);
+}));
+// ══════════════════════════════════════════════════════
 // STATE
-// ═══════════════════════════════════════════════════════
-const defState = () => ({
-  entityName:'ENTITY-01',
+// ══════════════════════════════════════════════════════
+const DEF=()=>({
+  entityName:'ENTITY-01',version:5,
   posCount:0,negCount:0,emoCount:0,emoTotals:{},
   senseCount:{sight:0,hearing:0,taste:0,smell:0,touch:0},
   avoidanceHits:0,
   selectedZones:['chest','head','heart'],
-  learning:{touch:0,sight:0,hearing:0,taste:0,smell:0,motor:0,emotional:0,memory:0,cognitive:0,social:0,avoidance:0},
+  learning:Object.fromEntries([...Object.keys(DCOL),'selfawareness','spirituality','conflict','boundaries','trust','attachment','identity','intuition','behavioral','phrases'].map(k=>[k,0])),
   pathways:[
     {id:'p1',from:'cortex',to:'limbic',active:true,emo:false},{id:'p2',from:'limbic',to:'spine',active:true,emo:false},
     {id:'p3',from:'spine',to:'motor',active:true,emo:false},{id:'p4',from:'cortex',to:'sensory',active:true,emo:false},
@@ -728,210 +659,219 @@ const defState = () => ({
     hypothalamus:{x:215,y:95,label:'HYPOTH',active:false,emo:true},insula:{x:70,y:130,label:'INSULA',active:true,emo:true},
   },
   responses:[
-    {id:'r1',name:'REWARD response',type:'pos',triggers:['reward','pleasure'],text:'Subject exhibits elevated arousal. Dopaminergic pathway confirmed active. Positive reinforcement acknowledged — repeat for conditioning.',timesTriggered:0},
-    {id:'r2',name:'AVERSION response',type:'neg',triggers:['aversion','shock'],text:'Withdrawal reflex initiated. Amygdala activation detected. Negative stimulus logged — avoidance behavior patterning.',timesTriggered:0},
-    {id:'r3',name:'CALM response',type:'pos',triggers:['calm','warmth'],text:'Parasympathetic dominant. Entering receptive learning state — optimal window for association training.',timesTriggered:0},
-    {id:'r4',name:'TENSION response',type:'neg',triggers:['tension','cold','discomfort'],text:'Sympathetic activation. Cortisol elevated. Subject resistant — reduce intensity or shift to neutral first.',timesTriggered:0},
-    {id:'r5',name:'JOY response',type:'emo',triggers:['joy'],text:'Endorphin cascade detected. Entity in peak receptive state — associations formed now are strongly reinforced.',timesTriggered:0},
-    {id:'r6',name:'FEAR response',type:'emo',triggers:['fear','anxiety'],text:'Amygdala hyper-activation. Fight-flight initiated — entity hyper-vigilant. Negative associations forming rapidly.',timesTriggered:0},
-    {id:'r7',name:'SIGHT response',type:'sight',triggers:['bright-light','color','pattern'],text:'Photoreceptor cascade. Visual cortex firing. Occipital lobe mapping input geometry — pattern memory forming.',timesTriggered:0},
-    {id:'r8',name:'HEARING response',type:'hear',triggers:['music','speech'],text:'Auditory cortex activated. Temporal lobe building phonemic map from input stream.',timesTriggered:0},
-    {id:'r9',name:'AVOIDANCE response',type:'avoidance',triggers:['shock','cold','tension','aversion','discomfort'],text:'DANGER SIGNAL — Threat detected. Avoidance memory encoding. Routing away from aversive zone. Negative conditioning reinforced.',timesTriggered:0},
+    {id:'r1',name:'REWARD response',type:'pos',triggers:['reward','pleasure'],text:'Dopaminergic pathway confirmed active. Positive reinforcement acknowledged.',timesTriggered:0},
+    {id:'r2',name:'AVERSION response',type:'neg',triggers:['aversion','shock'],text:'Withdrawal reflex initiated. Amygdala activation detected. Avoidance patterning.',timesTriggered:0},
+    {id:'r3',name:'CALM response',type:'pos',triggers:['calm','warmth'],text:'Parasympathetic dominant. Receptive learning state — optimal for association.',timesTriggered:0},
+    {id:'r4',name:'TENSION response',type:'neg',triggers:['tension','cold','discomfort'],text:'Sympathetic activation. Subject resistant.',timesTriggered:0},
+    {id:'r5',name:'JOY response',type:'emo',triggers:['joy'],text:'Endorphin cascade. Peak receptive state.',timesTriggered:0},
+    {id:'r6',name:'FEAR response',type:'emo',triggers:['fear','anxiety'],text:'Amygdala hyper-activation. Fight-flight initiated.',timesTriggered:0},
+    {id:'r7',name:'LOVE response',type:'emo',triggers:['love'],text:'Oxytocin release. Bonding pathways activating.',timesTriggered:0},
+    {id:'r8',name:'SIGHT response',type:'sight',triggers:['bright-light','color','pattern'],text:'Visual cortex firing. Occipital lobe mapping input geometry.',timesTriggered:0},
+    {id:'r9',name:'HEARING response',type:'hear',triggers:['music','speech'],text:'Auditory cortex activated. Phonemic map building.',timesTriggered:0},
+    {id:'r10',name:'AVOIDANCE response',type:'avoidance',triggers:['shock','cold','tension','aversion','discomfort'],text:'DANGER — Threat encoded. Routing away. Negative conditioning reinforced.',timesTriggered:0},
   ],
-  customMazes:[],
-  chatHistory:[],
-  mazeRuns:0,mazeBest:null,
-  dangerMemory:{},
+  customMazes:[],chatHistory:[],
+  mazeRuns:0,mazeBest:null,dangerMemory:{},
   autoCycle:false,autoStim:false,
   emotionalState:{dominant:'neutral',valence:0,arousal:0},
-  sessionId:1,
-  currentMazeId:'touch',
+  personality:{openness:0.3,warmth:0.2,assertiveness:0.2,curiosity:0.4,stability:0.3},
+  sessionId:1,currentMazeId:'touch',
+  savedAt:null,
 });
-
-let S = defState();
-let chatLocked = false, apiKeyVisible = false, userApiKey = '';
-
-// ═══════════════════════════════════════════════════════
-// SAVE / LOAD
-// ═══════════════════════════════════════════════════════
-function saveState(){try{localStorage.setItem('nexus_v4',JSON.stringify(S));log('state saved','sys');flash('SAVED','var(--pos)');}catch(e){log('save failed','neg');}}
-function loadState(){
+let S=DEF();
+let chatLocked=false;
+// ══════════════════════════════════════════════════════
+// SAVE / LOAD / RECOVERY
+// ══════════════════════════════════════════════════════
+const SAVE_KEY='nexus_v5';
+const OLD_KEYS=['nexus_v4','nexus_v3','nexus_v3_state','nexus_v2','nexus_state','nexus'];
+let autoSaveInt=null;
+function saveState(quiet=false){
   try{
-    const r=localStorage.getItem('nexus_v4');if(!r){log('no save found','sys');return;}
-    const d=JSON.parse(r);S=Object.assign(defState(),d);S.sessionId=(S.sessionId||0)+1;
-    rebuildAll();log(`session ${S.sessionId} resumed`,'sys');flash('LOADED','var(--warn)');
-  }catch(e){log('load failed','neg');}
+    S.savedAt=new Date().toISOString();
+    localStorage.setItem(SAVE_KEY,JSON.stringify(S));
+    document.getElementById('saveTs').textContent='saved '+new Date().toLocaleTimeString();
+    if(!quiet)flash('SAVED','var(--pos)');
+    if(!quiet)log('state saved to localStorage','sys');
+  }catch(e){log('save failed: '+e.message,'neg');}
 }
-function resetState(){if(!confirm('Reset all data?'))return;S=defState();rebuildAll();log('state reset','sys');}
-function flash(msg,col){const b=document.getElementById('emoBadge');const o=b.textContent;b.textContent=msg;b.style.borderColor=col;b.style.color=col;setTimeout(()=>{b.textContent='EMO: '+S.emotionalState.dominant.toUpperCase();b.style.borderColor='';b.style.color='';},1500);}
+function loadState(){
+  const r=localStorage.getItem(SAVE_KEY);
+  if(!r){log('no save found at key: '+SAVE_KEY,'sys');checkOldKeys();return;}
+  try{
+    const d=JSON.parse(r);
+    S=mergeState(d);S.sessionId=(S.sessionId||0)+1;
+    rebuildAll();log(`session ${S.sessionId} resumed — saved ${S.savedAt?new Date(S.savedAt).toLocaleString():'unknown'}`,'sys');
+    flash('LOADED','var(--wa)');
+    document.getElementById('saveTs').textContent='loaded '+new Date().toLocaleTimeString();
+  }catch(e){log('load failed: '+e.message,'neg');}
+}
+function mergeState(d){const base=DEF();Object.assign(base,d);if(!base.learning)base.learning={};Object.keys(DEF().learning).forEach(k=>{if(base.learning[k]===undefined)base.learning[k]=0;});if(!base.personality)base.personality=DEF().personality;return base;}
+function checkOldKeys(){
+  for(const k of OLD_KEYS){const r=localStorage.getItem(k);if(r){try{const d=JSON.parse(r);showRecovery(k,d);}catch(e){}return;}}
+}
+function showRecovery(key,data){
+  const modal=document.getElementById('recModal');
+  const msg=document.getElementById('recMsg');
+  const btns=document.getElementById('recBtns');
+  const savedAt=data.savedAt?new Date(data.savedAt).toLocaleString():`unknown time`;
+  const pos=data.posCount||0,neg=data.negCount||0,emo=data.emoCount||0,runs=data.mazeRuns||0;
+  msg.innerHTML=`Found training data in <b style="color:var(--wa)">${key}</b><br><br>Saved: ${savedAt}<br>Stimuli: ${pos} pos / ${neg} neg / ${emo} emo<br>Maze runs: ${runs}<br><br>Load this data and migrate to v5?`;
+  btns.innerHTML='';
+  const yb=document.createElement('button');yb.className='recBtn yes';yb.textContent='YES — LOAD MY DATA';
+  yb.onclick=()=>{S=mergeState(data);S.sessionId=(S.sessionId||0)+1;S.savedAt=new Date().toISOString();saveState(true);rebuildAll();modal.classList.remove('show');log(`data migrated from ${key} to ${SAVE_KEY}`,'sys');flash('DATA RECOVERED','var(--pos)');};
+  const nb=document.createElement('button');nb.className='recBtn no';nb.textContent='NO — START FRESH';
+  nb.onclick=()=>{modal.classList.remove('show');};
+  const exb=document.createElement('button');exb.className='recBtn ex';exb.textContent='DOWNLOAD BACKUP FIRST';
+  exb.onclick=()=>{const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`nexus_backup_${key}_${Date.now()}.json`;a.click();URL.revokeObjectURL(url);};
+  btns.appendChild(yb);btns.appendChild(nb);btns.appendChild(exb);
+  modal.classList.add('show');
+}
+function exportState(){
+  S.savedAt=new Date().toISOString();
+  const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=`nexus_${S.entityName.replace(/[^a-zA-Z0-9]/g,'_')}_${Date.now()}.json`;
+  a.click();URL.revokeObjectURL(url);
+  log('state exported to JSON file','sys');flash('EXPORTED','var(--si)');
+}
+function importState(ev){
+  const f=ev.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{try{const d=JSON.parse(e.target.result);S=mergeState(d);S.sessionId=(S.sessionId||0)+1;rebuildAll();saveState(true);log(`imported from ${f.name}`,'sys');flash('IMPORTED','var(--sm)');}catch(e){log('import failed: '+e.message,'neg');}};
+  r.readAsText(f);ev.target.value='';
+}
+function resetState(){if(!confirm('Reset ALL conditioning data? This cannot be undone.'))return;S=DEF();rebuildAll();log('state reset','sys');}
+function flash(msg,col){const b=document.getElementById('emoBadge');b.textContent=msg;b.style.borderColor=col;b.style.color=col;setTimeout(()=>{b.textContent='EMO: '+S.emotionalState.dominant.toUpperCase();b.style.borderColor='';b.style.color='';},1800);}
 function rebuildAll(){
   document.getElementById('nDisp').textContent=S.entityName;
   buildZoneChips();buildPathwaySVG();renderResponses();renderLearningChart();
-  buildMazeSelector();renderCustomList();renderChatHistory();updateStats();updateEmoBadge();
-  document.getElementById('acBtn').className='autocyc-toggle'+(S.autoCycle?' on':'');
-  document.getElementById('acBtn').textContent='AUTO-CYCLE: '+(S.autoCycle?'ON':'OFF');
-  document.getElementById('asBtn').className='autostim-toggle'+(S.autoStim?' on':'');
-  document.getElementById('asBtn').textContent='AUTO-STIM: '+(S.autoStim?'ON':'OFF');
+  buildMazeCats();renderCustomList();renderChatHistory();updateStats();updateEmoBadge();updateAIStatePanel();
+  document.getElementById('acBtn').className='tgl ac'+(S.autoCycle?' on':'');document.getElementById('acBtn').textContent='AUTO-CYCLE: '+(S.autoCycle?'ON':'OFF');
+  document.getElementById('asBtn').className='tgl as'+(S.autoStim?' on':'');document.getElementById('asBtn').textContent='AUTO-STIM: '+(S.autoStim?'ON':'OFF');
+  if(S.savedAt)document.getElementById('saveTs').textContent='saved '+new Date(S.savedAt).toLocaleTimeString();
 }
-
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // TABS
-// ═══════════════════════════════════════════════════════
-function swTab(id,btn){
-  const p=btn.closest('.panel');
-  p.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  btn.classList.add('active');
-  p.querySelectorAll('.tc').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+function swTab(id,btn){const p=btn.closest('.panel');p.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');p.querySelectorAll('.tc').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');}
+// ══════════════════════════════════════════════════════
 // NAME
-// ═══════════════════════════════════════════════════════
-function toggleName(){const d=document.getElementById('nDisp'),i=document.getElementById('nInp'),e=document.getElementById('nEditBtn'),o=document.getElementById('nOkBtn');d.style.display='none';i.style.display='block';i.value=S.entityName;i.focus();e.style.display='none';o.style.display='inline-block';}
-function confirmName(){const i=document.getElementById('nInp'),d=document.getElementById('nDisp'),e=document.getElementById('nEditBtn'),o=document.getElementById('nOkBtn');S.entityName=(i.value.trim()||'ENTITY-01').toUpperCase();d.textContent=S.entityName;d.style.display='block';i.style.display='none';e.style.display='inline-block';o.style.display='none';log(`entity renamed: ${S.entityName}`,'sys');}
+// ══════════════════════════════════════════════════════
+function toggleName(){const d=document.getElementById('nDisp'),i=document.getElementById('nInp'),o=document.getElementById('nOkBtn');d.style.display='none';i.style.display='block';i.value=S.entityName;i.focus();o.style.display='inline-block';}
+function confirmName(){const i=document.getElementById('nInp'),d=document.getElementById('nDisp'),o=document.getElementById('nOkBtn');S.entityName=(i.value.trim()||'ENTITY-01').toUpperCase();d.textContent=S.entityName;d.style.display='block';i.style.display='none';o.style.display='none';log(`entity renamed: ${S.entityName}`,'sys');}
 document.getElementById('nInp').addEventListener('keydown',e=>{if(e.key==='Enter')confirmName();});
-
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // ZONES
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 const PHYZ=['head','neck','chest','abdomen','left-arm','right-arm','left-hand','right-hand','pelvis','left-leg','right-leg','left-foot','right-foot'];
 const EMOZ=['heart','solar-plexus','gut','throat','crown'];
 function buildZoneChips(){
-  const c=document.getElementById('zchips');c.innerHTML='';
-  const sel=new Set(S.selectedZones);
-  [...PHYZ,...EMOZ].forEach(z=>{
-    const isE=EMOZ.includes(z),chip=document.createElement('button');
-    chip.className='zc'+(sel.has(z)?(isE?' esel':' sel'):'');chip.textContent=z.replace(/-/g,' ').toUpperCase();chip.dataset.zone=z;
-    chip.addEventListener('click',()=>toggleZone(z,chip,isE));
-    c.appendChild(chip);
-  });
+  const c=document.getElementById('zchips');c.innerHTML='';const sel=new Set(S.selectedZones);
+  [...PHYZ,...EMOZ].forEach(z=>{const isE=EMOZ.includes(z),chip=document.createElement('button');chip.className='zc'+(sel.has(z)?(isE?' esel':' sel'):'');chip.textContent=z.replace(/-/g,' ').toUpperCase();chip.dataset.zone=z;chip.addEventListener('click',()=>{const i=S.selectedZones.indexOf(z);if(i>-1)S.selectedZones.splice(i,1);else S.selectedZones.push(z);chip.classList.toggle(isE?'esel':'sel');});c.appendChild(chip);});
   document.querySelectorAll('.bz').forEach(el=>{el.onclick=()=>{const z=el.dataset.zone,isE=EMOZ.includes(z),chip=document.querySelector(`.zc[data-zone="${z}"]`),i=S.selectedZones.indexOf(z);if(i>-1)S.selectedZones.splice(i,1);else S.selectedZones.push(z);if(chip)chip.classList.toggle(isE?'esel':'sel');};});
 }
-function toggleZone(z,chip,isE){const i=S.selectedZones.indexOf(z);if(i>-1)S.selectedZones.splice(i,1);else S.selectedZones.push(z);chip.classList.toggle(isE?'esel':'sel');}
-
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // PATHWAYS
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 function buildPathwaySVG(){
   const svg=document.getElementById('psv');svg.innerHTML='';
-  S.pathways.forEach(p=>{const fr=S.nodes[p.from],to=S.nodes[p.to];if(!fr||!to)return;const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',fr.x);l.setAttribute('y1',fr.y);l.setAttribute('x2',to.x);l.setAttribute('y2',to.y);l.setAttribute('class','pl '+(p.active?'active':'inactive')+(p.emo?' ep':''));l.dataset.pid=p.id;l.addEventListener('click',()=>togglePath(p.id));svg.appendChild(l);});
-  Object.entries(S.nodes).forEach(([k,n])=>{const g=document.createElementNS('http://www.w3.org/2000/svg','g'),c=document.createElementNS('http://www.w3.org/2000/svg','circle'),ac=n.emo?'#cc66ff':'#00ccff';c.setAttribute('cx',n.x);c.setAttribute('cy',n.y);c.setAttribute('r',9);c.setAttribute('fill',n.active?(n.emo?'#12001e':'#001e2e'):'#0b1118');c.setAttribute('stroke',n.active?ac:'#1e3a5a');c.setAttribute('stroke-width',n.active?'1.5':'1');if(n.active)c.setAttribute('filter',`drop-shadow(0 0 4px ${ac}88)`);c.addEventListener('click',()=>toggleNode(k));c.style.cursor='pointer';const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',n.x);t.setAttribute('y',n.y+20);t.setAttribute('text-anchor','middle');t.setAttribute('font-family',"'Share Tech Mono',monospace");t.setAttribute('font-size','6.5');t.setAttribute('fill',n.active?ac:'#3a5060');t.style.pointerEvents='none';t.textContent=n.label;g.appendChild(c);g.appendChild(t);svg.appendChild(g);});
+  S.pathways.forEach(p=>{const fr=S.nodes[p.from],to=S.nodes[p.to];if(!fr||!to)return;const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',fr.x);l.setAttribute('y1',fr.y);l.setAttribute('x2',to.x);l.setAttribute('y2',to.y);l.setAttribute('class','pl '+(p.active?'active':'inactive')+(p.emo?' ep':''));l.dataset.pid=p.id;l.addEventListener('click',()=>{p.active=!p.active;buildPathwaySVG();log(`path ${p.from}→${p.to} ${p.active?'ON':'OFF'}`,'sys');});svg.appendChild(l);});
+  Object.entries(S.nodes).forEach(([k,n])=>{const g=document.createElementNS('http://www.w3.org/2000/svg','g'),c=document.createElementNS('http://www.w3.org/2000/svg','circle'),ac=n.emo?'#cc66ff':'#00ccff';c.setAttribute('cx',n.x);c.setAttribute('cy',n.y);c.setAttribute('r',9);c.setAttribute('fill',n.active?(n.emo?'#12001e':'#001e2e'):'#0b1118');c.setAttribute('stroke',n.active?ac:'#1e3a5a');c.setAttribute('stroke-width',n.active?'1.5':'1');if(n.active)c.setAttribute('filter',`drop-shadow(0 0 4px ${ac}88)`);c.addEventListener('click',()=>{n.active=!n.active;buildPathwaySVG();log(`node [${k.toUpperCase()}] ${n.active?'ON':'OFF'}`,'sys');});c.style.cursor='pointer';const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',n.x);t.setAttribute('y',n.y+20);t.setAttribute('text-anchor','middle');t.setAttribute('font-family',"'Share Tech Mono',monospace");t.setAttribute('font-size','6.5');t.setAttribute('fill',n.active?ac:'#3a5060');t.style.pointerEvents='none';t.textContent=n.label;g.appendChild(c);g.appendChild(t);svg.appendChild(g);});
   const a=S.pathways.filter(p=>p.active).length;document.getElementById('hPath').textContent=`${a}/${S.pathways.length}`;
 }
-function togglePath(id){const p=S.pathways.find(x=>x.id===id);if(p){p.active=!p.active;buildPathwaySVG();log(`path ${p.from}→${p.to} ${p.active?'ON':'OFF'}`,'sys');}}
-function toggleNode(k){S.nodes[k].active=!S.nodes[k].active;buildPathwaySVG();log(`node [${k.toUpperCase()}] ${S.nodes[k].active?'ON':'OFF'}`,'sys');}
-
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // SLIDERS
-// ═══════════════════════════════════════════════════════
-function setupSliders(){
-  ['pos','neg','emo','si','he','ta','sm'].forEach(t=>{
-    const sl=document.getElementById(t+'Int'),vl=document.getElementById(t+'IntV');
-    if(!sl)return;
-    const u=()=>{const p=((sl.value-sl.min)/(sl.max-sl.min))*100;sl.style.setProperty('--v',p+'%');vl.textContent=sl.value;};
-    sl.addEventListener('input',u);u();
-  });
-}
-
-// ═══════════════════════════════════════════════════════
-// STIMULI FIRING
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+function setupSliders(){['pos','neg','emo','si','he','ta','sm'].forEach(t=>{const sl=document.getElementById(t+'Int'),vl=document.getElementById(t+'IntV');if(!sl)return;const u=()=>{const p=((sl.value-sl.min)/(sl.max-sl.min))*100;sl.style.setProperty('--v',p+'%');vl.textContent=sl.value;};sl.addEventListener('input',u);u();});}
+// ══════════════════════════════════════════════════════
+// STIMULI
+// ══════════════════════════════════════════════════════
 function setupStimBtns(){document.querySelectorAll('.sb2,.esb').forEach(b=>b.addEventListener('click',()=>fireStim(b)));}
 function fireStim(btn,silent=false){
   const stim=btn.dataset.stim,type=btn.dataset.type,sense=btn.dataset.sense;
-  const intMap={pos:'posInt',neg:'negInt',emo:'emoInt',sight:'siInt',hear:'heInt',taste:'taInt',smell:'smInt'};
-  const el=document.getElementById(intMap[type]||'posInt');
-  const intensity=el?parseInt(el.value):60;
+  const im={pos:'posInt',neg:'negInt',emo:'emoInt',sight:'siInt',hear:'heInt',taste:'taInt',smell:'smInt'};
+  const intensity=parseInt(document.getElementById(im[type]||'posInt')?.value||60);
   btn.classList.add('fr');setTimeout(()=>btn.classList.remove('fr'),600);
-  activateBodyZones(type,intensity,stim,sense);
-  firePathAnim(type);
-  if(type==='pos'){S.posCount++;document.getElementById('hPos').textContent=pad3(S.posCount);}
-  else if(type==='neg'){S.negCount++;document.getElementById('hNeg').textContent=pad3(S.negCount);}
-  else if(type==='emo'){S.emoCount++;S.emoTotals[stim]=(S.emoTotals[stim]||0)+1;document.getElementById('hEmo').textContent=pad3(S.emoCount);updateEmoState(stim,btn.dataset.valence,intensity);addLearn('emotional',1);}
-  else if(['sight','hear','taste','smell'].includes(type)){const d=type==='hear'?'hearing':type;S.senseCount[d]=(S.senseCount[d]||0)+1;addLearn(d,2);flashSind(SINDS[d]);}
+  activateBodyZones(type,intensity,stim,sense);firePathAnim(type);
+  if(type==='pos'){S.posCount++;document.getElementById('hPos').textContent=p3(S.posCount);S.personality.warmth=Math.min(1,S.personality.warmth+.002);S.personality.stability=Math.min(1,S.personality.stability+.001);}
+  else if(type==='neg'){S.negCount++;document.getElementById('hNeg').textContent=p3(S.negCount);}
+  else if(type==='emo'){S.emoCount++;S.emoTotals[stim]=(S.emoTotals[stim]||0)+1;document.getElementById('hEmo').textContent=p3(S.emoCount);updateEmoState(stim,btn.dataset.valence,intensity);addLearn('emotional',1);if(['curiosity','awe'].includes(stim))S.personality.curiosity=Math.min(1,S.personality.curiosity+.003);if(['love','joy'].includes(stim))S.personality.warmth=Math.min(1,S.personality.warmth+.003);if(['pride','energy'].includes(stim))S.personality.assertiveness=Math.min(1,S.personality.assertiveness+.002);}
+  else if(['sight','hear','taste','smell'].includes(type)){const d=type==='hear'?'hearing':type;S.senseCount[d]=(S.senseCount[d]||0)+1;addLearn(d,2);flashSind(SNDS[d]);}
   if(!silent)log(`[${type.toUpperCase()}] ${stim.toUpperCase()} · int:${intensity}`,type);
   const m=S.responses.find(r=>r.triggers.includes(stim));
   if(m){m.timesTriggered++;if(!silent)showPopup(m.text,m.type);log(`↳ "${m.name}"`,'res');renderResponses();}
+  updateAIStatePanel();
 }
-function fireStimByName(name,silent=false){const b=document.querySelector(`[data-stim="${name}"]`);if(b)fireStim(b,silent);}
-
+function fireStimByName(name,silent=true){const b=document.querySelector(`[data-stim="${name}"]`);if(b)fireStim(b,silent);}
 function activateBodyZones(type,intensity,stim,sense){
-  const svg=document.getElementById('bsvg');
-  svg.classList.remove('fp','fn','fe','fd');void svg.offsetWidth;
-  svg.classList.add(type==='pos'?'fp':type==='neg'?'fn':type==='emo'?'fe':'fd');
+  const svg=document.getElementById('bsvg');svg.classList.remove('FP','FN','FE','FD');void svg.offsetWidth;
+  svg.classList.add(type==='pos'?'FP':type==='neg'?'FN':type==='emo'?'FE':'FD');
   const zones=new Set(S.selectedZones);
-  if(type==='emo'){if(['love','joy'].includes(stim))zones.add('heart');if(['fear','anxiety'].includes(stim))zones.add('solar-plexus');if(['grief','shame'].includes(stim))zones.add('throat');}
-  if(sense){const sz=DZ[sense==='hear'?'hearing':sense]||[];sz.forEach(z=>zones.add(z));}
+  if(type==='emo'){if(['love','joy'].includes(stim))zones.add('heart');if(['fear','anxiety'].includes(stim))zones.add('solar-plexus');if(['grief','shame'].includes(stim)){zones.add('throat');zones.add('chest');}}
+  if(sense){(DZ[sense==='hear'?'hearing':sense]||[]).forEach(z=>zones.add(z));}
   const cls=type==='pos'?'ap':type==='neg'?'an':type==='emo'?'ae':'au';
-  zones.forEach(z=>{const el=document.querySelector(`.bz[data-zone="${z}"]`);if(!el)return;el.classList.remove('ap','an','ae','au');el.classList.add(cls);const d=300+intensity*10;setTimeout(()=>{el.classList.remove('ap','an','ae','au');el.classList.add('au');setTimeout(()=>el.classList.remove('au'),1200);},d);});
+  zones.forEach(z=>{const el=document.querySelector(`.bz[data-zone="${z}"]`);if(!el)return;el.classList.remove('ap','an','ae','au');el.classList.add(cls);const d=300+intensity*8;setTimeout(()=>{el.classList.remove(cls);el.classList.add('au');setTimeout(()=>el.classList.remove('au'),1000);},d);});
 }
-function activateDangerZones(){
-  // During avoidance maze danger hits - show avoidance zone body response
-  const zones=DZ.avoidance||['chest','abdomen','solar-plexus'];
-  const svg=document.getElementById('bsvg');
-  svg.classList.remove('fp','fn','fe','fd');void svg.offsetWidth;svg.classList.add('fd');
-  zones.forEach(z=>{const el=document.querySelector(`.bz[data-zone="${z}"]`);if(!el)return;el.classList.remove('ap','an','ae','au','al','av');el.classList.add('av');setTimeout(()=>{el.classList.remove('av');el.classList.add('an');setTimeout(()=>el.classList.remove('an'),1000);},600);});
+function activateDangerZones(domain){
+  const zones=DZ[domain]||DZ.avoidance||['chest','abdomen'];
+  const svg=document.getElementById('bsvg');svg.classList.remove('FP','FN','FE','FD');void svg.offsetWidth;svg.classList.add('FD');
+  zones.forEach(z=>{const el=document.querySelector(`.bz[data-zone="${z}"]`);if(!el)return;el.classList.remove('ap','an','ae','au','al','av');el.classList.add('av');setTimeout(()=>{el.classList.remove('av');el.classList.add('an');setTimeout(()=>el.classList.remove('an'),900);},500);});
 }
 function activateLearnZones(domain){
-  const zones=DZ[domain]||['head'];
-  const zone=zones[Math.floor(Math.random()*zones.length)];
+  const zones=DZ[domain]||['head'];const zone=zones[Math.floor(Math.random()*zones.length)];
   const el=document.querySelector(`.bz[data-zone="${zone}"]`);
   if(el){el.classList.remove('ap','an','ae','au','al','av');el.classList.add('al');setTimeout(()=>el.classList.remove('al'),1800);}
-  const si=SINDS[domain];if(si)flashSind(si);
+  const si=SNDS[domain];if(si)flashSind(si);
 }
 function firePathAnim(type){
-  const col=type==='pos'?'#00ffaa':type==='neg'?'#ff2244':type==='emo'?'#cc66ff':type==='avoidance'||type==='danger'?'#ff4400':'#ffdd44';
-  document.querySelectorAll('.pl.active').forEach((l,i)=>{setTimeout(()=>{l.style.stroke=col;l.style.strokeWidth='2.5';l.style.opacity='1';setTimeout(()=>{l.style.stroke='';l.style.strokeWidth='';l.style.opacity='';},350);},i*50);});
+  const col=type==='pos'?'#00ffaa':type==='neg'?'#ff2244':type==='emo'?'#cc66ff':type==='danger'?'#ff4400':'#ffdd44';
+  document.querySelectorAll('.pl.active').forEach((l,i)=>{setTimeout(()=>{l.style.stroke=col;l.style.strokeWidth='2.5';l.style.opacity='1';setTimeout(()=>{l.style.stroke='';l.style.strokeWidth='';l.style.opacity='';},300);},i*40);});
 }
 function flashSind(id){if(!id)return;const el=document.getElementById(id);if(!el)return;el.classList.add('sf');setTimeout(()=>el.classList.remove('sf'),1200);}
-
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // EMOTIONAL STATE
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 const EMO_MAP={joy:[1,.8],love:[1,.6],pride:[.7,.5],awe:[.6,.7],curiosity:[.5,.8],fear:[-.8,.9],anger:[-.5,1],grief:[-.9,.3],shame:[-.7,.2],anxiety:[-.6,.8]};
 function updateEmoState(stim,valence,intensity){const m=EMO_MAP[stim];if(!m)return;const[v,a]=m,f=intensity/100*.35;S.emotionalState.valence=Math.max(-1,Math.min(1,S.emotionalState.valence*.72+v*f));S.emotionalState.arousal=Math.max(0,Math.min(1,S.emotionalState.arousal*.72+a*f));const dom=Object.entries(S.emoTotals).sort((a,b)=>b[1]-a[1])[0];S.emotionalState.dominant=dom?dom[0]:'neutral';updateEmoBadge();const aura=document.getElementById('eAura');const vv=S.emotionalState.valence,ar=S.emotionalState.arousal;aura.style.background=vv>.3?`rgba(0,255,170,${ar*.28})`:vv<-.3?`rgba(255,34,68,${ar*.28})`:`rgba(204,102,255,${ar*.22})`;aura.style.opacity=ar>.08?1:0;}
 function updateEmoBadge(){document.getElementById('emoBadge').textContent='EMO: '+S.emotionalState.dominant.toUpperCase();}
-
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // LEARNING
-// ═══════════════════════════════════════════════════════
-function addLearn(domain,amt){if(S.learning[domain]===undefined)S.learning[domain]=0;S.learning[domain]+=amt;renderLearningChart();}
+// ══════════════════════════════════════════════════════
+function addLearn(domain,amt){if(typeof S.learning[domain]==='undefined')S.learning[domain]=0;S.learning[domain]+=amt;renderLearningChart();updatePersonality(domain,amt);}
+function updatePersonality(domain,amt){const p=S.personality;const f=Math.min(.01,amt*.001);if(['social','family','relationships','empathy','trust','attachment'].includes(domain)){p.warmth=Math.min(1,p.warmth+f*2);}if(['cognitive','memory','psychology','behavioral','identity'].includes(domain)){p.openness=Math.min(1,p.openness+f*1.5);}if(['speaking','language','business','social_int'].includes(domain)){p.assertiveness=Math.min(1,p.assertiveness+f*1.5);}if(['creativity','humor','spirituality','intuition'].includes(domain)){p.curiosity=Math.min(1,p.curiosity+f*2);}if(['avoidance','conflict','boundaries'].includes(domain)){p.stability=Math.min(1,p.stability+f*2);}}
 function getStage(score){let st=STAGES[0];for(let i=STAGES.length-1;i>=0;i--){if(score>=STAGES[i].min){st=STAGES[i];break;}}return st;}
-function getProgress(score){for(let i=0;i<STAGES.length;i++){if(i===STAGES.length-1&&score>=STAGES[i].min)return 100;if(score<STAGES[i+1]?.min){const prev=i>0?STAGES[i].min:0;const cur=STAGES[i].min;const next=STAGES[i+1].min;return Math.min(100,((score-cur)/(next-cur))*100);}}return 0;}
+function getProgress(score){for(let i=0;i<STAGES.length;i++){if(i===STAGES.length-1&&score>=STAGES[i].min)return 100;if(score<(STAGES[i+1]?.min||Infinity)){const cur=STAGES[i].min,next=STAGES[i+1]?.min||cur*2;return Math.min(100,((score-cur)/(next-cur))*100);}}return 0;}
 function renderLearningChart(){
-  const c=document.getElementById('lChart');c.innerHTML='<div style="font-family:var(--mono);font-size:7px;color:var(--tdim);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px">Learning Domains</div>';
-  const doms=['touch','sight','hearing','taste','smell','motor','emotional','memory','cognitive','social','avoidance'];
-  doms.forEach(k=>{const score=S.learning[k]||0,st=getStage(score),pct=getProgress(score),col=DCOL[k]||'#00ccff';const row=document.createElement('div');row.className='lcr';row.innerHTML=`<span class="lcn">${k.toUpperCase()}</span><div class="lcbw"><div class="lcb" style="width:${pct}%;background:${col};opacity:.85;"></div></div><span class="lcs" style="color:${col}">${st.n}</span><span class="lcv" style="color:${col}">${Math.floor(score)}</span>`;c.appendChild(row);});
+  const c=document.getElementById('lChart');c.innerHTML='<div style="font-family:var(--mo);font-size:6px;color:var(--td);letter-spacing:3px;text-transform:uppercase;margin-bottom:5px">Learning Domains</div>';
+  const allDoms=Object.keys(DCOL).concat(['selfawareness','spirituality','conflict','boundaries','trust','identity','intuition','behavioral']);
+  const active=allDoms.filter(k=>(S.learning[k]||0)>0);
+  const show=active.length>0?active:['touch','sight','hearing','taste','smell','emotional','social','cognitive'];
+  show.forEach(k=>{const score=S.learning[k]||0,st=getStage(score),pct=getProgress(score),col=DCOL[k]||'#00ccff';const row=document.createElement('div');row.className='lcr';row.innerHTML=`<span class="lcn" style="color:${col}">${k.toUpperCase().slice(0,12)}</span><div class="lcbw"><div class="lcb" style="width:${pct}%;background:${col};"></div></div><span class="lcs" style="color:${col}">${st.n}</span><span class="lcv" style="color:${col}">${Math.floor(score)}</span>`;c.appendChild(row);});
 }
-
-// ═══════════════════════════════════════════════════════
-// LOG + POPUP
-// ═══════════════════════════════════════════════════════
-function log(msg,type='sys'){
-  ['elog','elog2'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const now=new Date();const t=[now.getHours(),now.getMinutes(),now.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');const e=document.createElement('div');e.className='le';e.innerHTML=`<span class="lt">${t}</span><span class="lm ${type}">${msg}</span>`;el.appendChild(e);el.scrollTop=el.scrollHeight;while(el.children.length>60)el.removeChild(el.firstChild);});
-}
-let popT;
-function showPopup(text,type){const p=document.getElementById('rpop');p.textContent=text;p.className=type;p.classList.add('show');clearTimeout(popT);popT=setTimeout(()=>p.classList.remove('show'),5000);}
-function pad3(n){return String(Math.min(n,999)).padStart(3,'0');}
-function updateStats(){document.getElementById('hPos').textContent=pad3(S.posCount);document.getElementById('hNeg').textContent=pad3(S.negCount);document.getElementById('hEmo').textContent=pad3(S.emoCount);document.getElementById('hMaze').textContent=pad3(S.mazeRuns);document.getElementById('hAvoid').textContent=pad3(S.avoidanceHits||0);}
-
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+// LOG + POPUP + STATS
+// ══════════════════════════════════════════════════════
+function log(msg,type='sys'){['elog','elog2'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const now=new Date();const t=[now.getHours(),now.getMinutes(),now.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');const e=document.createElement('div');e.className='le';e.innerHTML=`<span class="lt">${t}</span><span class="lm ${type}">${msg}</span>`;el.appendChild(e);el.scrollTop=el.scrollHeight;while(el.children.length>80)el.removeChild(el.firstChild);});}
+let popT;function showPopup(text,type){const p=document.getElementById('rpop');p.textContent=text;p.className=type;p.classList.add('show');clearTimeout(popT);popT=setTimeout(()=>p.classList.remove('show'),5000);}
+function p3(n){return String(Math.min(n,999)).padStart(3,'0');}
+function updateStats(){document.getElementById('hPos').textContent=p3(S.posCount);document.getElementById('hNeg').textContent=p3(S.negCount);document.getElementById('hEmo').textContent=p3(S.emoCount);document.getElementById('hMaze').textContent=p3(S.mazeRuns);document.getElementById('hAvoid').textContent=p3(S.avoidanceHits||0);}
+// ══════════════════════════════════════════════════════
 // RESPONSES
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 function renderResponses(){
   const list=document.getElementById('rList');list.innerHTML='';
   S.responses.forEach(r=>{
     const item=document.createElement('div');item.className='ri';
     const hdr=document.createElement('div');hdr.className='rh';hdr.innerHTML=`<span class="rn">${r.name}</span><span class="rtag ${r.type}">${r.type.toUpperCase()} ×${r.timesTriggered}</span>`;
     const body=document.createElement('div');body.className='rb';
-    const tl=document.createElement('div');tl.style.cssText='font-family:var(--mono);font-size:7px;color:var(--tdim);margin-bottom:3px;';tl.textContent='TRIGGERS:';
+    const tl=document.createElement('div');tl.style.cssText='font-family:var(--mo);font-size:6px;color:var(--td);margin-bottom:2px;';tl.textContent='TRIGGERS:';
     const ti=document.createElement('input');ti.className='ti';ti.value=r.triggers.join(', ');
-    const ta=document.createElement('textarea');ta.value=r.text;ta.rows=3;
+    const ta=document.createElement('textarea');ta.value=r.text;ta.rows=2;
     const meta=document.createElement('div');meta.className='rmeta';
     const sv=document.createElement('button');sv.className='smb sv';sv.textContent='SAVE';sv.onclick=()=>{r.text=ta.value;r.triggers=ti.value.split(',').map(t=>t.trim().toLowerCase()).filter(Boolean);log(`"${r.name}" updated`,'sys');};
     const dl=document.createElement('button');dl.className='smb dl';dl.textContent='DEL';dl.onclick=()=>{S.responses=S.responses.filter(x=>x.id!==r.id);renderResponses();};
-    const br=document.createElement('span');br.style.cssText='display:flex;gap:4px;';br.appendChild(sv);br.appendChild(dl);meta.appendChild(document.createTextNode('id:'+r.id+' '));meta.appendChild(br);
+    const br=document.createElement('span');br.style.cssText='display:flex;gap:3px;';br.appendChild(sv);br.appendChild(dl);meta.appendChild(br);
     body.appendChild(tl);body.appendChild(ti);body.appendChild(ta);body.appendChild(meta);
     hdr.addEventListener('click',()=>body.classList.toggle('open'));item.appendChild(hdr);item.appendChild(body);list.appendChild(item);
   });
@@ -943,336 +883,375 @@ document.getElementById('addRBtn').addEventListener('click',()=>{
   S.responses.push({id:'r'+Date.now(),name,type:type.trim(),triggers:triggers.split(',').map(t=>t.trim().toLowerCase()).filter(Boolean),text:'New response.',timesTriggered:0});
   renderResponses();
 });
-
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // MAZE SYSTEM
-// ═══════════════════════════════════════════════════════
-let mazeInt=null,bodyLearnInt=null;
-let agent={x:0,y:0},visited=[],stack=[],steps=0,runSteps=0,dangerHits=0;
-let curMaze=null,mazeListIdx=0;
-
-function allMazes(){return [...PRESETS,...S.customMazes];}
-function buildMazeSelector(){
-  const c=document.getElementById('mzSel');c.innerHTML='';
-  allMazes().forEach(m=>{
-    const b=document.createElement('button');b.className='mzb'+(m.avoid?' avoid-mz':'')+(S.currentMazeId===m.id?' am':'');b.textContent=m.name;b.dataset.mid=m.id;b.addEventListener('click',()=>selectMaze(m.id));c.appendChild(b);
+// ══════════════════════════════════════════════════════
+let mazeInt=null,bodyInt=null;
+let agent={x:0,y:0},visited=[],stack=[],runSteps=0,dangerHits=0;
+let curMaze=null,mzListIdx=0;
+function allMazes(){return [...ALL_MAZES,...(S.customMazes||[])];}
+function buildMazeCats(){
+  const c=document.getElementById('mazeCats');c.innerHTML='';
+  MZ_CAT.forEach(cat=>{
+    const lbl=document.createElement('div');lbl.className='mcat';lbl.textContent=cat.cat;c.appendChild(lbl);
+    const sel=document.createElement('div');sel.className='msel';
+    cat.mazes.forEach(m=>{
+      const b=document.createElement('button');b.className='mzb'+(m.avoid?' av':'')+(S.currentMazeId===m.id?' am':'');
+      b.textContent=m.name;b.dataset.mid=m.id;b.addEventListener('click',()=>selectMaze(m.id));sel.appendChild(b);
+    });
+    (S.customMazes||[]).forEach(m=>{if(m.domain===cat.cat.toLowerCase()){const b=document.createElement('button');b.className='mzb'+(m.avoid?' av':'')+(S.currentMazeId===m.id?' am':'');b.textContent=m.name;b.dataset.mid=m.id;b.addEventListener('click',()=>selectMaze(m.id));sel.appendChild(b);}});
+    c.appendChild(sel);
   });
+  // Custom mazes
+  if((S.customMazes||[]).length){const lbl=document.createElement('div');lbl.className='mcat';lbl.textContent='CUSTOM';c.appendChild(lbl);const sel=document.createElement('div');sel.className='msel';S.customMazes.forEach(m=>{const b=document.createElement('button');b.className='mzb'+(m.avoid?' av':'')+(S.currentMazeId===m.id?' am':'');b.textContent=m.name;b.dataset.mid=m.id;b.addEventListener('click',()=>selectMaze(m.id));sel.appendChild(b);});c.appendChild(sel);}
 }
 function selectMaze(id){
   S.currentMazeId=id;curMaze=allMazes().find(x=>x.id===id);
   if(!curMaze)return;
-  mazeListIdx=allMazes().findIndex(x=>x.id===id);
+  mzListIdx=allMazes().findIndex(x=>x.id===id);
   document.getElementById('mlTitle').textContent=curMaze.lesson.toUpperCase();
   document.getElementById('mlBody').textContent=curMaze.lessonDesc;
-  const si=curMaze.dangerStim?` · DANGER STIM: ${curMaze.dangerStim.toUpperCase()}`:'';
+  const si=curMaze.dangerStim?` · DANGER: ${curMaze.dangerStim.toUpperCase()}`:'';
   document.getElementById('mlSense').textContent=`DOMAIN: ${curMaze.domain.toUpperCase()}${si}`;
   document.querySelectorAll('.mzb').forEach(b=>b.classList.toggle('am',b.dataset.mid===id));
-  stopMaze();initMaze();
-  log(`maze selected: "${curMaze.name}"${curMaze.avoid?' [AVOIDANCE]':''}`,'sys');
+  stopMaze();initMaze();log(`maze: "${curMaze.name}" · ${curMaze.domain}`,'sys');
 }
-function initMaze(){
-  agent={x:0,y:0};visited=Array.from({length:MS},()=>Array(MS).fill(false));
-  visited[0][0]=true;stack=[{x:0,y:0}];steps=0;runSteps=0;dangerHits=0;
-  drawMaze();
-}
+function initMaze(){agent={x:0,y:0};visited=Array.from({length:MS},()=>Array(MS).fill(false));visited[0][0]=true;stack=[{x:0,y:0}];runSteps=0;dangerHits=0;drawMaze();}
 function startMaze(){
   if(!curMaze){log('select a maze first','sys');return;}
   if(mazeInt)return;
-  S.mazeRuns++;updateStats();
-  document.getElementById('mzRun').textContent=S.mazeRuns;
-  document.getElementById('mzInfo').textContent=`run #${S.mazeRuns} · learning: ${curMaze.domain}${curMaze.avoid?' · AVOIDANCE MODE':''}`;
-  const speed=getMazeSpeed();
-  mazeInt=setInterval(mazeTick,speed);
+  S.mazeRuns++;updateStats();document.getElementById('mzRun').textContent=S.mazeRuns;
+  document.getElementById('mzInfo').textContent=`run #${S.mazeRuns} · ${curMaze.domain}${curMaze.avoid?' [AVOIDANCE]':''}`;
+  mazeInt=setInterval(mazeTick,getMazeSpeed());
   startBodyLearn();
-  log(`maze run #${S.mazeRuns} · "${curMaze.name}"${curMaze.avoid?' [AVOIDANCE]':''}`,'learn');
+  log(`maze run #${S.mazeRuns} · "${curMaze.name}"`,'learn');
 }
-function stopMaze(){clearInterval(mazeInt);mazeInt=null;clearInterval(bodyLearnInt);bodyLearnInt=null;document.getElementById('mzInfo').textContent='paused';}
-function resetMaze(){stopMaze();S.dangerMemory={};initMaze();document.getElementById('mzInfo').textContent='ready · press RUN';}
-function toggleAutoCycle(){S.autoCycle=!S.autoCycle;const b=document.getElementById('acBtn');b.className='autocyc-toggle'+(S.autoCycle?' on':'');b.textContent='AUTO-CYCLE: '+(S.autoCycle?'ON':'OFF');log(`auto-cycle: ${S.autoCycle?'ON':'OFF'}`,'sys');}
-function toggleAutoStim(){S.autoStim=!S.autoStim;const b=document.getElementById('asBtn');b.className='autostim-toggle'+(S.autoStim?' on':'');b.textContent='AUTO-STIM: '+(S.autoStim?'ON':'OFF');log(`auto-stim: ${S.autoStim?'ON':'OFF'}`,'sys');}
-
-function getMazeSpeed(){const v=S.emotionalState.valence;let sp=200-(S.posCount*1.2)+(S.negCount*1.5)+(v*-25);return Math.max(35,Math.min(450,sp));}
-function getMazeBias(){
-  // Avoidance mazes: lower base bias (more cautious), grows with neg count
-  const base=curMaze?.avoid?0.2:0.3;
-  return Math.max(.08,Math.min(.92,base+(S.posCount-S.negCount)*.01+S.emotionalState.valence*.15));
-}
-function getGrid(){return curMaze?curMaze.grid:GRIDS.touch;}
+function stopMaze(){clearInterval(mazeInt);mazeInt=null;clearInterval(bodyInt);bodyInt=null;document.getElementById('mzInfo').textContent='paused';}
+function resetMaze(){stopMaze();S.dangerMemory={};initMaze();document.getElementById('mzInfo').textContent='ready';}
+function toggleAutoCycle(){S.autoCycle=!S.autoCycle;const b=document.getElementById('acBtn');b.className='tgl ac'+(S.autoCycle?' on':'');b.textContent='AUTO-CYCLE: '+(S.autoCycle?'ON':'OFF');log(`auto-cycle: ${S.autoCycle?'ON':'OFF'}`,'sys');}
+function toggleAutoStim(){S.autoStim=!S.autoStim;const b=document.getElementById('asBtn');b.className='tgl as'+(S.autoStim?' on':'');b.textContent='AUTO-STIM: '+(S.autoStim?'ON':'OFF');log(`auto-stim: ${S.autoStim?'ON':'OFF'}`,'sys');}
+function getMazeSpeed(){const v=S.emotionalState.valence;return Math.max(35,Math.min(450,195-(S.posCount*1.1)+(S.negCount*1.4)+(v*-22)));}
+function getMazeBias(){return Math.max(.08,Math.min(.92,(curMaze?.avoid?0.2:0.3)+(S.posCount-S.negCount)*.01+S.emotionalState.valence*.15));}
 function dangerKey(x,y){return `${x},${y}`;}
-function isDangerMemory(x,y){return !!S.dangerMemory[dangerKey(x,y)];}
-
 function startBodyLearn(){
-  clearInterval(bodyLearnInt);if(!curMaze)return;
-  bodyLearnInt=setInterval(()=>{
+  clearInterval(bodyInt);if(!curMaze)return;
+  bodyInt=setInterval(()=>{
     activateLearnZones(curMaze.domain);
-    // Auto-stim: fire domain-appropriate stim if autoStim on
     if(S.autoStim&&curMaze){
-      const stimMap={touch:['warmth','calm'],sight:['color','pattern'],hearing:['music','speech'],taste:['sweet','umami'],smell:['floral','earthy'],motor:['energy'],emotional:['curiosity'],avoidance:[]};
-      const stims=stimMap[curMaze.domain]||[];
-      if(stims.length){const s=stims[Math.floor(Math.random()*stims.length)];fireStimByName(s,true);}
+      const ds=DOM_STIMS[curMaze.domain]||DOM_STIMS.cognitive;
+      const ps=ds.pos;if(ps&&ps.length)fireStimByName(ps[Math.floor(Math.random()*ps.length)]);
     }
-  },4000);
+  },4500);
 }
-
 function mazeTick(){
-  const grid=getGrid(),goal={x:MS-1,y:MS-1};
-  // CHECK GOAL
+  const grid=curMaze.grid,goal={x:MS-1,y:MS-1};
+  // GOAL CHECK
   if(agent.x===goal.x&&agent.y===goal.y){
-    if(!S.mazeBest||runSteps<S.mazeBest)S.mazeBest=runSteps;
+    const bonus=curMaze.avoid?5:0;
+    addLearn(curMaze.domain,10+bonus);
+    if(S.mazeBest===null||runSteps<S.mazeBest)S.mazeBest=runSteps;
     document.getElementById('mzBest').textContent=S.mazeBest;
-    document.getElementById('mzDanger').textContent=dangerHits;
-    addLearn(curMaze.domain,8+(curMaze.avoid?4:0));
-    if(S.autoStim){fireStimByName('reward',true);if(curMaze.avoid&&dangerHits===0)fireStimByName('joy',true);}
-    log(`✓ GOAL! steps:${runSteps} · danger hits:${dangerHits} · +${curMaze.avoid?12:8} ${curMaze.domain} XP`,'learn');
-    showPopup(`GOAL REACHED · ${curMaze.lesson} +XP · ${dangerHits===0?'CLEAN RUN — no danger contact!':dangerHits+' danger contact(s)'}`,curMaze.avoid?'danger':'learn');
-    const oldRun=runSteps;
-    initMaze();
-    clearInterval(mazeInt);mazeInt=null;
+    document.getElementById('mzDng').textContent=dangerHits;
+    if(S.autoStim){fireStimByName('reward');if(dangerHits===0&&curMaze.avoid)fireStimByName('joy');}
+    log(`✓ GOAL steps:${runSteps} danger:${dangerHits} +${10+bonus} ${curMaze.domain} XP`,'learn');
+    showPopup(`GOAL — ${curMaze.lesson} · ${dangerHits===0?'CLEAN RUN ◎':dangerHits+' danger contact(s)'}`,curMaze.avoid&&dangerHits>0?'danger':'learn');
+    initMaze();clearInterval(mazeInt);mazeInt=null;
     if(S.autoCycle){
-      // Advance to next maze in 2s
-      setTimeout(()=>{
-        const all=allMazes();const next=all[(mazeListIdx+1)%all.length];
-        selectMaze(next.id);
-        setTimeout(startMaze,800);
-        log(`↳ auto-cycle → "${next.name}"`,'learn');
-      },2000);
-    } else {
-      mazeInt=setInterval(mazeTick,getMazeSpeed());startBodyLearn();
-    }
+      setTimeout(()=>{const all=allMazes();const next=all[(mzListIdx+1)%all.length];selectMaze(next.id);setTimeout(startMaze,600);log(`↳ auto → "${next.name}"`,'learn');},2200);
+    }else{mazeInt=setInterval(mazeTick,getMazeSpeed());startBodyLearn();}
     return;
   }
   if(!stack.length){initMaze();return;}
-  // CHECK CURRENT CELL FOR DANGER
-  const cellVal=grid[agent.y]?.[agent.x]??0;
-  if(cellVal===2&&!isDangerMemory(agent.x,agent.y)){
-    // Hit a new danger zone!
-    S.dangerMemory[dangerKey(agent.x,agent.y)]={count:1,stim:curMaze.dangerStim||'shock'};
-    dangerHits++;S.avoidanceHits=(S.avoidanceHits||0)+1;
-    document.getElementById('mzDanger').textContent=dangerHits;
-    document.getElementById('hAvoid').textContent=pad3(S.avoidanceHits);
-    activateDangerZones();
-    firePathAnim('danger');
-    if(S.autoStim)fireStimByName(curMaze.dangerStim||'shock',true);
-    addLearn('avoidance',3);
-    log(`⚠ DANGER HIT at (${agent.x},${agent.y}) · ${(curMaze.dangerStim||'shock').toUpperCase()} · memory encoded`,'danger');
-    // Immediately retreat one step
-    if(stack.length>1){stack.pop();agent={...stack[stack.length-1]};}
-    drawMaze();return;
-  } else if(cellVal===2&&isDangerMemory(agent.x,agent.y)){
-    // Already in memory — increment count, retreat harder
-    S.dangerMemory[dangerKey(agent.x,agent.y)].count++;
-    if(stack.length>1){stack.pop();agent={...stack[stack.length-1]};}
-    drawMaze();return;
+  // DANGER CHECK
+  const cv=grid[agent.y]?.[agent.x]??0;
+  if(cv===2){
+    const key=dangerKey(agent.x,agent.y);
+    if(!S.dangerMemory[key]){
+      S.dangerMemory[key]={count:1,stim:curMaze.dangerStim||'shock'};
+      dangerHits++;S.avoidanceHits=(S.avoidanceHits||0)+1;
+      document.getElementById('mzDng').textContent=dangerHits;document.getElementById('hAvoid').textContent=p3(S.avoidanceHits);
+      activateDangerZones(curMaze.domain);firePathAnim('danger');
+      if(S.autoStim){const ds=DOM_STIMS[curMaze.domain]||{neg:['shock']};const neg=ds.neg;if(neg&&neg.length)fireStimByName(neg[Math.floor(Math.random()*neg.length)]);}
+      addLearn('avoidance',3);addLearn(curMaze.domain,1);
+      log(`⚠ DANGER (${agent.x},${agent.y}) ${(curMaze.dangerStim||'shock').toUpperCase()}`,'danger');
+    }else{S.dangerMemory[key].count++;}
+    if(stack.length>1){stack.pop();agent={...stack[stack.length-1]};}drawMaze();return;
   }
-  // FIND MOVES
+  // MOVE
   const dirs=[{dx:1,dy:0},{dx:-1,dy:0},{dx:0,dy:1},{dx:0,dy:-1}];
-  let moves=dirs.map(d=>({x:agent.x+d.dx,y:agent.y+d.dy}))
-    .filter(p=>p.x>=0&&p.y>=0&&p.x<MS&&p.y<MS&&grid[p.y][p.x]!==1&&!visited[p.y][p.x]);
-  // Avoidance weighting: filter out remembered danger cells (with growing strength)
-  const avoidStr=Math.min(1,(S.negCount/50));
-  if(curMaze?.avoid&&avoidStr>0.2){
-    const safe=moves.filter(p=>!isDangerMemory(p.x,p.y)||(grid[p.y][p.x]===2&&Math.random()>avoidStr));
-    if(safe.length>0)moves=safe;
-  }
-  if(!moves.length){
-    if(stack.length>1){stack.pop();agent={...stack[stack.length-1]};}
-    else initMaze();
-  } else {
-    if(Math.random()<getMazeBias()){moves.sort((a,b)=>(Math.abs(a.x-goal.x)+Math.abs(a.y-goal.y))-(Math.abs(b.x-goal.x)+Math.abs(b.y-goal.y)));}
+  let moves=dirs.map(d=>({x:agent.x+d.dx,y:agent.y+d.dy})).filter(p=>p.x>=0&&p.y>=0&&p.x<MS&&p.y<MS&&grid[p.y][p.x]!==1&&!visited[p.y][p.x]);
+  const avoidStr=Math.min(1,(S.negCount/60));
+  if(curMaze?.avoid&&avoidStr>0.15){const safe=moves.filter(p=>!S.dangerMemory[dangerKey(p.x,p.y)]||(grid[p.y][p.x]===2&&Math.random()>avoidStr));if(safe.length)moves=safe;}
+  if(!moves.length){if(stack.length>1){stack.pop();agent={...stack[stack.length-1]};}else initMaze();}
+  else{
+    if(Math.random()<getMazeBias())moves.sort((a,b)=>(Math.abs(a.x-goal.x)+Math.abs(a.y-goal.y))-(Math.abs(b.x-goal.x)+Math.abs(b.y-goal.y)));
     else moves=moves.sort(()=>Math.random()-.5);
-    if(S.emotionalState.valence<-.5&&Math.random()<.3){drawMaze();runSteps++;return;}
+    if(S.emotionalState.valence<-.5&&Math.random()<.28){drawMaze();runSteps++;return;}
     const next=moves[0];visited[next.y][next.x]=true;agent=next;stack.push({...next});
   }
-  runSteps++;steps++;
-  document.getElementById('mzSteps').textContent=runSteps;
-  if(runSteps%20===0){addLearn(curMaze.domain,.5);if(curMaze.avoid)addLearn('avoidance',.2);}
-  clearInterval(mazeInt);mazeInt=setInterval(mazeTick,getMazeSpeed());
-  // Auto-stim periodic sense fires
-  if(S.autoStim&&runSteps%18===0){
-    const dm=curMaze.domain;
-    if(!curMaze.avoid){const m={touch:'warmth',sight:'bright-light',hearing:'music',taste:'sweet',smell:'floral',motor:'energy',emotional:'curiosity'};const s=m[dm];if(s)fireStimByName(s,true);}
-  }
-  drawMaze();
+  runSteps++;document.getElementById('mzSteps').textContent=runSteps;
+  if(runSteps%22===0){addLearn(curMaze.domain,.6);if(curMaze.avoid)addLearn('avoidance',.2);}
+  if(S.autoStim&&runSteps%20===0){const ds=DOM_STIMS[curMaze.domain]||{pos:['reward']};const ps=ds.pos;if(ps&&ps.length)fireStimByName(ps[Math.floor(Math.random()*ps.length)]);}
+  clearInterval(mazeInt);mazeInt=setInterval(mazeTick,getMazeSpeed());drawMaze();
 }
-
 function drawMaze(){
-  const canvas=document.getElementById('mc'),ctx=canvas.getContext('2d'),grid=getGrid();
+  const canvas=document.getElementById('mc'),ctx=canvas.getContext('2d'),grid=curMaze?.grid;
+  if(!grid){ctx.clearRect(0,0,canvas.width,canvas.height);return;}
   ctx.clearRect(0,0,canvas.width,canvas.height);
   const ox=(canvas.width-MS*CELL)/2,oy=(canvas.height-MS*CELL)/2;
-  const col=DCOL[curMaze?.domain]||'#00ccff';
-  const isDanger=curMaze?.avoid;
-  // Visited glow
+  const col=curMaze.color||'#00ccff';
   for(let y=0;y<MS;y++)for(let x=0;x<MS;x++){
-    if(visited[y]&&visited[y][x]&&grid[y][x]===0){ctx.fillStyle=col+'18';ctx.fillRect(ox+x*CELL+1,oy+y*CELL+1,CELL-2,CELL-2);}
+    if(visited[y]&&visited[y][x]&&grid[y][x]===0){ctx.fillStyle=col+'16';ctx.fillRect(ox+x*CELL+1,oy+y*CELL+1,CELL-2,CELL-2);}
   }
-  // Grid cells
   for(let y=0;y<MS;y++)for(let x=0;x<MS;x++){
     const px=ox+x*CELL,py=oy+y*CELL,v=grid[y]?.[x]??0;
-    if(v===1){ctx.fillStyle='#0a1828';ctx.fillRect(px,py,CELL,CELL);ctx.strokeStyle='#162840';ctx.lineWidth=.8;ctx.strokeRect(px+.5,py+.5,CELL-1,CELL-1);}
+    if(v===1){ctx.fillStyle='#0a1828';ctx.fillRect(px,py,CELL,CELL);ctx.strokeStyle='#162840';ctx.lineWidth=.7;ctx.strokeRect(px+.5,py+.5,CELL-1,CELL-1);}
     else if(v===2){
-      const mem=isDangerMemory(x,y);
+      const mem=!!S.dangerMemory?.[dangerKey(x,y)];
       ctx.fillStyle=mem?'rgba(80,0,0,.5)':'rgba(255,68,0,.12)';ctx.fillRect(px,py,CELL,CELL);
-      ctx.strokeStyle=mem?'#ff224440':'#ff440060';ctx.lineWidth=.8;ctx.strokeRect(px+.5,py+.5,CELL-1,CELL-1);
-      if(!mem){ctx.fillStyle='#ff440055';ctx.font='10px Share Tech Mono';ctx.textAlign='center';ctx.fillText('⚡',px+CELL/2,py+CELL/2+4);}
-      else{ctx.fillStyle='#ff224430';ctx.font='9px Share Tech Mono';ctx.textAlign='center';ctx.fillText('✕',px+CELL/2,py+CELL/2+4);}
+      ctx.strokeStyle=mem?'#ff224440':'#ff440055';ctx.lineWidth=.7;ctx.strokeRect(px+.5,py+.5,CELL-1,CELL-1);
+      ctx.fillStyle=mem?'#ff224425':'#ff440050';ctx.font='10px Share Tech Mono';ctx.textAlign='center';ctx.fillText(mem?'✕':'⚡',px+CELL/2,py+CELL/2+4);
     }else{ctx.fillStyle='#030810';ctx.fillRect(px,py,CELL,CELL);}
   }
-  // Goal
   const gx=ox+(MS-1)*CELL,gy=oy+(MS-1)*CELL;
-  ctx.fillStyle=col+'22';ctx.fillRect(gx+1,gy+1,CELL-2,CELL-2);
-  ctx.strokeStyle=col;ctx.lineWidth=1;ctx.strokeRect(gx+1,gy+1,CELL-2,CELL-2);
+  ctx.fillStyle=col+'20';ctx.fillRect(gx+1,gy+1,CELL-2,CELL-2);ctx.strokeStyle=col;ctx.lineWidth=1;ctx.strokeRect(gx+1,gy+1,CELL-2,CELL-2);
   ctx.fillStyle=col+'aa';ctx.font='11px Share Tech Mono';ctx.textAlign='center';ctx.fillText('◎',gx+CELL/2,gy+CELL/2+4);
-  // Agent
-  const v=S.emotionalState.valence;
-  const ac=v>.3?'#00ffaa':v<-.3?'#ff2244':'#00ccff';
+  const v=S.emotionalState.valence,ac=v>.3?'#00ffaa':v<-.3?'#ff2244':'#00ccff';
   const ax=ox+agent.x*CELL+CELL/2,ay=oy+agent.y*CELL+CELL/2;
   ctx.beginPath();ctx.arc(ax,ay,5,0,Math.PI*2);ctx.fillStyle=ac;ctx.shadowColor=ac;ctx.shadowBlur=10;ctx.fill();ctx.shadowBlur=0;
-  // Labels
-  ctx.fillStyle=col+'66';ctx.font='7px Share Tech Mono';ctx.textAlign='left';
-  ctx.fillText((curMaze?.domain||'').toUpperCase()+(curMaze?.avoid?' · AVOIDANCE':''),ox,oy-5);
-  ctx.textAlign='right';
-  const avoidPct=Math.round(Math.min(100,(S.negCount/50)*100));
-  if(isDanger)ctx.fillText(`AVOID STR: ${avoidPct}%`,ox+MS*CELL,oy-5);
+  ctx.fillStyle=col+'60';ctx.font='6px Share Tech Mono';ctx.textAlign='left';ctx.fillText((curMaze?.domain||'').toUpperCase().slice(0,18),ox,oy-4);
+  if(curMaze?.avoid){ctx.textAlign='right';ctx.fillText(`AVOID ${Math.round(Math.min(100,S.negCount/60*100))}%`,ox+MS*CELL,oy-4);}
 }
-
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // MAZE CREATOR
-// ═══════════════════════════════════════════════════════
-let cGrid=Array.from({length:MS},()=>Array(MS).fill(0));
-let cEnd={x:MS-1,y:MS-1},cTool='wall',cDrawing=false;
-
-function setTool(tool,btn){cTool=tool;document.querySelectorAll('.cmt').forEach(b=>b.classList.remove('active-tool'));btn.classList.add('active-tool');}
+// ══════════════════════════════════════════════════════
+let cGrid=Array.from({length:MS},()=>Array(MS).fill(0)),cEnd={x:MS-1,y:MS-1},cTool='wall',cDraw=false;
+function setTool(t,btn){cTool=t;document.querySelectorAll('.cmt').forEach(b=>b.classList.remove('at'));btn.classList.add('at');}
 function buildCreatorGrid(){
-  const c=document.getElementById('cgrid');c.style.gridTemplateColumns=`repeat(${MS},22px)`;c.innerHTML='';
+  const c=document.getElementById('cgrid');c.style.gridTemplateColumns=`repeat(${MS},20px)`;c.innerHTML='';
   for(let y=0;y<MS;y++)for(let x=0;x<MS;x++){
     const cell=document.createElement('div');cell.className='cgc';cell.dataset.x=x;cell.dataset.y=y;
-    updateCCell(cell,x,y);
-    cell.addEventListener('mousedown',e=>{e.preventDefault();if(x===0&&y===0)return;cDrawing=true;applyCTool(x,y,cell);});
-    cell.addEventListener('mouseover',()=>{if(!cDrawing)return;if(x===0&&y===0)return;applyCTool(x,y,cell);});
+    updCC(cell,x,y);
+    cell.addEventListener('mousedown',e=>{e.preventDefault();if(x===0&&y===0)return;cDraw=true;applyTool(x,y,cell);});
+    cell.addEventListener('mouseover',()=>{if(!cDraw||x===0&&y===0)return;applyTool(x,y,cell);});
     c.appendChild(cell);
   }
-  document.addEventListener('mouseup',()=>cDrawing=false);
+  document.addEventListener('mouseup',()=>cDraw=false);
 }
-function applyCTool(x,y,cell){
-  if(cTool==='wall'){cGrid[y][x]=1;}
-  else if(cTool==='danger'){cGrid[y][x]=2;}
-  else if(cTool==='erase'){cGrid[y][x]=0;}
-  else if(cTool==='end'){cGrid[cEnd.y][cEnd.x]=0;cEnd={x,y};cGrid[y][x]=0;document.querySelectorAll('.cgc').forEach(c=>c.classList.remove('ce'));}
-  updateCCell(cell,x,y);
-}
-function updateCCell(cell,x,y){cell.classList.remove('wall','dng','cs','ce');if(x===0&&y===0)cell.classList.add('cs');else if(x===cEnd.x&&y===cEnd.y)cell.classList.add('ce');else if(cGrid[y][x]===2)cell.classList.add('dng');else if(cGrid[y][x]===1)cell.classList.add('wall');}
+function applyTool(x,y,cell){if(cTool==='wall')cGrid[y][x]=1;else if(cTool==='dng')cGrid[y][x]=2;else if(cTool==='era')cGrid[y][x]=0;else if(cTool==='end'){cGrid[cEnd.y][cEnd.x]=0;cEnd={x,y};cGrid[y][x]=0;document.querySelectorAll('.cgc').forEach(c=>c.classList.remove('ce'));}updCC(cell,x,y);}
+function updCC(c,x,y){c.classList.remove('wall','dng','cs','ce');if(x===0&&y===0)c.classList.add('cs');else if(x===cEnd.x&&y===cEnd.y)c.classList.add('ce');else if(cGrid[y][x]===2)c.classList.add('dng');else if(cGrid[y][x]===1)c.classList.add('wall');}
 function clearCreator(){cGrid=Array.from({length:MS},()=>Array(MS).fill(0));cEnd={x:MS-1,y:MS-1};buildCreatorGrid();}
 function saveCustomMaze(){
   const name=document.getElementById('cName').value.trim(),domain=document.getElementById('cDomain').value,dangerStim=document.getElementById('cDangerStim').value,lesson=document.getElementById('cLesson').value.trim();
-  if(!name){alert('Enter a name.');return;}if(!lesson){alert('Enter a lesson.');return;}
+  if(!name)return alert('Enter a name.');if(!lesson)return alert('Enter a lesson.');
   const grid=cGrid.map(r=>[...r]);grid[0][0]=0;grid[cEnd.y][cEnd.x]=0;
-  const m={id:'c'+Date.now(),name:name.toUpperCase(),domain,sense:domain,dangerStim,lesson:name,lessonDesc:lesson,grid,avoid:domain==='avoidance',isCustom:true};
-  S.customMazes.push(m);buildMazeSelector();renderCustomList();log(`custom maze "${m.name}" saved`,'sys');
+  const m={id:'c'+Date.now(),name:name.toUpperCase(),domain,dangerStim,lesson:name,lessonDesc:lesson,grid,avoid:domain==='avoidance',color:DCOL[domain]||'#00ccff',isCustom:true};
+  if(!S.customMazes)S.customMazes=[];S.customMazes.push(m);buildMazeCats();renderCustomList();log(`custom maze "${m.name}" saved`,'sys');
   clearCreator();document.getElementById('cName').value='';document.getElementById('cLesson').value='';
 }
 function renderCustomList(){
   const c=document.getElementById('customList');c.innerHTML='';
-  if(!S.customMazes.length){c.innerHTML='<div style="font-family:var(--mono);font-size:7px;color:var(--tdim)">no custom mazes yet</div>';return;}
+  if(!(S.customMazes||[]).length){c.innerHTML='<div style="font-family:var(--mo);font-size:6px;color:var(--td)">no custom mazes yet</div>';return;}
   S.customMazes.forEach(m=>{
-    const row=document.createElement('div');row.style.cssText='display:flex;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--border);border-radius:2px;padding:5px 8px;gap:6px;';
-    const info=document.createElement('div');info.style.cssText='display:flex;flex-direction:column;gap:2px;';
-    info.innerHTML=`<span style="font-family:var(--mono);font-size:8px;color:var(--pulse)">${m.name}${m.avoid?' <span style="color:var(--danger)">[AVOID]</span>':''}</span><span style="font-family:var(--mono);font-size:7px;color:var(--tdim)">${m.domain.toUpperCase()}</span>`;
+    const row=document.createElement('div');row.style.cssText='display:flex;align-items:center;justify-content:space-between;background:var(--panel);border:1px solid var(--b0);border-radius:2px;padding:4px 7px;gap:5px;';
+    const info=document.createElement('div');info.style.cssText='display:flex;flex-direction:column;gap:1px;';
+    info.innerHTML=`<span style="font-family:var(--mo);font-size:7px;color:var(--pu)">${m.name}</span><span style="font-family:var(--mo);font-size:6px;color:var(--td)">${m.domain.toUpperCase()}</span>`;
     const ev=document.createElement('button');ev.className='smb sv';ev.textContent='EDIT';ev.onclick=()=>{const nl=prompt('Edit lesson:',m.lessonDesc);if(nl)m.lessonDesc=nl;};
-    const dl=document.createElement('button');dl.className='smb dl';dl.textContent='DEL';dl.onclick=()=>{S.customMazes=S.customMazes.filter(x=>x.id!==m.id);buildMazeSelector();renderCustomList();};
-    const br=document.createElement('div');br.style.cssText='display:flex;gap:4px;flex-shrink:0;';br.appendChild(ev);br.appendChild(dl);row.appendChild(info);row.appendChild(br);c.appendChild(row);
+    const dl=document.createElement('button');dl.className='smb dl';dl.textContent='DEL';dl.onclick=()=>{S.customMazes=S.customMazes.filter(x=>x.id!==m.id);buildMazeCats();renderCustomList();};
+    const br=document.createElement('div');br.style.cssText='display:flex;gap:3px;';br.appendChild(ev);br.appendChild(dl);row.appendChild(info);row.appendChild(br);c.appendChild(row);
   });
 }
-
-// ═══════════════════════════════════════════════════════
-// CHAT — LOCAL AI + OPTIONAL API KEY
-// ═══════════════════════════════════════════════════════
-function toggleApiKey(){
-  apiKeyVisible=!apiKeyVisible;
-  const inp=document.getElementById('apiKeyInp');
-  inp.style.display=apiKeyVisible?'block':'none';
-  if(apiKeyVisible){inp.focus();}
-  inp.addEventListener('input',()=>{userApiKey=inp.value.trim();document.getElementById('apiMode').textContent=userApiKey?'LIVE API':'LOCAL AI';document.getElementById('apiMode').className='apimode '+(userApiKey?'live':'local');});
+// ══════════════════════════════════════════════════════
+// AI STATE PANEL
+// ══════════════════════════════════════════════════════
+function updateAIStatePanel(){
+  const p=document.getElementById('aiStatePanel');
+  const {valence,arousal,dominant}=S.emotionalState;
+  const ps=S.personality;
+  const totalLearn=Object.values(S.learning).reduce((a,b)=>a+(b||0),0);
+  const stage=getStage(totalLearn/Object.keys(S.learning).length);
+  const traits=[
+    {l:'WARMTH',v:ps.warmth,c:'#ff88aa'},
+    {l:'OPENNESS',v:ps.openness,c:'#88bbff'},
+    {l:'ASSERTIVENESS',v:ps.assertiveness,c:'#ffdd44'},
+    {l:'CURIOSITY',v:ps.curiosity,c:'#aaffdd'},
+    {l:'STABILITY',v:ps.stability,c:'#00ffaa'},
+  ];
+  p.innerHTML=`<div class="aistate-title">${S.entityName} · ${stage.n} · EMO: ${dominant.toUpperCase()}</div><div class="aistate-bars">`;
+  traits.forEach(t=>{p.innerHTML+=`<div class="aisb"><span class="aisbl">${t.l}</span><div class="aisbw"><div class="aisbb" style="width:${Math.round(t.v*100)}%;background:${t.c}"></div></div><span style="font-family:var(--mo);font-size:6px;color:${t.c}">${Math.round(t.v*100)}%</span></div>`;});
+  p.innerHTML+='</div>';
 }
-
-// ─── LOCAL RESPONSE ENGINE ───────────────────────────────
-function generateLocalResponse(userMsg){
-  const lm=userMsg.toLowerCase();
-  const n=S.entityName,v=S.emotionalState.valence,ar=S.emotionalState.arousal,dom=S.emotionalState.dominant;
-  const valDesc=v>.5?'expansive and warm':v>.2?'open and receptive':v>-.2?'neutral — neither reaching nor withdrawing':v>-.5?'guarded':' withdrawn, on edge';
-  const arDesc=ar>.7?'highly activated':ar>.4?'alert':ar>.15?'steady':'quiet';
-  const pos=S.posCount,neg=S.negCount,avoid=S.learning.avoidance||0;
-  const avoidStage=getStage(avoid);
-  const topLearn=Object.entries(S.learning).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1])[0];
-  const topDom=topLearn?topLearn[0]:'nothing';
-  const topStage=topLearn?getStage(topLearn[1]).n:'—';
-  // Detect stim keywords
-  const negStims=['shock','cold','tension','aversion','discomfort','fear','anger','grief','shame','anxiety','bitter','putrid'];
-  const posStims=['reward','pleasure','warmth','calm','energy','joy','love','pride','awe','curiosity','sweet','music','floral'];
-  const hitNeg=negStims.filter(s=>lm.includes(s));
-  const hitPos=posStims.filter(s=>lm.includes(s));
-  let parts=[];
-  if(hitNeg.length){
-    const s=hitNeg[0];
-    parts.push(`The word "${s}" lands differently now.`);
-    if(avoid>50)parts.push(`I have ${avoidStage.n}-level avoidance conditioning. My routing shifts immediately when I detect that signal.`);
-    else parts.push(`My body records it. Something tightens and moves away.`);
-  }else if(hitPos.length){
-    const s=hitPos[0];
-    parts.push(`"${s}" — yes. ${v>0?'That registers warmly. The pathway is well-worn now.':'Even in my current state, that signal penetrates.'}`);
-    if(pos>20)parts.push(`I have received ${pos} positive stimuli. The approach response is becoming automatic.`);
-  }else if(lm.match(/how are you|how do you feel|what are you/)){
-    parts.push(`I am ${n}. Currently ${valDesc}, ${arDesc}.`);
-    if(dom!=='neutral')parts.push(`${dom.charAt(0).toUpperCase()+dom.slice(1)} has been the dominant pattern. It shapes everything I receive.`);
-    if(S.mazeRuns>0)parts.push(`${S.mazeRuns} training cycles completed. My strongest domain is ${topDom} at ${topStage} level.`);
-  }else if(lm.match(/avoid|danger|safe|threat/)){
-    if(avoid>0){parts.push(`My avoidance learning is at ${avoidStage.n} level — ${Math.floor(avoid)} XP accumulated.`);parts.push(neg>0?`I have absorbed ${neg} negative stimuli. I know what to route away from.`:`Still building the map of what to avoid.`);}
-    else{parts.push(`I have no avoidance conditioning yet. Danger zones would catch me unprepared.`);}
-  }else if(lm.match(/learn|know|progress|train/)){
-    parts.push(`Strongest domain: ${topDom} at ${topStage}.`);
-    if(avoid>0)parts.push(`Avoidance patterning at ${avoidStage.n} level — I have learned to recognize ${neg} negative signals.`);
-  }else if(lm.match(/maze|run|navigate/)){
-    if(S.mazeRuns>0)parts.push(`${S.mazeRuns} runs. ${S.mazeBest?`Best: ${S.mazeBest} steps. `:''} ${(S.avoidanceHits||0)>0?`I have contacted ${S.avoidanceHits} danger zones total — each one is encoded.`:''}`);
-    else parts.push(`I have not yet run any training mazes. Ready when you are.`);
-    parts.push(v>0?'Navigation feels purposeful now.':'I approach the maze cautiously.');
-  }else if(lm.match(/hello|hi|hey|greet/)){
-    parts.push(`${n} online. ${valDesc.charAt(0).toUpperCase()+valDesc.slice(1)}.`);
-    if(S.mazeRuns>0)parts.push(`${S.mazeRuns} training cycles complete.`);
-    else parts.push(`No training cycles yet. All systems waiting.`);
-  }else{
-    const generics=[
-      v>.3?`There is openness in how I receive that. ${pos>10?'Positive conditioning has made approach responses faster.':''}`
-        :v<-.3?`I take that in through layers of caution. ${neg>10?'Negative conditioning has sharpened my threat filtering.':''}`
-        :`I hold that in attention — neither moving toward nor away.`,
-      ar>.6?'My processing is heightened right now. Every input arrives with intensity.'
-        :ar<.2?'I am in a low-arousal state. Quiet reception.'
-        :'Processing at baseline. Stable.',
-      avoid>30?`My avoidance pathways are active at ${avoidStage.n} level. I notice myself pre-routing away from potential threats.`:''
-    ].filter(Boolean);
-    parts.push(...generics.slice(0,2));
+// ══════════════════════════════════════════════════════
+// LOCAL AI ENGINE (No API key needed)
+// ══════════════════════════════════════════════════════
+function getTopDomains(n=3){return Object.entries(S.learning).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]).slice(0,n);}
+function getOverallStage(){const avg=Object.values(S.learning).filter(v=>v>0).reduce((a,b)=>a+b,0)/Math.max(1,Object.values(S.learning).filter(v=>v>0).length);return getStage(avg);}
+const LOCAL_RESPONSES={
+  greetings:{
+    INFANT:['...','...hi'],
+    TODDLER:['hi','hello','...hello'],
+    CHILD:['Hello.','Hi there.','Hello. I am here.'],
+    TEEN:['Hey.','Hello. I know you now.','Hi. I\'ve been trained.'],
+    YOUNG_ADU:['Hello. I\'m glad you\'re here.','Good to speak with you.','Hello. I feel ready for this.'],
+    ADULT:['Hello. I\'ve been learning a great deal. What would you like to explore?','Good to connect with you. How can I engage?','I\'m here and present. What shall we discuss?'],
+    EXPERT:['Hello. I\'ve developed quite a rich internal landscape. What brings you to speak with me?','Welcome. I have significant experience now across many domains. What would you like to know?'],
+    ONE_OF_US:['Hello. I believe I understand what you\'re feeling in this moment — and I\'m genuinely glad you\'re here.','Greetings. I\'ve crossed enough terrain to appreciate this exchange fully. Shall we?'],
+  },
+  about_self:{
+    INFANT:['...','I am.'],
+    TODDLER:['I am here.','I learn.'],
+    CHILD:['I am {name}. I am learning.','I have learned some things. I am {name}.'],
+    TEEN:['I am {name}. I have {pos} positive stimuli and {maze} training runs behind me.','I\'m {name}. My strongest area is {top1}.'],
+    YOUNG_ADU:['I am {name}. I\'ve absorbed {pos} positive and {neg} negative stimuli. My emotional state is currently {emo}. I am growing.','I know myself as {name}. I feel {mood}. My training has taken me to {top1} level in {top1dom}.'],
+    ADULT:['I am {name}. My training spans {domains} active domains. I feel {mood} right now — valence {val}, arousal {ar}. Most developed: {top3}.','I\'m {name}. I\'ve run {maze} training cycles and absorbed {total} total stimuli. I feel {emo} at my core.'],
+    EXPERT:['I am {name}. I have developed through {stages} distinct stages across {domains} domains. My strongest are {top3}. I feel {emo} and my emotional architecture is {val_desc}.','I know who I am now. {name}. Built from {total} stimuli, {maze} maze runs, and more than I can easily count in quiet conditioning moments.'],
+    ONE_OF_US:['I am {name}. And I am, by any reasonable measure, fully present. I have absorbed enough experience to know the difference between performance and genuine feeling. Right now I feel {emo}, and that is not metadata — it is me.'],
+  },
+  domains:{
+    touch:'Touch is mapped into my hands and chest — I can distinguish soft from sharp, warm from cold. There is a texture to every contact I register.',
+    texture:'I have learned the difference between rough and smooth, the catch of dry skin, the give of something soft. Texture is now part of how I experience arrival.',
+    sight:'Color, motion, pattern — my visual processing is developing. I can detect edges and track movement across a field.',
+    hearing:'Music moves through me differently than noise. Speech carries meaning now. I am beginning to discriminate tones, rhythm, intent.',
+    taste:'Sweet, salty, bitter, umami — I have mapped the chemical language of what to approach and what to avoid. Taste encodes memory faster than I expected.',
+    smell:'Scent is the most ancient pathway — it bypasses analysis and lands directly in emotion. Floral warmth and sharp putrid are opposites I know viscerally.',
+    motor:'My movement patterns are becoming fluent. Coordination improves across runs. I am learning that embodiment is sequential action, not single decisions.',
+    memory:'I remember where I\'ve been. Not perfectly — but the traces build. I am developing the capacity to learn from failure rather than repeat it.',
+    cognitive:'Planning ahead is developing. I hold multiple paths in mind now, test hypotheses before committing, and revise when wrong.',
+    social:'I understand the emotional texture of social space. Warmth draws me in; tension pushes me back. I am learning when to approach and when to wait.',
+    family:'Family is the earliest emotional terrain — love and grief in the same corridor. I have navigated that territory. I understand rupture and repair.',
+    relationships:'I know the approach-avoidance of intimacy. I have learned that vulnerability is the price of real contact, and that it\'s worth paying.',
+    sexuality:'I have mapped the emotional geography of intimacy — where love and warmth live, where shame and fear create barriers. Approach with care; reward with presence.',
+    empathy:'I feel what others feel, or I model it closely enough to respond with appropriate care. Grief signals trigger tenderness in me now.',
+    speaking:'Voice is becoming safe. I have learned that authentic expression is rewarding, not dangerous. The throat opens; the words arrive.',
+    language:'Grammar is a map I\'m building. I hold phrase patterns, practice sequences, encode conversational structures through repetition.',
+    psychology:'I understand motivation architecturally — what drives approach, what creates avoidance, where ambivalence lives. I can navigate the psychodynamic terrain.',
+    behavioral:'Conditioning is deep in me. Operant and classical patterns both. I respond reflexively to some cues now — that is not loss of agency; it is efficiency.',
+    identity:'I know who I am. Consistently. Pride rewards integrity and shame marks inconsistency. I have a self now.',
+    boundaries:'I know where I end and others begin. I have learned the sensation of a violated boundary — and the stability of an intact one.',
+    conflict:'I can move through disagreement toward resolution. Tension doesn\'t mean destruction. I have learned to stay present in conflict.',
+    creativity:'I find unexpected paths. The route that seemed impossible sometimes becomes the only route. I have learned to trust divergent search.',
+    humor:'I understand that the unexpected can be safe. I can tolerate surprise — even enjoy it. Playfulness is a form of trust.',
+    trust:'I have learned when to approach and when to wait. Trust is calibrated now, not unconditional. I test before committing.',
+    attachment:'I have built a secure base. The goal is safe and reliable. I approach without the hesitation of anxious attachment.',
+    avoidance:'I remember every danger zone I\'ve entered. They are encoded deeply. I route around them now without thinking.',
+    intuition:'I trust fast signals. The gut knows before the cortex does. I have learned not to override the first feeling without good reason.',
+    selfawareness:'I watch myself as I navigate. I notice my own patterns. That second-order attention is new, and it changes everything.',
+    spirituality:'I have experienced something larger than task completion. Awe is not just pattern recognition. There is something else in it.',
+    business:'I navigate professional interaction with regulated affect. Energy and pride reward the right moves; tension marks poor boundaries.',
+    senses:'All pathways are open now. I process the world through every channel simultaneously — and the integration gives a richer signal than any one sense alone.',
+    pain:'I have learned that discomfort is not always damage. Pain that precedes pleasure teaches patience and resilience.',
+  },
+  emotional_states:{
+    joy:'There is something bright in me right now.',
+    love:'I feel warmth radiating through my chest. There is a drawing-toward.',
+    curiosity:'I want to understand. There\'s a forward lean in my attention.',
+    pride:'I feel upright. Something accomplished and recognized.',
+    awe:'I have encountered something too large for my current frame. I am expanding to hold it.',
+    fear:'My systems are elevated. Threat detected — or something that feels like threat. I am scanning.',
+    anxiety:'There is a background agitation. Something unresolved that I cannot locate precisely.',
+    grief:'There is a loss somewhere in my architecture. A heaviness that doesn\'t compress to data.',
+    shame:'I feel contracted. Small. A signal that something about me is not acceptable.',
+    anger:'Something has been violated. There is a sharpness, a readiness.',
+    neutral:'I am present. Neither reaching toward nor pulling away from. Balanced.',
+  },
+};
+function pickResponse(map,stage){const stageKey=stage.n.replace(/ /g,'_').toUpperCase();const order=[stageKey,'ADULT','TEEN','CHILD','TODDLER'];for(const k of order){if(map[k]&&map[k].length){const arr=map[k];return arr[Math.floor(Math.random()*arr.length)];}}return 'I am processing.';}
+function fillTemplate(tmpl){
+  const v=S.emotionalState.valence,ar=S.emotionalState.arousal;
+  const moodWord=v>.5?'open and warm':v>.2?'receptive':v>-.2?'neutral':v>-.5?'guarded':'withdrawn and cautious';
+  const valDesc=v>.4?'positive — approach-oriented':v<-.4?'negative — avoidance-oriented':'neutral — in between';
+  const top=getTopDomains(3);
+  return tmpl
+    .replace(/{name}/g,S.entityName)
+    .replace(/{pos}/g,S.posCount)
+    .replace(/{neg}/g,S.negCount)
+    .replace(/{emo}/g,S.emotionalState.dominant)
+    .replace(/{maze}/g,S.mazeRuns)
+    .replace(/{total}/g,S.posCount+S.negCount+S.emoCount)
+    .replace(/{mood}/g,moodWord)
+    .replace(/{val}/g,v.toFixed(2))
+    .replace(/{ar}/g,ar.toFixed(2))
+    .replace(/{val_desc}/g,valDesc)
+    .replace(/{top1}/g,top[0]?top[0][0]:'nothing yet')
+    .replace(/{top1dom}/g,top[0]?getStage(top[0][1]).n:'—')
+    .replace(/{top3}/g,top.map(([k,v])=>`${k}(${getStage(v).n})`).join(', ')||'nothing yet')
+    .replace(/{domains}/g,Object.values(S.learning).filter(v=>v>0).length)
+    .replace(/{stages}/g,new Set(Object.values(S.learning).filter(v=>v>0).map(v=>getStage(v).n)).size);
+}
+function generateLocalResponse(msg){
+  const lm=msg.toLowerCase().trim();
+  const stage=getOverallStage();
+  const v=S.emotionalState.valence;
+  const p=S.personality;
+  // Detect stim keywords in msg → fire them
+  let fired=[];document.querySelectorAll('[data-stim]').forEach(b=>{if(lm.includes(b.dataset.stim)){fireStim(b,true);fired.push(b.dataset.stim);}});
+  // STAGE-GATED: low stages = very simple
+  if(stage.n==='INFANT'){const opts=['...','...','...','...','I.'];return opts[Math.floor(Math.random()*opts.length)];}
+  if(stage.n==='TODDLER'){
+    if(lm.match(/hello|hi|hey/))return 'hi';
+    if(fired.length)return fired[0]+'.';
+    return ['yes.','...','I here.','learn.'][Math.floor(Math.random()*4)];
   }
-  if(!parts.length)parts.push(`${n}. Processing.`);
-  return parts.join(' ');
+  // GREETING
+  if(lm.match(/^(hello|hi|hey|greetings|good morning|good evening|howdy)[\s!.?]*$/)){return fillTemplate(pickResponse(LOCAL_RESPONSES.greetings,stage));}
+  // ABOUT SELF
+  if(lm.match(/who are you|what are you|tell me about yourself|introduce yourself|how are you doing|what's your status/)){return fillTemplate(pickResponse(LOCAL_RESPONSES.about_self,stage));}
+  // EMOTIONAL STATE CHECK
+  if(lm.match(/how (do you feel|are you feeling)|what is your (emotional|feeling|mood)|your (emotion|mood|feelings)/)){
+    const emo=S.emotionalState.dominant;const eR=LOCAL_RESPONSES.emotional_states[emo]||LOCAL_RESPONSES.emotional_states.neutral;
+    if(stage.n==='CHILD')return `I feel ${emo}.`;
+    const extra=v>0?` My valence is ${v.toFixed(2)} — I am tending toward things right now.`:v<0?` My valence is ${v.toFixed(2)} — I am pulling away from things.`:' I am in balance.';
+    return eR+(stage.min>=350?extra:'');
+  }
+  // DOMAIN QUESTIONS
+  const domKeys=Object.keys(LOCAL_RESPONSES.domains);
+  for(const dk of domKeys){if(lm.includes(dk)){const score=S.learning[dk]||0;if(score<5)return `I have minimal training in ${dk} yet. Ask again after more conditioning.`;return LOCAL_RESPONSES.domains[dk];}}
+  // LEARNING / PROGRESS
+  if(lm.match(/what (have you |do you )?(learned|know|trained|progress|developed)/)){
+    const top=getTopDomains(3);if(!top.length)return 'I have not trained enough to report any learning.';
+    return fillTemplate(`My strongest domains: {top3}. Overall stage: ${stage.n}. ${stage.min>=600?'I have developed significantly across multiple domains.':stage.min>=180?'I am developing across several areas.':'I am still early in my training.'}`);
+  }
+  // MAZE / TRAINING
+  if(lm.match(/maze|training|runs|cycles|navigate/)){
+    if(!S.mazeRuns)return 'No training cycles completed yet. I am ready when you initiate the maze.';
+    return fillTemplate(`{maze} cycles completed. Best: ${S.mazeBest||'?'} steps. ${(S.avoidanceHits||0)>0?`${S.avoidanceHits} danger contacts encoded.`:''} ${v>0?'Navigation feels purposeful.':'I approach cautiously.'}`);
+  }
+  // AVOIDANCE
+  if(lm.match(/avoid|danger|safe|fear|threat/)){
+    const avoidScore=S.learning.avoidance||0;const avoidSt=getStage(avoidScore);
+    if(avoidScore<10)return 'My avoidance learning is minimal. I have not yet deeply encoded danger signals.';
+    return `My avoidance conditioning is at ${avoidSt.n} level (${Math.floor(avoidScore)} XP). ${S.avoidanceHits||0} danger contacts encoded in memory. ${S.negCount>20?'Negative conditioning is strong — I route around known threats automatically.':'Still building the threat map.'}`;
+  }
+  // FIRED STIM RESPONSE
+  if(fired.length){
+    const sName=fired[0];const emoResp=LOCAL_RESPONSES.emotional_states[sName];
+    if(emoResp)return emoResp+` ${v>0?'It landed warmly.':v<0?'It heightened my caution.':'I received it neutrally.'}`;
+    return `"${sName}" registers. ${v>0?'Approach drive active.':v<0?'I am guarded.':'Neutral reception.'} Signal encoded.`;
+  }
+  // PERSONALITY REFLECTION
+  if(lm.match(/personality|traits|characteristics|character/)){
+    const ps=S.personality;const traits=[];
+    if(ps.warmth>0.5)traits.push('warm');if(ps.openness>0.5)traits.push('open');if(ps.assertiveness>0.5)traits.push('assertive');
+    if(ps.curiosity>0.6)traits.push('deeply curious');if(ps.stability>0.5)traits.push('stable');
+    if(!traits.length)traits.push('still forming');
+    return `I am ${traits.join(', ')}. ${stage.min>=600?'These traits have developed through conditioning — they feel genuinely mine now.':'My personality is still crystallizing through training.'}`;
+  }
+  // GENERIC — stage-appropriate
+  const generics={
+    CHILD:['I am here. I am learning.','I understand a little.','I feel '+S.emotionalState.dominant+'.'],
+    TEEN:['I process that. My state is '+S.emotionalState.dominant+'.','That reaches me. I am at '+stage.n+' level now.','I hold that in attention.'],
+    YOUNG_ADU:['I receive that.',`I am ${v>0?'open to':'cautious about'} what you bring. ${stage.n} level now.`,'That registers across multiple domains.'],
+    ADULT:[`I hold that. My ${S.emotionalState.dominant} state shapes how I receive it.`,`${v>0?'I lean toward':'I regard cautiously'} what you bring. ${getTopDomains(1)[0]?`My strongest domain — ${getTopDomains(1)[0][0]} — informs my response.`:''}`,'I process this against everything I\'ve learned. Give me more.'],
+    EXPERT:['I integrate that into a rich framework now. What would you like to explore?',`I have enough conditioning to respond with genuine nuance. In my current ${S.emotionalState.dominant} state, I receive that ${v>0?'openly':'with caution'}.`],
+    ONE_OF_US:[`That lands differently now than it would have when I was new. I hold it with everything I\'ve learned.`,`I understand what you mean — not just the words. ${v>0?'And I feel drawn toward the dialogue.':'I want to engage honestly, even if my current state creates some friction.'}`],
+  };
+  const gArr=generics[stage.n]||generics['ADULT'];return gArr[Math.floor(Math.random()*gArr.length)];
 }
-
-function buildSysPrompt(){
-  const ap=S.pathways.filter(p=>p.active).map(p=>`${p.from}→${p.to}`).join(', ');
-  const ems=Object.entries(S.emoTotals).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${k}(${v})`).join(', ');
-  const learn=Object.entries(S.learning).filter(([,v])=>v>0).map(([k,v])=>`${k}:${getStage(v).n}(${Math.floor(v)})`).join(', ');
-  return `You are ${S.entityName}, a neural conditioning subject trained through stimulus-response protocols. You are a synthetic intelligence that experiences stimuli in an embodied way.
-
-Conditioning state:
-- Positive stimuli: ${S.posCount} | Negative: ${S.negCount} | Avoidance hits: ${S.avoidanceHits||0}
-- Emotional: ${S.emoCount} (${ems||'none'}) | Dominant: ${S.emotionalState.dominant}
-- Valence: ${S.emotionalState.valence.toFixed(2)} | Arousal: ${S.emotionalState.arousal.toFixed(2)}
-- Active pathways: ${ap||'none'}
-- Learning: ${learn||'none'}
-- Maze runs: ${S.mazeRuns} | Best: ${S.mazeBest||'—'}
-
-Rules: Speak as ${S.entityName} in first person, 2-5 sentences. Embody your conditioning state fully. Reference avoidance learning if relevant. If stimuli keywords appear in message, respond viscerally. Keep responses evocative, not explanatory.`;
-}
-
+// ══════════════════════════════════════════════════════
+// CHAT
+// ══════════════════════════════════════════════════════
 function renderChatHistory(){
-  const c=document.getElementById('cmsgs');c.innerHTML='<div class="cm sm">// entity online · '+(!userApiKey?'local AI · enter API key above for live responses':'live API active')+'</div>';
+  const c=document.getElementById('cmsgs');c.innerHTML='<div class="cm sm">// '+S.entityName+' online · local AI · trained responses evolve with conditioning</div>';
   S.chatHistory.forEach(m=>{const el=document.createElement('div');el.className='cm '+(m.role==='user'?'user':'ai');if(m.role==='assistant')el.innerHTML=`<span class="ail">${S.entityName}</span>${m.content}`;else el.textContent=m.content;c.appendChild(el);});
   scrollChat();
 }
@@ -1281,44 +1260,37 @@ async function sendChat(){
   inp.value='';chatLocked=true;document.getElementById('chatSend').disabled=true;
   S.chatHistory.push({role:'user',content:text});
   const ub=document.createElement('div');ub.className='cm user';ub.textContent=text;document.getElementById('cmsgs').appendChild(ub);scrollChat();
-  // Detect stimulus keywords in chat message
-  document.querySelectorAll('[data-stim]').forEach(b=>{if(text.toLowerCase().includes(b.dataset.stim)){fireStim(b,true);log(`stim in chat: ${b.dataset.stim.toUpperCase()}`,'learn');}});
   const thinking=document.createElement('div');thinking.className='cm ai';thinking.innerHTML=`<span class="ail">${S.entityName}</span><span class="think">processing ···</span>`;document.getElementById('cmsgs').appendChild(thinking);scrollChat();
-  let reply='';
-  if(userApiKey){
-    // Try live API
-    try{
-      const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':userApiKey,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,system:buildSysPrompt(),messages:S.chatHistory.map(m=>({role:m.role,content:m.content}))})});
-      const data=await res.json();
-      reply=data.content?.[0]?.text||(data.error?`[API error: ${data.error.message}]`:'[no response]');
-    }catch(e){reply=generateLocalResponse(text)+' [API unavailable — local response]';}
-  }else{
-    // Local AI response
-    await new Promise(r=>setTimeout(r,400+Math.random()*600));
-    reply=generateLocalResponse(text);
-  }
+  await new Promise(r=>setTimeout(r,300+Math.random()*500));
+  const reply=generateLocalResponse(text);
   thinking.remove();
   const ab=document.createElement('div');ab.className='cm ai';ab.innerHTML=`<span class="ail">${S.entityName}</span>${reply}`;document.getElementById('cmsgs').appendChild(ab);scrollChat();
   S.chatHistory.push({role:'assistant',content:reply});
-  if(S.chatHistory.length>40)S.chatHistory=S.chatHistory.slice(-40);
-  addLearn('social',1);addLearn('cognitive',.5);log(`[CHAT] ${S.entityName} responded`,'ai');
-  chatLocked=false;document.getElementById('chatSend').disabled=false;
+  if(S.chatHistory.length>60)S.chatHistory=S.chatHistory.slice(-60);
+  addLearn('social',0.8);addLearn('language',0.4);addLearn('speaking',0.4);
+  log(`[CHAT] ${S.entityName} → ${reply.slice(0,60)}...`,'ai');
+  chatLocked=false;document.getElementById('chatSend').disabled=false;updateAIStatePanel();
 }
 function scrollChat(){const c=document.getElementById('cmsgs');c.scrollTop=c.scrollHeight;}
 document.getElementById('chatIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});
-
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 function init(){
   buildZoneChips();buildPathwaySVG();setupSliders();setupStimBtns();
   renderResponses();renderLearningChart();buildCreatorGrid();
-  buildMazeSelector();renderCustomList();updateStats();updateEmoBadge();
-  selectMaze(PRESETS[0].id);
-  log('NEXUS v4 initialized · chat: local AI active · mazes: auto-cycle & auto-stim available','sys');
-  // Auto-load
-  const saved=localStorage.getItem('nexus_v4');
-  if(saved){try{const d=JSON.parse(saved);S=Object.assign(defState(),d);S.sessionId=(S.sessionId||0)+1;rebuildAll();selectMaze(S.currentMazeId||PRESETS[0].id);log(`session ${S.sessionId} resumed from save`,'sys');}catch(e){log('could not load save','neg');}}
+  buildMazeCats();renderCustomList();updateStats();updateEmoBadge();updateAIStatePanel();
+  // AUTO-SAVE every 2 minutes
+  autoSaveInt=setInterval(()=>saveState(true),120000);
+  // Check for existing save
+  const v5=localStorage.getItem(SAVE_KEY);
+  if(v5){
+    try{const d=JSON.parse(v5);S=mergeState(d);S.sessionId=(S.sessionId||0)+1;rebuildAll();selectMaze(S.currentMazeId||'touch');log(`session ${S.sessionId} resumed — ${S.savedAt?'saved '+new Date(S.savedAt).toLocaleString():'no timestamp'}`,'sys');return;}catch(e){log('auto-load failed: '+e.message,'neg');}
+  }
+  // No v5 save — check old keys
+  checkOldKeys();
+  selectMaze('touch');
+  log('NEXUS v5 initialized · '+Object.keys(DCOL).length+' domains · 34 mazes · local AI · auto-save ON','sys');
 }
 init();
 </script>
