@@ -681,18 +681,15 @@
   <!-- CENTER: Stimuli Controls + Maze Training -->
   <div class="center-panel">
     <div class="panel-title">Stimuli Controls</div>
-
     <div class="stimuli-grid">
       <!-- Positive -->
       <div class="stimuli-group positive">
         <div class="group-label pos">▲ Positive Stimuli</div>
-
         <div class="intensity-row">
           <span class="intensity-label">INTENSITY</span>
           <input type="range" class="pos-range" id="pos-intensity" min="1" max="100" value="50">
           <span class="intensity-val" id="pos-int-val" style="color:var(--pos)">50</span>
         </div>
-
         <button class="stim-btn pos" data-stim="reward" data-type="pos">
           <span>REWARD</span><span class="stim-icon">◈</span>
         </button>
@@ -709,17 +706,14 @@
           <span>ENERGY</span><span class="stim-icon">◆</span>
         </button>
       </div>
-
       <!-- Negative -->
       <div class="stimuli-group negative">
         <div class="group-label neg">▼ Negative Stimuli</div>
-
         <div class="intensity-row">
           <span class="intensity-label">INTENSITY</span>
           <input type="range" class="neg-range" id="neg-intensity" min="1" max="100" value="50">
           <span class="intensity-val" id="neg-int-val" style="color:var(--neg)">50</span>
         </div>
-
         <button class="stim-btn neg" data-stim="aversion" data-type="neg">
           <span>AVERSION</span><span class="stim-icon">◈</span>
         </button>
