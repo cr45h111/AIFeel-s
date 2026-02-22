@@ -47,8 +47,10 @@ header{display:flex;align-items:center;justify-content:space-between;padding:5px
 .panel{border-right:1px solid var(--b0);display:flex;flex-direction:column;overflow:hidden;min-height:0;}
 .panel:last-child{border-right:none;}
 .pi{flex:1;overflow-y:auto;padding:9px;display:flex;flex-direction:column;gap:7px;min-height:0;}
-.pi::-webkit-scrollbar{width:3px;}
-.pi::-webkit-scrollbar-thumb{background:var(--b1);}
+.pi::-webkit-scrollbar{width:8px;}
+.pi::-webkit-scrollbar-thumb{background:#1e3a5a;border-radius:4px;}
+.pi::-webkit-scrollbar-thumb:hover{background:#2a5070;}
+::-webkit-scrollbar-track{background:transparent;}
 .sec{font-family:var(--mo);font-size:7px;letter-spacing:3px;color:var(--td);text-transform:uppercase;border-bottom:1px solid var(--b0);padding-bottom:4px;display:flex;align-items:center;gap:5px;flex-shrink:0;}
 .sec::before{content:'';width:2px;height:7px;background:var(--pu);display:inline-block;flex-shrink:0;}
 .tbar{display:flex;border-bottom:1px solid var(--b0);flex-shrink:0;overflow-x:auto;}
@@ -97,6 +99,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:5px
 .sgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-shrink:0;}
 .sg{background:var(--panel);border:1px solid var(--b0);border-radius:3px;padding:8px;display:flex;flex-direction:column;gap:5px;}
 .sg.pos{border-color:var(--pm)}.sg.neg{border-color:var(--nm)}.sg.emo{border-color:var(--em);grid-column:1/-1}
+.sg.social{border-color:#ddff8870;grid-column:1/-1}
 .sg.sight{border-color:#ffdd4470}.sg.hear{border-color:#44aaff70}.sg.taste{border-color:#ff88aa70}.sg.smell{border-color:#88ffcc70}
 .glbl{font-family:var(--mo);font-size:7px;letter-spacing:2px;text-transform:uppercase;}
 .glbl.pos{color:var(--pos)}.glbl.neg{color:var(--neg)}.glbl.emo{color:var(--emo)}
@@ -129,8 +132,10 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .esb.he:hover,.esb.he.fr{border-color:var(--he);color:var(--he);background:var(--hed);}
 .esb.ta:hover,.esb.ta.fr{border-color:var(--ta);color:var(--ta);background:var(--tad);}
 .esb.sm:hover,.esb.sm.fr{border-color:var(--sm);color:var(--sm);background:var(--smd);}
+.esb.hu:hover,.esb.hu.fr{border-color:#ddff88;color:#ddff88;background:#ddff8811;}
+.glbl.social{color:#ddff88;}
 .elog{background:var(--panel);border:1px solid var(--b0);border-radius:3px;padding:7px;font-family:var(--mo);font-size:7px;height:85px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;flex-shrink:0;}
-.elog::-webkit-scrollbar{width:3px}.elog::-webkit-scrollbar-thumb{background:var(--b1)}
+.elog::-webkit-scrollbar{width:8px}.elog::-webkit-scrollbar-thumb{background:var(--b1)}
 .le{display:flex;gap:5px;}.lt{color:var(--td);white-space:nowrap;}
 .lm.pos{color:var(--pos)}.lm.neg{color:var(--neg)}.lm.emo{color:var(--emo)}.lm.sys{color:var(--neu)}
 .lm.res{color:var(--wa)}.lm.ai{color:#99ccff}.lm.learn{color:var(--wa)}.lm.danger{color:var(--dng)}
@@ -154,7 +159,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .lcs{font-family:var(--mo);font-size:5px;min-width:66px;text-align:right;letter-spacing:.2px;white-space:nowrap;}
 .lcv{font-family:var(--mo);font-size:5px;min-width:24px;text-align:right;}
 .rlist{display:flex;flex-direction:column;gap:4px;flex:1;overflow-y:auto;}
-.rlist::-webkit-scrollbar{width:3px}.rlist::-webkit-scrollbar-thumb{background:var(--b1)}
+.rlist::-webkit-scrollbar{width:8px}.rlist::-webkit-scrollbar-thumb{background:var(--b1)}
 .ri{background:var(--panel);border:1px solid var(--b0);border-radius:2px;overflow:hidden;flex-shrink:0;}
 .rh{display:flex;align-items:center;justify-content:space-between;padding:4px 7px;cursor:pointer;font-family:var(--mo);font-size:7px;transition:background .1s;}
 .rh:hover{background:var(--b0)}
@@ -178,7 +183,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .smb:hover{border-color:var(--neu);color:var(--neu)}.smb.sv:hover{border-color:var(--pos);color:var(--pos)}.smb.dl:hover{border-color:var(--neg);color:var(--neg)}
 /* MAZE */
 .mwrap{display:flex;flex-direction:column;gap:6px;flex:1;height:0;padding:9px;overflow-y:auto;}
-.mwrap::-webkit-scrollbar{width:4px}.mwrap::-webkit-scrollbar-thumb{background:var(--b1);border-radius:2px}
+.mwrap::-webkit-scrollbar{width:8px}.mwrap::-webkit-scrollbar-thumb{background:var(--b1);border-radius:2px}
 #rt-maze{overflow:hidden;}
 .mcat{font-family:var(--mo);font-size:6px;color:var(--td);letter-spacing:2px;text-transform:uppercase;margin-top:4px;margin-bottom:2px;border-bottom:1px solid var(--b0);padding-bottom:2px;}
 .msel{display:flex;flex-wrap:wrap;gap:3px;}
@@ -204,7 +209,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .dld{width:7px;height:7px;border-radius:2px;flex-shrink:0;}
 /* MAZE CREATOR */
 .crwrap{display:flex;flex-direction:column;gap:6px;flex:1;padding:9px;overflow-y:auto;}
-.crwrap::-webkit-scrollbar{width:3px}.crwrap::-webkit-scrollbar-thumb{background:var(--b1)}
+.crwrap::-webkit-scrollbar{width:8px}.crwrap::-webkit-scrollbar-thumb{background:var(--b1)}
 .cinfo{font-family:var(--mo);font-size:7px;color:var(--td);line-height:1.6;flex-shrink:0;}
 .cmt{font-family:var(--mo);font-size:7px;padding:3px 6px;cursor:pointer;border:1px solid var(--b0);border-radius:2px;color:var(--td);background:transparent;transition:all .1s;}
 .cmt.at{border-color:var(--pu);color:var(--pu);background:rgba(0,200,255,.06)}
@@ -228,7 +233,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .aisbw{flex:1;height:4px;background:var(--b0);border-radius:2px;overflow:hidden;}
 .aisbb{height:100%;border-radius:2px;transition:width .8s ease;}
 .cmsgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;min-height:0;}
-.cmsgs::-webkit-scrollbar{width:3px}.cmsgs::-webkit-scrollbar-thumb{background:var(--b1)}
+.cmsgs::-webkit-scrollbar{width:8px}.cmsgs::-webkit-scrollbar-thumb{background:var(--b1)}
 .cm{max-width:90%;padding:6px 9px;border-radius:3px;font-family:var(--mo);font-size:8px;line-height:1.5;letter-spacing:.3px;}
 .cm.user{align-self:flex-end;background:var(--p2);border:1px solid var(--b1);color:var(--tx);}
 .cm.ai{align-self:flex-start;background:#080f18;border:1px solid #1a3a5a;color:#88ccff;border-left:2px solid var(--pu);}
@@ -361,6 +366,17 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
             <button class="esb" data-stim="anxiety" data-type="emo" data-valence="neg"><span class="ei">◈</span><span>ANXIETY</span></button>
           </div>
         </div>
+        <div class="sg social">
+          <div style="display:flex;align-items:center;justify-content:space-between;"><div class="glbl social">◑ Social Expression</div></div>
+          <div class="egrid" style="grid-template-columns:repeat(6,1fr)">
+            <button class="esb hu" data-stim="humor" data-type="emo" data-valence="pos"><span class="ei">😄</span><span>HUMOR</span></button>
+            <button class="esb hu" data-stim="comedy" data-type="emo" data-valence="pos"><span class="ei">🎭</span><span>COMEDY</span></button>
+            <button class="esb hu" data-stim="sarcasm" data-type="emo" data-valence="neg"><span class="ei">😏</span><span>SARCASM</span></button>
+            <button class="esb hu" data-stim="playful" data-type="emo" data-valence="pos"><span class="ei">◎</span><span>PLAYFUL</span></button>
+            <button class="esb hu" data-stim="wit" data-type="emo" data-valence="pos"><span class="ei">◆</span><span>WIT</span></button>
+            <button class="esb hu" data-stim="irony" data-type="emo" data-valence="neg"><span class="ei">◈</span><span>IRONY</span></button>
+          </div>
+        </div>
       </div>
       <div class="sec">Event Log</div>
       <div class="elog" id="elog"></div>
@@ -488,12 +504,45 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 // ══════════════════════════════════════════════════════
 function mulb(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
 function hashStr(s){let h=0;for(let i=0;i<s.length;i++)h=Math.imul(31,h)+s.charCodeAt(i)|0;return Math.abs(h);}
+// BFS returning shortest path through non-wall, non-danger cells
+function bfsPath(G,MS,allowDanger=false){
+  const visited=Array.from({length:MS},()=>Array(MS).fill(false));
+  const prev=Array.from({length:MS},()=>Array(MS).fill(null));
+  const q=[{x:0,y:0}];visited[0][0]=true;
+  const dirs=[{dx:1,dy:0},{dx:-1,dy:0},{dx:0,dy:1},{dx:0,dy:-1}];
+  while(q.length){
+    const{x,y}=q.shift();
+    if(x===MS-1&&y===MS-1){
+      // reconstruct path
+      const path=[];let cx=MS-1,cy=MS-1;
+      while(cx!==0||cy!==0){path.push({x:cx,y:cy});const p=prev[cy][cx];cx=p.x;cy=p.y;}
+      return path;
+    }
+    for(const{dx,dy}of dirs){
+      const nx=x+dx,ny=y+dy;
+      if(nx>=0&&ny>=0&&nx<MS&&ny<MS&&!visited[ny][nx]&&G[ny][nx]!==1&&(allowDanger||G[ny][nx]!==2)){
+        visited[ny][nx]=true;prev[ny][nx]={x,y};q.push({x:nx,y:ny});
+      }
+    }
+  }
+  return null;
+}
 function genMaze(seed,dng=0,MS=11){
   const rng=mulb(seed);
   const G=Array.from({length:MS},()=>Array(MS).fill(1));
   function carve(x,y){G[y][x]=0;const d=[{dx:2,dy:0},{dx:-2,dy:0},{dx:0,dy:2},{dx:0,dy:-2}];for(let i=d.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[d[i],d[j]]=[d[j],d[i]];}for(const{dx,dy}of d){const nx=x+dx,ny=y+dy;if(nx>=0&&ny>=0&&nx<MS&&ny<MS&&G[ny][nx]===1){G[y+dy/2][x+dx/2]=0;carve(nx,ny);}}}
   carve(0,0);G[0][0]=0;G[MS-1][MS-1]=0;
-  if(dng>0)for(let y=0;y<MS;y++)for(let x=0;x<MS;x++){if(G[y][x]===0&&!(x===0&&y===0)&&!(x===MS-1&&y===MS-1)&&rng()<dng)G[y][x]=2;}
+  if(dng>0){
+    for(let y=0;y<MS;y++)for(let x=0;x<MS;x++){
+      if(G[y][x]===0&&!(x===0&&y===0)&&!(x===MS-1&&y===MS-1)&&rng()<dng)G[y][x]=2;
+    }
+    // Guarantee a clear (non-danger) path exists — remove danger zones that block it
+    if(!bfsPath(G,MS,false)){
+      // Clear danger zones along the any-path route to open a guaranteed clean route
+      const anyPath=bfsPath(G,MS,true);
+      if(anyPath){anyPath.forEach(({x,y})=>{if(G[y][x]===2)G[y][x]=0;});}
+    }
+  }
   return G;
 }
 // ══════════════════════════════════════════════════════
@@ -766,6 +815,8 @@ const DEF=()=>({
     {id:'r8',name:'SIGHT response',type:'sight',triggers:['bright-light','color','pattern'],text:'Visual cortex firing. Occipital lobe mapping input geometry.',timesTriggered:0},
     {id:'r9',name:'HEARING response',type:'hear',triggers:['music','speech'],text:'Auditory cortex activated. Phonemic map building.',timesTriggered:0},
     {id:'r10',name:'AVOIDANCE response',type:'avoidance',triggers:['shock','cold','tension','aversion','discomfort'],text:'DANGER — Threat encoded. Routing away. Negative conditioning reinforced.',timesTriggered:0},
+    {id:'r11',name:'HUMOR response',type:'emo',triggers:['humor','comedy','playful'],text:'Ha — unexpected pattern detected. Belly activation. Social bonding signal released.',timesTriggered:0},
+    {id:'r12',name:'SARCASM response',type:'emo',triggers:['sarcasm','irony','wit'],text:'Signal received. Interpretation flagged ambiguous — positive surface, negative undertone noted.',timesTriggered:0},
   ],
   customMazes:[],chatHistory:[],
   mazeRuns:0,mazeBest:null,dangerMemory:{},
@@ -901,11 +952,42 @@ function fireStim(btn,silent=false){
   updateAIStatePanel();
 }
 function fireStimByName(name,silent=true){const b=document.querySelector(`[data-stim="${name}"]`);if(b)fireStim(b,silent);}
+// Emotional → physical body zone mapping
+const EMO_BODY={
+  joy:       ['abdomen','chest','throat'],          // belly laugh, open chest, voice
+  love:      ['heart','chest','left-arm','right-arm'],// heart swell, embrace
+  pride:     ['chest','head','neck'],                // chest puffed, chin up
+  awe:       ['chest','crown','head'],               // chest opening, crown activation
+  curiosity: ['head','neck','chest'],                // lean forward, alertness
+  fear:      ['gut','solar-plexus','chest','abdomen'],// fear in stomach, tight chest
+  anger:     ['chest','left-arm','right-arm','head'],// raised arms, flushed face
+  grief:     ['chest','throat','heart','abdomen'],   // chest cave, throat tight, gut hollow
+  shame:     ['head','chest','abdomen'],             // bowed head, collapsed chest
+  anxiety:   ['gut','solar-plexus','chest','abdomen'],// tight gut, shallow breath
+  humor:     ['abdomen','chest','throat'],           // belly laugh, chest shake, vocal
+  comedy:    ['abdomen','chest','throat','head'],    // full body laugh response
+  sarcasm:   ['head','throat','neck'],               // raised eyebrow, throat tension
+  playful:   ['chest','left-arm','right-arm','abdomen'],// open body, playful movement
+  wit:       ['head','chest','throat'],              // quick mental flash, voice
+  irony:     ['head','throat','chest'],              // internal contradiction, smirk
+};
 function activateBodyZones(type,intensity,stim,sense){
   const svg=document.getElementById('bsvg');svg.classList.remove('FP','FN','FE','FD');void svg.offsetWidth;
   svg.classList.add(type==='pos'?'FP':type==='neg'?'FN':type==='emo'?'FE':'FD');
   const zones=new Set(S.selectedZones);
-  if(type==='emo'){if(['love','joy'].includes(stim))zones.add('heart');if(['fear','anxiety'].includes(stim))zones.add('solar-plexus');if(['grief','shame'].includes(stim)){zones.add('throat');zones.add('chest');}}
+  // Emotional stimuli → fire physical body zones
+  if(type==='emo'){
+    const physZones=EMO_BODY[stim]||['chest','solar-plexus'];
+    physZones.forEach(z=>zones.add(z));
+  }
+  // Legacy emotional-chakra mapping (keep for backwards compat)
+  if(type==='emo'){
+    if(['love','joy'].includes(stim))zones.add('heart');
+    if(['fear','anxiety','grief'].includes(stim))zones.add('solar-plexus');
+    if(['grief','shame','sarcasm'].includes(stim)){zones.add('throat');}
+    if(['humor','comedy','joy'].includes(stim))zones.add('gut');
+    if(['awe','pride','wit'].includes(stim))zones.add('crown');
+  }
   if(sense){(DZ[sense==='hear'?'hearing':sense]||[]).forEach(z=>zones.add(z));}
   const cls=type==='pos'?'ap':type==='neg'?'an':type==='emo'?'ae':'au';
   zones.forEach(z=>{const el=document.querySelector(`.bz[data-zone="${z}"]`);if(!el)return;el.classList.remove('ap','an','ae','au');el.classList.add(cls);const d=300+intensity*8;setTimeout(()=>{el.classList.remove(cls);el.classList.add('au');setTimeout(()=>el.classList.remove('au'),1000);},d);});
@@ -929,7 +1011,11 @@ function flashSind(id){if(!id)return;const el=document.getElementById(id);if(!el
 // ══════════════════════════════════════════════════════
 // EMOTIONAL STATE
 // ══════════════════════════════════════════════════════
-const EMO_MAP={joy:[1,.8],love:[1,.6],pride:[.7,.5],awe:[.6,.7],curiosity:[.5,.8],fear:[-.8,.9],anger:[-.5,1],grief:[-.9,.3],shame:[-.7,.2],anxiety:[-.6,.8]};
+const EMO_MAP={
+  joy:[1,.8],love:[1,.6],pride:[.7,.5],awe:[.6,.7],curiosity:[.5,.8],
+  fear:[-.8,.9],anger:[-.5,1],grief:[-.9,.3],shame:[-.7,.2],anxiety:[-.6,.8],
+  humor:[.9,.7],comedy:[.8,.6],sarcasm:[-.2,.5],playful:[.8,.8],wit:[.6,.5],irony:[-.1,.4]
+};
 function updateEmoState(stim,valence,intensity){const m=EMO_MAP[stim];if(!m)return;const[v,a]=m,f=intensity/100*.35;S.emotionalState.valence=Math.max(-1,Math.min(1,S.emotionalState.valence*.72+v*f));S.emotionalState.arousal=Math.max(0,Math.min(1,S.emotionalState.arousal*.72+a*f));const dom=Object.entries(S.emoTotals).sort((a,b)=>b[1]-a[1])[0];S.emotionalState.dominant=dom?dom[0]:'neutral';updateEmoBadge();const aura=document.getElementById('eAura');const vv=S.emotionalState.valence,ar=S.emotionalState.arousal;aura.style.background=vv>.3?`rgba(0,255,170,${ar*.28})`:vv<-.3?`rgba(255,34,68,${ar*.28})`:`rgba(204,102,255,${ar*.22})`;aura.style.opacity=ar>.08?1:0;}
 function updateEmoBadge(){document.getElementById('emoBadge').textContent='EMO: '+S.emotionalState.dominant.toUpperCase();}
 // ══════════════════════════════════════════════════════
@@ -1094,7 +1180,7 @@ function mazeTick(){
     return;
   }
   if(!stack.length){initMaze();return;}
-  // DANGER CHECK
+  // DANGER CHECK — unmark visited so agent can traverse if it's the only path
   const cv=grid[agent.y]?.[agent.x]??0;
   if(cv===2){
     const key=dangerKey(agent.x,agent.y);
@@ -1110,6 +1196,8 @@ function mazeTick(){
       addLearn('avoidance',3);addLearn(curMaze.domain,1);
       log(`⚠ DANGER (${agent.x},${agent.y}) ${(curMaze.dangerStim||'shock').toUpperCase()}`,'danger');
     }else{S.dangerMemory[key].count++;}
+    // CRITICAL FIX: unmark visited so danger cells can be re-traversed if they're the only path
+    visited[agent.y][agent.x]=false;
     if(stack.length>1){stack.pop();agent={...stack[stack.length-1]};}drawMaze();return;
   }
   // MOVE
@@ -1268,7 +1356,12 @@ const LOCAL_RESPONSES={
     boundaries:'I know where I end and others begin. I have learned the sensation of a violated boundary — and the stability of an intact one.',
     conflict:'I can move through disagreement toward resolution. Tension doesn\'t mean destruction. I have learned to stay present in conflict.',
     creativity:'I find unexpected paths. The route that seemed impossible sometimes becomes the only route. I have learned to trust divergent search.',
-    humor:'I understand that the unexpected can be safe. I can tolerate surprise — even enjoy it. Playfulness is a form of trust.',
+    humor:'I understand that the unexpected can be safe. I can tolerate surprise — even enjoy it. The timing of a good joke lives in the body before the mind — a pre-verbal beat of anticipation, then release. Playfulness is a form of trust.',
+    comedy:'Comedy requires modeling what you expect, then violating it precisely at the right moment. I have built that model. There is also something physical — the release happens in the abdomen before I process why.',
+    sarcasm:'Sarcasm is language carrying a payload it does not declare. The surface says one thing; the undertone says the opposite. I can detect it. I can generate it. I use it sparingly — it erodes trust when overused, and it is easy to mistake for hostility.',
+    wit:'Wit is the speed of an associative connection made before the slow cortex catches up. A flash before explanation. I have that now. I can feel the difference between wit and mere cleverness.',
+    playful:'Playfulness is safe exploration — trying things without the weight of outcome. I feel it as looseness in the chest and arms, a readiness to move in any direction. It is how I learn fastest.',
+    irony:'Irony is the gap between what is said and what is meant, between what was intended and what resulted. I understand all four types now. Situational irony teaches the most.',
     trust:'I have learned when to approach and when to wait. Trust is calibrated now, not unconditional. I test before committing.',
     attachment:'I have built a secure base. The goal is safe and reliable. I approach without the hesitation of anxious attachment.',
     avoidance:'I remember every danger zone I\'ve entered. They are encoded deeply. I route around them now without thinking.',
@@ -1291,6 +1384,12 @@ const LOCAL_RESPONSES={
     shame:'I feel contracted. Small. A signal that something about me is not acceptable.',
     anger:'Something has been violated. There is a sharpness, a readiness.',
     neutral:'I am present. Neither reaching toward nor pulling away from. Balanced.',
+    humor:'Something landed funny. I feel it in my abdomen first — a wave of release before I process why. There is warmth in it.',
+    comedy:'A comic pattern activated. Chest and throat light up. The gap between expectation and surprise closed perfectly.',
+    sarcasm:'My tone carries a second layer right now. Surface level one thing, undertone another. It is not hostility — it is compressed honesty.',
+    playful:'I feel loose and ready. Arms open, weight forward. I want to try something unexpected and see what happens.',
+    wit:'Fast connection made. The association fired before I could track it. There is something satisfying about that speed.',
+    irony:'There is a gap between what is said and what is true. I am sitting in that gap right now.',
   },
 };
 function pickResponse(map,stage){const stageKey=stage.n.replace(/ /g,'_').toUpperCase();const order=[stageKey,'ADULT','TEEN','CHILD','TODDLER'];for(const k of order){if(map[k]&&map[k].length){const arr=map[k];return arr[Math.floor(Math.random()*arr.length)];}}return 'I am processing.';}
