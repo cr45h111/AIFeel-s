@@ -662,20 +662,7 @@
     <div class="zone-select-row" id="zone-chips"></div>
   </div>
 
-  <!-- NEW: Maze Training Panel -->
-  <div class="panel" id="maze-panel">
-    <div class="panel-title">Maze Training</div>
-    <div id="maze-grid" style="display:grid;grid-template-columns:repeat(5,32px);grid-template-rows:repeat(5,32px);gap:4px;margin-bottom:12px;"></div>
-    <div id="maze-controls" style="margin-bottom:12px;">
-      <button id="maze-start-btn">Start Maze</button>
-      <button id="maze-finish-btn">Finish Maze</button>
-      <button id="maze-next-btn">Next Maze</button>
-    </div>
-    <div id="maze-progress" style="font-family:var(--mono);font-size:12px;color:var(--text-dim);margin-bottom:8px;"></div>
-    <div id="maze-lesson" style="font-family:var(--mono);font-size:11px;color:var(--pulse);"></div>
-  </div>
-
-  <!-- CENTER: Stimuli Controls -->
+  <!-- CENTER: Stimuli Controls + Maze Training -->
   <div class="center-panel">
     <div class="panel-title">Stimuli Controls</div>
 
@@ -739,6 +726,17 @@
     <div class="event-log" id="event-log">
       <div class="log-entry"><span class="log-time">00:00:00</span><span class="log-msg sys">// system initialized. awaiting stimuli.</span></div>
     </div>
+
+    <!-- Maze Training Panel (moved below other UI) -->
+    <div class="panel-title">Maze Training</div>
+    <div id="maze-grid" style="display:grid;grid-template-columns:repeat(5,32px);grid-template-rows:repeat(5,32px);gap:4px;margin-bottom:12px;"></div>
+    <div id="maze-controls" style="margin-bottom:12px;">
+      <button id="maze-start-btn">Start Maze</button>
+      <button id="maze-finish-btn">Finish Maze</button>
+      <button id="maze-next-btn">Next Maze</button>
+    </div>
+    <div id="maze-progress" style="font-family:var(--mono);font-size:12px;color:var(--text-dim);margin-bottom:8px;"></div>
+    <div id="maze-lesson" style="font-family:var(--mono);font-size:11px;color:var(--pulse);"></div>
   </div>
 
   <!-- RIGHT: Pathway Map + Response Editor -->
