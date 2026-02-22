@@ -65,14 +65,33 @@
     main {
       display: flex;
       flex-direction: row;
-      gap: 2vw;
+      gap: 0;
       width: 100%;
-        min-height: 0;
-        height: 100%;
-      padding: 2vw;
-      justify-content: center;
+      min-height: 0;
+      height: 100%;
+      padding: 0;
+      justify-content: flex-start;
       align-items: stretch;
-        overflow-y: auto;
+      overflow-y: auto;
+    }
+
+    .panel {
+      min-width: 260px;
+      max-width: 320px;
+    }
+
+    .center-panel {
+      min-width: 340px;
+      max-width: 420px;
+      margin-left: 24px;
+      margin-right: 16px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      max-height: 60vh;
+    }
     }
 
     .panel {
