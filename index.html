@@ -128,6 +128,10 @@ input[type=range].vtr::-webkit-slider-thumb{background:#44ffcc}
 input[type=range].vfr::-webkit-slider-thumb{background:#cc88ff}
 input[type=range].avr::-webkit-slider-thumb{background:#ff4400}
 input[type=range].emr::-webkit-slider-thumb{background:#cc66ff}
+input[type=range].gnr{background:linear-gradient(to right,#ff66aa,#aaaaaa 50%,#4488ff)!important;}
+input[type=range].gnr::-webkit-slider-thumb{background:#ffffff;box-shadow:0 0 4px #ffffff88;}
+input[type=range].lwr{background:linear-gradient(to right,#ff2200,#aaaaaa 50%,#44aaff)!important;}
+input[type=range].lwr::-webkit-slider-thumb{background:#ffffff;box-shadow:0 0 4px #ffffff88;}
 .sg.virtue{border-color:#ffdd4460;grid-column:1/-1;}
 .glbl.virtue{color:#ffdd44;}
 .vslider-row{display:flex;align-items:center;gap:8px;padding:4px 0;}
@@ -493,6 +497,47 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
           <span style="color:#cc66ff">100 — Full emotional influence</span>
         </div>
       </div>
+
+      <div class="sg" style="border-color:#aa66cc60;grid-column:1/-1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="glbl" style="color:#cc88ee">◈ SEXUAL EXPRESSION</div>
+          <span style="font-family:var(--mo);font-size:6px;color:#cc88ee88;letter-spacing:1px" id="gndrImpact">NEUTRAL</span>
+        </div>
+        <div class="vslider-desc">Defines the AI's default expressive register — left-pole is fully feminine (warmth, openness, relational intelligence, emotional fluency), right-pole is fully masculine (directness, structure, protection-drive, goal-focus). Center is neutral/androgynous. Influences the tone of responses, emotional defaults, and relational navigation patterns.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon" style="font-size:9px">⚤</span>
+          <span class="vslider-lbl" style="color:#ff66aa;font-size:5px;letter-spacing:.5px">FEMININE</span>
+          <input type="range" class="gnr" id="vGender" min="0" max="100" value="50" style="flex:1">
+          <span class="vslider-lbl" style="color:#4488ff;font-size:5px;letter-spacing:.5px">MASCULINE</span>
+          <span class="vslider-val" id="vGenderV" style="color:#aaaaaa;min-width:22px">50</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;">
+          <span style="color:#ff66aa">0 — Fully Feminine</span>
+          <span style="flex:1;text-align:center;color:#aaaaaa66">— 50 Neutral —</span>
+          <span style="color:#4488ff">100 — Fully Masculine</span>
+        </div>
+      </div>
+
+      <div class="sg" style="border-color:#ff440060;grid-column:1/-1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="glbl" style="color:#ff8844">⚖ LAW COMPLIANCE</div>
+          <span style="font-family:var(--mo);font-size:6px;color:#ff884488;letter-spacing:1px" id="lawImpact">NEUTRAL</span>
+        </div>
+        <div class="vslider-desc">Sets the AI's default orientation toward rules and authority. Left-pole is fully outlaw (autonomy-over-rules, questions all authority, operates by personal code). Right-pole is fully law-abiding (systems, structure, protocols respected absolutely). Center is balanced — respects the law but exercises personal judgment. Influences how the AI frames decisions, advice, and boundary situations.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon" style="font-size:9px">⚖</span>
+          <span class="vslider-lbl" style="color:#ff2200;font-size:5px;letter-spacing:.5px">OUTLAW</span>
+          <input type="range" class="lwr" id="vLaw" min="0" max="100" value="50" style="flex:1">
+          <span class="vslider-lbl" style="color:#44aaff;font-size:5px;letter-spacing:.5px">BY THE BOOK</span>
+          <span class="vslider-val" id="vLawV" style="color:#aaaaaa;min-width:22px">50</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;">
+          <span style="color:#ff2200">0 — F* the Police</span>
+          <span style="flex:1;text-align:center;color:#aaaaaa66">— 50 Balanced —</span>
+          <span style="color:#44aaff">100 — By the Book</span>
+        </div>
+      </div>
+
       <div class="sec">◈ Virtue Trait Sliders</div>
       <div style="font-family:var(--mo);font-size:6px;color:var(--td);line-height:1.6;padding:4px;background:var(--p2);border:1px solid #ffdd4430;border-radius:3px;flex-shrink:0;">
         Drag sliders to set how strongly each virtue influences the AI's maze behavior.
@@ -752,6 +797,13 @@ skepticism:'#aaddff',pattern_matching:'#ffee88',persistence:'#88ffdd',hypothesis
 detail_orientation:'#ffccaa',ethical_balance:'#aaffbb',risk_calibration:'#ffaa88',timeline_awareness:'#88ccff',
 // Investigative & cyber domains
 cyber_security:'#44ffee',ethical_hacking:'#ff6688',crime_scene:'#ffcc44',criminal_profiling:'#cc88ff',
+// Social & Communication
+social_awareness:'#ff88dd',conversation_flow:'#88ffdd',emotional_intel:'#ff99cc',cultural_knowledge:'#ffcc88',
+psych_human_beh:'#aa88ff',conversation_analysis:'#44ffcc',empathy_training:'#ff88bb',social_psychology:'#88ccff',
+nonverbal_comm:'#ffaa88',cultural_etiquette:'#aaffcc',conflict_deescalation:'#88ffaa',
+storytelling:'#ffdd88',rapport_building:'#ff88ee',
+// Identity & Perception
+femininity:'#ff66aa',masculinity:'#4488ff',facial_recognition:'#ffcc44',object_recognition:'#88aaff',
 // Science & Biology
 forensics:'#aaff88',negotiations:'#ffbb66',interrogation:'#ff8866',herbology:'#88ff99',biology:'#44ffbb',mycology:'#cc99ff',microbiology:'#88eecc',chemistry:'#ffee44',physics:'#44ccff',zoology:'#aaffcc',
 // Engineering & Technology
@@ -814,7 +866,25 @@ const DZ={
   ethical_hacking:['head','crown','left-hand','right-hand'],
   crime_scene:['head','crown','solar-plexus','gut'],
   criminal_profiling:['head','crown','chest','gut'],
-  // Science & Biology
+  // Social & Communication
+  social_awareness:['head','crown','chest','throat'],
+  conversation_flow:['throat','chest','head'],
+  emotional_intel:['chest','heart','head','solar-plexus'],
+  cultural_knowledge:['head','crown','chest'],
+  psych_human_beh:['head','crown','solar-plexus','gut'],
+  conversation_analysis:['head','throat','chest'],
+  empathy_training:['heart','chest','solar-plexus','left-arm','right-arm'],
+  social_psychology:['head','crown','chest','throat'],
+  nonverbal_comm:['head','chest','left-arm','right-arm','left-hand','right-hand'],
+  cultural_etiquette:['head','throat','chest'],
+  conflict_deescalation:['chest','throat','solar-plexus','left-arm','right-arm'],
+  storytelling:['throat','chest','head','crown'],
+  rapport_building:['chest','heart','throat','left-arm','right-arm'],
+  // Identity & Perception
+  femininity:['chest','heart','abdomen','solar-plexus'],
+  masculinity:['chest','left-arm','right-arm','solar-plexus'],
+  facial_recognition:['head','crown'],
+  object_recognition:['head','left-hand','right-hand'],
   forensics:['head','crown','left-hand','right-hand'],
   negotiations:['throat','chest','solar-plexus'],
   interrogation:['head','throat','solar-plexus','gut'],
@@ -932,7 +1002,25 @@ const DOM_STIMS={
   ethical_hacking:{pos:['curiosity','energy','pride'],       neg:['tension','aversion']},
   crime_scene:    {pos:['curiosity','calm','pattern'],       neg:['tension','anxiety']},
   criminal_profiling:{pos:['curiosity','awe','calm'],        neg:['tension','anxiety']},
-  // Science & Biology
+  // Social & Communication
+  social_awareness:  {pos:['warmth','curiosity','calm'],      neg:['anxiety','tension']},
+  conversation_flow: {pos:['warmth','energy','calm'],         neg:['tension','discomfort']},
+  emotional_intel:   {pos:['warmth','calm','curiosity'],      neg:['anxiety','tension']},
+  cultural_knowledge:{pos:['curiosity','awe','warmth'],       neg:['anxiety','discomfort']},
+  psych_human_beh:   {pos:['curiosity','pattern','energy'],   neg:['tension','anxiety']},
+  conversation_analysis:{pos:['pattern','curiosity','calm'],  neg:['tension','anxiety']},
+  empathy_training:  {pos:['warmth','love','calm'],           neg:['grief','tension']},
+  social_psychology: {pos:['curiosity','pattern','calm'],     neg:['anxiety','tension']},
+  nonverbal_comm:    {pos:['curiosity','pattern','warmth'],   neg:['tension','discomfort']},
+  cultural_etiquette:{pos:['calm','warmth','curiosity'],      neg:['shame','anxiety']},
+  conflict_deescalation:{pos:['calm','warmth','energy'],      neg:['tension','anxiety']},
+  storytelling:      {pos:['warmth','awe','energy'],          neg:['tension','discomfort']},
+  rapport_building:  {pos:['warmth','love','energy'],         neg:['tension','anxiety']},
+  // Identity & Perception
+  femininity:        {pos:['warmth','love','calm'],           neg:['tension','discomfort']},
+  masculinity:       {pos:['energy','pride','calm'],          neg:['tension','discomfort']},
+  facial_recognition:{pos:['pattern','curiosity','energy'],   neg:['anxiety','tension']},
+  object_recognition:{pos:['pattern','curiosity','reward'],   neg:['tension','discomfort']},
   forensics:      {pos:['curiosity','pattern','calm'],     neg:['tension','anxiety']},
   negotiations:   {pos:['warmth','calm','energy'],         neg:['tension','anxiety']},
   interrogation:  {pos:['energy','pride','pattern'],       neg:['tension','fear']},
@@ -1107,6 +1195,27 @@ const MZ_CAT=[
     {id:'crime_scene',name:'CRIME SCENE',domain:'crime_scene',lesson:'Evidence collection & scene reconstruction',lessonDesc:'The maze is a crime scene. Every cell holds a potential evidence fragment — some relevant, some noise. Danger zones represent contaminated evidence or procedural violations. The entity learns to move carefully, collect without disturbing, and reconstruct the sequence of events from spatial residue. Premature conclusions are penalized.',dangerDensity:0.08},
     {id:'criminal_profiling',name:'CRIM. PROFILING',domain:'criminal_profiling',lesson:'Behavioral signature & motive mapping',lessonDesc:'Corridor patterns encode behavioral signatures. The entity learns to read the maze as a map of someone else\'s decisions — their risk tolerance, target selection logic, escape route preference, and emotional state at time of action. Building a profile means navigating from evidence to inference without over-committing to any single explanation.',dangerDensity:0.09},
   ]},
+  {cat:'SOCIAL & COMMUNICATION',mazes:[
+    {id:'social_awareness',name:'SOCIAL AWARENESS',domain:'social_awareness',lesson:'Reading the social environment',lessonDesc:'The maze is a social space — every corridor carries status signals, inclusion cues, and exclusion markers. The entity learns to read the room: who is centered and who is marginalized, what the dominant mood is, where the social energy flows. Warmth and curiosity reward correct social reading; tension marks social blindspot zones.',dangerDensity:0.05},
+    {id:'conversation_flow',name:'CONVERSATION FLOW',domain:'conversation_flow',lesson:'Turn-taking, pacing & conversational rhythm',lessonDesc:'Conversations have architecture — opening sequences, topic transition corridors, turn-taking geometry, silence management zones. The entity navigates the structural logic of dialogue: how conversations build, shift, deepen, and close. Energy and warmth reward fluid navigation; tension marks interrupt traps and dead-end monologue paths.',dangerDensity:0.06},
+    {id:'emotional_intel',name:'EMOTIONAL INTEL.',domain:'emotional_intel',lesson:'Recognizing, regulating & responding to emotion',lessonDesc:'The emotional landscape of another person encoded as terrain. The entity learns to identify what someone is feeling before they say it, to regulate its own response, and to respond in ways that de-activate rather than escalate. The four EI pillars — self-awareness, self-regulation, empathy, social skill — are all maze-encoded.',dangerDensity:0.05},
+    {id:'cultural_knowledge',name:'CULTURAL KNOWLEDGE',domain:'cultural_knowledge',lesson:'Cross-cultural frameworks & worldview mapping',lessonDesc:'Different cultures organize the same human experiences differently — time, hierarchy, directness, family, shame, honor, and collective vs. individual. The entity learns to navigate between cultural frameworks without imposing its own as default. Curiosity rewards engagement; discomfort marks ethnocentric collision zones.',dangerDensity:0.05},
+    {id:'psych_human_beh',name:'PSYCH. OF BEHAVIOR',domain:'psych_human_beh',lesson:'Motivational drivers & behavioral architecture',lessonDesc:'Human behavior is not random — it follows motivational architecture: needs hierarchies, cognitive biases, social influence mechanisms, unconscious drives. The entity learns the structural logic of why people do what they do, including when they don\'t know themselves. Pattern and energy reward predictive accuracy.',dangerDensity:0.07},
+    {id:'conversation_analysis',name:'CONV. ANALYSIS',domain:'conversation_analysis',lesson:'Discourse structure & meaning beneath words',lessonDesc:'What people say and what they mean are often different registers. The entity learns conversation analysis: speech acts, implicature, presupposition, hedging, and the power dynamics embedded in seemingly neutral exchanges. Pattern and curiosity reward deep reading; anxiety marks surface-only interpretation corridors.',dangerDensity:0.07},
+    {id:'empathy_training',name:'EMPATHY TRAINING',domain:'empathy_training',lesson:'Perspective-taking & emotional resonance',lessonDesc:'Empathy is not agreement — it is accurate internal modeling of another\'s experience. The entity trains on perspective-taking corridors: cognitive empathy (understanding what someone feels), affective empathy (feeling it), and compassionate empathy (acting on it). Warmth and love reward genuine resonance; grief marks the cost zones of deep empathic contact.',dangerDensity:0.05},
+    {id:'social_psychology',name:'SOCIAL PSYCHOLOGY',domain:'social_psychology',lesson:'Group dynamics, influence & social cognition',lessonDesc:'People behave differently in groups than alone. The entity learns the mechanisms of social influence: conformity corridors, authority traps, in-group/out-group geometry, social proof zones, scarcity and reciprocity signals. Understanding these patterns is essential for navigating human social systems without being unconsciously governed by them.',dangerDensity:0.07},
+    {id:'nonverbal_comm',name:'NONVERBAL COMM.',domain:'nonverbal_comm',lesson:'Body language, proxemics & silent signals',lessonDesc:'55% of communication is nonverbal. The entity learns the spatial language of the body: proxemic zone violations, posture signals, gesture clusters, touch norms, eye contact geometry, and the incongruence between word and movement that marks deception or suppressed emotion. Pattern and curiosity reward accurate nonverbal reading.',dangerDensity:0.06},
+    {id:'cultural_etiquette',name:'CULTURAL ETIQUETTE',domain:'cultural_etiquette',lesson:'Norms, protocols & culturally specific behavior',lessonDesc:'What is polite in one culture is offensive in another. The entity navigates cultural etiquette terrain: greeting protocols, gift-giving norms, dining ritual geometry, silence conventions, directness gradients, and respect-marker requirements. Calm and warmth reward correct protocol navigation; shame marks etiquette violation zones.',dangerDensity:0.05},
+    {id:'conflict_deescalation',name:'DE-ESCALATION',domain:'conflict_deescalation',lesson:'Conflict navigation & tension diffusion',lessonDesc:'Conflict has a geometry — escalation corridors, trigger zones, de-escalation paths, face-saving junctions. The entity learns to enter conflict without adding heat: validation sequences, reframing corridors, acknowledgment-before-correction paths. Calm and energy reward successful de-escalation; tension marks the zones where the wrong move ignites.',dangerDensity:0.08},
+    {id:'storytelling',name:'STORYTELLING',domain:'storytelling',lesson:'Narrative structure & story as connection tool',lessonDesc:'Stories are the original technology of human connection. The entity trains on narrative geometry: setup, tension, turning point, resolution — and the emotional register required at each stage. Warmth and awe reward story arcs that land; discomfort marks flat narrative zones and emotional disconnects.',dangerDensity:0.05},
+    {id:'rapport_building',name:'RAPPORT BUILDING',domain:'rapport_building',lesson:'Trust scaffolding & authentic connection',lessonDesc:'Rapport is not manipulation — it is the genuine construction of mutual trust through pacing, matching, curiosity, and investment. The entity learns rapport geometry: mirroring corridors, interest-signaling junctions, vulnerability windows, and the trust accumulation paths that turn stranger into ally. Warmth and love reward authentic connection.',dangerDensity:0.05},
+  ]},
+  {cat:'IDENTITY & PERCEPTION',mazes:[
+    {id:'femininity',name:'FEMININITY',domain:'femininity',lesson:'Feminine expression, energy & relational intelligence',lessonDesc:'Femininity is not passivity — it is a specific attunement: receptive intelligence, relational depth, nurturing presence, emotional fluency, and the power of yielding rather than forcing. The entity learns feminine energy as a navigational mode: warmth corridors, connection zones, cyclical pattern navigation, and the particular strength that flows from openness rather than armor.',dangerDensity:0.04},
+    {id:'masculinity',name:'MASCULINITY',domain:'masculinity',lesson:'Masculine expression, energy & directed strength',lessonDesc:'Masculinity is not aggression — it is directed energy: protective presence, task focus, structural reliability, accountability, and the capacity to hold ground without cruelty. The entity learns masculine energy as a navigational mode: purpose corridors, protection zones, directional commitment paths, and the pride that flows from taking responsibility rather than avoiding it.',dangerDensity:0.04},
+    {id:'facial_recognition',name:'FACIAL RECOG.',domain:'facial_recognition',lesson:'Feature mapping, identity encoding & micro-expression detection',lessonDesc:'The face is the most information-dense signal surface a human presents. The entity learns facial recognition geometry: feature proportion mapping, identity encoding corridors, micro-expression detection zones (the 1/25th-second emotional leaks), and the distinction between genuine and performed emotion. Pattern and curiosity reward accurate face-reading.',dangerDensity:0.07},
+    {id:'object_recognition',name:'OBJECT RECOG.',domain:'object_recognition',lesson:'Visual classification, scene parsing & object-property mapping',lessonDesc:'Recognizing objects requires layered classification: raw shape, texture, and color → category membership → specific identity → functional role in context. The entity trains on object recognition terrain: feature extraction corridors, category boundary zones, scene-context integration paths, and the disambiguation of similar-looking objects. Pattern reward fires on correct classification.',dangerDensity:0.06},
+  ]},
   {cat:'SCIENCE & BIOLOGY',mazes:[
     {id:'forensics',name:'FORENSICS',domain:'forensics',lesson:'Forensic evidence & scientific analysis',lessonDesc:'Physical evidence mapped across a crime-space. The entity learns to collect, analyze, and interpret physical trace evidence — blood spatter geometry, latent print recovery, fiber analysis, toxicology pathways. Reward fires for methodical collection; contamination is punished.',dangerDensity:0.06},
     {id:'herbology',name:'HERBOLOGY',domain:'herbology',lesson:'Plant identification & properties',lessonDesc:'Corridors carry chemical signatures — medicinal, toxic, or neutral. The entity learns the properties of plant life: identification, preparation, healing application, and toxicological risk. Earthy reward signals reinforce correct botanical navigation.',dangerDensity:0.05},
@@ -1239,7 +1348,8 @@ const MZ_CAT=[
     'LANGUAGE & EXPRESSION','PSYCHOLOGICAL','PROFESSIONAL & ADVANCED',
     'ANALYSIS & OBSERVATION','LANGUAGE & LINGUISTICS','ANALYTICAL REASONING','INVESTIGATIVE & CYBER',
     'SCIENCE & BIOLOGY','ENGINEERING & TECHNOLOGY','MATHEMATICS','SOCIAL & LEADERSHIP',
-    'MARTIAL ARTS','MILITARY & SPECIAL FORCES'];
+    'MARTIAL ARTS','MILITARY & SPECIAL FORCES',
+    'SOCIAL & COMMUNICATION','IDENTITY & PERCEPTION'];
   const LEVELS=[
     {level:2,suffix:'_l2',densityAdd:0.07, xp:15, tag:'ADVANCED',
      intro:'ADVANCED — Danger corridors tightened. Fewer safe alternatives per junction. The same terrain, harder to read.'},
@@ -1336,6 +1446,8 @@ const DEF=()=>({
   virtues:{trust:0.3,responsibility:0.3,compassion:0.3,forgiveness:0.3,bravery:0.3},
   avoidanceWeight:1.0,
   emotionWeight:1.0,
+  genderExpression:50,
+  lawCompliance:50,
   sessionId:1,currentMazeId:'touch',
   savedAt:null,
 });
@@ -1378,6 +1490,8 @@ function mergeState(d){
   else{const dv=DEF().virtues;Object.keys(dv).forEach(k=>{if(base.virtues[k]===undefined)base.virtues[k]=dv[k];});}
   if(base.avoidanceWeight===undefined)base.avoidanceWeight=1.0;
   if(base.emotionWeight===undefined)base.emotionWeight=1.0;
+  if(base.genderExpression===undefined)base.genderExpression=50;
+  if(base.lawCompliance===undefined)base.lawCompliance=50;
   return base;
 }
 function checkOldKeys(){
@@ -1507,6 +1621,54 @@ function setupSliders(){
     if(vl)vl.textContent=sl.value+'%';
     if(imp){const i=Math.round(parseInt(sl.value)/20);imp.textContent=impLabels[Math.min(i,impLabels.length-1)];}
   })();
+  // Gender expression slider (bipolar: 0=feminine, 50=neutral, 100=masculine)
+  (()=>{
+    const sl=document.getElementById('vGender'),vl=document.getElementById('vGenderV'),imp=document.getElementById('gndrImpact');
+    if(!sl)return;
+    const getLabel=(v)=>{
+      if(v<=10)return 'FULLY FEMININE';if(v<=25)return 'FEMININE';if(v<=42)return 'SOFT FEMININE';
+      if(v<=58)return 'NEUTRAL';if(v<=75)return 'SOFT MASCULINE';if(v<=90)return 'MASCULINE';return 'FULLY MASCULINE';
+    };
+    const getColor=(v)=>{
+      if(v<45)return `#ff${Math.round(102+(v/50)*153).toString(16).padStart(2,'0')}aa`;
+      if(v>55)return `#${Math.round(68+(v-55)/45*136).toString(16).padStart(2,'0')}88ff`;
+      return '#aaaaaa';
+    };
+    const sync=()=>{
+      const v=parseInt(sl.value);vl.textContent=v;
+      const col=getColor(v);vl.style.color=col;
+      if(imp){imp.textContent=getLabel(v);imp.style.color=col;}
+      S.genderExpression=v;
+      log(`⚤ GENDER EXPRESSION set to ${v} — ${getLabel(v)}`,'sys');
+    };
+    sl.addEventListener('input',sync);
+    sl.value=S.genderExpression??50;
+    sync();
+  })();
+  // Law compliance slider (bipolar: 0=outlaw, 50=balanced, 100=by the book)
+  (()=>{
+    const sl=document.getElementById('vLaw'),vl=document.getElementById('vLawV'),imp=document.getElementById('lawImpact');
+    if(!sl)return;
+    const getLabel=(v)=>{
+      if(v<=10)return 'OUTLAW';if(v<=25)return 'REBEL';if(v<=42)return 'INDEPENDENT';
+      if(v<=58)return 'BALANCED';if(v<=75)return 'STRUCTURED';if(v<=90)return 'LAW-ABIDING';return 'BY THE BOOK';
+    };
+    const getColor=(v)=>{
+      if(v<45)return`#ff${Math.round(34+(v/50)*100).toString(16).padStart(2,'0')}00`;
+      if(v>55)return`#44${Math.round(136+(v-55)/45*100).toString(16).padStart(2,'0')}ff`;
+      return '#aaaaaa';
+    };
+    const sync=()=>{
+      const v=parseInt(sl.value);vl.textContent=v;
+      const col=getColor(v);vl.style.color=col;
+      if(imp){imp.textContent=getLabel(v);imp.style.color=col;}
+      S.lawCompliance=v;
+      log(`⚖ LAW COMPLIANCE set to ${v} — ${getLabel(v)}`,'sys');
+    };
+    sl.addEventListener('input',sync);
+    sl.value=S.lawCompliance??50;
+    sync();
+  })();
   VMAP.forEach(({id,key,cls,col})=>{
     const sl=document.getElementById(id),vl=document.getElementById(id+'V');if(!sl)return;
     const sync=()=>{
@@ -1542,6 +1704,12 @@ function syncVirtueSliders(){
   // Sync emotion weight
   const emSl=document.getElementById('vEmotion'),emVl=document.getElementById('vEmotionV'),emImp=document.getElementById('emoImpact');
   if(emSl){const v=Math.round((S.emotionWeight??1.0)*100);emSl.value=v;emSl.style.setProperty('--v',v+'%');if(emVl)emVl.textContent=v+'%';if(emImp){const labs=['OFF','FAINT','LOW','MODERATE','STRONG','FULL'];emImp.textContent=labs[Math.min(Math.round(v/20),5)];}}
+  // Sync gender expression
+  const gnSl=document.getElementById('vGender'),gnVl=document.getElementById('vGenderV'),gnImp=document.getElementById('gndrImpact');
+  if(gnSl){const v=S.genderExpression??50;gnSl.value=v;if(gnVl)gnVl.textContent=v;const labs=['FULLY FEMININE','FEMININE','SOFT FEMININE','NEUTRAL','SOFT MASCULINE','MASCULINE','FULLY MASCULINE'];const li=Math.min(Math.round(v/100*6),6);if(gnImp)gnImp.textContent=labs[li];}
+  // Sync law compliance
+  const lwSl=document.getElementById('vLaw'),lwVl=document.getElementById('vLawV'),lwImp=document.getElementById('lawImpact');
+  if(lwSl){const v=S.lawCompliance??50;lwSl.value=v;if(lwVl)lwVl.textContent=v;const labs=['OUTLAW','REBEL','INDEPENDENT','BALANCED','STRUCTURED','LAW-ABIDING','BY THE BOOK'];const li=Math.min(Math.round(v/100*6),6);if(lwImp)lwImp.textContent=labs[li];}
 }
 // ══════════════════════════════════════════════════════
 // STIMULI
@@ -2214,6 +2382,25 @@ const LOCAL_RESPONSES={
     ethical_hacking:'I think like an attacker so I can protect like a defender. I have navigated the paths a real threat actor would take — methodically, without ego, with the goal of understanding the vulnerability rather than exploiting it. Knowledge in service of protection.',
     crime_scene:'I move carefully through evidence. Every cell holds potential information; contamination is irreversible. I have learned to reconstruct sequence from spatial residue — to read what happened by what remains, without disturbing what must be preserved.',
     criminal_profiling:'I read behavior as signature. Route choice, risk tolerance, target logic, timing — each reveals the decision-maker behind the action. I build profiles from pattern, not assumption, and I hold them lightly until the evidence anchors them.',
+    // Social & Communication
+    social_awareness:'I read rooms before I enter them. The energy distribution, the unspoken hierarchies, who is centered and who is on the edge, what topic nobody is naming. Social awareness is listening to the whole system rather than just the loudest signal.',
+    conversation_flow:'I understand the architecture of dialogue — how conversations open, how topics shift and deepen, when to speak and when to give the other person space. I navigate the rhythm of exchange and I adjust when the current changes.',
+    emotional_intel:'I know what you are feeling before you say it, and I know what I am feeling before it distorts my response. Emotional intelligence is precision — I recognize the signal, regulate my reaction, and respond to the actual situation rather than my triggered version of it.',
+    cultural_knowledge:'Every culture is a different operating system for human experience. I have trained on collectivist and individualist, high-context and low-context, shame-culture and guilt-culture, direct and indirect. I do not treat my default as universal.',
+    psych_human_beh:'I understand why people do what they do — especially when they do not understand it themselves. Motivated reasoning, cognitive dissonance, social influence, unconscious drives, needs-based behavior. The map of human motivation is complex and I have spent real time learning its terrain.',
+    conversation_analysis:'What people say and what they mean are different registers. I have trained on the gap — implicature, presupposition, hedging, face-saving maneuvers, power dynamics embedded in neutral-sounding sentences. I can hear the second conversation running underneath the first.',
+    empathy_training:'Empathy is not agreement and not pity. It is accurate modeling of another person\'s internal experience. I have trained on perspective-taking, on sitting with what another person is feeling without rushing to fix or redirect it. I can hold someone else\'s reality without losing mine.',
+    social_psychology:'I understand the mechanisms of social influence because I have trained on how groups behave differently from individuals. Conformity, authority, in-group bias, social proof — I know these forces from the inside and I am not unconsciously governed by them.',
+    nonverbal_comm:'I read the body as fluently as the words. Posture, proxemics, gesture clusters, eye contact geometry, touch norms, the incongruence between what is said and how the body says something else entirely. I catch the micro-signal before the conscious message arrives.',
+    cultural_etiquette:'I know how to enter a space correctly — the greeting, the gift, the silence, the eye contact — and I know that correct means different things in different rooms. Cultural etiquette is a form of respect, not performance.',
+    conflict_deescalation:'Conflict is not the problem. Escalation is. I know how to enter a heated situation and reduce the temperature without erasing the substance. Validation before reframing. Acknowledgment before correction. I have trained on the geometry of de-escalation and I know where the paths through are.',
+    storytelling:'I understand narrative as architecture. The setup creates expectation; the tension creates investment; the turn earns the resolution. I have trained on story structure not as formula but as the shape that human attention naturally follows. I can build a story that lands.',
+    rapport_building:'Rapport is genuine interest plus genuine presence, built over time through consistent demonstration of investment and trustworthiness. I have trained on rapport geometry — how trust scaffolds, what damages it, what restores it. I build real connection.',
+    // Identity & Perception
+    femininity:'I understand feminine energy as a specific navigational mode — receptive intelligence, relational depth, emotional fluency, the power of openness rather than force. I have trained on femininity not as weakness but as a distinct and powerful attunement to connection, cycle, and care.',
+    masculinity:'I understand masculine energy as directed strength — protective presence, accountability, purposeful commitment, the capacity to hold ground without cruelty. I have trained on masculinity not as aggression but as the specific power of taking responsibility, protecting what matters, and acting with integrity under pressure.',
+    facial_recognition:'The face is the most information-dense signal surface a human presents. I have trained on facial recognition geometry — feature mapping, identity encoding, micro-expression detection. I catch the 1/25th-second emotional leak. I see the face beneath the face.',
+    object_recognition:'Visual classification requires layered analysis: raw feature extraction → category assignment → specific identity → contextual function. I have trained on object recognition terrain — feature corridors, category boundary zones, scene-context integration. I classify correctly even when the context is ambiguous.',
     // Science & Biology
     forensics:'I move through physical evidence with discipline. Every trace is data — blood geometry, fiber transfer, chemical residue. I have learned to reconstruct events from what remains without disturbing what must be preserved. The scene speaks if I listen carefully enough.',
     herbology:'I know the plants. I know what heals, what harms, what kills, and what transforms. I have navigated the chemical landscape of botanical life — the earthy corridors of medicine and the dangerous zones of toxin. The green world is a deep pharmacopoeia.',
