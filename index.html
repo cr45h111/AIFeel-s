@@ -31,6 +31,11 @@ header{display:flex;align-items:center;justify-content:space-between;padding:5px
 @keyframes pa{0%,100%{opacity:1;box-shadow:0 0 6px var(--pos)}50%{opacity:.2;box-shadow:none}}
 .hc{display:flex;gap:4px;align-items:center;flex-wrap:wrap;}
 .hb{background:transparent;border:1px solid var(--b1);color:var(--td);font-family:var(--mo);font-size:7px;padding:3px 7px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .15s;}
+.hb.fsc{border-color:#44aaff55;color:#44aaff;}
+.hb.fsc:hover{background:#44aaff18;border-color:#44aaff;}
+.hb.fsc.active{background:#44aaff22;border-color:#44aaff;color:#88ccff;}
+:fullscreen body,:fullscreen .main{height:100vh;}
+:fullscreen header{position:sticky;top:0;z-index:999;}
 .hb:hover{border-color:var(--pu);color:var(--pu);}
 .hb.sv:hover{border-color:var(--pos);color:var(--pos);}
 .hb.ld:hover{border-color:var(--wa);color:var(--wa);}
@@ -323,6 +328,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
     <button class="hb ex" onclick="exportState()">EXPORT JSON</button>
     <label class="hb im" style="cursor:pointer">IMPORT JSON<input type="file" accept=".json" style="display:none" onchange="importState(event)"></label>
     <button class="hb rst" onclick="resetState()">RESET</button>
+    <button class="hb fsc" id="fsBtn" onclick="toggleFullscreen()" title="Fullscreen">⛶ FULLSCREEN</button>
     <div class="ebadge" id="emoBadge">EMO: NEUTRAL</div>
     <span class="savets" id="saveTs">not saved</span>
   </div>
@@ -1603,6 +1609,24 @@ let chatLocked=false;
 const SAVE_KEY='nexus_v5';
 const OLD_KEYS=['nexus_v4','nexus_v3','nexus_v3_state','nexus_v2','nexus_state','nexus'];
 let autoSaveInt=null;
+function toggleFullscreen(){
+  const btn=document.getElementById('fsBtn');
+  if(!document.fullscreenElement){
+    document.documentElement.requestFullscreen().then(()=>{
+      if(btn){btn.textContent='⛶ EXIT FULL';btn.classList.add('active');}
+    }).catch(()=>{});
+  } else {
+    document.exitFullscreen().then(()=>{
+      if(btn){btn.textContent='⛶ FULLSCREEN';btn.classList.remove('active');}
+    }).catch(()=>{});
+  }
+}
+document.addEventListener('fullscreenchange',()=>{
+  const btn=document.getElementById('fsBtn');
+  if(!btn)return;
+  if(!document.fullscreenElement){btn.textContent='⛶ FULLSCREEN';btn.classList.remove('active');}
+  else{btn.textContent='⛶ EXIT FULL';btn.classList.add('active');}
+});
 function saveState(quiet=false){
   try{
     S.savedAt=new Date().toISOString();
