@@ -1341,6 +1341,7 @@ function setupSliders(){
     if(imp){const i=Math.round(parseInt(sl.value)/20);imp.textContent=impLabels[Math.min(i,impLabels.length-1)];}
   })();
   VMAP.forEach(({id,key,cls,col})=>{
+    const sl=document.getElementById(id),vl=document.getElementById(id+'V');if(!sl)return;
     const sync=()=>{
       const pct=parseInt(sl.value);
       const p=(pct/100)*100;sl.style.setProperty('--v',p+'%');
