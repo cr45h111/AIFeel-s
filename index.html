@@ -31,11 +31,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:5px
 @keyframes pa{0%,100%{opacity:1;box-shadow:0 0 6px var(--pos)}50%{opacity:.2;box-shadow:none}}
 .hc{display:flex;gap:4px;align-items:center;flex-wrap:wrap;}
 .hb{background:transparent;border:1px solid var(--b1);color:var(--td);font-family:var(--mo);font-size:7px;padding:3px 7px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .15s;}
-.hb.fsc{border-color:#44aaff55;color:#44aaff;}
-.hb.fsc:hover{background:#44aaff18;border-color:#44aaff;}
-.hb.fsc.active{background:#44aaff22;border-color:#44aaff;color:#88ccff;}
-:fullscreen body,:fullscreen .main{height:100vh;}
-:fullscreen header{position:sticky;top:0;z-index:999;}
+#fsBtn:hover{background:#44aaff18!important;box-shadow:0 0 16px #44aaff66!important;}
 .hb:hover{border-color:var(--pu);color:var(--pu);}
 .hb.sv:hover{border-color:var(--pos);color:var(--pos);}
 .hb.ld:hover{border-color:var(--wa);color:var(--wa);}
@@ -328,7 +324,6 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
     <button class="hb ex" onclick="exportState()">EXPORT JSON</button>
     <label class="hb im" style="cursor:pointer">IMPORT JSON<input type="file" accept=".json" style="display:none" onchange="importState(event)"></label>
     <button class="hb rst" onclick="resetState()">RESET</button>
-    <button class="hb fsc" id="fsBtn" onclick="toggleFullscreen()" title="Fullscreen">⛶ FULLSCREEN</button>
     <div class="ebadge" id="emoBadge">EMO: NEUTRAL</div>
     <span class="savets" id="saveTs">not saved</span>
   </div>
@@ -341,6 +336,14 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
     <div class="hs"><span class="sl">PATHS</span><span class="pc" id="hPath">0/0</span></div>
   </div>
 </header>
+<button id="fsBtn" onclick="toggleFullscreen()" title="Toggle Fullscreen" style="
+  position:fixed;bottom:14px;right:14px;z-index:99999;
+  background:#040810;border:1px solid #44aaff88;color:#44aaff;
+  font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;
+  padding:6px 10px;cursor:pointer;border-radius:3px;
+  transition:all .2s;box-shadow:0 0 10px #44aaff33;
+  display:flex;align-items:center;gap:5px;
+">⛶ FULL</button>
 <div class="main">
 <!-- ═══ LEFT: BODY MAP ═══ -->
 <div class="panel">
@@ -1613,19 +1616,19 @@ function toggleFullscreen(){
   const btn=document.getElementById('fsBtn');
   if(!document.fullscreenElement){
     document.documentElement.requestFullscreen().then(()=>{
-      if(btn){btn.textContent='⛶ EXIT FULL';btn.classList.add('active');}
+      if(btn){btn.textContent='⛶ EXIT';btn.style.borderColor='#44ffaa88';btn.style.color='#44ffaa';btn.style.boxShadow='0 0 12px #44ffaa44';}
     }).catch(()=>{});
   } else {
     document.exitFullscreen().then(()=>{
-      if(btn){btn.textContent='⛶ FULLSCREEN';btn.classList.remove('active');}
+      if(btn){btn.textContent='⛶ FULL';btn.style.borderColor='#44aaff88';btn.style.color='#44aaff';btn.style.boxShadow='0 0 10px #44aaff33';}
     }).catch(()=>{});
   }
 }
 document.addEventListener('fullscreenchange',()=>{
   const btn=document.getElementById('fsBtn');
   if(!btn)return;
-  if(!document.fullscreenElement){btn.textContent='⛶ FULLSCREEN';btn.classList.remove('active');}
-  else{btn.textContent='⛶ EXIT FULL';btn.classList.add('active');}
+  if(!document.fullscreenElement){btn.textContent='⛶ FULL';btn.style.borderColor='#44aaff88';btn.style.color='#44aaff';btn.style.boxShadow='0 0 10px #44aaff33';}
+  else{btn.textContent='⛶ EXIT';btn.style.borderColor='#44ffaa88';btn.style.color='#44ffaa';btn.style.boxShadow='0 0 12px #44ffaa44';}
 });
 function saveState(quiet=false){
   try{
