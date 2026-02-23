@@ -213,6 +213,10 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .mwrap::-webkit-scrollbar{width:8px}.mwrap::-webkit-scrollbar-thumb{background:var(--b1);border-radius:2px}
 #rt-maze{overflow:hidden;}
 .mcat{font-family:var(--mo);font-size:6px;color:var(--td);letter-spacing:2px;text-transform:uppercase;margin-top:4px;margin-bottom:2px;border-bottom:1px solid var(--b0);padding-bottom:2px;}
+.mcat.collapsible{cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+.mcat.collapsible:hover{color:var(--wa);}
+.mcat-arrow{font-size:7px;margin-left:4px;transition:transform .2s;flex-shrink:0;}
+.msel.hidden{display:none!important;}
 .msel{display:flex;flex-wrap:wrap;gap:3px;}
 .mzb{background:transparent;border:1px solid var(--b0);color:var(--td);font-family:var(--mo);font-size:6px;padding:2px 5px;cursor:pointer;border-radius:2px;letter-spacing:.5px;transition:all .1s;}
 .mzb:hover{border-color:var(--neu);color:var(--neu)}.mzb.am{border-color:var(--pu);color:var(--pu);background:rgba(0,200,255,.06)}
@@ -1068,45 +1072,36 @@ const MZ_CAT=[
   // Only upgrade base training mazes (not shadow, not avoidance, not virtue)
   const UPGRADEABLE_CATS=['SENSORY','PHYSICAL & MOTOR','COGNITIVE','EMOTIONAL','SOCIAL & RELATIONAL',
     'LANGUAGE & EXPRESSION','PSYCHOLOGICAL','PROFESSIONAL & ADVANCED',
-    'ANALYSIS & OBSERVATION','LANGUAGE & LINGUISTICS'];
+    'ANALYSIS & OBSERVATION','LANGUAGE & LINGUISTICS','ANALYTICAL REASONING','INVESTIGATIVE & CYBER'];
   const LEVELS=[
-    {level:2,suffix:'_l2',badge:'▲ II',   densityAdd:0.07, xp:15, tag:'ADVANCED',
+    {level:2,suffix:'_l2',densityAdd:0.07, xp:15, tag:'ADVANCED',
      intro:'ADVANCED — Danger corridors tightened. Fewer safe alternatives per junction. The same terrain, harder to read.'},
-    {level:3,suffix:'_l3',badge:'▲▲ III', densityAdd:0.13, xp:22, tag:'EXPERT',
+    {level:3,suffix:'_l3',densityAdd:0.13, xp:22, tag:'EXPERT',
      intro:'EXPERT — High danger saturation. Memory of bad cells is critical. One wrong turn costs several steps. Precision required.'},
-    {level:4,suffix:'_l4',badge:'▲▲▲ IV', densityAdd:0.18, xp:32, tag:'MASTER',
+    {level:4,suffix:'_l4',densityAdd:0.18, xp:32, tag:'MASTER',
      intro:'MASTER — Maximum density. A single clean path survives the BFS guarantee. Everything else is threat. Perfect recall or reset.'},
   ];
-  const byCat={};
-  UPGRADEABLE_CATS.forEach(catName=>{
-    const cat=MZ_CAT.find(c=>c.cat===catName);if(!cat)return;
-    LEVELS.forEach(lv=>{
-      const upMazes=cat.mazes.map(base=>({
-        ...base,
-        id: base.id+lv.suffix,
-        name: base.name+(lv.level===2?' ▲':lv.level===3?' ▲▲':' ▲▲▲'),
-        lessonDesc: lv.intro+' '+base.lessonDesc,
-        dangerDensity: Math.min(0.20, (base.dangerDensity||0)+lv.densityAdd),
-        level: lv.level,
-        levelBadge: lv.badge,
-        levelTag: lv.tag,
-        xpBonus: lv.xp,
-        baseId: base.id,
-      }));
-      const key=catName+'||'+lv.level;
-      if(!byCat[key])byCat[key]={cat:catName+' · '+lv.tag,level:lv.level,badge:lv.badge,mazes:[]};
-      byCat[key].mazes.push(...upMazes);
+  LEVELS.forEach(lv=>{
+    // One collapsed category per level containing ALL upgraded mazes
+    const allUpMazes=[];
+    UPGRADEABLE_CATS.forEach(catName=>{
+      const cat=MZ_CAT.find(c=>c.cat===catName);if(!cat)return;
+      cat.mazes.forEach(base=>{
+        allUpMazes.push({
+          ...base,
+          id: base.id+lv.suffix,
+          name: base.name,
+          lessonDesc: lv.intro+' '+base.lessonDesc,
+          dangerDensity: Math.min(0.20,(base.dangerDensity||0)+lv.densityAdd),
+          level: lv.level,
+          levelTag: lv.tag,
+          xpBonus: lv.xp,
+          baseId: base.id,
+        });
+      });
     });
-  });
-  // Insert upgrade categories in level order after all base cats but before shadow/avoidance/virtue
-  const shadowStart=MZ_CAT.findIndex(c=>c.cat.startsWith('AVOIDANCE')||c.cat.startsWith('SHADOW')||c.cat.startsWith('◈'));
-  const insertAt=shadowStart===-1?MZ_CAT.length:shadowStart;
-  [2,3,4].forEach(lv=>{
-    const lvCats=Object.values(byCat).filter(c=>c.level===lv);
-    lvCats.forEach((lc,i)=>{
-      // Flatten all same-level upgrades into grouped category names
-      MZ_CAT.splice(insertAt+(lv-2)*lvCats.length+i,0,{cat:lc.cat,mazes:lc.mazes,isUpgrade:true,level:lv});
-    });
+    // Push to end of MZ_CAT (after shadow)
+    MZ_CAT.push({cat:'UPGRADE · '+lv.tag+' (L'+lv.level+')',mazes:allUpMazes,isUpgrade:true,level:lv.level,collapsed:true});
   });
 })();
 
@@ -1531,13 +1526,27 @@ function buildMazeCats(){
   const lvCols={2:'#ffdd44',3:'#ff8844',4:'#ff2244'};
   MZ_CAT.forEach(cat=>{
     const lbl=document.createElement('div');
-    lbl.className='mcat';
-    if(cat.cat.startsWith('SHADOW')){lbl.style.cssText='color:#ff4466;border-color:#ff224430;';}
+    const isUpgrade=cat.isUpgrade;
+    lbl.className='mcat'+(isUpgrade?' collapsible':'');
+    if(cat.cat.startsWith('SHADOW')){lbl.style.cssText='color:#ff4466;border-bottom-color:#ff224430;';}
     else if(cat.cat.startsWith('◈ VIRTUE')){lbl.className='mcat virtue';}
-    else if(cat.cat==='ANALYSIS & OBSERVATION'||cat.cat.startsWith('LANGUAGE & LING')){lbl.className='mcat langadd';}
-    else if(cat.isUpgrade){const col=lvCols[cat.level]||'#ffdd44';lbl.style.cssText=`color:${col};border-color:${col}30;`;}
-    lbl.textContent=cat.cat;c.appendChild(lbl);
-    const sel=document.createElement('div');sel.className='msel';
+    else if(cat.cat==='ANALYSIS & OBSERVATION'||cat.cat.startsWith('LANGUAGE & LING')||cat.cat==='ANALYTICAL REASONING'||cat.cat==='INVESTIGATIVE & CYBER'){lbl.className='mcat langadd';}
+    else if(isUpgrade){const col=lvCols[cat.level]||'#ffdd44';lbl.style.color=col;lbl.style.borderBottomColor=col+'30';}
+    const sel=document.createElement('div');sel.className='msel'+(isUpgrade&&cat.collapsed?' hidden':'');
+
+    if(isUpgrade){
+      // Collapsible header with arrow
+      const span=document.createElement('span');span.textContent=cat.cat;lbl.appendChild(span);
+      const arrow=document.createElement('span');arrow.className='mcat-arrow';arrow.textContent='▾';lbl.appendChild(arrow);
+      if(cat.collapsed)lbl.classList.add('collapsed');
+      lbl.addEventListener('click',()=>{
+        cat.collapsed=!cat.collapsed;
+        sel.classList.toggle('hidden',cat.collapsed);
+        lbl.classList.toggle('collapsed',cat.collapsed);
+        arrow.textContent=cat.collapsed?'▾':'▴';
+      });
+    }else{lbl.textContent=cat.cat;}
+
     cat.mazes.forEach(m=>{
       const b=document.createElement('button');
       let cls='mzb';
@@ -1548,8 +1557,12 @@ function buildMazeCats(){
       else if(m.level===3)cls+=' l3u';
       else if(m.level===4)cls+=' l4u';
       if(S.currentMazeId===m.id)cls+=' am';
-      b.className=cls;b.dataset.mid=m.id;
-      b.addEventListener('click',()=>selectMaze(m.id));
+      b.className=cls;b.dataset.mid=m.id;b.id='mzb_'+m.id;
+      b.addEventListener('click',()=>{
+        // Auto-expand upgrade category when a maze in it is selected
+        if(isUpgrade&&cat.collapsed){cat.collapsed=false;sel.classList.remove('hidden');lbl.classList.remove('collapsed');lbl.querySelector('.mcat-arrow').textContent='▴';}
+        selectMaze(m.id);
+      });
       if(m.level){
         const col=lvCols[m.level]||'#ffdd44';
         b.style.display='flex';b.style.alignItems='center';b.style.justifyContent='space-between';b.style.gap='4px';
@@ -1557,17 +1570,19 @@ function buildMazeCats(){
       }else{b.textContent=m.name;}
       sel.appendChild(b);
     });
-    c.appendChild(sel);
+    c.appendChild(lbl);c.appendChild(sel);
   });
   if((S.customMazes||[]).length){
     const lbl=document.createElement('div');lbl.className='mcat';lbl.textContent='CUSTOM';c.appendChild(lbl);
     const sel=document.createElement('div');sel.className='msel';
     S.customMazes.forEach(m=>{
       const b=document.createElement('button');b.className='mzb'+(m.avoid?' av':'')+(S.currentMazeId===m.id?' am':'');
-      b.textContent=m.name;b.dataset.mid=m.id;b.addEventListener('click',()=>selectMaze(m.id));sel.appendChild(b);
+      b.id='mzb_'+m.id;b.textContent=m.name;b.dataset.mid=m.id;b.addEventListener('click',()=>selectMaze(m.id));sel.appendChild(b);
     });
     c.appendChild(sel);
   }
+  // Scroll selected maze button into view
+  setTimeout(()=>{const am=document.querySelector('#mazeCats .mzb.am');if(am)am.scrollIntoView({block:'nearest',behavior:'smooth'});},80);
 }
 function selectMaze(id){
   S.currentMazeId=id;curMaze=allMazes().find(x=>x.id===id);
