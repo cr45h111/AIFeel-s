@@ -119,11 +119,15 @@ input[type=range].vrr{background:linear-gradient(to right,#ffaa44 var(--v,30%),v
 input[type=range].vcr{background:linear-gradient(to right,#ff88cc var(--v,30%),var(--b0) var(--v,30%))}
 input[type=range].vtr{background:linear-gradient(to right,#44ffcc var(--v,30%),var(--b0) var(--v,30%))}
 input[type=range].vfr{background:linear-gradient(to right,#cc88ff var(--v,30%),var(--b0) var(--v,30%))}
+input[type=range].avr{background:linear-gradient(to right,#ff4400 var(--v,100%),var(--b0) var(--v,100%))}
+input[type=range].emr{background:linear-gradient(to right,#cc66ff var(--v,100%),var(--b0) var(--v,100%))}
 input[type=range].vbr::-webkit-slider-thumb{background:#ffdd44}
 input[type=range].vrr::-webkit-slider-thumb{background:#ffaa44}
 input[type=range].vcr::-webkit-slider-thumb{background:#ff88cc}
 input[type=range].vtr::-webkit-slider-thumb{background:#44ffcc}
 input[type=range].vfr::-webkit-slider-thumb{background:#cc88ff}
+input[type=range].avr::-webkit-slider-thumb{background:#ff4400}
+input[type=range].emr::-webkit-slider-thumb{background:#cc66ff}
 .sg.virtue{border-color:#ffdd4460;grid-column:1/-1;}
 .glbl.virtue{color:#ffdd44;}
 .vslider-row{display:flex;align-items:center;gap:8px;padding:4px 0;}
@@ -445,6 +449,46 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
   </div>
   <div class="tc" id="t-virtue">
     <div class="pi">
+      <div class="sec">⚙ Behavioral Weights</div>
+      <div style="font-family:var(--mo);font-size:6px;color:var(--td);line-height:1.6;padding:4px 6px;background:var(--p2);border:1px solid #ff440030;border-radius:3px;flex-shrink:0;">
+        These sliders control <b style="color:#ff4400">how strongly</b> avoidance memory and emotional state override the AI's navigation decisions. Drag them down to reduce their dominance — the AI will become more exploratory and goal-driven.
+      </div>
+      <div class="sg" style="border-color:#ff440060;grid-column:1/-1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="glbl" style="color:#ff4400">⚡ AVOIDANCE WEIGHT</div>
+          <span style="font-family:var(--mo);font-size:6px;color:#ff440088;letter-spacing:1px" id="avoidImpact">DOMINANT</span>
+        </div>
+        <div class="vslider-desc">Controls how strongly memorized danger cells block the AI's route choices. At 100%, the AI <em>always</em> avoids any cell it has been shocked in — this is what currently makes avoidance the dominant guiding force. At 0%, danger memory is ignored entirely and the AI navigates freely. Set this low to let curiosity, virtue, and goal-seeking drive behavior instead.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon">🚫</span>
+          <span class="vslider-lbl" style="color:#ff4400">AVOIDANCE</span>
+          <input type="range" class="avr" id="vAvoidance" min="0" max="100" value="100" style="flex:1">
+          <span class="vslider-val" style="color:#ff4400" id="vAvoidanceV">100%</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;">
+          <span style="color:#3a5060">0 — Ignores all danger memory</span>
+          <span style="flex:1;text-align:center;color:#ff440060">—</span>
+          <span style="color:#ff4400">100 — Full avoidance (current default)</span>
+        </div>
+      </div>
+      <div class="sg" style="border-color:#cc66ff60;grid-column:1/-1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="glbl" style="color:#cc66ff">◈ EMOTION WEIGHT</div>
+          <span style="font-family:var(--mo);font-size:6px;color:#cc66ff88;letter-spacing:1px" id="emoImpact">FULL</span>
+        </div>
+        <div class="vslider-desc">Controls how strongly the AI's current emotional state affects its navigation speed, goal-seeking drive, and hesitation behavior. At 100%, negative valence slows the AI, reduces goal-seeking, and causes random freeze pauses. At 0%, emotional state has no effect on movement — the AI navigates the same regardless of what it's feeling.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon">◈</span>
+          <span class="vslider-lbl" style="color:#cc66ff">EMOTION</span>
+          <input type="range" class="emr" id="vEmotion" min="0" max="100" value="100" style="flex:1">
+          <span class="vslider-val" style="color:#cc66ff" id="vEmotionV">100%</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;">
+          <span style="color:#3a5060">0 — Emotions don't affect movement</span>
+          <span style="flex:1;text-align:center;color:#cc66ff60">—</span>
+          <span style="color:#cc66ff">100 — Full emotional influence</span>
+        </div>
+      </div>
       <div class="sec">◈ Virtue Trait Sliders</div>
       <div style="font-family:var(--mo);font-size:6px;color:var(--td);line-height:1.6;padding:4px;background:var(--p2);border:1px solid #ffdd4430;border-radius:3px;flex-shrink:0;">
         Drag sliders to set how strongly each virtue influences the AI's maze behavior.
@@ -1128,6 +1172,8 @@ const DEF=()=>({
   emotionalState:{dominant:'neutral',valence:0,arousal:0},
   personality:{openness:0.3,warmth:0.2,assertiveness:0.2,curiosity:0.4,stability:0.3},
   virtues:{trust:0.3,responsibility:0.3,compassion:0.3,forgiveness:0.3,bravery:0.3},
+  avoidanceWeight:1.0,
+  emotionWeight:1.0,
   sessionId:1,currentMazeId:'touch',
   savedAt:null,
 });
@@ -1168,6 +1214,8 @@ function mergeState(d){
   // Backward compat: add virtues if not in old save
   if(!base.virtues)base.virtues={trust:0.3,responsibility:0.3,compassion:0.3,forgiveness:0.3,bravery:0.3};
   else{const dv=DEF().virtues;Object.keys(dv).forEach(k=>{if(base.virtues[k]===undefined)base.virtues[k]=dv[k];});}
+  if(base.avoidanceWeight===undefined)base.avoidanceWeight=1.0;
+  if(base.emotionWeight===undefined)base.emotionWeight=1.0;
   return base;
 }
 function checkOldKeys(){
@@ -1261,8 +1309,43 @@ function setupSliders(){
     {id:'vTrust',      key:'trust',      cls:'vtr', col:'#44ffcc'},
     {id:'vForgiveness',key:'forgiveness',cls:'vfr', col:'#cc88ff'},
   ];
+  // Avoidance weight slider
+  (()=>{
+    const sl=document.getElementById('vAvoidance'),vl=document.getElementById('vAvoidanceV'),imp=document.getElementById('avoidImpact');
+    if(!sl)return;
+    const impLabels=['NONE','MINIMAL','LOW','MODERATE','STRONG','DOMINANT'];
+    const sync=()=>{
+      const pct=parseInt(sl.value);
+      sl.style.setProperty('--v',pct+'%');vl.textContent=pct+'%';
+      S.avoidanceWeight=pct/100;
+      if(imp){const i=Math.round(pct/20);imp.textContent=impLabels[Math.min(i,impLabels.length-1)];}
+      log(`⚡ AVOIDANCE WEIGHT set to ${pct}%`,'sys');
+    };
+    sl.addEventListener('input',sync);
+    sl.value=Math.round((S.avoidanceWeight??1.0)*100);
+    sl.style.setProperty('--v',sl.value+'%');
+    if(vl)vl.textContent=sl.value+'%';
+    if(imp){const i=Math.round(parseInt(sl.value)/20);imp.textContent=impLabels[Math.min(i,impLabels.length-1)];}
+  })();
+  // Emotion weight slider
+  (()=>{
+    const sl=document.getElementById('vEmotion'),vl=document.getElementById('vEmotionV'),imp=document.getElementById('emoImpact');
+    if(!sl)return;
+    const impLabels=['OFF','FAINT','LOW','MODERATE','STRONG','FULL'];
+    const sync=()=>{
+      const pct=parseInt(sl.value);
+      sl.style.setProperty('--v',pct+'%');vl.textContent=pct+'%';
+      S.emotionWeight=pct/100;
+      if(imp){const i=Math.round(pct/20);imp.textContent=impLabels[Math.min(i,impLabels.length-1)];}
+      log(`◈ EMOTION WEIGHT set to ${pct}%`,'sys');
+    };
+    sl.addEventListener('input',sync);
+    sl.value=Math.round((S.emotionWeight??1.0)*100);
+    sl.style.setProperty('--v',sl.value+'%');
+    if(vl)vl.textContent=sl.value+'%';
+    if(imp){const i=Math.round(parseInt(sl.value)/20);imp.textContent=impLabels[Math.min(i,impLabels.length-1)];}
+  })();
   VMAP.forEach(({id,key,cls,col})=>{
-    const sl=document.getElementById(id),vl=document.getElementById(id+'V');if(!sl)return;
     const sync=()=>{
       const pct=parseInt(sl.value);
       const p=(pct/100)*100;sl.style.setProperty('--v',p+'%');
@@ -1290,6 +1373,12 @@ function syncVirtueSliders(){
     sl.value=val;sl.style.setProperty('--v',val+'%');
     if(vl)vl.textContent=val+'%';
   });
+  // Sync avoidance weight
+  const avSl=document.getElementById('vAvoidance'),avVl=document.getElementById('vAvoidanceV'),avImp=document.getElementById('avoidImpact');
+  if(avSl){const v=Math.round((S.avoidanceWeight??1.0)*100);avSl.value=v;avSl.style.setProperty('--v',v+'%');if(avVl)avVl.textContent=v+'%';if(avImp){const labs=['NONE','MINIMAL','LOW','MODERATE','STRONG','DOMINANT'];avImp.textContent=labs[Math.min(Math.round(v/20),5)];}}
+  // Sync emotion weight
+  const emSl=document.getElementById('vEmotion'),emVl=document.getElementById('vEmotionV'),emImp=document.getElementById('emoImpact');
+  if(emSl){const v=Math.round((S.emotionWeight??1.0)*100);emSl.value=v;emSl.style.setProperty('--v',v+'%');if(emVl)emVl.textContent=v+'%';if(emImp){const labs=['OFF','FAINT','LOW','MODERATE','STRONG','FULL'];emImp.textContent=labs[Math.min(Math.round(v/20),5)];}}
 }
 // ══════════════════════════════════════════════════════
 // STIMULI
@@ -1547,8 +1636,17 @@ function resetMaze(){
 }
 function toggleAutoCycle(){S.autoCycle=!S.autoCycle;const b=document.getElementById('acBtn');b.className='tgl ac'+(S.autoCycle?' on':'');b.textContent='AUTO-CYCLE: '+(S.autoCycle?'ON':'OFF');log(`auto-cycle: ${S.autoCycle?'ON':'OFF'}`,'sys');}
 function toggleAutoStim(){S.autoStim=!S.autoStim;const b=document.getElementById('asBtn');b.className='tgl as'+(S.autoStim?' on':'');b.textContent='AUTO-STIM: '+(S.autoStim?'ON':'OFF');log(`auto-stim: ${S.autoStim?'ON':'OFF'}`,'sys');}
-function getMazeSpeed(){const v=S.emotionalState.valence;return Math.max(35,Math.min(450,195-(S.posCount*1.1)+(S.negCount*1.4)+(v*-22)));}
-function getMazeBias(){return Math.max(.08,Math.min(.92,(curMaze?.avoid||curMaze?.isNeg?0.18:0.3)+(S.posCount-S.negCount)*.01+S.emotionalState.valence*.15));}
+function getMazeSpeed(){
+  const v=S.emotionalState.valence;
+  const ew=S.emotionWeight??1.0;
+  // Emotion weight scales both the valence effect and the neg-count drag
+  return Math.max(35,Math.min(450,195-(S.posCount*1.1)+(S.negCount*1.4*ew)+(v*-22*ew)));
+}
+function getMazeBias(){
+  const ew=S.emotionWeight??1.0;
+  const base=curMaze?.avoid||curMaze?.isNeg?0.18:0.3;
+  return Math.max(.08,Math.min(.92,base+(S.posCount-S.negCount)*.01+(S.emotionalState.valence*.15*ew)));
+}
 function dangerKey(x,y){return `${x},${y}`;}
 function startBodyLearn(){
   clearInterval(bodyInt);if(!curMaze)return;
@@ -1665,8 +1763,10 @@ function mazeTick(){
     .filter(p=>p.x>=0&&p.y>=0&&p.x<MS&&p.y<MS&&grid[p.y][p.x]!==1&&!visited[p.y][p.x]);
 
   // Prefer routes that don't step into memorised danger zones
+  // avoidanceWeight (0–1): 0 = ignore danger memory entirely, 1 = always prefer safe cells
+  const avoidW=S.avoidanceWeight??1.0;
   const safeMoves=allMoves.filter(p=>!S.dangerMemory[dangerKey(p.x,p.y)]&&grid[p.y][p.x]!==2);
-  let moves=safeMoves.length>0?safeMoves:allMoves;
+  let moves=(safeMoves.length>0&&Math.random()<avoidW)?safeMoves:allMoves;
 
   if(!moves.length){
     // Dead end — backtrack
@@ -1726,8 +1826,9 @@ function mazeTick(){
     moves.sort((a,b)=>(Math.abs(a.x-goal.x)+Math.abs(a.y-goal.y))-(Math.abs(b.x-goal.x)+Math.abs(b.y-goal.y)));
   }else{moves.sort(()=>Math.random()-.5);}
 
-  // Hesitation when emotionally distressed
-  if(S.emotionalState.valence<-.5&&Math.random()<.22){drawMaze();runSteps++;return;}
+  // Hesitation when emotionally distressed — scaled by emotionWeight
+  const ew=S.emotionWeight??1.0;
+  if(S.emotionalState.valence<-.5&&Math.random()<(.22*ew)){drawMaze();runSteps++;return;}
 
   const next=moves[0];visited[next.y][next.x]=true;agent=next;stack.push({...next});
   runSteps++;document.getElementById('mzSteps').textContent=runSteps;
