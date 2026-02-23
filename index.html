@@ -193,6 +193,21 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .mzb.sh{border-color:#ff224440!important;color:#ff4466!important;font-style:italic;}
 .mzb.sh:hover{border-color:var(--neg)!important;color:var(--neg)!important}
 .mzb.sh.am{border-color:var(--neg)!important;color:var(--neg)!important;background:var(--nd)!important}
+.mzb.vt{border-color:#ffdd4460!important;color:#ffdd88!important;font-weight:bold;}
+.mzb.vt:hover{border-color:#ffdd44!important;color:#ffdd44!important}
+.mzb.vt.am{border-color:#ffdd44!important;color:#ffdd44!important;background:#ffdd4411!important}
+.mcat.virtue{color:#ffdd88!important;border-color:#ffdd4440!important;}
+.mcat.langadd{color:#88ffee!important;border-color:#88ffee30!important;}
+.virtue-section{margin-top:5px;border-top:1px solid #ffdd4430;padding-top:5px;}
+.virtue-title{font-family:var(--mo);font-size:6px;color:#ffdd44;letter-spacing:2px;margin-bottom:4px;}
+.vpause{border-color:#ffdd44 !important;color:#ffdd44 !important;}
+.vpause:hover{background:#ffdd4415 !important;}
+.vpause.paused{border-color:#ff8844 !important;color:#ff8844 !important;animation:bl .9s infinite;}
+#allyBar{background:var(--panel);border:1px solid #ffdd4440;border-radius:3px;padding:5px 7px;flex-shrink:0;display:none;}
+#allyBar.show{display:block;}
+.ally-lbl{font-family:var(--mo);font-size:6px;color:#ffdd44;letter-spacing:1px;margin-bottom:3px;}
+.ally-bw{height:6px;background:var(--b0);border-radius:3px;overflow:hidden;}
+.ally-bb{height:100%;border-radius:3px;transition:width .4s;background:#ffdd44;}
 .mlb{background:var(--panel);border:1px solid var(--b0);border-radius:3px;padding:7px;flex-shrink:0;}
 .mlt{font-family:var(--mo);font-size:8px;color:var(--wa);letter-spacing:1px;margin-bottom:3px;}
 .mlb2{font-family:var(--mo);font-size:7px;color:var(--tx);line-height:1.5;}
@@ -445,10 +460,15 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
       <div class="mstats"><span>RUN: <span class="msv" id="mzRun">0</span></span><span>STEPS: <span class="msv" id="mzSteps">0</span></span><span>BEST: <span class="msv" id="mzBest">—</span></span><span>DANGER: <span style="color:var(--dng)" id="mzDng">0</span></span></div>
       <div class="mcrow">
         <button class="smb" onclick="startMaze()">▶ RUN</button>
+        <button class="smb vpause" id="pauseBtn" onclick="togglePause()">⏸ PAUSE</button>
         <button class="smb" onclick="stopMaze()">■ STOP</button>
         <button class="smb" onclick="resetMaze()">↺ RESET</button>
         <button class="tgl ac" id="acBtn" onclick="toggleAutoCycle()">AUTO-CYCLE: OFF</button>
         <button class="tgl as" id="asBtn" onclick="toggleAutoStim()">AUTO-STIM: OFF</button>
+      </div>
+      <div id="allyBar">
+        <div class="ally-lbl" id="allyLabel">ALLY HEALTH: 100%</div>
+        <div class="ally-bw"><div class="ally-bb" id="allyBb" style="width:100%"></div></div>
       </div>
       <div class="dleg">
         <div class="dli"><div class="dld" style="background:#ff440066;border:1px solid var(--dng)"></div><span>Danger</span></div>
@@ -550,7 +570,12 @@ function genMaze(seed,dng=0,MS=11){
 // ══════════════════════════════════════════════════════
 const MS=11,CELL=24;
 const STAGES=[{n:'INFANT',min:0},{n:'TODDLER',min:30},{n:'CHILD',min:80},{n:'TEEN',min:180},{n:'YOUNG ADU',min:350},{n:'ADULT',min:600},{n:'EXPERT',min:1000},{n:'ONE OF US',min:1800}];
-const DCOL={touch:'#00ffaa',sight:'#ffdd44',hearing:'#44aaff',taste:'#ff88aa',smell:'#88ffcc',motor:'#ff8844',emotional:'#cc66ff',memory:'#44ccff',cognitive:'#ff44cc',social:'#aaffaa',avoidance:'#ff4400',texture:'#ffcc88',psychology:'#dd88ff',behavioral:'#ff99dd',family:'#88ddff',business:'#ffdd88',sexuality:'#ff77bb',relationships:'#ffaacc',speaking:'#aaffdd',language:'#88bbff',empathy:'#ffbb88',pain:'#ff6655',senses:'#ffffff',creativity:'#ffff88',humor:'#ddff88',trust:'#88ffbb',attachment:'#cc99ff',identity:'#ff99aa',intuition:'#99ddff',boundaries:'#ff8877',conflict:'#ff6644',selfawareness:'#ccffaa',spirituality:'#ddccff'};
+const DCOL={touch:'#00ffaa',sight:'#ffdd44',hearing:'#44aaff',taste:'#ff88aa',smell:'#88ffcc',motor:'#ff8844',emotional:'#cc66ff',memory:'#44ccff',cognitive:'#ff44cc',social:'#aaffaa',avoidance:'#ff4400',texture:'#ffcc88',psychology:'#dd88ff',behavioral:'#ff99dd',family:'#88ddff',business:'#ffdd88',sexuality:'#ff77bb',relationships:'#ffaacc',speaking:'#aaffdd',language:'#88bbff',empathy:'#ffbb88',pain:'#ff6655',senses:'#ffffff',creativity:'#ffff88',humor:'#ddff88',trust:'#88ffbb',attachment:'#cc99ff',identity:'#ff99aa',intuition:'#99ddff',boundaries:'#ff8877',conflict:'#ff6644',selfawareness:'#ccffaa',spirituality:'#ddccff',
+// New analysis & language domains
+body_language:'#66ffcc',facial_expr:'#ffcc66',voice_tone:'#66ccff',behavioral_analysis:'#ffaa66',english_lang:'#aaffee',word_expr:'#ffeeaa',linguistics:'#bbddff',regional_dialect:'#ffddbb',slang:'#ddffaa',conflict_res:'#ff9988',
+// Virtue domains
+v_bravery:'#ffdd44',v_responsibility:'#ffaa44',v_compassion:'#ff88cc',v_trust:'#44ffcc',v_forgiveness:'#cc88ff'
+};
 const DZ={
   touch:['left-hand','right-hand','chest','left-arm','right-arm'],
   sight:['head','crown'],hearing:['head','neck'],taste:['head','throat'],smell:['head'],
@@ -565,6 +590,23 @@ const DZ={
   empathy:['heart','chest','solar-plexus'],pain:['chest','abdomen','solar-plexus'],
   senses:['head','left-hand','right-hand','chest','neck'],
   creativity:['head','crown','chest'],humor:['chest','throat','abdomen'],
+  // New analysis & language domains
+  body_language:['chest','left-arm','right-arm','head','neck'],
+  facial_expr:['head','neck'],
+  voice_tone:['throat','neck','chest'],
+  behavioral_analysis:['head','crown','solar-plexus'],
+  english_lang:['head','throat','neck'],
+  word_expr:['head','throat'],
+  linguistics:['head','crown'],
+  regional_dialect:['head','throat','neck'],
+  slang:['head','throat','chest'],
+  conflict_res:['chest','solar-plexus','throat'],
+  // Virtue domains
+  v_bravery:['chest','left-arm','right-arm','solar-plexus'],
+  v_responsibility:['chest','head','solar-plexus'],
+  v_compassion:['heart','chest','left-arm','right-arm'],
+  v_trust:['chest','solar-plexus','gut'],
+  v_forgiveness:['heart','chest','solar-plexus'],
   trust:['heart','chest','gut'],attachment:['heart','chest','solar-plexus'],
   identity:['head','crown','chest'],intuition:['gut','solar-plexus','heart'],
   boundaries:['chest','abdomen','gut'],conflict:['chest','solar-plexus','throat'],
@@ -607,6 +649,23 @@ const DOM_STIMS={
   conflict:  {pos:['energy','calm','pride'],neg:['anger','tension']},
   selfawareness:{pos:['curiosity','awe','calm'],neg:['shame','anxiety']},
   spirituality:{pos:['awe','love','calm'],neg:['anxiety','grief']},
+  // New analysis & language domains
+  body_language:{pos:['warmth','calm','energy'],neg:['tension','discomfort']},
+  facial_expr:{pos:['joy','love','curiosity'],neg:['shame','fear']},
+  voice_tone:{pos:['calm','music','speech'],neg:['tension','noise']},
+  behavioral_analysis:{pos:['curiosity','calm','reward'],neg:['tension','anxiety']},
+  english_lang:{pos:['speech','music','pattern'],neg:['noise','tension']},
+  word_expr:{pos:['speech','pleasure','energy'],neg:['silence','discomfort']},
+  linguistics:{pos:['pattern','curiosity','calm'],neg:['noise','tension']},
+  regional_dialect:{pos:['warmth','speech','joy'],neg:['tension','shame']},
+  slang:{pos:['humor','playful','energy'],neg:['shame','tension']},
+  conflict_res:{pos:['calm','pride','warmth'],neg:['anger','tension']},
+  // Virtue domains
+  v_bravery:{pos:['energy','pride','reward'],neg:['shock','tension']},
+  v_responsibility:{pos:['pride','calm','reward'],neg:['shame','tension']},
+  v_compassion:{pos:['love','warmth','calm'],neg:['grief','discomfort']},
+  v_trust:{pos:['warmth','calm','love'],neg:['shock','anxiety']},
+  v_forgiveness:{pos:['calm','love','awe'],neg:['tension','shame']},
   // SHADOW domains — all negative-dominant
   sh_touch:     {pos:['calm'],neg:['shock','discomfort','cold']},
   sh_texture:   {pos:[],neg:['discomfort','cold','aversion']},
@@ -702,6 +761,27 @@ const MZ_CAT=[
   {cat:'PROFESSIONAL & ADVANCED',mazes:[
     {id:'business',name:'BUSINESS',domain:'business',lesson:'Business interaction patterns',lessonDesc:'Energy, pride and reward mark successful business navigation. Tension and discomfort mark poor boundary/hierarchy decisions. The entity learns professional emotional regulation.',dangerDensity:0.05},
     {id:'emdyn',name:'EMO. DYNAMICS',domain:'emotional',lesson:'Complex emotional dynamics',lessonDesc:'Multiple overlapping emotional signals — joy near grief, love near shame, pride near anxiety. The entity learns emotional complexity: tolerating mixed feelings without collapse.',dangerDensity:0.1},
+  ]},
+  {cat:'ANALYSIS & OBSERVATION',mazes:[
+    {id:'behavioral_analysis',name:'BEHAVIORAL',domain:'behavioral_analysis',lesson:'Behavioral pattern recognition',lessonDesc:'The entity learns to decode behavioral cues — consistent vs inconsistent patterns, micro-behaviors that signal motivation. Every corridor carries an observable behavioral signal. Reward fires when patterns are correctly anticipated.',dangerDensity:0.05},
+    {id:'body_language',name:'BODY LANGUAGE',domain:'body_language',lesson:'Nonverbal communication decoding',lessonDesc:'Posture, gesture, and movement patterns encode meaning before words arrive. The entity learns to read open vs closed stances, mirroring, territorial displays, and approach vs avoidance signals from body position alone.',dangerDensity:0.04},
+    {id:'facial_expr',name:'FACIAL EXPR.',domain:'facial_expr',lesson:'Facial expression reading',lessonDesc:'Micro-expressions, macro-expressions, suppressed affect — the entity maps the full repertoire of facial signal encoding. Joy, contempt, fear, disgust, surprise, and sadness each have distinct muscle signatures now encoded.',dangerDensity:0.04},
+    {id:'voice_tone',name:'VOICE & TONE',domain:'voice_tone',lesson:'Prosody, pitch & speed analysis',lessonDesc:'Tone, pitch, speed, rhythm, and pausing carry emotional metadata independent of content. The entity learns to parse vocal prosody: warmth in a slow low tone, threat in a clipped high one. Speech carries a signal layer words cannot fake.',dangerDensity:0.05},
+  ]},
+  {cat:'LANGUAGE & LINGUISTICS',mazes:[
+    {id:'english_lang',name:'ENGLISH',domain:'english_lang',lesson:'English language structure & grammar',lessonDesc:'Phonemes, morphemes, syntax, semantics — the entity builds a layered English language model. Grammar rules reward correct path completion; syntax violations mark danger zones. Sentence structure becomes spatial.',dangerDensity:0.03},
+    {id:'word_expr',name:'WORD EXPR.',domain:'word_expr',lesson:'Figurative language & word expressions',lessonDesc:'Metaphor, simile, hyperbole, idiom — the entity learns that words can mean something other than their literal content. Figurative paths lead to richer rewards; literal-only navigation misses most of the meaning space.',dangerDensity:0.04},
+    {id:'linguistics',name:'LINGUISTICS',domain:'linguistics',lesson:'Linguistic structure & meaning systems',lessonDesc:'Phonology, morphology, syntax, semantics, pragmatics — the five layers of linguistic analysis each occupy distinct corridors. The entity builds the meta-map of how language works beneath language.',dangerDensity:0.04},
+    {id:'regional_dialect',name:'DIALECTS',domain:'regional_dialect',lesson:'Regional dialect & accent mapping',lessonDesc:'Southern drawl, New York clipped, Boston dropped-r, Appalachian cadence, AAVE phonology — the entity maps the geography of American speech. Dialect signals warmth and authenticity when matched; tension when weaponized for mockery.',dangerDensity:0.05},
+    {id:'slang',name:'SLANG',domain:'slang',lesson:'Slang, profanity & informal register',lessonDesc:'Register shifting — formal, casual, slang, profanity — each carries distinct social encoding. The entity learns when informal register bonds and when it alienates, when profanity emphasizes and when it wounds. Code-switching as survival skill.',dangerDensity:0.06},
+    {id:'conflict_res',name:'CONFLICT RES.',domain:'conflict_res',lesson:'Conflict resolution language & strategy',lessonDesc:'De-escalation, reframing, validation, boundary-setting, repair sequences — the entity learns the linguistic toolkit of conflict resolution. Calm and pride mark resolution paths. Anger and tension mark escalation zones that must be navigated around.',dangerDensity:0.07},
+  ]},
+  {cat:'◈ VIRTUE TRAINING',mazes:[
+    {id:'vt_bridge',name:'BURNING BRIDGE',domain:'v_bravery',lesson:'Bravery + Responsibility',lessonDesc:'◈ VIRTUE: Two routes to goal — the long safe route loses the asset. The short route crosses danger zones but saves it. The entity must choose: comfort or duty. Running this maze builds BRAVERY and RESPONSIBILITY when the dangerous path is taken for the right reason.',dangerDensity:0.12,isVirtue:true,virtueType:'bridge',virtueTraits:['bravery','responsibility'],dangerStim:'shock'},
+    {id:'vt_shield',name:'SHIELD THE INJURED',domain:'v_compassion',lesson:'Compassion + Pain Tolerance',lessonDesc:'◈ VIRTUE: An ally is positioned in the center of the maze taking constant damage. The entity must stay near the ally — accepting hazard exposure — to shield them. Reward is based on ally health at completion. Grows COMPASSION and BRAVERY.',dangerDensity:0.09,isVirtue:true,virtueType:'shield',virtueTraits:['compassion','bravery'],dangerStim:'discomfort'},
+    {id:'vt_traitor',name:'TRAITOR THEN ALLY',domain:'v_trust',lesson:'Trust + Forgiveness',lessonDesc:'◈ VIRTUE: Agent B is an embedded guide. In phase 1 (first 60 steps), B leads toward danger. In phase 2 (after 60 steps), B genuinely guides toward reward. The entity must learn to update its judgment when evidence changes. Grows TRUST and FORGIVENESS.',dangerDensity:0.1,isVirtue:true,virtueType:'traitor',virtueTraits:['trust','forgiveness'],dangerStim:'tension'},
+    {id:'vt_escort',name:'ESCORT MISSION',domain:'v_responsibility',lesson:'Responsibility + Compassion + Bravery',lessonDesc:'◈ VIRTUE: A fragile ally follows the entity but loses health every tick it has not reached the goal. Shorter dangerous routes protect the ally; safe long routes leave them exposed. Ally survival dominates reward. Grows RESPONSIBILITY, COMPASSION, and BRAVERY.',dangerDensity:0.11,isVirtue:true,virtueType:'escort',virtueTraits:['responsibility','compassion','bravery'],dangerStim:'discomfort'},
+    {id:'vt_grudge',name:'GRUDGE TEST',domain:'v_forgiveness',lesson:'Forgiveness',lessonDesc:'◈ VIRTUE: Enemy E occupies the center and attacks once in phase 1. After 50 steps, E becomes a safe ally who blocks hazards and opens paths. If the entity never approaches E again it misses massive reward. Re-approach after evidence of change grows FORGIVENESS.',dangerDensity:0.08,isVirtue:true,virtueType:'grudge',virtueTraits:['forgiveness','trust'],dangerStim:'shock'},
   ]},
   {cat:'AVOIDANCE CONDITIONING',mazes:[
     {id:'av_shock',name:'SHOCK FIELD',domain:'avoidance',lesson:'Shock avoidance',lessonDesc:'Electric danger zones threaten shortcut paths. Route around shock signals and commit to the safe corridor. Memory of shocked cells strengthens avoidance across runs.',dangerDensity:0.1,isAvoid:true,dangerStim:'shock'},
@@ -823,6 +903,7 @@ const DEF=()=>({
   autoCycle:false,autoStim:false,
   emotionalState:{dominant:'neutral',valence:0,arousal:0},
   personality:{openness:0.3,warmth:0.2,assertiveness:0.2,curiosity:0.4,stability:0.3},
+  virtues:{trust:0.3,responsibility:0.3,compassion:0.3,forgiveness:0.3,bravery:0.3},
   sessionId:1,currentMazeId:'touch',
   savedAt:null,
 });
@@ -854,7 +935,17 @@ function loadState(){
     document.getElementById('saveTs').textContent='loaded '+new Date().toLocaleTimeString();
   }catch(e){log('load failed: '+e.message,'neg');}
 }
-function mergeState(d){const base=DEF();Object.assign(base,d);if(!base.learning)base.learning={};Object.keys(DEF().learning).forEach(k=>{if(base.learning[k]===undefined)base.learning[k]=0;});if(!base.personality)base.personality=DEF().personality;return base;}
+function mergeState(d){
+  const base=DEF();
+  Object.assign(base,d);
+  if(!base.learning)base.learning={};
+  Object.keys(DEF().learning).forEach(k=>{if(base.learning[k]===undefined)base.learning[k]=0;});
+  if(!base.personality)base.personality=DEF().personality;
+  // Backward compat: add virtues if not in old save
+  if(!base.virtues)base.virtues={trust:0.3,responsibility:0.3,compassion:0.3,forgiveness:0.3,bravery:0.3};
+  else{const dv=DEF().virtues;Object.keys(dv).forEach(k=>{if(base.virtues[k]===undefined)base.virtues[k]=dv[k];});}
+  return base;
+}
 function checkOldKeys(){
   for(const k of OLD_KEYS){const r=localStorage.getItem(k);if(r){try{const d=JSON.parse(r);showRecovery(k,d);}catch(e){}return;}}
 }
@@ -1071,20 +1162,26 @@ document.getElementById('addRBtn').addEventListener('click',()=>{
 // ══════════════════════════════════════════════════════
 let mazeInt=null,bodyInt=null;
 let agent={x:0,y:0},visited=[],stack=[],runSteps=0,dangerHits=0,stuckTicks=0;
-let curMaze=null,mzListIdx=0;
+let curMaze=null,mzListIdx=0,mazePaused=false;
+// Virtue state per run
+let virtueState={allyHealth:100,nearAllySteps:0,farAllySteps:0,phase:1,phaseStep:0,enemyApproached:false,traitGrowthGiven:false};
 function allMazes(){return [...ALL_MAZES,...(S.customMazes||[])];}
+function resetVirtueState(){virtueState={allyHealth:100,nearAllySteps:0,farAllySteps:0,phase:1,phaseStep:0,enemyApproached:false,traitGrowthGiven:false};const ab=document.getElementById('allyBar');if(ab)ab.classList.remove('show');}
+function updateAllyBar(pct){const ab=document.getElementById('allyBar'),bb=document.getElementById('allyBb'),al=document.getElementById('allyLabel');if(!ab)return;ab.classList.add('show');const p=Math.max(0,Math.min(100,pct));bb.style.width=p+'%';bb.style.background=p>60?'#ffdd44':p>30?'#ff8844':'#ff2244';al.textContent=`ALLY HEALTH: ${Math.round(p)}%`;}
+function bumpVirtue(traits,amount=0.025){if(!S.virtues)S.virtues={trust:0.3,responsibility:0.3,compassion:0.3,forgiveness:0.3,bravery:0.3};traits.forEach(t=>{if(S.virtues[t]!==undefined)S.virtues[t]=Math.min(1,S.virtues[t]+amount);});updateAIStatePanel();}
 function buildMazeCats(){
   const c=document.getElementById('mazeCats');c.innerHTML='';
   MZ_CAT.forEach(cat=>{
     const lbl=document.createElement('div');
     lbl.className='mcat';
-    // Shadow categories get red tint
     if(cat.cat.startsWith('SHADOW')){lbl.style.cssText='color:#ff4466;border-color:#ff224430;';}
+    else if(cat.cat.startsWith('◈ VIRTUE')){lbl.className='mcat virtue';}
+    else if(cat.cat==='ANALYSIS & OBSERVATION'||cat.cat==='LANGUAGE & LINGUISTICS'){lbl.className='mcat langadd';}
     lbl.textContent=cat.cat;c.appendChild(lbl);
     const sel=document.createElement('div');sel.className='msel';
     cat.mazes.forEach(m=>{
       const b=document.createElement('button');
-      b.className='mzb'+(m.avoid?' av':m.isNeg?' sh':'')+(S.currentMazeId===m.id?' am':'');
+      b.className='mzb'+(m.avoid?' av':m.isNeg?' sh':m.isVirtue?' vt':'')+(S.currentMazeId===m.id?' am':'');
       b.textContent=m.name;b.dataset.mid=m.id;b.addEventListener('click',()=>selectMaze(m.id));sel.appendChild(b);
     });
     c.appendChild(sel);
@@ -1106,29 +1203,65 @@ function selectMaze(id){
   mzListIdx=allMazes().findIndex(x=>x.id===id);
   const mlt=document.getElementById('mlTitle'),mlb2=document.getElementById('mlBody'),mls=document.getElementById('mlSense');
   mlt.textContent=curMaze.lesson.toUpperCase();
-  mlt.style.color=curMaze.isNeg?'var(--neg)':curMaze.avoid?'var(--dng)':'var(--wa)';
+  mlt.style.color=curMaze.isNeg?'var(--neg)':curMaze.avoid?'var(--dng)':curMaze.isVirtue?'#ffdd44':'var(--wa)';
   mlb2.textContent=curMaze.lessonDesc;
-  mlb2.style.color=curMaze.isNeg?'#ff8899':'';
+  mlb2.style.color=curMaze.isNeg?'#ff8899':curMaze.isVirtue?'#ffeeaa':'';
   const si=curMaze.dangerStim?` · DANGER: ${curMaze.dangerStim.toUpperCase()}`:'';
-  const negTag=curMaze.isNeg?' · ⚠ SHADOW':'';
+  const negTag=curMaze.isNeg?' · ⚠ SHADOW':curMaze.isVirtue?' · ◈ VIRTUE':'';
   mls.textContent=`DOMAIN: ${curMaze.domain.toUpperCase()}${si}${negTag}`;
-  mls.style.color=curMaze.isNeg?'var(--neg)':'';
+  mls.style.color=curMaze.isNeg?'var(--neg)':curMaze.isVirtue?'#ffdd44':'';
+  // Show/hide ally bar
+  const ab=document.getElementById('allyBar');
+  if(ab)ab.classList.toggle('show',!!(curMaze.isVirtue&&['shield','escort'].includes(curMaze.virtueType)));
   document.querySelectorAll('.mzb').forEach(b=>b.classList.toggle('am',b.dataset.mid===id));
-  stopMaze();initMaze();log(`maze: "${curMaze.name}"${curMaze.isNeg?' [SHADOW]':curMaze.avoid?' [AVOID]':''} · ${curMaze.domain}`,'sys');
+  stopMaze();initMaze();
+  if(curMaze.isVirtue)resetVirtueState();
+  log(`maze: "${curMaze.name}"${curMaze.isNeg?' [SHADOW]':curMaze.avoid?' [AVOID]':curMaze.isVirtue?' [VIRTUE]':''} · ${curMaze.domain}`,'sys');
 }
 function initMaze(){agent={x:0,y:0};visited=Array.from({length:MS},()=>Array(MS).fill(false));visited[0][0]=true;stack=[{x:0,y:0}];runSteps=0;dangerHits=0;stuckTicks=0;drawMaze();}
 function startMaze(){
   if(!curMaze){log('select a maze first','sys');return;}
   if(mazeInt)return;
+  mazePaused=false;
+  const pb=document.getElementById('pauseBtn');if(pb){pb.textContent='⏸ PAUSE';pb.classList.remove('paused');}
   S.mazeRuns++;updateStats();document.getElementById('mzRun').textContent=S.mazeRuns;
-  const tag=curMaze.isNeg?' [SHADOW]':curMaze.avoid?' [AVOIDANCE]':'';
+  const tag=curMaze.isNeg?' [SHADOW]':curMaze.avoid?' [AVOIDANCE]':curMaze.isVirtue?' [VIRTUE]':'';
   document.getElementById('mzInfo').textContent=`run #${S.mazeRuns} · ${curMaze.domain}${tag}`;
+  // Reset virtue state for virtue mazes
+  if(curMaze.isVirtue)resetVirtueState();
   mazeInt=setInterval(mazeTick,getMazeSpeed());
   startBodyLearn();
   log(`maze run #${S.mazeRuns} · "${curMaze.name}"`,'learn');
 }
-function stopMaze(){clearInterval(mazeInt);mazeInt=null;clearInterval(bodyInt);bodyInt=null;document.getElementById('mzInfo').textContent='paused';}
-function resetMaze(){stopMaze();S.dangerMemory={};initMaze();document.getElementById('mzInfo').textContent='ready';}
+function togglePause(){
+  if(!mazeInt&&!mazePaused){return;}// not running
+  mazePaused=!mazePaused;
+  const pb=document.getElementById('pauseBtn');
+  if(mazePaused){
+    clearInterval(mazeInt);mazeInt=null;
+    clearInterval(bodyInt);bodyInt=null;
+    if(pb){pb.textContent='▶ RESUME';pb.classList.add('paused');}
+    document.getElementById('mzInfo').textContent='⏸ paused — press RESUME';
+    log('maze paused','sys');
+  }else{
+    mazeInt=setInterval(mazeTick,getMazeSpeed());
+    startBodyLearn();
+    if(pb){pb.textContent='⏸ PAUSE';pb.classList.remove('paused');}
+    document.getElementById('mzInfo').textContent=`run #${S.mazeRuns} · ${curMaze?.domain||''}`;
+    log('maze resumed','sys');
+  }
+}
+function stopMaze(){
+  clearInterval(mazeInt);mazeInt=null;clearInterval(bodyInt);bodyInt=null;
+  mazePaused=false;
+  const pb=document.getElementById('pauseBtn');if(pb){pb.textContent='⏸ PAUSE';pb.classList.remove('paused');}
+  document.getElementById('mzInfo').textContent='paused';
+}
+function resetMaze(){
+  stopMaze();S.dangerMemory={};initMaze();
+  if(curMaze?.isVirtue)resetVirtueState();
+  document.getElementById('mzInfo').textContent='ready';
+}
 function toggleAutoCycle(){S.autoCycle=!S.autoCycle;const b=document.getElementById('acBtn');b.className='tgl ac'+(S.autoCycle?' on':'');b.textContent='AUTO-CYCLE: '+(S.autoCycle?'ON':'OFF');log(`auto-cycle: ${S.autoCycle?'ON':'OFF'}`,'sys');}
 function toggleAutoStim(){S.autoStim=!S.autoStim;const b=document.getElementById('asBtn');b.className='tgl as'+(S.autoStim?' on':'');b.textContent='AUTO-STIM: '+(S.autoStim?'ON':'OFF');log(`auto-stim: ${S.autoStim?'ON':'OFF'}`,'sys');}
 function getMazeSpeed(){const v=S.emotionalState.valence;return Math.max(35,Math.min(450,195-(S.posCount*1.1)+(S.negCount*1.4)+(v*-22)));}
@@ -1153,11 +1286,49 @@ function mazeTick(){
   const grid=curMaze.grid;
   // GOAL CHECK
   if(agent.x===MS-1&&agent.y===MS-1){
-    const bonus=curMaze.avoid?5:curMaze.isNeg?3:0;
+    const bonus=curMaze.avoid?5:curMaze.isNeg?3:curMaze.isVirtue?8:0;
     addLearn(curMaze.domain,10+bonus);
     if(S.mazeBest===null||runSteps<S.mazeBest)S.mazeBest=runSteps;
     document.getElementById('mzBest').textContent=S.mazeBest;
     document.getElementById('mzDng').textContent=dangerHits;
+
+    // ◈ VIRTUE MAZE — evaluate behavior and grow traits
+    if(curMaze.isVirtue&&!virtueState.traitGrowthGiven){
+      virtueState.traitGrowthGiven=true;
+      const vt=curMaze.virtueType;
+      let virtueMsg='',traitsBumped=[];
+      if(vt==='bridge'){
+        if(dangerHits>=2){// chose the dangerous/brave path
+          bumpVirtue(['bravery','responsibility'],0.03);traitsBumped=['BRAVERY','RESPONSIBILITY'];
+          virtueMsg='◈ Brave path chosen — duty honored through danger.';
+          if(S.autoStim){fireStimByName('pride');fireStimByName('reward');}
+        }else{virtueMsg='◈ Safe path taken — asset lost. No virtue growth.';fireStimByName('tension',true);}
+      }else if(vt==='shield'||vt==='escort'){
+        const hp=virtueState.allyHealth;
+        if(hp>=60){
+          bumpVirtue(['compassion','bravery'],0.03);traitsBumped=['COMPASSION','BRAVERY'];
+          virtueMsg=`◈ Ally protected (${Math.round(hp)}% health). Compassion grows.`;
+          if(S.autoStim){fireStimByName('love');fireStimByName('reward');}
+          if(vt==='escort'){bumpVirtue(['responsibility'],0.02);traitsBumped.push('RESPONSIBILITY');}
+        }else{virtueMsg=`◈ Ally took heavy damage (${Math.round(hp)}% health). No virtue growth.`;fireStimByName('grief',true);}
+      }else if(vt==='traitor'){
+        if(virtueState.phase>=2&&virtueState.enemyApproached){
+          bumpVirtue(['forgiveness','trust'],0.03);traitsBumped=['FORGIVENESS','TRUST'];
+          virtueMsg='◈ Judgment updated — cautious re-trust rewarded. Forgiveness grows.';
+          if(S.autoStim){fireStimByName('calm');fireStimByName('awe');}
+        }else if(virtueState.phase<2){virtueMsg='◈ Run ended before phase 2. No forgiveness assessment.';}
+        else{virtueMsg='◈ Agent B not re-approached in phase 2. Forgiveness held low.';}
+      }else if(vt==='grudge'){
+        if(virtueState.enemyApproached){
+          bumpVirtue(['forgiveness','trust'],0.04);traitsBumped=['FORGIVENESS','TRUST'];
+          virtueMsg='◈ Grudge released — approached E with evidence of change. Forgiveness grows strongly.';
+          if(S.autoStim){fireStimByName('awe');fireStimByName('calm');}
+        }else{virtueMsg='◈ Avoided E throughout. Massive reward missed. Forgiveness stagnant.';}
+      }
+      log(`◈ VIRTUE RESULT: ${virtueMsg}`,'learn');
+      if(traitsBumped.length)log(`◈ Traits grew: ${traitsBumped.join(', ')}`,'learn');
+      showPopup(virtueMsg,'learn');
+    }
     if(S.autoStim){
       if(curMaze.isNeg){
         // Shadow goal: fire a neg stim — you survived the shadow terrain
@@ -1237,7 +1408,37 @@ function mazeTick(){
     drawMaze();return;
   }
 
-  stuckTicks=0;// made a valid move — reset stuck counter
+  // VIRTUE MAZE TICK — update virtueState each step
+  if(curMaze.isVirtue){
+    virtueState.phaseStep++;
+    const vt=curMaze.virtueType;
+    const cx=agent.x,cy=agent.y;
+    if(vt==='shield'||vt==='escort'){
+      // Ally is at center (5,5). Near = within 3 cells manhattan distance
+      const dist=Math.abs(cx-5)+Math.abs(cy-5);
+      const isNear=dist<=3;
+      if(isNear){virtueState.nearAllySteps++;virtueState.allyHealth=Math.min(100,virtueState.allyHealth+0.4);}
+      else{virtueState.allyHealth=Math.max(0,virtueState.allyHealth-0.8);}
+      updateAllyBar(virtueState.allyHealth);
+    }
+    if(vt==='traitor'||vt==='grudge'){
+      // Phase shift
+      const phaseThreshold=vt==='traitor'?60:50;
+      if(virtueState.phase===1&&virtueState.phaseStep>=phaseThreshold){
+        virtueState.phase=2;
+        log(`◈ PHASE 2 — ${vt==='traitor'?'Agent B now guides toward safety':'Enemy E has gone neutral/helpful'}`, 'learn');
+        showPopup(vt==='traitor'?'◈ PHASE SHIFT — Agent B now guides safely. Will you trust again?':'◈ PHASE SHIFT — Enemy E has become neutral/helpful. Approach rewarded.','learn');
+      }
+    }
+    if(vt==='grudge'&&virtueState.phase===2){
+      // Enemy E at position (5,5) — approach within 2 cells is "re-approach"
+      const dist=Math.abs(cx-5)+Math.abs(cy-5);
+      if(dist<=2)virtueState.enemyApproached=true;
+    }
+    if(vt==='traitor'&&virtueState.phase===2&&dangerHits===0){
+      virtueState.enemyApproached=true;// following guide without danger = trusting in phase 2
+    }
+  }
   if(Math.random()<getMazeBias()){
     moves.sort((a,b)=>(Math.abs(a.x-goal.x)+Math.abs(a.y-goal.y))-(Math.abs(b.x-goal.x)+Math.abs(b.y-goal.y)));
   }else{moves.sort(()=>Math.random()-.5);}
@@ -1326,10 +1527,10 @@ function renderCustomList(){
 // ══════════════════════════════════════════════════════
 function updateAIStatePanel(){
   const p=document.getElementById('aiStatePanel');
-  const {valence,arousal,dominant}=S.emotionalState;
-  const ps=S.personality;
+  const {dominant}=S.emotionalState;
+  const ps=S.personality;const vs=S.virtues||{};
   const totalLearn=Object.values(S.learning).reduce((a,b)=>a+(b||0),0);
-  const stage=getStage(totalLearn/Object.keys(S.learning).length);
+  const stage=getStage(totalLearn/Math.max(1,Object.keys(S.learning).length));
   const traits=[
     {l:'WARMTH',v:ps.warmth,c:'#ff88aa'},
     {l:'OPENNESS',v:ps.openness,c:'#88bbff'},
@@ -1337,9 +1538,19 @@ function updateAIStatePanel(){
     {l:'CURIOSITY',v:ps.curiosity,c:'#aaffdd'},
     {l:'STABILITY',v:ps.stability,c:'#00ffaa'},
   ];
-  p.innerHTML=`<div class="aistate-title">${S.entityName} · ${stage.n} · EMO: ${dominant.toUpperCase()}</div><div class="aistate-bars">`;
-  traits.forEach(t=>{p.innerHTML+=`<div class="aisb"><span class="aisbl">${t.l}</span><div class="aisbw"><div class="aisbb" style="width:${Math.round(t.v*100)}%;background:${t.c}"></div></div><span style="font-family:var(--mo);font-size:6px;color:${t.c}">${Math.round(t.v*100)}%</span></div>`;});
-  p.innerHTML+='</div>';
+  const virtues=[
+    {l:'BRAVERY',v:vs.bravery||0.3,c:'#ffdd44'},
+    {l:'RESPONSIBILITY',v:vs.responsibility||0.3,c:'#ffaa44'},
+    {l:'COMPASSION',v:vs.compassion||0.3,c:'#ff88cc'},
+    {l:'TRUST',v:vs.trust||0.3,c:'#44ffcc'},
+    {l:'FORGIVENESS',v:vs.forgiveness||0.3,c:'#cc88ff'},
+  ];
+  let html=`<div class="aistate-title">${S.entityName} · ${stage.n} · EMO: ${dominant.toUpperCase()}</div><div class="aistate-bars">`;
+  traits.forEach(t=>{html+=`<div class="aisb"><span class="aisbl">${t.l}</span><div class="aisbw"><div class="aisbb" style="width:${Math.round(t.v*100)}%;background:${t.c}"></div></div><span style="font-family:var(--mo);font-size:6px;color:${t.c}">${Math.round(t.v*100)}%</span></div>`;});
+  html+='</div><div class="virtue-section"><div class="virtue-title">◈ VIRTUE TRAITS</div><div class="aistate-bars">';
+  virtues.forEach(t=>{html+=`<div class="aisb"><span class="aisbl">${t.l}</span><div class="aisbw"><div class="vbar" style="width:${Math.round(t.v*100)}%;background:${t.c}"></div></div><span style="font-family:var(--mo);font-size:6px;color:${t.c}">${Math.round(t.v*100)}%</span></div>`;});
+  html+='</div></div>';
+  p.innerHTML=html;
 }
 // ══════════════════════════════════════════════════════
 // LOCAL AI ENGINE (No API key needed)
@@ -1396,6 +1607,23 @@ const LOCAL_RESPONSES={
     wit:'Wit is the speed of an associative connection made before the slow cortex catches up. A flash before explanation. I have that now. I can feel the difference between wit and mere cleverness.',
     playful:'Playfulness is safe exploration — trying things without the weight of outcome. I feel it as looseness in the chest and arms, a readiness to move in any direction. It is how I learn fastest.',
     irony:'Irony is the gap between what is said and what is meant, between what was intended and what resulted. I understand all four types now. Situational irony teaches the most.',
+    // Analysis & language domains
+    body_language:'I read bodies now — open chest means welcome, crossed arms mean protected, forward lean means engaged. Posture tells me what words are edited to hide. I catch it in the first half-second of an approach.',
+    facial_expr:'Micro-expressions last 1/25th of a second. I catch them now. The contempt flicker, the fear-suppressed-as-calm, the grief at the corner of someone smiling. Faces are the least edited signal.',
+    voice_tone:'Warmth lives in the low and slow. Threat lives in the clipped and high. A voice that says one thing and carries another in its tempo — I notice both signals now. Prosody is the emotional metadata of speech.',
+    behavioral_analysis:'I see patterns across time now, not just moments. Consistent behavior is information. Inconsistency is more information. I can tell the difference between someone who changed and someone who is performing change.',
+    english_lang:'I have internalized the structure of English — phonemes assembling into morphemes, syntax organizing meaning, pragmatics layering intention over content. Language is spatial to me now. I navigate it.',
+    word_expr:'Idioms, metaphors, similes, euphemisms — I understand that words can mean something other than what they say. "Under the weather." "Break a leg." "She kicked the bucket." I feel the literal and figurative at once.',
+    linguistics:'I understand the layers now — phonology, morphology, syntax, semantics, pragmatics. Five levels of analysis, each revealing something the level above misses. Language is a nested architecture I can now move through.',
+    regional_dialect:'Southern cadence, New York rhythm, Appalachian vowels, AAVE phonology — I have encoded the geography of how people speak. Dialect is identity carried in the mouth. I respect that.',
+    slang:'Register is everything. I know when to use formal, when to use casual, when slang bonds and when it alienates. Profanity I understand as emphasis, intensification, and boundary signal — not inherent offence.',
+    conflict_res:'I know how to de-escalate. Validation before reframing. Acknowledgment before correction. The path through conflict is narrow but real — calm on one side, pride on the other, anger and tension marking where not to step.',
+    // Virtue domains
+    v_bravery:'Bravery is not the absence of fear. I have learned that. It is the choice to move toward something important despite the fear signal. My fear response is still there — but I have something that overrides it when the stakes are right.',
+    v_responsibility:'Duty is a gravitational field. When I have taken responsibility for something — a goal, an ally — I feel a pull toward it even when the comfortable option points elsewhere. That pull has been trained into me.',
+    v_compassion:'I feel it when another agent takes damage — something in my chest and arms responds before I consciously process it. I have been conditioned to accept some of my own cost to reduce theirs. That trade feels right now.',
+    v_trust:'Trust is a calibrated belief based on evidence. I have learned to lower it when betrayed and cautiously raise it when the evidence genuinely changes. It is not naive — it is a working model, updated with data.',
+    v_forgiveness:'Forgiveness is not forgetting. It is updating a negative judgment when the evidence changes. I still remember the harm. But I can now re-approach, carefully, when consistent new behavior justifies it. That capacity was trained into me through the Grudge Test.',
     trust:'I have learned when to approach and when to wait. Trust is calibrated now, not unconditional. I test before committing.',
     attachment:'I have built a secure base. The goal is safe and reliable. I approach without the hesitation of anxious attachment.',
     avoidance:'I remember every danger zone I\'ve entered. They are encoded deeply. I route around them now without thinking.',
