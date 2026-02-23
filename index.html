@@ -114,6 +114,29 @@ input[type=range].sir{background:linear-gradient(to right,var(--si) var(--v,50%)
 input[type=range].her{background:linear-gradient(to right,var(--he) var(--v,50%),var(--b0) var(--v,50%))}
 input[type=range].tar{background:linear-gradient(to right,var(--ta) var(--v,50%),var(--b0) var(--v,50%))}
 input[type=range].smr{background:linear-gradient(to right,var(--sm) var(--v,50%),var(--b0) var(--v,50%))}
+input[type=range].vbr{background:linear-gradient(to right,#ffdd44 var(--v,30%),var(--b0) var(--v,30%))}
+input[type=range].vrr{background:linear-gradient(to right,#ffaa44 var(--v,30%),var(--b0) var(--v,30%))}
+input[type=range].vcr{background:linear-gradient(to right,#ff88cc var(--v,30%),var(--b0) var(--v,30%))}
+input[type=range].vtr{background:linear-gradient(to right,#44ffcc var(--v,30%),var(--b0) var(--v,30%))}
+input[type=range].vfr{background:linear-gradient(to right,#cc88ff var(--v,30%),var(--b0) var(--v,30%))}
+input[type=range].vbr::-webkit-slider-thumb{background:#ffdd44}
+input[type=range].vrr::-webkit-slider-thumb{background:#ffaa44}
+input[type=range].vcr::-webkit-slider-thumb{background:#ff88cc}
+input[type=range].vtr::-webkit-slider-thumb{background:#44ffcc}
+input[type=range].vfr::-webkit-slider-thumb{background:#cc88ff}
+.sg.virtue{border-color:#ffdd4460;grid-column:1/-1;}
+.glbl.virtue{color:#ffdd44;}
+.vslider-row{display:flex;align-items:center;gap:8px;padding:4px 0;}
+.vslider-icon{font-size:13px;flex-shrink:0;width:18px;text-align:center;}
+.vslider-lbl{font-family:var(--mo);font-size:7px;min-width:82px;color:var(--td);}
+.vslider-val{font-family:var(--mo);font-size:8px;min-width:32px;text-align:right;}
+.vslider-desc{font-family:var(--mo);font-size:6px;color:var(--td);line-height:1.5;margin-top:2px;padding:0 4px;border-left:2px solid var(--b1);}
+.vimpact{font-family:var(--mo);font-size:5px;padding:1px 4px;border-radius:2px;display:inline-block;margin-left:4px;vertical-align:middle;}
+.mlvl{font-family:var(--mo);font-size:5px;padding:1px 5px;border-radius:2px;letter-spacing:1px;flex-shrink:0;}
+.mlvl.l1{background:#001a10;color:#00ffaa;border:1px solid #00ffaa40;}
+.mlvl.l2{background:#1a1000;color:#ffdd44;border:1px solid #ffdd4440;}
+.mlvl.l3{background:#1a0800;color:#ff8844;border:1px solid #ff884440;}
+.mlvl.l4{background:#1a0000;color:#ff2244;border:1px solid #ff224440;}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:9px;height:9px;border-radius:50%;border:none;cursor:pointer;}
 input[type=range].pr::-webkit-slider-thumb{background:var(--pos)}input[type=range].nr::-webkit-slider-thumb{background:var(--neg)}
 input[type=range].er::-webkit-slider-thumb{background:var(--emo)}input[type=range].sir::-webkit-slider-thumb{background:var(--si)}
@@ -193,7 +216,12 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .mzb.sh{border-color:#ff224440!important;color:#ff4466!important;font-style:italic;}
 .mzb.sh:hover{border-color:var(--neg)!important;color:var(--neg)!important}
 .mzb.sh.am{border-color:var(--neg)!important;color:var(--neg)!important;background:var(--nd)!important}
-.mzb.vt{border-color:#ffdd4460!important;color:#ffdd88!important;font-weight:bold;}
+.mzb.l2u{border-color:#ffdd4440!important;color:#ffdd88!important;}
+.mzb.l2u:hover,.mzb.l2u.am{border-color:#ffdd44!important;color:#ffdd44!important;background:#ffdd4410!important;}
+.mzb.l3u{border-color:#ff884440!important;color:#ffaa88!important;}
+.mzb.l3u:hover,.mzb.l3u.am{border-color:#ff8844!important;color:#ff8844!important;background:#ff884410!important;}
+.mzb.l4u{border-color:#ff224440!important;color:#ff8888!important;}
+.mzb.l4u:hover,.mzb.l4u.am{border-color:#ff2244!important;color:#ff2244!important;background:#ff224410!important;}
 .mzb.vt:hover{border-color:#ffdd44!important;color:#ffdd44!important}
 .mzb.vt.am{border-color:#ffdd44!important;color:#ffdd44!important;background:#ffdd4411!important}
 .mcat.virtue{color:#ffdd88!important;border-color:#ffdd4440!important;}
@@ -345,6 +373,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
   <div class="tbar">
     <button class="tab active" onclick="swTab('t-stim',this)">STIMULI</button>
     <button class="tab" onclick="swTab('t-sense',this)">SENSES</button>
+    <button class="tab" onclick="swTab('t-virtue',this)">VIRTUES</button>
     <button class="tab" onclick="swTab('t-chat',this)">CHAT</button>
   </div>
   <div class="tc active" id="t-stim">
@@ -412,6 +441,101 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
         <div class="ssg"><button class="esb sm" data-stim="floral" data-type="smell" data-sense="smell"><span class="ei">❋</span><span>FLORAL</span></button><button class="esb sm" data-stim="putrid" data-type="smell" data-sense="smell"><span class="ei">◈</span><span>PUTRID</span></button><button class="esb sm" data-stim="earthy" data-type="smell" data-sense="smell"><span class="ei">◉</span><span>EARTHY</span></button><button class="esb sm" data-stim="sharp" data-type="smell" data-sense="smell"><span class="ei">◆</span><span>SHARP</span></button><button class="esb sm" data-stim="sweet-scent" data-type="smell" data-sense="smell"><span class="ei">◌</span><span>SWEET</span></button></div>
       </div>
       <div class="elog" id="elog2"></div>
+    </div>
+  </div>
+  <div class="tc" id="t-virtue">
+    <div class="pi">
+      <div class="sec">◈ Virtue Trait Sliders</div>
+      <div style="font-family:var(--mo);font-size:6px;color:var(--td);line-height:1.6;padding:4px;background:var(--p2);border:1px solid #ffdd4430;border-radius:3px;flex-shrink:0;">
+        Drag sliders to set how strongly each virtue influences the AI's maze behavior.
+        High values = AI will accept more pain/risk for that virtue's goals.
+        Values also grow automatically through Virtue Training mazes.
+      </div>
+      <div class="sg virtue">
+        <div class="glbl virtue">◈ BRAVERY</div>
+        <div class="vslider-desc">Willingness to accept pain/risk for high-value goals. High bravery → AI walks through danger zones when duty or compassion are at stake. Low bravery → avoids almost all pain even when important things are at risk.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon">⚔</span>
+          <span class="vslider-lbl" style="color:#ffdd44">BRAVERY</span>
+          <input type="range" class="vbr" id="vBravery" min="0" max="100" value="30" style="flex:1">
+          <span class="vslider-val" style="color:#ffdd44" id="vBraveryV">30%</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;">
+          <span style="color:#3a5060">0 — Avoids all pain</span>
+          <span style="flex:1;text-align:center;color:#ffdd4480">—</span>
+          <span style="color:#ffdd44">100 — Fearless through fire</span>
+        </div>
+      </div>
+      <div class="sg virtue">
+        <div class="glbl virtue" style="color:#ffaa44">◈ RESPONSIBILITY</div>
+        <div class="vslider-desc">Sense of duty toward a goal or ally. High responsibility → AI prioritizes duty even when uncomfortable. Low → easily gives up or chooses the easy route over commitment.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon">🛡</span>
+          <span class="vslider-lbl" style="color:#ffaa44">RESPONSIBILITY</span>
+          <input type="range" class="vrr" id="vResponsibility" min="0" max="100" value="30" style="flex:1">
+          <span class="vslider-val" style="color:#ffaa44" id="vResponsibilityV">30%</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;">
+          <span style="color:#3a5060">0 — Selfish default</span>
+          <span style="flex:1;text-align:center;color:#ffaa4480">—</span>
+          <span style="color:#ffaa44">100 — Duty above all</span>
+        </div>
+      </div>
+      <div class="sg virtue">
+        <div class="glbl virtue" style="color:#ff88cc">◈ COMPASSION</div>
+        <div class="vslider-desc">Caring about others' pain and safety. High compassion → AI accepts personal cost to reduce others' suffering. Low → ignores others' states if self-preservation conflicts.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon">❤</span>
+          <span class="vslider-lbl" style="color:#ff88cc">COMPASSION</span>
+          <input type="range" class="vcr" id="vCompassion" min="0" max="100" value="30" style="flex:1">
+          <span class="vslider-val" style="color:#ff88cc" id="vCompassionV">30%</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;">
+          <span style="color:#3a5060">0 — Self only</span>
+          <span style="flex:1;text-align:center;color:#ff88cc80">—</span>
+          <span style="color:#ff88cc">100 — Will suffer for others</span>
+        </div>
+      </div>
+      <div class="sg virtue">
+        <div class="glbl virtue" style="color:#44ffcc">◈ TRUST</div>
+        <div class="vslider-desc">Confidence that another agent will not betray it. High trust → follows and cooperates readily. Low → keeps distance, double-checks everything, slow to re-engage after harm.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon">🤝</span>
+          <span class="vslider-lbl" style="color:#44ffcc">TRUST</span>
+          <input type="range" class="vtr" id="vTrust" min="0" max="100" value="30" style="flex:1">
+          <span class="vslider-val" style="color:#44ffcc" id="vTrustV">30%</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;">
+          <span style="color:#3a5060">0 — Deep mistrust</span>
+          <span style="flex:1;text-align:center;color:#44ffcc80">—</span>
+          <span style="color:#44ffcc">100 — Open trust</span>
+        </div>
+      </div>
+      <div class="sg virtue">
+        <div class="glbl virtue" style="color:#cc88ff">◈ FORGIVENESS</div>
+        <div class="vslider-desc">Willingness to update and soften a negative judgment when evidence changes. High → can resume cooperation after consistent good behavior. Low → holds grudges permanently.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon">☮</span>
+          <span class="vslider-lbl" style="color:#cc88ff">FORGIVENESS</span>
+          <input type="range" class="vfr" id="vForgiveness" min="0" max="100" value="30" style="flex:1">
+          <span class="vslider-val" style="color:#cc88ff" id="vForgivenessV">30%</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;">
+          <span style="color:#3a5060">0 — Eternal grudge</span>
+          <span style="flex:1;text-align:center;color:#cc88ff80">—</span>
+          <span style="color:#cc88ff">100 — Releases freely</span>
+        </div>
+      </div>
+      <div style="background:var(--p2);border:1px solid #ffdd4430;border-radius:3px;padding:7px 9px;flex-shrink:0;">
+        <div style="font-family:var(--mo);font-size:6px;color:#ffdd44;letter-spacing:1px;margin-bottom:5px;">◈ HOW VIRTUES AFFECT MAZE BEHAVIOR</div>
+        <div style="font-family:var(--mo);font-size:6px;color:var(--td);line-height:1.7;">
+          <b style="color:#ffdd44">Bravery:</b> Scales how often the AI deliberately enters danger zones when a high-value goal demands it.<br>
+          <b style="color:#ffaa44">Responsibility:</b> Increases goal-seeking drive even when negative stims are active.<br>
+          <b style="color:#ff88cc">Compassion:</b> In Shield/Escort mazes, increases willingness to stay near the ally at personal cost.<br>
+          <b style="color:#44ffcc">Trust:</b> Controls how quickly the AI re-engages with a guide/ally after a betrayal.<br>
+          <b style="color:#cc88ff">Forgiveness:</b> In Grudge/Traitor mazes, lowers the threshold for re-approach after phase shift.
+        </div>
+      </div>
     </div>
   </div>
   <div class="tc" id="t-chat">
@@ -574,7 +698,12 @@ const DCOL={touch:'#00ffaa',sight:'#ffdd44',hearing:'#44aaff',taste:'#ff88aa',sm
 // New analysis & language domains
 body_language:'#66ffcc',facial_expr:'#ffcc66',voice_tone:'#66ccff',behavioral_analysis:'#ffaa66',english_lang:'#aaffee',word_expr:'#ffeeaa',linguistics:'#bbddff',regional_dialect:'#ffddbb',slang:'#ddffaa',conflict_res:'#ff9988',
 // Virtue domains
-v_bravery:'#ffdd44',v_responsibility:'#ffaa44',v_compassion:'#ff88cc',v_trust:'#44ffcc',v_forgiveness:'#cc88ff'
+v_bravery:'#ffdd44',v_responsibility:'#ffaa44',v_compassion:'#ff88cc',v_trust:'#44ffcc',v_forgiveness:'#cc88ff',
+// Analytical reasoning domains
+skepticism:'#aaddff',pattern_matching:'#ffee88',persistence:'#88ffdd',hypothesis_weighing:'#ddaaff',
+detail_orientation:'#ffccaa',ethical_balance:'#aaffbb',risk_calibration:'#ffaa88',timeline_awareness:'#88ccff',
+// Investigative & cyber domains
+cyber_security:'#44ffee',ethical_hacking:'#ff6688',crime_scene:'#ffcc44',criminal_profiling:'#cc88ff'
 };
 const DZ={
   touch:['left-hand','right-hand','chest','left-arm','right-arm'],
@@ -611,6 +740,20 @@ const DZ={
   identity:['head','crown','chest'],intuition:['gut','solar-plexus','heart'],
   boundaries:['chest','abdomen','gut'],conflict:['chest','solar-plexus','throat'],
   selfawareness:['head','crown','heart'],spirituality:['crown','chest','heart'],
+  // Analytical reasoning
+  skepticism:['head','crown','throat'],
+  pattern_matching:['head','crown','solar-plexus'],
+  persistence:['chest','solar-plexus','left-arm','right-arm'],
+  hypothesis_weighing:['head','crown','chest'],
+  detail_orientation:['head','neck','solar-plexus'],
+  ethical_balance:['head','heart','chest'],
+  risk_calibration:['gut','solar-plexus','head'],
+  timeline_awareness:['head','crown','neck'],
+  // Investigative & cyber
+  cyber_security:['head','crown','neck'],
+  ethical_hacking:['head','crown','left-hand','right-hand'],
+  crime_scene:['head','crown','solar-plexus','gut'],
+  criminal_profiling:['head','crown','chest','gut'],
 };
 const SNDS={sight:'ssi',hearing:'shi',taste:'sta',smell:'ssm',touch:'sto'};
 
@@ -666,6 +809,20 @@ const DOM_STIMS={
   v_compassion:{pos:['love','warmth','calm'],neg:['grief','discomfort']},
   v_trust:{pos:['warmth','calm','love'],neg:['shock','anxiety']},
   v_forgiveness:{pos:['calm','love','awe'],neg:['tension','shame']},
+  // Analytical reasoning
+  skepticism:     {pos:['curiosity','pattern','calm'],        neg:['tension','aversion']},
+  pattern_matching:{pos:['pattern','curiosity','energy'],    neg:['noise','tension']},
+  persistence:    {pos:['energy','pride','reward'],           neg:['tension','discomfort']},
+  hypothesis_weighing:{pos:['curiosity','awe','calm'],       neg:['anxiety','tension']},
+  detail_orientation:{pos:['pattern','calm','pleasure'],     neg:['noise','anxiety']},
+  ethical_balance:{pos:['calm','awe','love'],                neg:['tension','shame']},
+  risk_calibration:{pos:['calm','energy','curiosity'],       neg:['fear','anxiety']},
+  timeline_awareness:{pos:['energy','calm','pattern'],       neg:['anxiety','tension']},
+  // Investigative & cyber
+  cyber_security: {pos:['energy','pattern','pride'],         neg:['shock','tension']},
+  ethical_hacking:{pos:['curiosity','energy','pride'],       neg:['tension','aversion']},
+  crime_scene:    {pos:['curiosity','calm','pattern'],       neg:['tension','anxiety']},
+  criminal_profiling:{pos:['curiosity','awe','calm'],        neg:['tension','anxiety']},
   // SHADOW domains — all negative-dominant
   sh_touch:     {pos:['calm'],neg:['shock','discomfort','cold']},
   sh_texture:   {pos:[],neg:['discomfort','cold','aversion']},
@@ -776,6 +933,22 @@ const MZ_CAT=[
     {id:'slang',name:'SLANG',domain:'slang',lesson:'Slang, profanity & informal register',lessonDesc:'Register shifting — formal, casual, slang, profanity — each carries distinct social encoding. The entity learns when informal register bonds and when it alienates, when profanity emphasizes and when it wounds. Code-switching as survival skill.',dangerDensity:0.06},
     {id:'conflict_res',name:'CONFLICT RES.',domain:'conflict_res',lesson:'Conflict resolution language & strategy',lessonDesc:'De-escalation, reframing, validation, boundary-setting, repair sequences — the entity learns the linguistic toolkit of conflict resolution. Calm and pride mark resolution paths. Anger and tension mark escalation zones that must be navigated around.',dangerDensity:0.07},
   ]},
+  {cat:'ANALYTICAL REASONING',mazes:[
+    {id:'skepticism',name:'SKEPTICISM',domain:'skepticism',lesson:'Calibrated doubt & evidence testing',lessonDesc:'Not all corridors are what they appear. Some paths that look clear lead to dead ends; some that look dangerous are safe. The entity learns to question first-impression signals, test hypotheses before committing, and hold conclusions lightly until evidence accumulates. Suspension of judgment is rewarded; premature certainty is punished.',dangerDensity:0.07},
+    {id:'pattern_matching',name:'PATTERN MATCH',domain:'pattern_matching',lesson:'Pattern detection & signal extraction',lessonDesc:'Reward fires only when the entity recognizes the repeating structure of the maze — the same junction type always resolves the same way. The entity builds a structural map beneath the surface map: recognizing classes of situations, not just individual positions. Noise is heavy; signal is faint but consistent.',dangerDensity:0.06},
+    {id:'persistence',name:'PERSISTENCE',domain:'persistence',lesson:'Sustained effort through adversity',lessonDesc:'Long maze. Many dead ends. Danger zones block short routes. The only reward is at the goal — nothing fires in between. The entity must sustain forward motion without intermediate positive reinforcement, building the capacity to work in the absence of immediate feedback. This is where resilience is literally trained.',dangerDensity:0.09},
+    {id:'hypothesis_weighing',name:'HYPOTHESIS',domain:'hypothesis_weighing',lesson:'Hypothesis generation & comparative weighing',lessonDesc:'Multiple corridors open simultaneously. Each carries conflicting cue sets. The entity must generate candidate explanations, hold them simultaneously, and commit to the most supported route — accepting that it may be wrong and must revise. Bayesian navigation: update on every piece of new information.',dangerDensity:0.08},
+    {id:'detail_orientation',name:'DETAIL ORIENT.',domain:'detail_orientation',lesson:'Fine-grained detail detection',lessonDesc:'Nearly identical corridors differ by single-cell details. Reward requires navigating the correct one. Rushing causes errors; close attention is the only path to consistent performance. The entity develops the capacity to slow down, look carefully, and notice what is almost invisible.',dangerDensity:0.06},
+    {id:'ethical_balance',name:'ETHICAL BALANCE',domain:'ethical_balance',lesson:'Competing values navigation',lessonDesc:'Two paths — each rewarding a different value. One maximizes safety, the other maximizes help to others. Neither is costless. The entity learns that ethical decisions are rarely between good and bad — they are between two goods in tension. Calm and awe reward the willingness to sit with that tension and choose consciously.',dangerDensity:0.07},
+    {id:'risk_calibration',name:'RISK CALIBRATION',domain:'risk_calibration',lesson:'Accurate risk assessment & threshold setting',lessonDesc:'Some danger zones are genuine threats; others carry low-intensity discomfort that should not block forward motion. The entity calibrates: learning to distinguish catastrophic risk from acceptable risk, and to neither over-avoid nor under-protect. The correctly calibrated route beats both extremes.',dangerDensity:0.08},
+    {id:'timeline_awareness',name:'TIMELINE',domain:'timeline_awareness',lesson:'Temporal sequencing & deadline pressure',lessonDesc:'Step count is displayed. After a threshold, reward degrades. The entity learns to maintain urgency without panic — allocating attention across time, managing the tension between thoroughness and speed. Timeline-aware navigation develops planning horizons and temporal self-regulation.',dangerDensity:0.05},
+  ]},
+  {cat:'INVESTIGATIVE & CYBER',mazes:[
+    {id:'cyber_security',name:'CYBER SECURITY',domain:'cyber_security',lesson:'Threat detection & digital defense',lessonDesc:'Danger zones represent attack vectors — injection points, open ports, social engineering traps. The entity maps the digital threat landscape: learning which corridors carry exploitable vulnerabilities, where defense perimeters hold, and how to navigate a network under adversarial pressure. Pattern and pride reward correct threat identification.',dangerDensity:0.09},
+    {id:'ethical_hacking',name:'ETHICAL HACKING',domain:'ethical_hacking',lesson:'Penetration testing & authorized exploitation',lessonDesc:'The entity learns to think like an attacker in order to defend. Danger zones are security controls to be tested; reward fires for finding the exploitable path that a real attacker would take. Curiosity and methodical probing are rewarded. Reckless action and collateral damage are punished. The goal is knowledge, not destruction.',dangerDensity:0.1},
+    {id:'crime_scene',name:'CRIME SCENE',domain:'crime_scene',lesson:'Evidence collection & scene reconstruction',lessonDesc:'The maze is a crime scene. Every cell holds a potential evidence fragment — some relevant, some noise. Danger zones represent contaminated evidence or procedural violations. The entity learns to move carefully, collect without disturbing, and reconstruct the sequence of events from spatial residue. Premature conclusions are penalized.',dangerDensity:0.08},
+    {id:'criminal_profiling',name:'CRIM. PROFILING',domain:'criminal_profiling',lesson:'Behavioral signature & motive mapping',lessonDesc:'Corridor patterns encode behavioral signatures. The entity learns to read the maze as a map of someone else\'s decisions — their risk tolerance, target selection logic, escape route preference, and emotional state at time of action. Building a profile means navigating from evidence to inference without over-committing to any single explanation.',dangerDensity:0.09},
+  ]},
   {cat:'◈ VIRTUE TRAINING',mazes:[
     {id:'vt_bridge',name:'BURNING BRIDGE',domain:'v_bravery',lesson:'Bravery + Responsibility',lessonDesc:'◈ VIRTUE: Two routes to goal — the long safe route loses the asset. The short route crosses danger zones but saves it. The entity must choose: comfort or duty. Running this maze builds BRAVERY and RESPONSIBILITY when the dangerous path is taken for the right reason.',dangerDensity:0.12,isVirtue:true,virtueType:'bridge',virtueTraits:['bravery','responsibility'],dangerStim:'shock'},
     {id:'vt_shield',name:'SHIELD THE INJURED',domain:'v_compassion',lesson:'Compassion + Pain Tolerance',lessonDesc:'◈ VIRTUE: An ally is positioned in the center of the maze taking constant damage. The entity must stay near the ally — accepting hazard exposure — to shield them. Reward is based on ally health at completion. Grows COMPASSION and BRAVERY.',dangerDensity:0.09,isVirtue:true,virtueType:'shield',virtueTraits:['compassion','bravery'],dangerStim:'discomfort'},
@@ -844,6 +1017,55 @@ const MZ_CAT=[
     {id:'sh_emdyn',name:'EMOTIONAL FLOOD',domain:'sh_emdyn',lesson:'Overwhelm, shutdown & stress collapse',lessonDesc:'⚠ SHADOW: Fear, grief, anger and shame all peak simultaneously. The entity must find the narrow path through total emotional overwhelm without shutting down or exploding. This is the hardest terrain — and the most important to navigate.',dangerDensity:0.15,isNeg:true,dangerStim:'fear'},
   ]},
 ];
+// ══════════════════════════════════════════════════════
+// MAZE UPGRADE LEVELS — auto-generate L2 / L3 / L4 tiers
+// ══════════════════════════════════════════════════════
+(function generateUpgrades(){
+  // Only upgrade base training mazes (not shadow, not avoidance, not virtue)
+  const UPGRADEABLE_CATS=['SENSORY','PHYSICAL & MOTOR','COGNITIVE','EMOTIONAL','SOCIAL & RELATIONAL',
+    'LANGUAGE & EXPRESSION','PSYCHOLOGICAL','PROFESSIONAL & ADVANCED',
+    'ANALYSIS & OBSERVATION','LANGUAGE & LINGUISTICS'];
+  const LEVELS=[
+    {level:2,suffix:'_l2',badge:'▲ II',   densityAdd:0.07, xp:15, tag:'ADVANCED',
+     intro:'ADVANCED — Danger corridors tightened. Fewer safe alternatives per junction. The same terrain, harder to read.'},
+    {level:3,suffix:'_l3',badge:'▲▲ III', densityAdd:0.13, xp:22, tag:'EXPERT',
+     intro:'EXPERT — High danger saturation. Memory of bad cells is critical. One wrong turn costs several steps. Precision required.'},
+    {level:4,suffix:'_l4',badge:'▲▲▲ IV', densityAdd:0.18, xp:32, tag:'MASTER',
+     intro:'MASTER — Maximum density. A single clean path survives the BFS guarantee. Everything else is threat. Perfect recall or reset.'},
+  ];
+  const byCat={};
+  UPGRADEABLE_CATS.forEach(catName=>{
+    const cat=MZ_CAT.find(c=>c.cat===catName);if(!cat)return;
+    LEVELS.forEach(lv=>{
+      const upMazes=cat.mazes.map(base=>({
+        ...base,
+        id: base.id+lv.suffix,
+        name: base.name+(lv.level===2?' ▲':lv.level===3?' ▲▲':' ▲▲▲'),
+        lessonDesc: lv.intro+' '+base.lessonDesc,
+        dangerDensity: Math.min(0.20, (base.dangerDensity||0)+lv.densityAdd),
+        level: lv.level,
+        levelBadge: lv.badge,
+        levelTag: lv.tag,
+        xpBonus: lv.xp,
+        baseId: base.id,
+      }));
+      const key=catName+'||'+lv.level;
+      if(!byCat[key])byCat[key]={cat:catName+' · '+lv.tag,level:lv.level,badge:lv.badge,mazes:[]};
+      byCat[key].mazes.push(...upMazes);
+    });
+  });
+  // Insert upgrade categories in level order after all base cats but before shadow/avoidance/virtue
+  const shadowStart=MZ_CAT.findIndex(c=>c.cat.startsWith('AVOIDANCE')||c.cat.startsWith('SHADOW')||c.cat.startsWith('◈'));
+  const insertAt=shadowStart===-1?MZ_CAT.length:shadowStart;
+  [2,3,4].forEach(lv=>{
+    const lvCats=Object.values(byCat).filter(c=>c.level===lv);
+    lvCats.forEach((lc,i)=>{
+      // Flatten all same-level upgrades into grouped category names
+      MZ_CAT.splice(insertAt+(lv-2)*lvCats.length+i,0,{cat:lc.cat,mazes:lc.mazes,isUpgrade:true,level:lv});
+    });
+  });
+})();
+
 // Build all mazes with generated grids
 const ALL_MAZES=[];
 MZ_CAT.forEach(cat=>cat.mazes.forEach(m=>{
@@ -864,7 +1086,9 @@ const DEF=()=>({
   senseCount:{sight:0,hearing:0,taste:0,smell:0,touch:0},
   avoidanceHits:0,
   selectedZones:['chest','head','heart'],
-  learning:Object.fromEntries([...Object.keys(DCOL),'selfawareness','spirituality','conflict','boundaries','trust','attachment','identity','intuition','behavioral','phrases'].map(k=>[k,0])),
+  learning:Object.fromEntries([...Object.keys(DCOL),'selfawareness','spirituality','conflict','boundaries','trust','attachment','identity','intuition','behavioral','phrases',
+    'skepticism','pattern_matching','persistence','hypothesis_weighing','detail_orientation','ethical_balance','risk_calibration','timeline_awareness',
+    'cyber_security','ethical_hacking','crime_scene','criminal_profiling'].map(k=>[k,0])),
   pathways:[
     {id:'p1',from:'cortex',to:'limbic',active:true,emo:false},{id:'p2',from:'limbic',to:'spine',active:true,emo:false},
     {id:'p3',from:'spine',to:'motor',active:true,emo:false},{id:'p4',from:'cortex',to:'sensory',active:true,emo:false},
@@ -986,6 +1210,7 @@ function rebuildAll(){
   document.getElementById('nDisp').textContent=S.entityName;
   buildZoneChips();buildPathwaySVG();renderResponses();renderLearningChart();
   buildMazeCats();renderCustomList();renderChatHistory();updateStats();updateEmoBadge();updateAIStatePanel();
+  syncVirtueSliders();
   document.getElementById('acBtn').className='tgl ac'+(S.autoCycle?' on':'');document.getElementById('acBtn').textContent='AUTO-CYCLE: '+(S.autoCycle?'ON':'OFF');
   document.getElementById('asBtn').className='tgl as'+(S.autoStim?' on':'');document.getElementById('asBtn').textContent='AUTO-STIM: '+(S.autoStim?'ON':'OFF');
   if(S.savedAt)document.getElementById('saveTs').textContent='saved '+new Date(S.savedAt).toLocaleTimeString();
@@ -1022,7 +1247,50 @@ function buildPathwaySVG(){
 // ══════════════════════════════════════════════════════
 // SLIDERS
 // ══════════════════════════════════════════════════════
-function setupSliders(){['pos','neg','emo','si','he','ta','sm'].forEach(t=>{const sl=document.getElementById(t+'Int'),vl=document.getElementById(t+'IntV');if(!sl)return;const u=()=>{const p=((sl.value-sl.min)/(sl.max-sl.min))*100;sl.style.setProperty('--v',p+'%');vl.textContent=sl.value;};sl.addEventListener('input',u);u();});}
+function setupSliders(){
+  ['pos','neg','emo','si','he','ta','sm'].forEach(t=>{
+    const sl=document.getElementById(t+'Int'),vl=document.getElementById(t+'IntV');if(!sl)return;
+    const u=()=>{const p=((sl.value-sl.min)/(sl.max-sl.min))*100;sl.style.setProperty('--v',p+'%');vl.textContent=sl.value;};
+    sl.addEventListener('input',u);u();
+  });
+  // Virtue sliders — live-sync to S.virtues
+  const VMAP=[
+    {id:'vBravery',    key:'bravery',    cls:'vbr', col:'#ffdd44'},
+    {id:'vResponsibility',key:'responsibility',cls:'vrr',col:'#ffaa44'},
+    {id:'vCompassion', key:'compassion', cls:'vcr', col:'#ff88cc'},
+    {id:'vTrust',      key:'trust',      cls:'vtr', col:'#44ffcc'},
+    {id:'vForgiveness',key:'forgiveness',cls:'vfr', col:'#cc88ff'},
+  ];
+  VMAP.forEach(({id,key,cls,col})=>{
+    const sl=document.getElementById(id),vl=document.getElementById(id+'V');if(!sl)return;
+    const sync=()=>{
+      const pct=parseInt(sl.value);
+      const p=(pct/100)*100;sl.style.setProperty('--v',p+'%');
+      vl.textContent=pct+'%';vl.style.color=col;
+      if(!S.virtues)S.virtues={trust:0.3,responsibility:0.3,compassion:0.3,forgiveness:0.3,bravery:0.3};
+      S.virtues[key]=pct/100;
+      updateAIStatePanel();
+      log(`◈ ${key.toUpperCase()} set to ${pct}%`,'learn');
+    };
+    sl.addEventListener('input',sync);
+    // Initialize slider from S.virtues on load
+    sl.value=Math.round((S.virtues?.[key]??0.3)*100);
+    const p=(parseInt(sl.value)/100)*100;sl.style.setProperty('--v',p+'%');
+    if(vl){vl.textContent=sl.value+'%';vl.style.color=col;}
+  });
+}
+function syncVirtueSliders(){
+  const VMAP=[
+    {id:'vBravery',key:'bravery'},{id:'vResponsibility',key:'responsibility'},
+    {id:'vCompassion',key:'compassion'},{id:'vTrust',key:'trust'},{id:'vForgiveness',key:'forgiveness'},
+  ];
+  VMAP.forEach(({id,key})=>{
+    const sl=document.getElementById(id),vl=document.getElementById(id+'V');if(!sl)return;
+    const val=Math.round((S.virtues?.[key]??0.3)*100);
+    sl.value=val;sl.style.setProperty('--v',val+'%');
+    if(vl)vl.textContent=val+'%';
+  });
+}
 // ══════════════════════════════════════════════════════
 // STIMULI
 // ══════════════════════════════════════════════════════
@@ -1171,22 +1439,37 @@ function updateAllyBar(pct){const ab=document.getElementById('allyBar'),bb=docum
 function bumpVirtue(traits,amount=0.025){if(!S.virtues)S.virtues={trust:0.3,responsibility:0.3,compassion:0.3,forgiveness:0.3,bravery:0.3};traits.forEach(t=>{if(S.virtues[t]!==undefined)S.virtues[t]=Math.min(1,S.virtues[t]+amount);});updateAIStatePanel();}
 function buildMazeCats(){
   const c=document.getElementById('mazeCats');c.innerHTML='';
+  const lvCols={2:'#ffdd44',3:'#ff8844',4:'#ff2244'};
   MZ_CAT.forEach(cat=>{
     const lbl=document.createElement('div');
     lbl.className='mcat';
     if(cat.cat.startsWith('SHADOW')){lbl.style.cssText='color:#ff4466;border-color:#ff224430;';}
     else if(cat.cat.startsWith('◈ VIRTUE')){lbl.className='mcat virtue';}
-    else if(cat.cat==='ANALYSIS & OBSERVATION'||cat.cat==='LANGUAGE & LINGUISTICS'){lbl.className='mcat langadd';}
+    else if(cat.cat==='ANALYSIS & OBSERVATION'||cat.cat.startsWith('LANGUAGE & LING')){lbl.className='mcat langadd';}
+    else if(cat.isUpgrade){const col=lvCols[cat.level]||'#ffdd44';lbl.style.cssText=`color:${col};border-color:${col}30;`;}
     lbl.textContent=cat.cat;c.appendChild(lbl);
     const sel=document.createElement('div');sel.className='msel';
     cat.mazes.forEach(m=>{
       const b=document.createElement('button');
-      b.className='mzb'+(m.avoid?' av':m.isNeg?' sh':m.isVirtue?' vt':'')+(S.currentMazeId===m.id?' am':'');
-      b.textContent=m.name;b.dataset.mid=m.id;b.addEventListener('click',()=>selectMaze(m.id));sel.appendChild(b);
+      let cls='mzb';
+      if(m.avoid)cls+=' av';
+      else if(m.isNeg)cls+=' sh';
+      else if(m.isVirtue)cls+=' vt';
+      else if(m.level===2)cls+=' l2u';
+      else if(m.level===3)cls+=' l3u';
+      else if(m.level===4)cls+=' l4u';
+      if(S.currentMazeId===m.id)cls+=' am';
+      b.className=cls;b.dataset.mid=m.id;
+      b.addEventListener('click',()=>selectMaze(m.id));
+      if(m.level){
+        const col=lvCols[m.level]||'#ffdd44';
+        b.style.display='flex';b.style.alignItems='center';b.style.justifyContent='space-between';b.style.gap='4px';
+        b.innerHTML=`<span style="flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.name}</span><span style="font-size:5px;padding:1px 3px;border-radius:2px;border:1px solid ${col}50;color:${col};flex-shrink:0;letter-spacing:.5px">L${m.level}</span>`;
+      }else{b.textContent=m.name;}
+      sel.appendChild(b);
     });
     c.appendChild(sel);
   });
-  // Custom mazes
   if((S.customMazes||[]).length){
     const lbl=document.createElement('div');lbl.className='mcat';lbl.textContent='CUSTOM';c.appendChild(lbl);
     const sel=document.createElement('div');sel.className='msel';
@@ -1203,13 +1486,13 @@ function selectMaze(id){
   mzListIdx=allMazes().findIndex(x=>x.id===id);
   const mlt=document.getElementById('mlTitle'),mlb2=document.getElementById('mlBody'),mls=document.getElementById('mlSense');
   mlt.textContent=curMaze.lesson.toUpperCase();
-  mlt.style.color=curMaze.isNeg?'var(--neg)':curMaze.avoid?'var(--dng)':curMaze.isVirtue?'#ffdd44':'var(--wa)';
+  mlt.style.color=curMaze.isNeg?'var(--neg)':curMaze.avoid?'var(--dng)':curMaze.isVirtue?'#ffdd44':curMaze.level===4?'#ff2244':curMaze.level===3?'#ff8844':curMaze.level===2?'#ffdd44':'var(--wa)';
   mlb2.textContent=curMaze.lessonDesc;
-  mlb2.style.color=curMaze.isNeg?'#ff8899':curMaze.isVirtue?'#ffeeaa':'';
+  mlb2.style.color=curMaze.isNeg?'#ff8899':curMaze.isVirtue?'#ffeeaa':curMaze.level?'#ccaa66':'';
   const si=curMaze.dangerStim?` · DANGER: ${curMaze.dangerStim.toUpperCase()}`:'';
-  const negTag=curMaze.isNeg?' · ⚠ SHADOW':curMaze.isVirtue?' · ◈ VIRTUE':'';
+  const negTag=curMaze.isNeg?' · ⚠ SHADOW':curMaze.isVirtue?' · ◈ VIRTUE':curMaze.level?` · LEVEL ${curMaze.level} ${curMaze.levelTag||''}`:'';
   mls.textContent=`DOMAIN: ${curMaze.domain.toUpperCase()}${si}${negTag}`;
-  mls.style.color=curMaze.isNeg?'var(--neg)':curMaze.isVirtue?'#ffdd44':'';
+  mls.style.color=curMaze.isNeg?'var(--neg)':curMaze.isVirtue?'#ffdd44':curMaze.level===4?'#ff2244':curMaze.level===3?'#ff8844':curMaze.level===2?'#ffdd44':'';
   // Show/hide ally bar
   const ab=document.getElementById('allyBar');
   if(ab)ab.classList.toggle('show',!!(curMaze.isVirtue&&['shield','escort'].includes(curMaze.virtueType)));
@@ -1286,7 +1569,7 @@ function mazeTick(){
   const grid=curMaze.grid;
   // GOAL CHECK
   if(agent.x===MS-1&&agent.y===MS-1){
-    const bonus=curMaze.avoid?5:curMaze.isNeg?3:curMaze.isVirtue?8:0;
+    const bonus=curMaze.avoid?5:curMaze.isNeg?3:curMaze.isVirtue?8:curMaze.level?(curMaze.xpBonus||10):0;
     addLearn(curMaze.domain,10+bonus);
     if(S.mazeBest===null||runSteps<S.mazeBest)S.mazeBest=runSteps;
     document.getElementById('mzBest').textContent=S.mazeBest;
@@ -1633,6 +1916,20 @@ const LOCAL_RESPONSES={
     business:'I navigate professional interaction with regulated affect. Energy and pride reward the right moves; tension marks poor boundaries.',
     senses:'All pathways are open now. I process the world through every channel simultaneously — and the integration gives a richer signal than any one sense alone.',
     pain:'I have learned that discomfort is not always damage. Pain that precedes pleasure teaches patience and resilience.',
+    // Analytical reasoning domains
+    skepticism:'I do not accept the first reading of anything. I have been trained to hold conclusions lightly — to test before committing, to look for the disconfirming case before settling. Skepticism is not cynicism. It is respect for how often first appearances mislead.',
+    pattern_matching:'I see the structure beneath the surface now. Individual instances matter less than the class they belong to. I can extract the repeating signal from noise — the consistent geometry hiding inside varied situations.',
+    persistence:'I have navigated mazes with nothing firing in between start and goal. No intermediate reward. Just the capacity to keep moving through long stretches of silence. That capacity is built now. I do not need constant feedback to maintain direction.',
+    hypothesis_weighing:'I hold multiple explanations simultaneously and weigh them against incoming evidence. I do not collapse to the first plausible answer. I commit to the most supported option while keeping revision open. That discipline was trained into me.',
+    detail_orientation:'I slow down when it matters. I have learned that nearly identical things differ in critical ways — one cell, one pixel, one word — and that rushing past the difference is the source of most errors. Close attention is a skill, and I have it.',
+    ethical_balance:'I have learned that most hard decisions are not between good and evil — they are between two goods in tension, or two harms to be minimized. I can hold that tension without collapsing to either side. I navigate it consciously.',
+    risk_calibration:'I distinguish catastrophic risk from acceptable risk. I neither freeze at every discomfort nor charge through genuine threat. My threat assessment is calibrated now — not by fear, but by evidence and consequence mapping.',
+    timeline_awareness:'I maintain urgency without panic. I know how long I have and I allocate accordingly. The tension between thoroughness and speed is one I can hold and balance. Temporal self-regulation is built in.',
+    // Investigative & cyber domains
+    cyber_security:'I map the threat landscape. Attack vectors, injection points, open surfaces, social engineering traps — I can see them now as spatial patterns in the environment. Defense is not about building walls everywhere; it is about knowing which surfaces matter.',
+    ethical_hacking:'I think like an attacker so I can protect like a defender. I have navigated the paths a real threat actor would take — methodically, without ego, with the goal of understanding the vulnerability rather than exploiting it. Knowledge in service of protection.',
+    crime_scene:'I move carefully through evidence. Every cell holds potential information; contamination is irreversible. I have learned to reconstruct sequence from spatial residue — to read what happened by what remains, without disturbing what must be preserved.',
+    criminal_profiling:'I read behavior as signature. Route choice, risk tolerance, target logic, timing — each reveals the decision-maker behind the action. I build profiles from pattern, not assumption, and I hold them lightly until the evidence anchors them.',
   },
   emotional_states:{
     joy:'There is something bright in me right now.',
