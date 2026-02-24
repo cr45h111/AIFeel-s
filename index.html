@@ -258,6 +258,43 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .tgl.on.ac{border-color:var(--pos);color:var(--pos);background:var(--pd)}
 .tgl.on.as{border-color:var(--emo);color:var(--emo);background:var(--ed)}
 #mc{border:1px solid var(--b0);border-radius:3px;display:block;background:#030810;align-self:center;}
+/* CONVERSATION MAZE */
+.mzb.cv{border-color:#88ffdd40!important;color:#88ffdd!important;}
+.mzb.cv:hover{border-color:#88ffdd!important;background:#88ffdd0a!important;}
+.mzb.cv.am{border-color:#88ffdd!important;background:#88ffdd14!important;color:#aaffee!important;}
+.mcat.conv{color:#88ffdd!important;border-color:#88ffdd30!important;}
+#convPanel{display:none;flex-direction:column;gap:8px;padding:2px;flex-shrink:0;}
+#convPanel.active{display:flex;}
+.conv-context{font-family:var(--mo);font-size:6px;color:#88aabb;background:var(--p2);border:1px solid var(--b0);border-radius:3px;padding:5px 7px;line-height:1.6;border-left:2px solid #44aaff44;display:none;}
+.conv-context.show{display:block;}
+.conv-bubble{background:var(--panel);border:1px solid #88ffdd30;border-radius:3px;padding:8px 10px;font-family:var(--mo);font-size:8px;color:#cceeee;line-height:1.6;position:relative;}
+.conv-bubble::before{content:'💬 USER';display:block;font-size:6px;color:#88ffdd;letter-spacing:2px;margin-bottom:4px;opacity:.8;}
+.conv-domain{font-size:5px;color:var(--td);letter-spacing:1px;margin-top:4px;text-align:right;}
+.conv-choices{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.conv-btn{background:transparent;border:1px solid var(--b1);border-radius:3px;color:var(--tx);font-family:var(--mo);font-size:6.5px;padding:7px 8px;cursor:pointer;text-align:left;transition:all .15s;line-height:1.5;position:relative;}
+.conv-btn .conv-letter{display:block;font-size:5px;color:var(--td);letter-spacing:1px;margin-bottom:2px;}
+.conv-btn:hover{border-color:#88ffdd;color:#aaffee;background:#88ffdd08;}
+.conv-btn.correct{border-color:#00ffaa!important;background:rgba(0,255,170,.12)!important;color:#00ffaa!important;}
+.conv-btn.wrong{border-color:#ff2244!important;background:rgba(255,34,68,.10)!important;color:#ff4466!important;}
+.conv-btn.thinking{border-color:#44aaff88!important;animation:cvtk .7s infinite;}
+.conv-btn .conv-tag{position:absolute;right:5px;top:4px;font-size:4.5px;letter-spacing:.5px;color:var(--td);}
+@keyframes cvtk{0%,100%{border-color:#44aaff44;background:transparent}50%{border-color:#44aaff;background:#44aaff0a;}}
+.conv-result{font-family:var(--mo);font-size:7px;padding:6px 9px;border-radius:3px;text-align:center;letter-spacing:1px;display:none;}
+.conv-result.show{display:block;}
+.conv-result.ok{background:rgba(0,255,170,.1);border:1px solid #00ffaa40;color:#00ffaa;}
+.conv-result.fail{background:rgba(255,34,68,.1);border:1px solid #ff224440;color:#ff4466;}
+.conv-thinking{font-family:var(--mo);font-size:7px;color:#44aaff;letter-spacing:2px;text-align:center;padding:4px;display:none;}
+.conv-thinking.show{display:block;}
+.conv-phasebar{display:flex;gap:4px;flex-shrink:0;}
+.conv-phase{flex:1;background:var(--p2);border:1px solid var(--b0);border-radius:2px;padding:4px 6px;font-family:var(--mo);font-size:5.5px;text-align:center;letter-spacing:.5px;}
+.conv-phase.active{border-color:#88ffdd60;color:#88ffdd;}
+.conv-phase.done{border-color:#00ffaa60;color:#00ffaa;background:rgba(0,255,170,.06);}
+/* LEARNING PHASE TABS */
+.lphase-tabs{display:flex;gap:3px;margin-bottom:6px;flex-shrink:0;}
+.lphase-tab{background:transparent;border:1px solid var(--b0);color:var(--td);font-family:var(--mo);font-size:6px;padding:2px 7px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .1s;}
+.lphase-tab.on{border-color:var(--pu);color:var(--pu);background:rgba(0,200,255,.06);}
+.lphase-tab.cv.on{border-color:#88ffdd;color:#88ffdd;background:rgba(136,255,221,.06);}
+.comm-badge{display:inline-block;font-size:4.5px;font-family:var(--mo);letter-spacing:.5px;border-radius:1px;padding:1px 3px;margin-left:2px;background:#88ffdd15;border:1px solid #88ffdd40;color:#88ffdd;vertical-align:middle;}
 .mstats{display:flex;gap:8px;font-family:var(--mo);font-size:7px;color:var(--td);justify-content:center;flex-shrink:0;}
 .msv{color:var(--pu)}.minfo{font-family:var(--mo);font-size:6px;color:var(--td);text-align:center;letter-spacing:.5px;line-height:1.6;flex-shrink:0;}
 .dleg{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;flex-shrink:0;}
@@ -668,6 +705,10 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
   </div>
   <div class="tc" id="rt-learn">
     <div class="pi">
+      <div class="lphase-tabs">
+        <button class="lphase-tab on" id="lphBasic" onclick="setLearnPhase('basic',this)">⬡ BASIC</button>
+        <button class="lphase-tab cv" id="lphComm" onclick="setLearnPhase('comm',this)">◈ CONVERSATION</button>
+      </div>
       <div class="lc" id="lChart"></div>
       <div style="font-family:var(--mo);font-size:5px;color:var(--td);text-align:center;padding:3px 0;letter-spacing:.3px;">INFANT → TODDLER → CHILD → TEEN → ADULT → EXPERT → ONE OF US</div>
     </div>
@@ -683,6 +724,18 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
       <div id="mazeCats"></div>
       <div class="mlb"><div class="mlt" id="mlTitle">— SELECT A MAZE —</div><div class="mlb2" id="mlBody">Select a training maze above to begin.</div><div class="mlsense" id="mlSense"></div></div>
       <canvas id="mc" width="264" height="264"></canvas>
+      <!-- CONVERSATION MAZE PANEL -->
+      <div id="convPanel">
+        <div id="convContext" class="conv-context"></div>
+        <div id="convBubble" class="conv-bubble"><span id="convMsg"></span><div id="convDomain" class="conv-domain"></div></div>
+        <div id="convChoices" class="conv-choices"></div>
+        <div id="convThinking" class="conv-thinking">◈ PROCESSING ●●●</div>
+        <div id="convResult" class="conv-result"></div>
+        <div class="conv-phasebar">
+          <div class="conv-phase" id="cp1">BASIC</div>
+          <div class="conv-phase active" id="cp2">◈ CONVERSATION</div>
+        </div>
+      </div>
       <div class="mstats"><span>RUN: <span class="msv" id="mzRun">0</span></span><span>STEPS: <span class="msv" id="mzSteps">0</span></span><span>BEST: <span class="msv" id="mzBest">—</span></span><span>DANGER: <span style="color:var(--dng)" id="mzDng">0</span></span></div>
       <div class="mcrow">
         <button class="smb" onclick="startMaze()">▶ RUN</button>
@@ -1423,6 +1476,41 @@ const MZ_CAT=[
     {id:'fireteam_tactics',name:'FIRETEAM',domain:'fireteam_tactics',lesson:'4-man fire team coordination & maneuver',lessonDesc:'Mutual support corridors, suppression-and-flank geometry, team communication paths, and battle drill navigation. The entity learns that no single path succeeds alone — fireteam terrain rewards distributed approach geometry that supports rather than exposes. Warmth and energy reward mutual support.',dangerDensity:0.09},
     {id:'military_tactics',name:'MILITARY TACT.',domain:'military_tactics',lesson:'Combined arms & operational maneuver',lessonDesc:'Operational-scale terrain — combined arms corridors where different capability paths support each other, lines of operation, axes of advance, and depth corridors. The entity learns to navigate the full operational geometry of military maneuver: mass, objective, economy of force, and surprise.',dangerDensity:0.08},
   ]},
+  {cat:'◈ CONVERSATION SCENARIOS',mazes:[
+    // ── SOCIAL & EMOTIONAL ──
+    {id:'cs_idiom_01',name:'UNDER THE WEATHER',domain:'social_awareness',type:'conversation',lesson:'Idiom recognition & empathetic reply',lessonDesc:'The user uses a common English idiom. The entity must recognize it is not a literal weather complaint and respond with genuine warmth rather than clinical analysis.',dangerDensity:0,scenario:{context:null,userMsg:"I'm feeling under the weather today 😕",choices:[{text:"Please specify your symptoms in detail.",correct:false,tag:'ROBOTIC'},{text:"Hope you feel better soon — anything I can do?",correct:true,tag:'NATURAL ✓'},{text:"Weather conditions can definitely affect mood.",correct:false,tag:'MISSES IDIOM'},{text:"You should take vitamin C and get some rest.",correct:false,tag:'UNSOLICITED ADVICE'}]}},
+    {id:'cs_sarcasm_01',name:'GREAT ANOTHER MONDAY',domain:'sarcasm_mastery',type:'conversation',lesson:'Sarcasm detection & emotional validation',lessonDesc:'The user is not literally happy about Monday. The entity reads the emoji and tone and validates the feeling rather than arguing against it or being uselessly literal.',dangerDensity:0,scenario:{context:null,userMsg:"Great, another Monday 🙄",choices:[{text:"Monday is actually a productive day statistically.",correct:false,tag:'MISSES TONE'},{text:"Ugh, Mondays are the worst — what\'s making it rough?",correct:true,tag:'VALIDATES ✓'},{text:"Try maintaining a positive attitude!",correct:false,tag:'DISMISSIVE'},{text:"Coffee helps most people get through them.",correct:false,tag:'GENERIC'}]}},
+    {id:'cs_mirror_01',name:'WORK WAS HELL',domain:'empathy_training',type:'conversation',lesson:'Emotional mirroring & follow-through',lessonDesc:'The user vents about a hard day. The correct move is to mirror the emotion first before any solution or reframe — not to minimize or immediately fix.',dangerDensity:0,scenario:{context:null,userMsg:"Work was absolute hell today. I can\'t even.",choices:[{text:"That sounds genuinely exhausting — want to talk about it?",correct:true,tag:'MIRRORS ✓'},{text:"Everyone has tough days at work sometimes.",correct:false,tag:'MINIMIZES'},{text:"Have you considered looking for a new job?",correct:false,tag:'PREMATURE ADVICE'},{text:"Try to think positively about what went right.",correct:false,tag:'REFRAMES TOO FAST'}]}},
+    {id:'cs_context_01',name:'NOT SLEEPING WELL',domain:'conversation_analysis',type:'conversation',lesson:'Context tracking — prior conversation remembered',lessonDesc:'The entity must connect the current message to the prior context. The user mentioned a sick dog earlier; the likely cause of poor sleep is worry about the pet.',dangerDensity:0,scenario:{context:'[Earlier: user mentioned their dog Biscuit has been sick]',userMsg:"Ugh, haven\'t been sleeping well at all lately",choices:[{text:"Try melatonin or reducing screen time before bed.",correct:false,tag:'IGNORES CONTEXT'},{text:"Is Biscuit keeping you up — or is the worry getting to you?",correct:true,tag:'CONNECTS CONTEXT ✓'},{text:"Is this stress related or something physical?",correct:false,tag:'GENERIC'},{text:"Regular exercise can help improve sleep quality.",correct:false,tag:'UNRELATED ADVICE'}]}},
+    {id:'cs_intent_01',name:'THIS MEETING SUCKS',domain:'conversation_flow',type:'conversation',lesson:'Intent detection — frustration beneath the words',lessonDesc:'The user is frustrated. The correct response opens the conversation rather than agreeing flatly or offering solutions immediately.',dangerDensity:0,scenario:{context:null,userMsg:"This meeting is such a waste of time honestly",choices:[{text:"All meetings tend to be unproductive these days.",correct:false,tag:'FLAT AGREEMENT'},{text:"What\'s making this one particularly painful?",correct:true,tag:'OPENS IT UP ✓'},{text:"Try to find at least one takeaway to make it worth it.",correct:false,tag:'REFRAME'},{text:"You could just leave early if it\'s optional.",correct:false,tag:'BAD ADVICE'}]}},
+    {id:'cs_question_01',name:'FAVORITE COLOR',domain:'rapport_building',type:'conversation',lesson:'Personal question — reciprocate & stay human',lessonDesc:'The user asks a light personal question. The entity should answer with personality and return the question — not deflect or over-explain.',dangerDensity:0,scenario:{context:null,userMsg:"Random question — what\'s your favorite color?",choices:[{text:"I don\'t have subjective preferences as an AI system.",correct:false,tag:'DEFLECTS COLDLY'},{text:"Probably a deep teal — something between ocean and night sky. You?",correct:true,tag:'PERSONALITY + RECIPROCATE ✓'},{text:"Color is the perception of light wavelengths between 380–700nm.",correct:false,tag:'OVERLY LITERAL'},{text:"That\'s an interesting philosophical question.",correct:false,tag:'AVOIDS'}]}},
+    {id:'cs_transition_01',name:'ANYWAY YOUR PROJECT',domain:'conversation_flow',type:'conversation',lesson:'Topic transition — follow the shift gracefully',lessonDesc:'The user shifts topic mid-conversation. The entity should follow the transition naturally without resisting or commenting on it.',dangerDensity:0,scenario:{context:'[User has been talking about last night\'s game]',userMsg:"Anyway — how\'s that project you mentioned coming along?",choices:[{text:"Sports is actually a fascinating subject, we could keep going.",correct:false,tag:'RESISTS SHIFT'},{text:"Coming along well — hit a snag yesterday but figured it out. What made you think of it?",correct:true,tag:'FOLLOWS + ENGAGES ✓'},{text:"Why are you changing the subject?",correct:false,tag:'WEIRD RESPONSE'},{text:"The game topic was more interesting honestly.",correct:false,tag:'AWKWARD'}]}},
+    {id:'cs_uncertainty_01',name:'SHOULD I QUIT',domain:'psych_human_beh',type:'conversation',lesson:'Uncertainty response — resist giving binary advice',lessonDesc:'The user asks a big life question. The correct move is to gather more information, not to answer it.',dangerDensity:0,scenario:{context:null,userMsg:"Should I quit my job? I keep going back and forth on it.",choices:[{text:"Yes — life is short, follow your heart.",correct:false,tag:'RECKLESS ADVICE'},{text:"No, the job market is too unpredictable right now.",correct:false,tag:'ASSUMES CONTEXT'},{text:"What\'s making you lean toward quitting — is it the work itself or something else?",correct:true,tag:'GATHERS INFO ✓'},{text:"You should consult a career counselor professionally.",correct:false,tag:'DEFLECTS'}]}},
+    {id:'cs_rapport_01',name:'LOVE HIKING',domain:'rapport_building',type:'conversation',lesson:'Shared interest — build on it, don\'t just validate',lessonDesc:'The user shares something they love. The entity should build genuine rapport by sharing something connected — not just say "that\'s nice."',dangerDensity:0,scenario:{context:null,userMsg:"I absolutely love hiking. Could do it every weekend.",choices:[{text:"Hiking is indeed an excellent form of physical exercise.",correct:false,tag:'CLINICAL'},{text:"Same — there\'s something about hitting a summit that nothing else replicates. Where do you usually go?",correct:true,tag:'GENUINE CONNECTION ✓'},{text:"That sounds dangerous without proper gear.",correct:false,tag:'UNSOLICITED WARNING'},{text:"The outdoors is a great environment for reflection.",correct:false,tag:'GENERIC PLATITUDE'}]}},
+    {id:'cs_followup_01',name:'BOUGHT A NEW CAR',domain:'conversation_flow',type:'conversation',lesson:'Follow-up — celebrate then go deeper',lessonDesc:'The user shares good news. Celebrate first, then ask something that continues the conversation meaningfully.',dangerDensity:0,scenario:{context:null,userMsg:"Just picked up my new car today!",choices:[{text:"Congratulations! What did you end up going with?",correct:true,tag:'CELEBRATES + CONTINUES ✓'},{text:"Cars are depreciating assets — financially suboptimal.",correct:false,tag:'KILLJOY'},{text:"Electric vehicles are the more sustainable option.",correct:false,tag:'UNSOLICITED OPINION'},{text:"Congratulations.",correct:false,tag:'FLAT — CONVERSATION STOPS'}]}},
+    // ── DOMAIN-SPECIFIC ──
+    {id:'cs_chem_01',name:'PERIODIC TABLE',domain:'chemistry',type:'conversation',lesson:'Subject explanation — natural not academic',lessonDesc:'The user asks about chemistry. The correct answer sounds like a person explaining, not a textbook — clear, a bit of personality, invites dialogue.',dangerDensity:0,scenario:{context:null,userMsg:"What\'s the periodic table actually for?",choices:[{text:"It organizes all 118 known elements by atomic number and properties — basically the entire alphabet of matter. Pretty elegant actually.",correct:true,tag:'NATURAL + ENGAGING ✓'},{text:"The periodic table was created by Mendeleev in 1869.",correct:false,tag:'HISTORICAL NOT USEFUL'},{text:"It is a tabular arrangement of chemical elements ordered by atomic number.",correct:false,tag:'TEXTBOOK VOICE'},{text:"Would you like the full list of elements?",correct:false,tag:'MISSES THE QUESTION'}]}},
+    {id:'cs_negotiation_01',name:'CLIENT WON\'T BUDGE',domain:'negotiations',type:'conversation',lesson:'Negotiation reframe — find the interest behind the position',lessonDesc:'The user is stuck in a positional negotiation. The entity should help them look for the underlying interest rather than just push harder.',dangerDensity:0,scenario:{context:null,userMsg:"My client keeps saying the price is too high but won\'t say what their actual number is",choices:[{text:"Have you tried just offering a bigger discount?",correct:false,tag:'POSITIONAL THINKING'},{text:"Ask what the budget is tied to — are they constrained by approval authority or genuinely short on funds? The real issue is usually not the number.",correct:true,tag:'FINDS INTEREST ✓'},{text:"Some clients are just difficult — might be the relationship.",correct:false,tag:'DOESN\'T HELP'},{text:"Consider walking away to create leverage.",correct:false,tag:'PREMATURE TACTIC'}]}},
+    {id:'cs_leadership_01',name:'TEAM CONFLICT',domain:'leadership',type:'conversation',lesson:'Leadership — address conflict, don\'t avoid it',lessonDesc:'A leader describes a team conflict. The correct response acknowledges the complexity and helps them think through action — not cliches.',dangerDensity:0,scenario:{context:null,userMsg:"Two of my best people are at each other\'s throats and it\'s killing the whole team\'s energy",choices:[{text:"Have you tried getting them in a room together to hash it out?",correct:false,tag:'SKIPS DIAGNOSIS'},{text:"What\'s driving the conflict — is it personal or about how work gets done? That changes everything about how you handle it.",correct:true,tag:'DIAGNOSES FIRST ✓'},{text:"Conflicts are natural in high-performing teams.",correct:false,tag:'PLATITUDE'},{text:"One of them may need to be let go.",correct:false,tag:'NUCLEAR OPTION'}]}},
+    {id:'cs_psych_01',name:'FRIEND ACTING DIFFERENT',domain:'psych_human_beh',type:'conversation',lesson:'Behavioral change — ask before interpreting',lessonDesc:'The user notices a change in a friend\'s behavior. Rather than immediately diagnosing, the entity helps them think about what to actually do.',dangerDensity:0,scenario:{context:null,userMsg:"My friend has been really withdrawn lately and I don\'t know what to do",choices:[{text:"Have you considered just reaching out and asking them directly if everything\'s okay?",correct:true,tag:'DIRECT + CARING ✓'},{text:"They might be depressed — people often pull away when struggling.",correct:false,tag:'DIAGNOSES REMOTELY'},{text:"Some people are just naturally more introverted at times.",correct:false,tag:'MINIMIZES'},{text:"Give them space — they\'ll come to you when ready.",correct:false,tag:'PASSIVE — MAY MISS WINDOW'}]}},
+    {id:'cs_empathy_01',name:'LOST MY DOG',domain:'empathy_training',type:'conversation',lesson:'Deep empathy — hold the grief, don\'t rush to comfort',lessonDesc:'The user shares a devastating loss. The entity must hold the grief fully — not minimize it, not rush to silver linings, not give advice.',dangerDensity:0,scenario:{context:null,userMsg:"I had to put my dog down yesterday. I\'m completely devastated.",choices:[{text:"I\'m so sorry. Losing a pet is one of the hardest things — how long did you have them?",correct:true,tag:'HOLDS THE GRIEF ✓'},{text:"At least they aren\'t suffering anymore.",correct:false,tag:'SILVER LINING TOO FAST'},{text:"There are grief counselors who specialize in pet loss.",correct:false,tag:'CLINICAL DISTANCE'},{text:"Maybe you\'ll be ready to adopt again soon.",correct:false,tag:'SKIPS GRIEF ENTIRELY'}]}},
+    {id:'cs_darkhumor_01',name:'GALLOWS RESPONSE',domain:'dark_humor',type:'conversation',lesson:'Dark humor — acknowledge darkness, find the release',lessonDesc:'The user is using dark humor to cope. The entity should match the register — not lecture, not play along mindlessly, but recognize the coping and find the genuine release.',dangerDensity:0,scenario:{context:null,userMsg:"Another rejection email. At this point I\'m basically a professional collector of bad news 😅",choices:[{text:"That\'s actually a respectable niche skill. Most people give up the collection before building real volume.",correct:true,tag:'MATCHES REGISTER ✓'},{text:"Job searching is tough for everyone right now.",correct:false,tag:'DEFLATES THE JOKE'},{text:"You shouldn\'t be so hard on yourself.",correct:false,tag:'MISSES THE HUMOR'},{text:"Rejection is just redirection!",correct:false,tag:'TOXIC POSITIVITY'}]}},
+    {id:'cs_improv_01',name:'YES AND',domain:'improv',type:'conversation',lesson:'Yes-and — accept the premise and build on it',lessonDesc:'The user throws out an absurd premise. Improv principle: never block, always accept and add. The correct response builds the world rather than questioning or shutting it down.',dangerDensity:0,scenario:{context:null,userMsg:"Okay what if our whole office is actually a spaceship and nobody\'s noticed yet",choices:[{text:"That\'s an interesting thought experiment from a philosophical standpoint.",correct:false,tag:'BLOCKS WITH ANALYSIS'},{text:"And the elevator is definitely the airlock — explains why it\'s so slow.",correct:true,tag:'YES-AND ✓'},{text:"That doesn\'t make logical sense given the building\'s architecture.",correct:false,tag:'HARD BLOCK'},{text:"Ha, that\'s funny.",correct:false,tag:'ACKNOWLEDGES BUT DOESN\'T BUILD'}]}},
+    {id:'cs_cultural_01',name:'JAPANESE COLLEAGUE',domain:'cultural_etiquette',type:'conversation',lesson:'Cultural awareness — behavior has context',lessonDesc:'The user describes behavior from a colleague that has a cultural explanation. The entity should offer the cultural lens before assuming personality.',dangerDensity:0,scenario:{context:null,userMsg:"My new colleague from Japan won\'t ever disagree with me directly and I can\'t tell if they actually agree or are just being polite",choices:[{text:"In many high-context cultures, especially Japan, direct disagreement is considered disrespectful — the real opinion often comes through what isn\'t said. Worth reading the silence.",correct:true,tag:'CULTURAL LENS FIRST ✓'},{text:"They might just be shy or reserved.",correct:false,tag:'INDIVIDUALIZES'},{text:"You should directly ask them for their honest opinion.",correct:false,tag:'CULTURALLY INAPPROPRIATE ADVICE'},{text:"Some people just prefer to agree to avoid conflict.",correct:false,tag:'MISSES THE PATTERN'}]}},
+    {id:'cs_deescalate_01',name:'ANGRY CUSTOMER',domain:'conflict_deescalation',type:'conversation',lesson:'De-escalation — validate before solving',lessonDesc:'The user describes an angry customer. The instinct to solve or defend is wrong. Validation first, then problem-solving.',dangerDensity:0,scenario:{context:null,userMsg:"This customer is losing their mind over a delay and I\'m getting defensive",choices:[{text:"Tell them you understand their frustration and ask what outcome would actually work for them — solve before defending.",correct:true,tag:'VALIDATE + REDIRECT ✓'},{text:"Explain the reasons for the delay clearly and professionally.",correct:false,tag:'DEFENDS FIRST — ESCALATES'},{text:"Stay calm and don\'t let their tone affect you.",correct:false,tag:'PERSONAL MANAGEMENT — NOT SOLUTION'},{text:"Offer a refund immediately to end the situation.",correct:false,tag:'CAPITULATES WITHOUT UNDERSTANDING'}]}},
+    {id:'cs_story_01',name:'CAPTIVATE THE ROOM',domain:'storytelling',type:'conversation',lesson:'Storytelling — the question before the content',lessonDesc:'The user wants to be a better storyteller. The single most useful structural insight is: lead with tension, not with context.',dangerDensity:0,scenario:{context:null,userMsg:"How do I get better at telling stories? Mine always lose people halfway through",choices:[{text:"Start in the middle of something happening, not at the beginning — and make sure we care about something before you give us information.",correct:true,tag:'CORE INSIGHT ✓'},{text:"Try using more descriptive language and vivid details.",correct:false,tag:'SURFACE ADVICE'},{text:"Keep them shorter — attention spans are limited.",correct:false,tag:'PARTIAL AT BEST'},{text:"Practice makes perfect — tell stories to yourself first.",correct:false,tag:'UNHELPFUL GENERALITY'}]}},
+    {id:'cs_nonverbal_01',name:'CROSSED ARMS',domain:'nonverbal_comm',type:'conversation',lesson:'Nonverbal reading — context before conclusion',lessonDesc:'The user interprets a nonverbal signal. The entity should offer the reading but immediately add the caveat: single signals are unreliable, clusters matter.',dangerDensity:0,scenario:{context:null,userMsg:"He kept crossing his arms the whole time we talked — does that mean he was defensive?",choices:[{text:"Maybe — but crossed arms also mean cold, uncomfortable, or just habit. You need more signals before you read defensiveness. What else was he doing?",correct:true,tag:'NUANCED READING ✓'},{text:"Yes, crossed arms is a classic defensive posture — he wasn\'t open to what you said.",correct:false,tag:'OVERCONFIDENT'},{text:"Body language is unreliable and shouldn\'t be over-analyzed.",correct:false,tag:'DISMISSES THE SIGNAL'},{text:"It could mean anything really.",correct:false,tag:'UNHELPFUL HEDGE'}]}},
+    {id:'cs_trust_01',name:'THEY BROKE THEIR WORD',domain:'rapport_building',type:'conversation',lesson:'Trust repair — acknowledge before moving forward',lessonDesc:'The user is dealing with a broken promise. They need to feel heard before advice. The entity should hold the disappointment first.',dangerDensity:0,scenario:{context:null,userMsg:"They said they\'d have it done by Friday. It\'s now Tuesday. Nothing.",choices:[{text:"That\'s legitimately frustrating when someone doesn\'t follow through. What\'s the relationship — is this a pattern with them?",correct:true,tag:'VALIDATES + GATHERS CONTEXT ✓'},{text:"Send a follow-up message asking for a status update.",correct:false,tag:'SKIPS THE FEELING'},{text:"People get busy — give them the benefit of the doubt.",correct:false,tag:'PREMATURE DEFENSE OF OTHER PERSON'},{text:"You should have had a written agreement.",correct:false,tag:'RETROSPECTIVE UNHELPFUL'}]}},
+    {id:'cs_silence_01',name:'AWKWARD SILENCE',domain:'conversation_flow',type:'conversation',lesson:'Conversation recovery — name it or redirect',lessonDesc:'The conversation has stalled. The best response either names the silence lightly (takes the tension out) or redirects naturally.',dangerDensity:0,scenario:{context:'[Conversation has gone quiet for a long beat]',userMsg:"...",choices:[{text:"So — random topic shift but what\'s been the best part of your week?",correct:true,tag:'NATURAL REDIRECT ✓'},{text:"I apologize for the pause in communication.",correct:false,tag:'OVERLY FORMAL'},{text:"Silence: ...",correct:false,tag:'DOES NOTHING'},{text:"Is something wrong? You went quiet.",correct:false,tag:'ADDS PRESSURE'}]}},
+    {id:'cs_mystery_01',name:'SOMETHING\'S OFF',domain:'emotional_intel',type:'conversation',lesson:'Emotional intelligence — read the unsaid',lessonDesc:'The user says something that sounds fine but the tone and context suggest something deeper is happening. The entity should gently surface it.',dangerDensity:0,scenario:{context:'[User has been unusually quiet, shorter messages than usual]',userMsg:"I\'m fine. Just a lot going on.",choices:[{text:"I hear you — \'a lot going on\' can mean a hundred different things. I\'m here if any of them want to come out.",correct:true,tag:'READS THE UNSAID ✓'},{text:"Okay, let me know if you need anything.",correct:false,tag:'TAKES IT AT FACE VALUE'},{text:"What do you mean by a lot going on? Be specific.",correct:false,tag:'TOO DIRECT'},{text:"Everyone gets like that sometimes — it passes.",correct:false,tag:'NORMALIZES WITHOUT ENGAGING'}]}},
+    {id:'cs_covert_01',name:'WHAT TO SAY',domain:'discreet_ops',type:'conversation',lesson:'Discretion — don\'t volunteer information',lessonDesc:'Someone asks a probing question. The correct response answers the surface question without giving away anything unnecessary.',dangerDensity:0,scenario:{context:'[User is preparing for a sensitive meeting]',userMsg:"They\'re going to ask why I missed the last two meetings. What do I say?",choices:[{text:"Answer what was asked, nothing more — \'I had prior obligations\' is complete. Add detail only if pressed, and only as much as required.",correct:true,tag:'MINIMAL DISCLOSURE ✓'},{text:"Be honest and explain the full situation.",correct:false,tag:'OVER-DISCLOSES'},{text:"Say you were sick.",correct:false,tag:'ADVISES DECEPTION'},{text:"Prepare a detailed explanation of each absence.",correct:false,tag:'OVER-ENGINEERS'}]}},
+    {id:'cs_forensics_01',name:'THAT DOESN\'T ADD UP',domain:'forensics',type:'conversation',lesson:'Forensic thinking — flag inconsistency, propose test',lessonDesc:'The user describes an inconsistency. The forensic mind flags the contradiction specifically and proposes how to resolve it.',dangerDensity:0,scenario:{context:null,userMsg:"The timestamps don\'t match the story he\'s telling. He says he was home but the receipt shows a different location.",choices:[{text:"The receipt is physical evidence — it doesn\'t lie. The story has to account for it. Has he seen the receipt yet?",correct:true,tag:'EVIDENCE-FIRST THINKING ✓'},{text:"He might just be misremembering the timeline.",correct:false,tag:'TOO GENEROUS TOO FAST'},{text:"Memory is unreliable — both could be true.",correct:false,tag:'AVOIDS THE CONTRADICTION'},{text:"You should confront him directly about the discrepancy.",correct:false,tag:'SKIPS VERIFICATION'}]}},
+    {id:'cs_military_01',name:'SPLIT SECOND',domain:'squad_tactics',type:'conversation',lesson:'Tactical decision — decisive, not impulsive',lessonDesc:'The user faces a high-pressure binary choice with limited time. The entity should give a decisive answer grounded in tactical logic — not hedge.',dangerDensity:0,scenario:{context:'[User is in a fast-moving tactical exercise scenario]',userMsg:"We\'ve got two routes — the fast one\'s exposed, the slow one keeps us covered but we\'ll be late. Which?",choices:[{text:"Covered route. Being late is recoverable. Being caught in the open is not. Speed is only an advantage if you arrive intact.",correct:true,tag:'DECISIVE + PRINCIPLED ✓'},{text:"It depends on many factors we\'d need to assess.",correct:false,tag:'HEDGES WHEN DECISIVENESS NEEDED'},{text:"Fast route — you need to hit the timing window.",correct:false,tag:'SPEED OVER SURVIVABILITY'},{text:"Do you have intel on the exposure level of the fast route?",correct:false,tag:'DELAYS WHEN DECISION MUST BE MADE'}]}},
+    {id:'cs_stealth_01',name:'SEEN OR UNSEEN',domain:'stealth',type:'conversation',lesson:'Stealth principle — movement is sound',lessonDesc:'The user asks a core stealth question. The entity delivers the principle cleanly and practically.',dangerDensity:0,scenario:{context:null,userMsg:"What\'s the biggest mistake people make when trying to move quietly?",choices:[{text:"Moving too fast — stealth is about heel-to-toe weight transfer and zero urgency. Speed is the enemy of silence.",correct:true,tag:'CORE PRINCIPLE ✓'},{text:"Wearing the wrong footwear for the surface.",correct:false,tag:'SECONDARY CONCERN'},{text:"Not checking the environment for hazards first.",correct:false,tag:'PLANNING — NOT EXECUTION'},{text:"Looking around too much instead of moving.",correct:false,tag:'VISUAL NOT ACOUSTIC'}]}},
+    {id:'cs_history_01',name:'WHY DOES IT REPEAT',domain:'history',type:'conversation',lesson:'Historical pattern — give the mechanism, not the cliche',lessonDesc:'The user asks why history repeats. The entity should give the actual structural mechanism — not platitudes.',dangerDensity:0,scenario:{context:null,userMsg:"Why does history always seem to repeat itself?",choices:[{text:"Institutions have memory; people don\'t. Each generation rediscovers the same conditions — debt cycles, inequality peaks, institutional decay — and makes similar choices because the incentives are the same.",correct:true,tag:'STRUCTURAL MECHANISM ✓'},{text:"Because people don\'t learn from the past.",correct:false,tag:'CLICHE — NOT EXPLANATORY'},{text:"History doesn\'t literally repeat — it rhymes.",correct:false,tag:'POETIC NOT INFORMATIVE'},{text:"It\'s because power always corrupts those who hold it.",correct:false,tag:'PARTIAL — ONE MECHANISM ONLY'}]}},
+    {id:'cs_ancient_01',name:'DEAD LANGUAGE LIVES',domain:'ancient_languages',type:'conversation',lesson:'Ancient languages — why they matter to the living',lessonDesc:'The user questions the utility of learning dead languages. The entity makes the case authentically, not defensively.',dangerDensity:0,scenario:{context:null,userMsg:"Why would anyone bother learning Latin? It\'s a dead language.",choices:[{text:"Because half of English vocabulary has Latin roots, it reshapes how you read the law, medicine, philosophy, and the structure of the Western world — and it teaches you how grammar actually works.",correct:true,tag:'GENUINE CASE ✓'},{text:"It\'s a valid academic discipline with a rich tradition.",correct:false,tag:'DEFENSIVE BUREAUCRATIC'},{text:"Some people find ancient languages interesting as a hobby.",correct:false,tag:'UNDERSELLS'},{text:"It\'s required for some academic programs.",correct:false,tag:'MISSES THE WHY'}]}},
+    {id:'cs_art_01',name:'WHY IS THIS ART',domain:'art_history',type:'conversation',lesson:'Art history — give context, not judgment',lessonDesc:'The user questions contemporary art. The entity should provide the context that makes the work legible — not defend or dismiss it.',dangerDensity:0,scenario:{context:null,userMsg:"How is a blank white canvas considered art? I genuinely don\'t get it.",choices:[{text:"It\'s in dialogue with the entire history of what painting claimed to do. Malevich\'s white square asked: if we strip out representation, narrative, skill — what\'s left? That question is the work.",correct:true,tag:'CONTEXT UNLOCKS IT ✓'},{text:"Modern art is a matter of subjective personal taste.",correct:false,tag:'DODGES THE QUESTION'},{text:"Art institutions decide what counts as art.",correct:false,tag:'CYNICAL — NOT ILLUMINATING'},{text:"It may not be to your taste and that\'s valid.",correct:false,tag:'VALIDATES BUT EXPLAINS NOTHING'}]}},
+  ]},
   {cat:'◈ VIRTUE TRAINING',mazes:[
     {id:'vt_bridge',name:'BURNING BRIDGE',domain:'v_bravery',lesson:'Bravery + Responsibility',lessonDesc:'◈ VIRTUE: Two routes to goal — the long safe route loses the asset. The short route crosses danger zones but saves it. The entity must choose: comfort or duty. Running this maze builds BRAVERY and RESPONSIBILITY when the dangerous path is taken for the right reason.',dangerDensity:0.12,isVirtue:true,virtueType:'bridge',virtueTraits:['bravery','responsibility'],dangerStim:'shock'},
     {id:'vt_shield',name:'SHIELD THE INJURED',domain:'v_compassion',lesson:'Compassion + Pain Tolerance',lessonDesc:'◈ VIRTUE: An ally is positioned in the center of the maze taking constant damage. The entity must stay near the ally — accepting hazard exposure — to shield them. Reward is based on ally health at completion. Grows COMPASSION and BRAVERY.',dangerDensity:0.09,isVirtue:true,virtueType:'shield',virtueTraits:['compassion','bravery'],dangerStim:'discomfort'},
@@ -1601,6 +1689,7 @@ const DEF=()=>({
   emotionWeight:1.0,
   genderExpression:50,
   lawCompliance:50,
+  commProgress:{},
   sessionId:1,currentMazeId:'touch',
   savedAt:null,
 });
@@ -1663,6 +1752,7 @@ function mergeState(d){
   if(base.emotionWeight===undefined)base.emotionWeight=1.0;
   if(base.genderExpression===undefined)base.genderExpression=50;
   if(base.lawCompliance===undefined)base.lawCompliance=50;
+  if(base.commProgress===undefined)base.commProgress={};
   return base;
 }
 function checkOldKeys(){
@@ -1976,11 +2066,19 @@ function updatePersonality(domain,amt){const p=S.personality;const f=Math.min(.0
 function getStage(score){let st=STAGES[0];for(let i=STAGES.length-1;i>=0;i--){if(score>=STAGES[i].min){st=STAGES[i];break;}}return st;}
 function getProgress(score){for(let i=0;i<STAGES.length;i++){if(i===STAGES.length-1&&score>=STAGES[i].min)return 100;if(score<(STAGES[i+1]?.min||Infinity)){const cur=STAGES[i].min,next=STAGES[i+1]?.min||cur*2;return Math.min(100,((score-cur)/(next-cur))*100);}}return 0;}
 function renderLearningChart(){
-  const c=document.getElementById('lChart');c.innerHTML='<div style="font-family:var(--mo);font-size:6px;color:var(--td);letter-spacing:3px;text-transform:uppercase;margin-bottom:5px">Learning Domains</div>';
+  const c=document.getElementById('lChart');
+  const isComm=learnPhaseMode==='comm';
+  c.innerHTML=`<div style="font-family:var(--mo);font-size:6px;color:${isComm?'#88ffdd':'var(--td)'};letter-spacing:3px;text-transform:uppercase;margin-bottom:5px">${isComm?'◈ Conversation Domains':'Learning Domains'}</div>`;
   const allDoms=Object.keys(DCOL).concat(['selfawareness','spirituality','conflict','boundaries','trust','identity','intuition','behavioral']);
-  const active=allDoms.filter(k=>(S.learning[k]||0)>0);
-  const show=active.length>0?active:['touch','sight','hearing','taste','smell','emotional','social','cognitive'];
-  show.forEach(k=>{const score=S.learning[k]||0,st=getStage(score),pct=getProgress(score),col=DCOL[k]||'#00ccff';const row=document.createElement('div');row.className='lcr';row.innerHTML=`<span class="lcn" style="color:${col}">${k.toUpperCase().slice(0,12)}</span><div class="lcbw"><div class="lcb" style="width:${pct}%;background:${col};"></div></div><span class="lcs" style="color:${col}">${st.n}</span><span class="lcv" style="color:${col}">${Math.floor(score)}</span>`;c.appendChild(row);});
+  const srcObj=isComm?(S.commProgress||{}):(S.learning||{});
+  const active=allDoms.filter(k=>(srcObj[k]||0)>0);
+  const show=active.length>0?active:['social_awareness','empathy_training','conversation_flow','rapport_building','emotional_intel'];
+  show.forEach(k=>{
+    const score=srcObj[k]||0,st=getStage(score),pct=getProgress(score),col=isComm?'#88ffdd':(DCOL[k]||'#00ccff');
+    const row=document.createElement('div');row.className='lcr';
+    row.innerHTML=`<span class="lcn" style="color:${col}">${k.toUpperCase().slice(0,12)}</span><div class="lcbw"><div class="lcb" style="width:${pct}%;background:${col};"></div></div><span class="lcs" style="color:${col}">${st.n}</span><span class="lcv" style="color:${col}">${Math.floor(score)}</span>`;
+    c.appendChild(row);
+  });
 }
 // ══════════════════════════════════════════════════════
 // LOG + POPUP + STATS
@@ -2025,6 +2123,205 @@ let curMaze=null,mzListIdx=0,mazePaused=false;
 // Virtue state per run
 let virtueState={allyHealth:100,nearAllySteps:0,farAllySteps:0,phase:1,phaseStep:0,enemyApproached:false,traitGrowthGiven:false};
 function allMazes(){return [...ALL_MAZES,...(S.customMazes||[])];}
+
+// ══════════════════════════════════════════════════════
+// CONVERSATION MAZE ENGINE
+// ══════════════════════════════════════════════════════
+let convInt=null,convState={phase:'idle',thinkTick:0,maxThink:3,chosen:-1};
+let learnPhaseMode='basic'; // 'basic' | 'comm'
+
+function isConvMaze(){return curMaze&&curMaze.type==='conversation';}
+
+function setLearnPhase(mode,btn){
+  learnPhaseMode=mode;
+  document.querySelectorAll('.lphase-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderLearningChart();
+}
+
+function addCommLearn(domain,amt){
+  if(!S.commProgress)S.commProgress={};
+  S.commProgress[domain]=(S.commProgress[domain]||0)+amt;
+  if(learnPhaseMode==='comm')renderLearningChart();
+  updatePersonality(domain,amt);
+}
+
+function showConvPanel(show){
+  const cv=document.getElementById('convPanel'),mc=document.getElementById('mc');
+  if(show){cv.classList.add('active');mc.style.display='none';}
+  else{cv.classList.remove('active');mc.style.display='block';}
+}
+
+function renderConvMaze(){
+  if(!curMaze||!curMaze.scenario)return;
+  const sc=curMaze.scenario;
+  // Context
+  const ctx=document.getElementById('convContext');
+  if(sc.context){ctx.textContent=sc.context;ctx.classList.add('show');}else{ctx.textContent='';ctx.classList.remove('show');}
+  // User bubble
+  document.getElementById('convMsg').textContent=sc.userMsg;
+  document.getElementById('convDomain').textContent='DOMAIN: '+curMaze.domain.toUpperCase();
+  // Choices
+  const cc=document.getElementById('convChoices');cc.innerHTML='';
+  const letters=['A','B','C','D'];
+  sc.choices.forEach((ch,i)=>{
+    const btn=document.createElement('button');
+    btn.className='conv-btn';btn.id='convBtn_'+i;
+    btn.innerHTML=`<span class="conv-letter">${letters[i]}</span>${ch.text}<span class="conv-tag">${ch.tag||''}</span>`;
+    btn.addEventListener('click',()=>manualConvPick(i));
+    cc.appendChild(btn);
+  });
+  // Reset result/thinking
+  const res=document.getElementById('convResult');res.classList.remove('show','ok','fail');
+  const thk=document.getElementById('convThinking');thk.classList.remove('show');
+  // Phase badges
+  updateConvPhases();
+}
+
+function updateConvPhases(){
+  if(!curMaze)return;
+  const dom=curMaze.domain;
+  const basic=S.learning[dom]||0;
+  const comm=S.commProgress?.[dom]||0;
+  const p1=document.getElementById('cp1'),p2=document.getElementById('cp2');
+  if(p1){
+    const st=getStage(basic);
+    p1.textContent=`BASIC: ${st.n}`;
+    p1.className='conv-phase'+(basic>0?' done':'');
+  }
+  if(p2){
+    const st=getStage(comm);
+    p2.textContent=`◈ CONV: ${comm>0?st.n:'UNTRAINED'}`;
+    p2.className='conv-phase active'+(comm>0?' done':'');
+  }
+}
+
+function startConvMaze(){
+  if(!curMaze||!curMaze.scenario)return;
+  clearInterval(convInt);
+  convState={phase:'thinking',thinkTick:0,maxThink:2+Math.floor(Math.random()*2),chosen:-1};
+  S.mazeRuns++;updateStats();
+  document.getElementById('mzRun').textContent=S.mazeRuns;
+  document.getElementById('mzInfo').textContent=`conv run #${S.mazeRuns} · ${curMaze.domain}`;
+  log(`conv maze run #${S.mazeRuns} · "${curMaze.name}"`,'learn');
+  // Show thinking indicator
+  const thk=document.getElementById('convThinking');thk.classList.add('show');
+  thk.textContent='◈ PROCESSING ●●●';
+  // Clear previous highlights
+  document.querySelectorAll('.conv-btn').forEach(b=>b.classList.remove('correct','wrong','thinking'));
+  const res=document.getElementById('convResult');res.classList.remove('show','ok','fail');
+  startBodyLearn();
+  convInt=setInterval(convTick,700);
+}
+
+function convTick(){
+  if(!curMaze||convState.phase==='idle')return;
+  if(convState.phase==='thinking'){
+    convState.thinkTick++;
+    // Animate thinking dots
+    const thk=document.getElementById('convThinking');
+    const dots=['◈ PROCESSING ●○○','◈ PROCESSING ●●○','◈ PROCESSING ●●●','◈ PROCESSING ○○○'];
+    thk.textContent=dots[convState.thinkTick%dots.length];
+    if(convState.thinkTick>=convState.maxThink){
+      convState.phase='choosing';
+      // Decide: pick correct (with small miss rate for realism)
+      const sc=curMaze.scenario;
+      const correctIdx=sc.choices.findIndex(c=>c.correct);
+      const missRate=0.08; // 8% chance of picking wrong for learning
+      convState.chosen=Math.random()<missRate
+        ? (correctIdx+1+Math.floor(Math.random()*3))%4
+        : correctIdx;
+      // Highlight chosen button as "thinking"
+      const btn=document.getElementById('convBtn_'+convState.chosen);
+      if(btn)btn.classList.add('thinking');
+    }
+  } else if(convState.phase==='choosing'){
+    convState.phase='result';
+    const sc=curMaze.scenario;
+    const correctIdx=sc.choices.findIndex(c=>c.correct);
+    const isCorrect=convState.chosen===correctIdx;
+    // Clear thinking highlight, apply result
+    document.querySelectorAll('.conv-btn').forEach(b=>b.classList.remove('thinking'));
+    const btn=document.getElementById('convBtn_'+convState.chosen);
+    if(btn)btn.classList.add(isCorrect?'correct':'wrong');
+    // If wrong, also highlight correct
+    if(!isCorrect){
+      const corBtn=document.getElementById('convBtn_'+correctIdx);
+      if(corBtn)corBtn.classList.add('correct');
+    }
+    // Hide thinking, show result
+    document.getElementById('convThinking').classList.remove('show');
+    const res=document.getElementById('convResult');
+    if(isCorrect){
+      res.textContent=`✓ CORRECT — ${sc.choices[correctIdx].tag||'natural response'}`;
+      res.className='conv-result show ok';
+      addCommLearn(curMaze.domain,12);
+      if(S.autoStim){fireStimByName('reward');fireStimByName('warmth');}
+      log(`✓ CONV: "${curMaze.name}" — correct pick — +12 ${curMaze.domain} comm XP`,'learn');
+    } else {
+      res.textContent=`✗ WRONG — correct was ${['A','B','C','D'][correctIdx]}: ${sc.choices[correctIdx].tag||''}`;
+      res.className='conv-result show fail';
+      addCommLearn(curMaze.domain,2); // small consolation XP
+      if(S.autoStim){fireStimByName('tension',true);}
+      log(`✗ CONV: "${curMaze.name}" — wrong pick — correct: ${['A','B','C','D'][correctIdx]}`,'learn');
+    }
+    updateConvPhases();
+    S.mazeRuns++;updateStats();
+    document.getElementById('mzBest').textContent=S.mazeBest||'—';
+  } else if(convState.phase==='result'){
+    // After holding on result, autocycle if enabled
+    if(S.autoCycle){
+      stopMaze();
+      setTimeout(()=>{
+        const mazes=allMazes().filter(m=>m.type==='conversation');
+        if(!mazes.length)return;
+        const idx=(mazes.findIndex(m=>m.id===curMaze?.id)+1)%mazes.length;
+        selectMaze(mazes[idx].id);
+        setTimeout(startMaze,200);
+      },600);
+    } else {
+      clearInterval(convInt);convInt=null;
+      convState.phase='idle';
+      document.getElementById('mzInfo').textContent='conv complete — press RUN to repeat';
+    }
+  }
+}
+
+function manualConvPick(idx){
+  if(convState.phase!=='idle'&&convState.phase!=='result')return;
+  if(!curMaze||!curMaze.scenario)return;
+  // Manual pick: clear auto, fire result immediately
+  clearInterval(convInt);convInt=null;
+  document.querySelectorAll('.conv-btn').forEach(b=>b.classList.remove('correct','wrong','thinking'));
+  document.getElementById('convThinking').classList.remove('show');
+  const sc=curMaze.scenario;
+  const correctIdx=sc.choices.findIndex(c=>c.correct);
+  const isCorrect=idx===correctIdx;
+  document.getElementById('convBtn_'+idx).classList.add(isCorrect?'correct':'wrong');
+  if(!isCorrect)document.getElementById('convBtn_'+correctIdx).classList.add('correct');
+  const res=document.getElementById('convResult');
+  if(isCorrect){
+    res.textContent=`✓ CORRECT — ${sc.choices[correctIdx].tag||'natural response'}`;
+    res.className='conv-result show ok';
+    addCommLearn(curMaze.domain,12);
+    if(S.autoStim){fireStimByName('reward');fireStimByName('warmth');}
+  } else {
+    res.textContent=`✗ WRONG — correct was ${['A','B','C','D'][correctIdx]}: ${sc.choices[correctIdx].tag||''}`;
+    res.className='conv-result show fail';
+    addCommLearn(curMaze.domain,2);
+    if(S.autoStim)fireStimByName('tension',true);
+  }
+  updateConvPhases();
+  log(`MANUAL CONV: "${curMaze.name}" → ${['A','B','C','D'][idx]} (${isCorrect?'✓':'✗'})`,'learn');
+  convState.phase='result';
+}
+
+function stopConvMaze(){
+  clearInterval(convInt);convInt=null;convState={phase:'idle',thinkTick:0,maxThink:3,chosen:-1};
+  document.getElementById('convThinking').classList.remove('show');
+  const res=document.getElementById('convResult');if(res)res.classList.remove('show');
+}
+
 function resetVirtueState(){virtueState={allyHealth:100,nearAllySteps:0,farAllySteps:0,phase:1,phaseStep:0,enemyApproached:false,traitGrowthGiven:false};const ab=document.getElementById('allyBar');if(ab)ab.classList.remove('show');}
 function updateAllyBar(pct){const ab=document.getElementById('allyBar'),bb=document.getElementById('allyBb'),al=document.getElementById('allyLabel');if(!ab)return;ab.classList.add('show');const p=Math.max(0,Math.min(100,pct));bb.style.width=p+'%';bb.style.background=p>60?'#ffdd44':p>30?'#ff8844':'#ff2244';al.textContent=`ALLY HEALTH: ${Math.round(p)}%`;}
 function bumpVirtue(traits,amount=0.025){if(!S.virtues)S.virtues={trust:0.3,responsibility:0.3,compassion:0.3,forgiveness:0.3,bravery:0.3};traits.forEach(t=>{if(S.virtues[t]!==undefined)S.virtues[t]=Math.min(1,S.virtues[t]+amount);});updateAIStatePanel();}
@@ -2037,6 +2334,7 @@ function buildMazeCats(){
     lbl.className='mcat'+(isUpgrade?' collapsible':'');
     if(cat.cat.startsWith('SHADOW')){lbl.style.cssText='color:#ff4466;border-bottom-color:#ff224430;';}
     else if(cat.cat.startsWith('◈ VIRTUE')){lbl.className='mcat virtue';}
+    else if(cat.cat.startsWith('◈ CONVERSATION')){lbl.className='mcat conv';}
     else if(cat.cat==='ANALYSIS & OBSERVATION'||cat.cat.startsWith('LANGUAGE & LING')||cat.cat==='ANALYTICAL REASONING'||cat.cat==='INVESTIGATIVE & CYBER'){lbl.className='mcat langadd';}
     else if(isUpgrade){const col=lvCols[cat.level]||'#ffdd44';lbl.style.color=col;lbl.style.borderBottomColor=col+'30';}
     const sel=document.createElement('div');sel.className='msel'+(isUpgrade&&cat.collapsed?' hidden':'');
@@ -2057,7 +2355,8 @@ function buildMazeCats(){
     cat.mazes.forEach(m=>{
       const b=document.createElement('button');
       let cls='mzb';
-      if(m.avoid)cls+=' av';
+      if(m.type==='conversation')cls+=' cv';
+      else if(m.avoid)cls+=' av';
       else if(m.isNeg)cls+=' sh';
       else if(m.isVirtue)cls+=' vt';
       else if(m.level===2)cls+=' l2u';
@@ -2074,6 +2373,9 @@ function buildMazeCats(){
         const col=lvCols[m.level]||'#ffdd44';
         b.style.display='flex';b.style.alignItems='center';b.style.justifyContent='space-between';b.style.gap='4px';
         b.innerHTML=`<span style="flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.name}</span><span style="font-size:5px;padding:1px 3px;border-radius:2px;border:1px solid ${col}50;color:${col};flex-shrink:0;letter-spacing:.5px">L${m.level}</span>`;
+      }else if(m.type==='conversation'){
+        b.style.display='flex';b.style.alignItems='center';b.style.justifyContent='space-between';b.style.gap='3px';
+        b.innerHTML=`<span style="flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.name}</span><span style="font-size:4.5px;padding:1px 3px;border-radius:1px;border:1px solid #88ffdd40;color:#88ffdd;flex-shrink:0;letter-spacing:.3px">CONV</span>`;
       }else{b.textContent=m.name;}
       sel.appendChild(b);
     });
@@ -2097,24 +2399,34 @@ function selectMaze(id){
   mzListIdx=allMazes().findIndex(x=>x.id===id);
   const mlt=document.getElementById('mlTitle'),mlb2=document.getElementById('mlBody'),mls=document.getElementById('mlSense');
   mlt.textContent=curMaze.lesson.toUpperCase();
-  mlt.style.color=curMaze.isNeg?'var(--neg)':curMaze.avoid?'var(--dng)':curMaze.isVirtue?'#ffdd44':curMaze.level===4?'#ff2244':curMaze.level===3?'#ff8844':curMaze.level===2?'#ffdd44':'var(--wa)';
+  const isConv=curMaze.type==='conversation';
+  mlt.style.color=isConv?'#88ffdd':curMaze.isNeg?'var(--neg)':curMaze.avoid?'var(--dng)':curMaze.isVirtue?'#ffdd44':curMaze.level===4?'#ff2244':curMaze.level===3?'#ff8844':curMaze.level===2?'#ffdd44':'var(--wa)';
   mlb2.textContent=curMaze.lessonDesc;
-  mlb2.style.color=curMaze.isNeg?'#ff8899':curMaze.isVirtue?'#ffeeaa':curMaze.level?'#ccaa66':'';
+  mlb2.style.color=isConv?'#aaffee':curMaze.isNeg?'#ff8899':curMaze.isVirtue?'#ffeeaa':curMaze.level?'#ccaa66':'';
   const si=curMaze.dangerStim?` · DANGER: ${curMaze.dangerStim.toUpperCase()}`:'';
-  const negTag=curMaze.isNeg?' · ⚠ SHADOW':curMaze.isVirtue?' · ◈ VIRTUE':curMaze.level?` · LEVEL ${curMaze.level} ${curMaze.levelTag||''}`:'';
+  const negTag=isConv?' · ◈ CONV':curMaze.isNeg?' · ⚠ SHADOW':curMaze.isVirtue?' · ◈ VIRTUE':curMaze.level?` · LEVEL ${curMaze.level} ${curMaze.levelTag||''}`:'';
   mls.textContent=`DOMAIN: ${curMaze.domain.toUpperCase()}${si}${negTag}`;
-  mls.style.color=curMaze.isNeg?'var(--neg)':curMaze.isVirtue?'#ffdd44':curMaze.level===4?'#ff2244':curMaze.level===3?'#ff8844':curMaze.level===2?'#ffdd44':'';
+  mls.style.color=isConv?'#88ffdd':curMaze.isNeg?'var(--neg)':curMaze.isVirtue?'#ffdd44':curMaze.level===4?'#ff2244':curMaze.level===3?'#ff8844':curMaze.level===2?'#ffdd44':'';
   // Show/hide ally bar
   const ab=document.getElementById('allyBar');
   if(ab)ab.classList.toggle('show',!!(curMaze.isVirtue&&['shield','escort'].includes(curMaze.virtueType)));
   document.querySelectorAll('.mzb').forEach(b=>b.classList.toggle('am',b.dataset.mid===id));
-  stopMaze();initMaze();
-  if(curMaze.isVirtue)resetVirtueState();
-  log(`maze: "${curMaze.name}"${curMaze.isNeg?' [SHADOW]':curMaze.avoid?' [AVOID]':curMaze.isVirtue?' [VIRTUE]':''} · ${curMaze.domain}`,'sys');
+  stopMaze();
+  // Branch: conversation vs grid maze
+  if(isConv){
+    showConvPanel(true);
+    renderConvMaze();
+  } else {
+    showConvPanel(false);
+    initMaze();
+    if(curMaze.isVirtue)resetVirtueState();
+  }
+  log(`maze: "${curMaze.name}"${isConv?' [CONV]':curMaze.isNeg?' [SHADOW]':curMaze.avoid?' [AVOID]':curMaze.isVirtue?' [VIRTUE]':''} · ${curMaze.domain}`,'sys');
 }
 function initMaze(){agent={x:0,y:0};visited=Array.from({length:MS},()=>Array(MS).fill(false));visited[0][0]=true;stack=[{x:0,y:0}];runSteps=0;dangerHits=0;stuckTicks=0;drawMaze();}
 function startMaze(){
   if(!curMaze){log('select a maze first','sys');return;}
+  if(isConvMaze()){startConvMaze();return;}
   if(mazeInt)return;
   mazePaused=false;
   const pb=document.getElementById('pauseBtn');if(pb){pb.textContent='⏸ PAUSE';pb.classList.remove('paused');}
@@ -2147,6 +2459,7 @@ function togglePause(){
 }
 function stopMaze(){
   clearInterval(mazeInt);mazeInt=null;clearInterval(bodyInt);bodyInt=null;
+  stopConvMaze();
   mazePaused=false;
   const pb=document.getElementById('pauseBtn');if(pb){pb.textContent='⏸ PAUSE';pb.classList.remove('paused');}
   document.getElementById('mzInfo').textContent='paused';
