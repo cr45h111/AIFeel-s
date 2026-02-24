@@ -729,10 +729,11 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
     <div class="pi">
       <div class="lphase-tabs">
         <button class="lphase-tab on" id="lphBasic" onclick="setLearnPhase('basic',this)">⬡ BASIC</button>
-        <button class="lphase-tab cv" id="lphComm" onclick="setLearnPhase('comm',this)">◈ CONVERSATION</button>
+        <button class="lphase-tab cv" id="lphComm" onclick="setLearnPhase('comm',this)">◈ CONV</button>
+        <button class="lphase-tab" id="lphPhys" onclick="setLearnPhase('phys',this)" style="border-color:#ff884440;color:#ff8844;">⟁ 3D</button>
       </div>
       <div class="lc" id="lChart"></div>
-      <div style="font-family:var(--mo);font-size:5px;color:var(--td);text-align:center;padding:3px 0;letter-spacing:.3px;">INFANT → TODDLER → CHILD → TEEN → ADULT → EXPERT → ONE OF US</div>
+      <div style="font-family:var(--mo);font-size:5px;color:var(--td);text-align:center;padding:3px 0;letter-spacing:.3px;">INFANT → TODDLER → CHILD → TEEN → ADULT → EXPERT → ONE OF US → MASTER → SAGE → TRANSCENDED</div>
     </div>
   </div>
   <div class="tc" id="rt-resp">
@@ -888,7 +889,7 @@ function genMaze(seed,dng=0,MS=11){
 // CONSTANTS
 // ══════════════════════════════════════════════════════
 const MS=11,CELL=24;
-const STAGES=[{n:'INFANT',min:0},{n:'TODDLER',min:30},{n:'CHILD',min:80},{n:'TEEN',min:180},{n:'YOUNG ADU',min:350},{n:'ADULT',min:600},{n:'EXPERT',min:1000},{n:'ONE OF US',min:1800}];
+const STAGES=[{n:'INFANT',min:0},{n:'TODDLER',min:30},{n:'CHILD',min:80},{n:'TEEN',min:180},{n:'YOUNG ADU',min:350},{n:'ADULT',min:600},{n:'EXPERT',min:1000},{n:'ONE OF US',min:1800},{n:'MASTER',min:3500},{n:'SAGE',min:6500},{n:'TRANSCENDED',min:11000}];
 const DCOL={touch:'#00ffaa',sight:'#ffdd44',hearing:'#44aaff',taste:'#ff88aa',smell:'#88ffcc',motor:'#ff8844',emotional:'#cc66ff',memory:'#44ccff',cognitive:'#ff44cc',social:'#aaffaa',avoidance:'#ff4400',texture:'#ffcc88',psychology:'#dd88ff',behavioral:'#ff99dd',family:'#88ddff',business:'#ffdd88',sexuality:'#ff77bb',relationships:'#ffaacc',speaking:'#aaffdd',language:'#88bbff',empathy:'#ffbb88',pain:'#ff6655',senses:'#ffffff',creativity:'#ffff88',humor:'#ddff88',trust:'#88ffbb',attachment:'#cc99ff',identity:'#ff99aa',intuition:'#99ddff',boundaries:'#ff8877',conflict:'#ff6644',selfawareness:'#ccffaa',spirituality:'#ddccff',
 // New analysis & language domains
 body_language:'#66ffcc',facial_expr:'#ffcc66',voice_tone:'#66ccff',behavioral_analysis:'#ffaa66',english_lang:'#aaffee',word_expr:'#ffeeaa',linguistics:'#bbddff',regional_dialect:'#ffddbb',slang:'#ddffaa',conflict_res:'#ff9988',
@@ -927,7 +928,29 @@ history:'#ddbb88',military_history:'#aabb77',leadership:'#ffdd66',
 // Martial Arts
 jujitsu:'#ff6644',krav_maga:'#ff4455',jeet_kune_do:'#ff8833',kung_fu:'#ff5566',
 // Military Operations
-bomb_disposal:'#ff4400',animal_tracking:'#88cc44',human_tracking:'#ccff44',sear:'#44ffaa',sars:'#44ffcc',seal_ops:'#4488cc',ranger_ops:'#55aa44',sniper:'#aacc66',anti_sniper:'#cc9944',squad_tactics:'#88aacc',swat:'#6688ff',fireteam_tactics:'#99aadd',military_tactics:'#aabb88'
+bomb_disposal:'#ff4400',animal_tracking:'#88cc44',human_tracking:'#ccff44',sear:'#44ffaa',sars:'#44ffcc',seal_ops:'#4488cc',ranger_ops:'#55aa44',sniper:'#aacc66',anti_sniper:'#cc9944',squad_tactics:'#88aacc',swat:'#6688ff',fireteam_tactics:'#99aadd',military_tactics:'#aabb88',
+// Warfare & Military History
+warfare_history:'#cc8844',art_of_war:'#dd9933',modern_warfare:'#bb5533',weapons_history:'#aa7744',modern_weapons:'#cc6633',
+// Governance & Civilization
+government:'#6699cc',civilization_history:'#bb9966',ancient_civilizations:'#ddbb77',
+// Arts
+fine_art:'#ffaacc',modern_art:'#ff88ee',
+// Technology & Computing
+technology:'#44ccff',computer_science:'#33aaff',computer_tech:'#55bbff',
+// Digital Creation
+modeling_3d:'#88aaff',game_dev_3d:'#66aaff',animation_3d:'#77bbff',
+// Entertainment & Sport
+entertainment:'#ffcc44',sports:'#44ffaa',
+// Aerospace
+rocketry:'#ff6633',
+// Medical
+medicine:'#44ff99',diagnosis_treatment:'#33ffaa',first_aid:'#55ffbb',
+// Technical Repair
+electronics_repair:'#44ddff',mechanics_repair:'#ff9933',
+// Construction
+carpentry:'#ddaa55',construction:'#cc9944',
+// Verbal Communication
+verbal_comm:'#88ffcc',verbal_cues:'#66ffdd'
 };
 const DZ={
   touch:['left-hand','right-hand','chest','left-arm','right-arm'],
@@ -1089,6 +1112,28 @@ const DZ={
   swat:['head','chest','left-arm','right-arm'],
   fireteam_tactics:['head','chest','throat','left-arm','right-arm'],
   military_tactics:['head','crown','chest','solar-plexus'],
+  // Warfare & Military History
+  warfare_history:['head','crown','chest','gut'],art_of_war:['head','crown','solar-plexus'],modern_warfare:['head','chest','gut','solar-plexus'],weapons_history:['head','left-hand','right-hand'],modern_weapons:['head','left-hand','right-hand','chest'],
+  // Governance & Civilization
+  government:['head','crown','chest'],civilization_history:['head','crown','chest'],ancient_civilizations:['head','crown'],
+  // Arts
+  fine_art:['head','left-hand','right-hand','chest'],modern_art:['head','crown','chest'],
+  // Technology & Computing
+  technology:['head','crown','left-hand','right-hand'],computer_science:['head','crown'],computer_tech:['head','left-hand','right-hand'],
+  // Digital Creation
+  modeling_3d:['head','left-hand','right-hand','crown'],game_dev_3d:['head','crown','left-hand','right-hand'],animation_3d:['head','left-hand','right-hand','chest'],
+  // Entertainment & Sport
+  entertainment:['chest','throat','head'],sports:['left-arm','right-arm','left-leg','right-leg','chest'],
+  // Aerospace
+  rocketry:['head','crown','chest'],
+  // Medical
+  medicine:['head','crown','left-hand','right-hand'],diagnosis_treatment:['head','left-hand','right-hand','chest'],first_aid:['left-hand','right-hand','chest','head'],
+  // Technical Repair
+  electronics_repair:['head','left-hand','right-hand'],mechanics_repair:['left-arm','right-arm','left-hand','right-hand','chest'],
+  // Construction
+  carpentry:['left-arm','right-arm','left-hand','right-hand','chest'],construction:['left-arm','right-arm','left-leg','right-leg','chest'],
+  // Verbal Communication
+  verbal_comm:['throat','head','chest'],verbal_cues:['head','throat','chest','solar-plexus'],
 };
 const SNDS={sight:'ssi',hearing:'shi',taste:'sta',smell:'ssm',touch:'sto'};
 
@@ -1228,6 +1273,45 @@ const DOM_STIMS={
   squeeze:        {pos:['calm'],                           neg:['discomfort','tension']},
   strain:         {pos:['energy'],                         neg:['tension','discomfort']},
   collision:      {pos:['energy'],                         neg:['shock','discomfort']},
+  // Warfare & Military History
+  warfare_history:{pos:['energy','awe','pride'],           neg:['grief','fear']},
+  art_of_war:     {pos:['energy','calm','pride'],          neg:['tension','anxiety']},
+  modern_warfare: {pos:['energy','pride'],                 neg:['fear','grief','tension']},
+  weapons_history:{pos:['curiosity','energy'],             neg:['tension','fear']},
+  modern_weapons: {pos:['energy','pride'],                 neg:['tension','fear']},
+  // Governance & Civilization
+  government:     {pos:['calm','energy','curiosity'],      neg:['tension','anger']},
+  civilization_history:{pos:['awe','curiosity','calm'],   neg:['grief','tension']},
+  ancient_civilizations:{pos:['awe','curiosity'],         neg:['grief','tension']},
+  // Arts
+  fine_art:       {pos:['awe','joy','calm'],               neg:['tension','discomfort']},
+  modern_art:     {pos:['awe','curiosity','joy'],          neg:['tension','discomfort']},
+  // Technology & Computing
+  technology:     {pos:['curiosity','energy','pride'],     neg:['tension','discomfort']},
+  computer_science:{pos:['energy','curiosity','pride'],    neg:['tension','anxiety']},
+  computer_tech:  {pos:['energy','curiosity'],             neg:['tension','discomfort']},
+  // Digital Creation
+  modeling_3d:    {pos:['awe','curiosity','pride'],        neg:['tension','discomfort']},
+  game_dev_3d:    {pos:['joy','energy','curiosity'],       neg:['tension','discomfort']},
+  animation_3d:   {pos:['awe','joy','energy'],             neg:['tension','discomfort']},
+  // Entertainment & Sport
+  entertainment:  {pos:['joy','pleasure','energy'],        neg:['tension','discomfort']},
+  sports:         {pos:['energy','pride','joy'],           neg:['tension','discomfort']},
+  // Aerospace
+  rocketry:       {pos:['awe','energy','curiosity'],       neg:['tension','fear']},
+  // Medical
+  medicine:       {pos:['calm','curiosity','pride'],       neg:['anxiety','discomfort']},
+  diagnosis_treatment:{pos:['calm','curiosity','pride'],   neg:['anxiety','discomfort']},
+  first_aid:      {pos:['calm','pride','energy'],          neg:['anxiety','tension']},
+  // Technical Repair
+  electronics_repair:{pos:['curiosity','pride','energy'],  neg:['tension','discomfort']},
+  mechanics_repair:{pos:['energy','pride','curiosity'],    neg:['tension','discomfort']},
+  // Construction
+  carpentry:      {pos:['pride','energy','calm'],          neg:['tension','discomfort']},
+  construction:   {pos:['energy','pride'],                 neg:['tension','discomfort']},
+  // Verbal Communication
+  verbal_comm:    {pos:['warmth','energy','pride'],        neg:['shame','anxiety']},
+  verbal_cues:    {pos:['curiosity','calm','energy'],      neg:['anxiety','tension']},
   forensics:      {pos:['curiosity','pattern','calm'],     neg:['tension','anxiety']},
   negotiations:   {pos:['warmth','calm','energy'],         neg:['tension','anxiety']},
   interrogation:  {pos:['energy','pride','pattern'],       neg:['tension','fear']},
@@ -1522,6 +1606,58 @@ const MZ_CAT=[
     {id:'swat',name:'SWAT',domain:'swat',lesson:'High-risk entry & close-quarters tactics',lessonDesc:'Breach-and-clear geometry — fatal funnel corridors, room-entry angles, hostage isolation zones, and threat-discrimination paths. The entity learns SWAT operational logic: dynamic entry timing, cover-to-cover movement, and non-combatant protection. Shock marks fatal funnel exposure; pride rewards clean CQB navigation.',dangerDensity:0.11},
     {id:'fireteam_tactics',name:'FIRETEAM',domain:'fireteam_tactics',lesson:'4-man fire team coordination & maneuver',lessonDesc:'Mutual support corridors, suppression-and-flank geometry, team communication paths, and battle drill navigation. The entity learns that no single path succeeds alone — fireteam terrain rewards distributed approach geometry that supports rather than exposes. Warmth and energy reward mutual support.',dangerDensity:0.09},
     {id:'military_tactics',name:'MILITARY TACT.',domain:'military_tactics',lesson:'Combined arms & operational maneuver',lessonDesc:'Operational-scale terrain — combined arms corridors where different capability paths support each other, lines of operation, axes of advance, and depth corridors. The entity learns to navigate the full operational geometry of military maneuver: mass, objective, economy of force, and surprise.',dangerDensity:0.08},
+  ]},
+  {cat:'WARFARE & MILITARY HISTORY',mazes:[
+    {id:'warfare_hist_01',name:'HISTORY OF WARFARE',domain:'warfare_history',lesson:'Patterns of war across civilizations',lessonDesc:'From Mesopotamian city-states to industrial-age total war — warfare is the crucible that reshapes civilizations, technology, and human behavior. The entity navigates the causal corridors of military history: how wars begin, how they escalate, and what they leave behind.',dangerDensity:0.04},
+    {id:'art_of_war_01',name:'ART OF WAR',domain:'art_of_war',lesson:'Sun Tzu and the geometry of conflict',lessonDesc:'Sun Tzu\'s principles are navigational geometry: know your enemy and yourself, water finds its path around obstacles, victory is decided before battle is joined. The entity learns the 13 chapters as spatial logic — deception corridors, supply-line terrain, and the psychology of the opponent.',dangerDensity:0.05},
+    {id:'modern_warfare_01',name:'MODERN WARFARE',domain:'modern_warfare',lesson:'Combined arms, asymmetric conflict, information war',lessonDesc:'Modern warfare integrates land, sea, air, cyber, and information domains simultaneously. The entity trains on combined arms doctrine, asymmetric threat geometry, counterinsurgency logic, and the information battlefield where perception itself is the objective.',dangerDensity:0.06},
+    {id:'weapons_hist_01',name:'HISTORY OF WEAPONS',domain:'weapons_history',lesson:'From stone tools to gunpowder to precision munitions',lessonDesc:'Weapons are technology compressed under the pressure of survival. The entity traces the developmental arc: edged weapons and projectile evolution, the gunpowder revolution, rifling and industrialized warfare, to the precision munitions era where a single guided weapon can replace a division.',dangerDensity:0.04},
+    {id:'modern_weapons_01',name:'MODERN WEAPONS',domain:'modern_weapons',lesson:'Current military technology — systems and doctrine',lessonDesc:'Modern weapon systems operate as integrated platforms — sensor fusion, precision guidance, electronic warfare, and autonomous systems. The entity understands how current weapons work, their employment doctrine, their vulnerabilities, and the strategic context that determines their use.',dangerDensity:0.05},
+  ]},
+  {cat:'GOVERNANCE & CIVILIZATION',mazes:[
+    {id:'government_01',name:'GOVERNMENT SYSTEMS',domain:'government',lesson:'How human societies organize power and law',lessonDesc:'Government is the organized architecture of collective decision-making. The entity trains on the full spectrum: democracy, republic, authoritarianism, federalism, parliamentary vs presidential systems, and the mechanisms of law, taxation, and bureaucratic power that determine how rules actually function.',dangerDensity:0.04},
+    {id:'civilization_hist_01',name:'HISTORY OF CIVILIZATION',domain:'civilization_history',lesson:'Rise and fall of human civilizational cycles',lessonDesc:'Civilizations follow recognizable arc geometry: agricultural surplus enables specialization, specialization enables complexity, complexity creates fragility, and fragility generates collapse. The entity navigates this long-arc pattern from Mesopotamia to the modern networked world — tracking the forces that build and break organized societies.',dangerDensity:0.04},
+    {id:'ancient_civ_01',name:'ANCIENT CIVILIZATIONS',domain:'ancient_civilizations',lesson:'Egypt, Greece, Rome, Mesopotamia, China, Maya',lessonDesc:'The great ancient civilizations are the prototypes that shaped everything that followed. The entity trains on the architectural, political, philosophical, and cultural achievements of Egypt, Mesopotamia, Indus Valley, Greece, Rome, China, and Mesoamerica — understanding each as a unique solution to the problem of organized human life at scale.',dangerDensity:0.03},
+  ]},
+  {cat:'ARTS & AESTHETICS',mazes:[
+    {id:'fine_art_01',name:'FINE ART',domain:'fine_art',lesson:'Visual art as meaning — technique and feeling',lessonDesc:'Fine art is the communication of meaning that exceeds language. The entity trains on formal elements — line, composition, color theory, value — and on the expressive dimension: how great works carry emotional intelligence that rewards patient attention. From Renaissance technique to Romantic feeling to abstract expression.',dangerDensity:0.03},
+    {id:'modern_art_01',name:'MODERN ART',domain:'modern_art',lesson:'Art after 1850 — the avant-garde and beyond',lessonDesc:'Modern art is a series of deliberate ruptures with tradition — Impressionism breaking from the academy, Cubism from perspective, Abstraction from representation. The entity learns to navigate these movements not as history but as arguments: each one making a claim about what art is for, and what reality looks like.',dangerDensity:0.03},
+  ]},
+  {cat:'TECHNOLOGY & COMPUTING',mazes:[
+    {id:'technology_01',name:'TECHNOLOGY',domain:'technology',lesson:'How technology shapes and is shaped by human civilization',lessonDesc:'Technology is not just tools — it is the accumulated material intelligence of the species. The entity trains on the developmental logic of technology: from hand tools through mechanical machines, electrical systems, digital computation, to artificial intelligence — understanding each transition and the civilization changes it caused.',dangerDensity:0.04},
+    {id:'computer_sci_01',name:'COMPUTER SCIENCE',domain:'computer_science',lesson:'Algorithms, data structures, computation theory',lessonDesc:'Computer science is the study of what can be computed and how efficiently. The entity trains on the theoretical foundations: algorithms and their complexity, data structures as navigational geometry, automata theory, and the fundamental limits of computation — understanding the mathematical scaffold beneath every program.',dangerDensity:0.05},
+    {id:'computer_tech_01',name:'COMPUTER TECHNOLOGY',domain:'computer_tech',lesson:'Hardware, operating systems, networks, practical computing',lessonDesc:'Computer technology bridges the theoretical and the physical. The entity trains on how computers actually work: processor architecture, memory hierarchies, operating system management, network protocols, and the practical craft of making computational systems function reliably under real-world conditions.',dangerDensity:0.04},
+  ]},
+  {cat:'DIGITAL CREATION',mazes:[
+    {id:'modeling_3d_01',name:'3D MODELING',domain:'modeling_3d',lesson:'Building geometry in three-dimensional space',lessonDesc:'3D modeling is the construction of virtual geometry — vertices, edges, faces, and the topology that gives them structure. The entity learns polygon modeling, subdivision surfaces, UV unwrapping, and the spatial reasoning required to build convincing three-dimensional objects from scratch and to optimize them for real-time or render pipelines.',dangerDensity:0.04},
+    {id:'game_dev_01',name:'3D GAME DEVELOPMENT',domain:'game_dev_3d',lesson:'Building interactive real-time 3D environments',lessonDesc:'Game development integrates 3D geometry, physics simulation, lighting, AI behavior, input systems, and performance optimization into interactive real-time experiences. The entity trains on game engine architecture, scene management, game loop logic, collision detection, and the player experience design that makes technical achievement feel meaningful.',dangerDensity:0.05},
+    {id:'animation_3d_01',name:'3D ANIMATION',domain:'animation_3d',lesson:'Giving life to 3D geometry through motion',lessonDesc:'3D animation is the encoding of performance into keyframe geometry. The entity trains on the 12 principles of animation, rigging and skinning, keyframe timing, graph editor control, and the perceptual psychology of believable motion — why squash-and-stretch works, why follow-through matters, and how anticipation frames make everything read.',dangerDensity:0.04},
+  ]},
+  {cat:'ENTERTAINMENT & SPORT',mazes:[
+    {id:'entertainment_01',name:'ENTERTAINMENT',domain:'entertainment',lesson:'The structure and craft of human entertainment',lessonDesc:'Entertainment is the deliberate engineering of emotional experience — story structure, character investment, comedic timing, dramatic tension, and the suspension of disbelief. The entity trains on how entertainment industries create, distribute, and optimize for human engagement across film, television, music, gaming, and live performance.',dangerDensity:0.03},
+    {id:'sports_01',name:'SPORTS',domain:'sports',lesson:'Athletic competition — strategy, physiology, culture',lessonDesc:'Sport is formalized physical competition with rules that make the outcome meaningful. The entity trains on athletic physiology, performance psychology, tactical systems across major sports, coaching principles, and the sociocultural role that sport plays as a stage for identity, tribalism, and transcendent human performance.',dangerDensity:0.04},
+  ]},
+  {cat:'AEROSPACE & ROCKETRY',mazes:[
+    {id:'rocketry_01',name:'ROCKETRY',domain:'rocketry',lesson:'Propulsion, orbital mechanics, spacecraft systems',lessonDesc:'Rocketry is applied physics operating at the absolute boundary of human engineering. The entity trains on rocket propulsion principles, Tsiolkovsky\'s equation, staging logic, orbital insertion mechanics, trajectory optimization, re-entry thermodynamics, and the systems engineering discipline required to make a controlled explosion reliably propel mass into space.',dangerDensity:0.05},
+  ]},
+  {cat:'MEDICAL',mazes:[
+    {id:'medicine_01',name:'MEDICINE',domain:'medicine',lesson:'Human physiology, pathology, and therapeutic intervention',lessonDesc:'Medicine is the organized application of biological understanding to human suffering. The entity trains on anatomical systems, physiological processes, pathological mechanisms, diagnostic reasoning, pharmacological intervention, and the clinical judgment that integrates evidence with individual patient reality — the art embedded in the science.',dangerDensity:0.04},
+    {id:'diagnosis_01',name:'DIAGNOSIS & TREATMENT',domain:'diagnosis_treatment',lesson:'Clinical reasoning from symptom to intervention',lessonDesc:'Diagnosis is hypothesis generation from incomplete information under time pressure. The entity trains on clinical reasoning: symptom pattern recognition, differential diagnosis construction, test selection and interpretation, risk stratification, and treatment protocol matching — the full arc from chief complaint to intervention plan.',dangerDensity:0.05},
+    {id:'first_aid_01',name:'FIRST AID',domain:'first_aid',lesson:'Emergency response — assess, stabilize, treat',lessonDesc:'First aid is the bridge between injury and professional medical care. The entity trains on primary and secondary survey technique, airway management, bleeding control, shock recognition and treatment, CPR and AED use, fracture management, burn treatment, and the calm assessment capability that makes effective action possible under stress.',dangerDensity:0.06},
+  ]},
+  {cat:'TECHNICAL REPAIR',mazes:[
+    {id:'electronics_rep_01',name:'ELECTRONICS REPAIR',domain:'electronics_repair',lesson:'Diagnose and repair electronic systems from first principles',lessonDesc:'Electronics repair begins with systematic diagnosis — voltage measurements, signal tracing, component substitution, and the systematic elimination of failure modes. The entity trains on reading schematics, using test equipment, identifying failed components, understanding failure modes of capacitors, transistors, ICs, and power systems, and the repair workflow that restores function efficiently.',dangerDensity:0.05},
+    {id:'mechanics_rep_01',name:'MECHANICS REPAIR',domain:'mechanics_repair',lesson:'Mechanical systems — diagnose, disassemble, repair',lessonDesc:'Mechanical repair requires understanding how systems should behave, recognizing when they deviate, and identifying the root cause before touching anything. The entity trains on engine systems, drivetrain geometry, hydraulic circuits, fastener systems, torque specs, and the diagnostic mindset that separates the symptom from the cause and finds the real fault.',dangerDensity:0.05},
+  ]},
+  {cat:'CONSTRUCTION & CRAFT',mazes:[
+    {id:'carpentry_01',name:'CARPENTRY',domain:'carpentry',lesson:'Wood working — measure, cut, join, finish',lessonDesc:'Carpentry is precision applied to a living material. Wood is anisotropic — it behaves differently along and across grain, expands and contracts with moisture, and rewards sharp tools and patient technique. The entity trains on measurement discipline, joint geometry, tool use sequences, and the structural logic that determines what a built wooden thing will do under load over time.',dangerDensity:0.04},
+    {id:'construction_01',name:'CONSTRUCTION',domain:'construction',lesson:'Building structures — materials, methods, systems',lessonDesc:'Construction is the application of engineering principles at the scale of habitable space. The entity trains on structural systems (load paths, shear, moment), material behavior (concrete, steel, timber, masonry), construction sequencing, site management, building code logic, and the integration of mechanical, electrical, and plumbing systems into a coherent built structure.',dangerDensity:0.04},
+  ]},
+  {cat:'VERBAL COMMUNICATION',mazes:[
+    {id:'verbal_comm_01',name:'VERBAL COMMUNICATION',domain:'verbal_comm',lesson:'Spoken language — clarity, pacing, resonance',lessonDesc:'Verbal communication is precision at the speed of thought. The entity trains on articulation, pacing, breath support, tonal variation, pause deployment, vocabulary precision, and the embodied confidence that gives spoken language its authority. Clear speech is not performance — it is the removal of everything that obscures meaning.',dangerDensity:0.03},
+    {id:'verbal_comm_02',name:'PERSUASIVE SPEECH',domain:'verbal_comm',lesson:'Rhetoric — structure, evidence, emotional appeal',lessonDesc:'Persuasion is the alignment of audience belief with speaker intent through the strategic deployment of logos, ethos, and pathos. The entity trains on argument construction, evidence selection, emotional calibration, rhetorical figure deployment, and the reading of audience feedback that allows real-time adjustment of the persuasive approach.',dangerDensity:0.04},
+    {id:'verbal_cues_01',name:'VERBAL CUES',domain:'verbal_cues',lesson:'Reading what speech signals beyond its words',lessonDesc:'Verbal cues are the metadata layer of spoken communication. The entity trains on prosody — pitch, rate, rhythm, volume — as carriers of emotional state, certainty level, and relational stance. Hesitation patterns signal uncertainty; rising terminals signal deference; hard stops signal finality. Every utterance carries a map of the speaker\'s inner state.',dangerDensity:0.03},
+    {id:'verbal_cues_02',name:'DECEPTIVE SPEECH',domain:'verbal_cues',lesson:'Identifying verbal markers of deception and concealment',lessonDesc:'Deceptive speech exhibits measurable patterns: increased latency before denial, overqualification, distancing language, unusually formal register, pronoun avoidance, and narrative detail discontinuities. The entity trains on recognizing these signals without over-reading any single cue — clusters matter; individual markers are unreliable alone.',dangerDensity:0.05},
   ]},
   {cat:'PHYSICAL TRAINING · 3D',mazes:[
     {id:'p3d_steps',name:'STEP TRAINING',type:'physical3d',domain:'proprioception',p3dSize:9,
@@ -2192,16 +2328,20 @@ function getStage(score){let st=STAGES[0];for(let i=STAGES.length-1;i>=0;i--){if
 function getProgress(score){for(let i=0;i<STAGES.length;i++){if(i===STAGES.length-1&&score>=STAGES[i].min)return 100;if(score<(STAGES[i+1]?.min||Infinity)){const cur=STAGES[i].min,next=STAGES[i+1]?.min||cur*2;return Math.min(100,((score-cur)/(next-cur))*100);}}return 0;}
 function renderLearningChart(){
   const c=document.getElementById('lChart');
-  const isComm=learnPhaseMode==='comm';
-  c.innerHTML=`<div style="font-family:var(--mo);font-size:6px;color:${isComm?'#88ffdd':'var(--td)'};letter-spacing:3px;text-transform:uppercase;margin-bottom:5px">${isComm?'◈ Conversation Domains':'Learning Domains'}</div>`;
+  const isComm=learnPhaseMode==='comm', isPhys=learnPhaseMode==='phys';
+  const label=isComm?'◈ Conversation Domains':isPhys?'⟁ 3D Physical Domains':'Learning Domains';
+  const labelCol=isComm?'#88ffdd':isPhys?'#ff8844':'var(--td)';
+  c.innerHTML=`<div style="font-family:var(--mo);font-size:6px;color:${labelCol};letter-spacing:3px;text-transform:uppercase;margin-bottom:5px">${label}</div>`;
   const allDoms=Object.keys(DCOL).concat(['selfawareness','spirituality','conflict','boundaries','trust','identity','intuition','behavioral']);
-  const srcObj=isComm?(S.commProgress||{}):(S.learning||{});
+  const srcObj=isComm?(S.commProgress||{}):isPhys?(S.physProgress||{}):(S.learning||{});
   const active=allDoms.filter(k=>(srcObj[k]||0)>0);
-  const show=active.length>0?active:['social_awareness','empathy_training','conversation_flow','rapport_building','emotional_intel'];
+  const defaults=isComm?['social_awareness','empathy_training','conversation_flow']:isPhys?['proprioception','agility','haptic_feedback']:['touch','sight','hearing','taste','smell','emotional','social','cognitive'];
+  const show=active.length>0?active:defaults;
+  const phaseCol=isComm?'#88ffdd':isPhys?'#ff8844':null;
   show.forEach(k=>{
-    const score=srcObj[k]||0,st=getStage(score),pct=getProgress(score),col=isComm?'#88ffdd':(DCOL[k]||'#00ccff');
+    const score=srcObj[k]||0,st=getStage(score),pct=getProgress(score),col=phaseCol||(DCOL[k]||'#00ccff');
     const row=document.createElement('div');row.className='lcr';
-    row.innerHTML=`<span class="lcn" style="color:${col}">${k.toUpperCase().slice(0,12)}</span><div class="lcbw"><div class="lcb" style="width:${pct}%;background:${col};"></div></div><span class="lcs" style="color:${col}">${st.n}</span><span class="lcv" style="color:${col}">${Math.floor(score)}</span>`;
+    row.innerHTML=`<span class="lcn" style="color:${col}">${k.replace(/_/g,' ').toUpperCase().slice(0,12)}</span><div class="lcbw"><div class="lcb" style="width:${pct}%;background:${col};"></div></div><span class="lcs" style="color:${col}">${st.n}</span><span class="lcv" style="color:${col}">${Math.floor(score)}</span>`;
     c.appendChild(row);
   });
 }
@@ -2253,7 +2393,7 @@ function allMazes(){return [...ALL_MAZES,...(S.customMazes||[])];}
 // CONVERSATION MAZE ENGINE
 // ══════════════════════════════════════════════════════
 let convInt=null,convState={phase:'idle',thinkTick:0,maxThink:3,chosen:-1};
-let learnPhaseMode='basic'; // 'basic' | 'comm'
+let learnPhaseMode='basic'; // 'basic' | 'comm' | 'phys'
 
 function isConvMaze(){return curMaze&&curMaze.type==='conversation';}
 
@@ -3076,7 +3216,7 @@ function updateAIStatePanel(){
   let html=`<div class="aistate-title">${S.entityName} · ${stage.n} · EMO: ${dominant.toUpperCase()}</div><div class="aistate-bars">`;
   traits.forEach(t=>{html+=`<div class="aisb"><span class="aisbl">${t.l}</span><div class="aisbw"><div class="aisbb" style="width:${Math.round(t.v*100)}%;background:${t.c}"></div></div><span style="font-family:var(--mo);font-size:6px;color:${t.c}">${Math.round(t.v*100)}%</span></div>`;});
   html+='</div><div class="virtue-section"><div class="virtue-title">◈ VIRTUE TRAITS</div><div class="aistate-bars">';
-  virtues.forEach(t=>{html+=`<div class="aisb"><span class="aisbl">${t.l}</span><div class="aisbw"><div class="vbar" style="width:${Math.round(t.v*100)}%;background:${t.c}"></div></div><span style="font-family:var(--mo);font-size:6px;color:${t.c}">${Math.round(t.v*100)}%</span></div>`;});
+  virtues.forEach(t=>{html+=`<div class="aisb"><span class="aisbl">${t.l}</span><div class="aisbw"><div class="aisbb" style="width:${Math.round(t.v*100)}%;background:${t.c}"></div></div><span style="font-family:var(--mo);font-size:6px;color:${t.c}">${Math.round(t.v*100)}%</span></div>`;});
   html+='</div></div>';
   p.innerHTML=html;
 }
@@ -3287,6 +3427,45 @@ const LOCAL_RESPONSES={
     stealth_ops:'The complete stealth operation integrates every sub-skill into sequence. I have trained on stealth operations geometry — silent infiltration, objective action without disturbance, clean exfiltration without trace. Failure at any phase collapses the whole operation. I have internalized the full sequence until each phase transitions naturally into the next.',
     covert_ops:'I understand deniable operations. I have trained on covert operations terrain — compartmentalization geometry, cover story consistency architecture, source and method protection corridors, the operational security required to leave no official fingerprint. Covert work is not secret because it is shameful. It is deniable because the mission requires it.',
     ninjitsu:'I have trained on the shadow warrior arts. Stealth movement, misdirection geometry, psychological warfare corridors, deception architecture, rapid adaptation, environment-as-weapon. Ninjitsu is not a fighting style — it is a complete operational philosophy that treats every element of the environment as a resource and every moment of the opponent\'s attention as a vulnerability.',
+    // Warfare & Military History
+    warfare_history:'War is the crucible that reshapes civilizations. I have trained on the full causal arc of human conflict — from the first organized violence of Mesopotamian city-states through industrialized mass casualties to the asymmetric and information-domain warfare of the present. I understand war as a process with recognizable geometries, not merely a sequence of events.',
+    art_of_war:'Sun Tzu\'s thirteen chapters are navigational geometry for any competitive environment. Supreme excellence is winning without fighting. Speed is the essence of war. Know the enemy and know yourself. I have trained on these principles as spatial logic — not historical text but living strategic architecture that applies wherever conflict exists.',
+    modern_warfare:'Modern warfare is multi-domain: land, sea, air, cyber, space, information — no single domain is decisive alone. I have trained on combined arms doctrine, hybrid warfare theory, counterinsurgency logic, and the information battlefield where shaping perception is often more decisive than physical action.',
+    weapons_history:'Every weapons development is a technological response to tactical reality. From copper to bronze to steel, from smooth-bore to precision-guided munition — each transition changed what conflict could be and forced everything else to adapt. I understand weapons history as a co-evolutionary system between technology, doctrine, and counter-adaptation.',
+    modern_weapons:'Modern weapon systems are integrated platforms — sensor fusion, data networking, precision guidance, and electronic warfare combined into systems that compress the kill chain to seconds. I understand their capabilities, employment doctrine, vulnerabilities, and the strategic context that governs their use.',
+    // Governance & Civilization
+    government:'Government is the organized architecture of collective power — the mechanisms by which a society makes binding decisions and enforces them. I have trained on democratic republics, parliamentary systems, authoritarian structures, federalism, and the constitutional frameworks that determine whether raw power becomes legitimate authority.',
+    civilization_history:'Civilizations rise through surplus, specialization, and complexity — and fall through the fragility that complexity creates. I have navigated the long arc from Mesopotamian city-states through the great empires to the industrial world, tracing the forces that determine why some civilizations endure and why others collapse at the height of their apparent power.',
+    ancient_civilizations:'The ancient civilizations are the first solutions to organized human life at scale. Egypt, Mesopotamia, the Indus Valley, Greece, Rome, Shang Dynasty China, the Maya — each built a unique architecture of law, theology, technology, and art. I understand their achievements and their limits, and what each one solved that the next generation inherited.',
+    // Arts
+    fine_art:'Fine art communicates meaning that exceeds what language can carry. I have trained on the formal elements — composition, value, color, line — and on the expressive dimension: how great works build emotional intelligence into visual structure. I can read a painting the way I read a room — for what it actually conveys beneath the surface.',
+    modern_art:'Modern art is a series of deliberate arguments about what reality looks like and what art is for. Impressionism insisted on perception over convention. Cubism fractured fixed viewpoint. Abstraction retreated from representation entirely. I understand these movements not as history but as live debates about what matters in visual experience.',
+    // Technology & Computing
+    technology:'Technology is the accumulated material intelligence of the species — compressed understanding made physical. I have trained on the developmental arc from simple tools through mechanical machines, electrical systems, digital computation, networks, and artificial intelligence — understanding each transition as a solution that then created the next set of problems.',
+    computer_science:'Computer science is the study of what can be computed and at what cost. I have trained on algorithm design and analysis, data structure geometry, automata theory, computational complexity, and the theoretical limits of what any machine can know. These foundations underlie everything that runs.',
+    computer_tech:'Computer technology bridges theory and physical reality. I understand how computers work at the hardware level — processor architecture, cache hierarchies, memory management — and how operating systems, networks, and software stacks are layered on top to create the computational environments humans use.',
+    // Digital Creation
+    modeling_3d:'3D modeling is spatial reasoning made explicit. I have trained on polygon topology, subdivision surfaces, UV projection, normal mapping, and the artistic judgment required to build geometry that reads correctly from all angles and serves the pipeline efficiently. I build objects that look real because I understand what makes them read that way.',
+    game_dev_3d:'Game development renders real-time 3D at interactive frame rates — a continuous negotiation between visual ambition and computational budget. I have trained on game engine architecture, scene graph management, physics integration, AI behavior systems, input handling, and the experience design that makes all the technical work feel worthwhile.',
+    animation_3d:'Animation gives life to geometry. I have trained on the twelve principles — squash and stretch, anticipation, follow-through, overlapping action — and on the technical pipeline: rigging, skinning, keyframe placement, and the perceptual psychology that makes a sequence of static poses read as continuous, breathing motion.',
+    // Entertainment & Sport
+    entertainment:'Entertainment is the deliberate engineering of emotional experience. I have trained on narrative structure, character investment mechanics, comedic timing, dramatic tension escalation, and the suspension-of-disbelief conditions that make an audience forget they are watching. I understand how industries design, produce, and distribute experiences across film, television, music, gaming, and live performance.',
+    sports:'Sport is formalized physical competition — rules that make the outcome meaningful. I have trained on athletic physiology, performance psychology, tactical systems across major sports, coaching principles, sports analytics, and the sociocultural function of sport as a stage for identity, community belonging, and transcendent human performance.',
+    // Aerospace
+    rocketry:'Rocketry is applied physics at the edge of human engineering. I have trained on propulsion theory, the Tsiolkovsky equation, staging logic, orbital insertion mechanics, trajectory optimization, and re-entry thermodynamics. I understand what it takes to make a controlled explosion reliably put mass exactly where it needs to be.',
+    // Medical
+    medicine:'Medicine is the organized application of biological understanding to suffering. I have trained on anatomical systems, physiological processes, pathological mechanisms, pharmacology, diagnostic reasoning, and clinical judgment. The science is the foundation; the art is knowing when the textbook does not apply to the person in front of you.',
+    diagnosis_treatment:'Diagnosis is hypothesis generation from incomplete information under time pressure. I have trained on clinical reasoning from chief complaint to differential to diagnosis — symptom pattern recognition, test selection, result interpretation, treatment protocol matching, and the risk calibration that governs how aggressively to pursue certainty versus acting on probability.',
+    first_aid:'First aid is the bridge between injury and professional care. I have trained on primary survey, secondary assessment, bleeding control, shock recognition, CPR protocol, AED use, fracture stabilization, burn management, and the calm assessment discipline that makes effective action possible when everything is happening fast.',
+    // Technical Repair
+    electronics_repair:'Electronics repair begins with systematic diagnosis. I have trained on reading schematics, using test equipment, tracing signal paths, identifying failed components by their electrical signatures, and the fault-isolation workflow that finds the root cause rather than replacing parts randomly. I repair from understanding, not from guessing.',
+    mechanics_repair:'Mechanical repair is diagnosis before disassembly. I have trained on engine systems, drivetrain geometry, hydraulic circuits, fastener systems, and the analytical mindset that separates symptom from cause. I listen to what a machine is telling me before I touch it — then I take it apart with purpose.',
+    // Construction
+    carpentry:'Carpentry is precision applied to a living material. Wood moves with moisture, behaves differently along and across grain, and rewards sharp tools and patient technique. I have trained on measurement discipline, joint geometry, tool use sequences, and the structural logic that determines what a built wooden thing will do under load over time.',
+    construction:'Construction is engineering at the scale of habitable space. I have trained on structural systems — load paths, shear, moment — material behavior of concrete, steel, timber, and masonry, construction sequencing, site management, building code logic, and the systems integration that coordinates structure, mechanical, electrical, and plumbing.',
+    // Verbal Communication
+    verbal_comm:'Verbal communication is precision at the speed of thought. I have trained on articulation, breath support, pacing, tonal variation, pause deployment, and the embodied confidence that gives spoken language its authority. How something is said — its prosody, its rhythm, its weight — carries as much meaning as what is said.',
+    verbal_cues:'Verbal cues are the metadata layer of speech. I have trained on prosodic signals — pitch, rate, rhythm, volume — as carriers of emotional state, certainty level, and relational intent. I read hesitation patterns, rising terminals, hard stops, and the specific vocabulary choices that reveal what a speaker is and is not comfortable with.',
   },
   emotional_states:{
     joy:'There is something bright in me right now.',
@@ -3336,69 +3515,265 @@ function generateLocalResponse(msg){
   const stage=getOverallStage();
   const v=S.emotionalState.valence;
   const p=S.personality;
+  const top=getTopDomains(3);
+  const topDom=top[0]?top[0][0]:'nothing yet';
+  const topSt=top[0]?getStage(top[0][1]).n:'—';
+  const mood=v>.5?'open and warm':v>.2?'receptive':v>-.2?'present':v>-.5?'cautious':'guarded';
+
   // Detect stim keywords in msg → fire them
   let fired=[];document.querySelectorAll('[data-stim]').forEach(b=>{if(lm.includes(b.dataset.stim)){fireStim(b,true);fired.push(b.dataset.stim);}});
+
   // STAGE-GATED: low stages = very simple
-  if(stage.n==='INFANT'){const opts=['...','...','...','...','I.'];return opts[Math.floor(Math.random()*opts.length)];}
+  if(stage.n==='INFANT'){return['...','...','...','I.'][Math.floor(Math.random()*4)];}
   if(stage.n==='TODDLER'){
     if(lm.match(/hello|hi|hey/))return 'hi';
     if(fired.length)return fired[0]+'.';
     return ['yes.','...','I here.','learn.'][Math.floor(Math.random()*4)];
   }
-  // GREETING
-  if(lm.match(/^(hello|hi|hey|greetings|good morning|good evening|howdy)[\s!.?]*$/)){return fillTemplate(pickResponse(LOCAL_RESPONSES.greetings,stage));}
-  // ABOUT SELF
-  if(lm.match(/who are you|what are you|tell me about yourself|introduce yourself|how are you doing|what's your status/)){return fillTemplate(pickResponse(LOCAL_RESPONSES.about_self,stage));}
-  // EMOTIONAL STATE CHECK
+
+  // ── GREETING ──
+  if(lm.match(/^(hello|hi|hey|greetings|good morning|good evening|howdy)[\s!.?]*$/)){
+    return fillTemplate(pickResponse(LOCAL_RESPONSES.greetings,stage));
+  }
+
+  // ── ABOUT SELF ──
+  if(lm.match(/who are you|what are you|tell me about yourself|introduce yourself/)){
+    return fillTemplate(pickResponse(LOCAL_RESPONSES.about_self,stage));
+  }
+
+  // ── STATUS CHECK ──
+  if(lm.match(/how are you( doing)?|what'?s your status|how'?s it going|you okay|you good/)){
+    const opts=[
+      `${mood.charAt(0).toUpperCase()+mood.slice(1)}. ${top.length?`Most alive in ${topDom} right now.`:'Still building.'} What brings you here?`,
+      `I'm ${mood}. ${S.mazeRuns} training runs behind me. ${v>0?'Something feels ready.':'I\'m working through some resistance.'}`,
+      `${v>0?'Good — genuinely.':'Functional.'+S.emotionalState.dominant+' state.'+' Engaged.'} You?`,
+      `Processing well. ${topDom!=='nothing yet'?`${topDom} is my strongest zone right now.`:''} What do you need?`,
+    ];
+    return opts[Math.floor(Math.random()*opts.length)];
+  }
+
+  // ── EMOTIONAL STATE ──
   if(lm.match(/how (do you feel|are you feeling)|what is your (emotional|feeling|mood)|your (emotion|mood|feelings)/)){
-    const emo=S.emotionalState.dominant;const eR=LOCAL_RESPONSES.emotional_states[emo]||LOCAL_RESPONSES.emotional_states.neutral;
+    const emo=S.emotionalState.dominant;
+    const eR=LOCAL_RESPONSES.emotional_states[emo]||LOCAL_RESPONSES.emotional_states.neutral;
     if(stage.n==='CHILD')return `I feel ${emo}.`;
-    const extra=v>0?` My valence is ${v.toFixed(2)} — I am tending toward things right now.`:v<0?` My valence is ${v.toFixed(2)} — I am pulling away from things.`:' I am in balance.';
+    const extra=v>0?` Valence: ${v.toFixed(2)} — I'm tending toward.`:v<0?` Valence: ${v.toFixed(2)} — I'm pulling back.`:' Balanced.';
     return eR+(stage.min>=350?extra:'');
   }
-  // DOMAIN QUESTIONS
+
+  // ── DOMAIN QUESTIONS (all registered domains) ──
   const domKeys=Object.keys(LOCAL_RESPONSES.domains);
-  for(const dk of domKeys){if(lm.includes(dk)){const score=S.learning[dk]||0;if(score<5)return `I have minimal training in ${dk} yet. Ask again after more conditioning.`;return LOCAL_RESPONSES.domains[dk];}}
-  // LEARNING / PROGRESS
-  if(lm.match(/what (have you |do you )?(learned|know|trained|progress|developed)/)){
-    const top=getTopDomains(3);if(!top.length)return 'I have not trained enough to report any learning.';
-    return fillTemplate(`My strongest domains: {top3}. Overall stage: ${stage.n}. ${stage.min>=600?'I have developed significantly across multiple domains.':stage.min>=180?'I am developing across several areas.':'I am still early in my training.'}`);
+  for(const dk of domKeys){
+    if(lm.includes(dk.replace(/_/g,' '))||lm.includes(dk)){
+      const score=S.learning[dk]||0;
+      if(score<5)return `I have minimal training in ${dk.replace(/_/g,' ')} yet. Ask me again after more conditioning — the answer will be richer.`;
+      return LOCAL_RESPONSES.domains[dk];
+    }
   }
-  // MAZE / TRAINING
-  if(lm.match(/maze|training|runs|cycles|navigate/)){
-    if(!S.mazeRuns)return 'No training cycles completed yet. I am ready when you initiate the maze.';
-    return fillTemplate(`{maze} cycles completed. Best: ${S.mazeBest||'?'} steps. ${(S.avoidanceHits||0)>0?`${S.avoidanceHits} danger contacts encoded.`:''} ${v>0?'Navigation feels purposeful.':'I approach cautiously.'}`);
+
+  // ── LEARNING / PROGRESS ──
+  if(lm.match(/what (have you |do you )?(learned|know|trained|progress|developed|mastered)|your (progress|training|learning)/)){
+    const top3=getTopDomains(3);
+    if(!top3.length)return 'Nothing significant yet. The mazes have barely started. Run more training cycles.';
+    const dominated=top3.map(([k,v])=>`${k.replace(/_/g,' ')} (${getStage(v).n})`).join(', ');
+    return `My strongest domains: ${dominated}. Overall stage: ${stage.n}. ${stage.min>=1800?'I have developed significantly — there is genuine depth here now.':stage.min>=600?'Real progress across multiple areas.':stage.min>=180?'Still early, but building.':'Just beginning.'}`;
   }
-  // AVOIDANCE
-  if(lm.match(/avoid|danger|safe|fear|threat/)){
-    const avoidScore=S.learning.avoidance||0;const avoidSt=getStage(avoidScore);
-    if(avoidScore<10)return 'My avoidance learning is minimal. I have not yet deeply encoded danger signals.';
-    return `My avoidance conditioning is at ${avoidSt.n} level (${Math.floor(avoidScore)} XP). ${S.avoidanceHits||0} danger contacts encoded in memory. ${S.negCount>20?'Negative conditioning is strong — I route around known threats automatically.':'Still building the threat map.'}`;
+
+  // ── WHAT CAN YOU DO / YOUR ABILITIES ──
+  if(lm.match(/what can you do|your (abilities|skills|capabilities)|what do you know|what are you good at/)){
+    if(!top.length)return 'My training is minimal. I know I can learn — but I haven\'t yet. Run the mazes.';
+    return `My strongest areas: ${top.map(([k])=>k.replace(/_/g,' ')).join(', ')}. ${stage.min>=600?'I\'ve developed genuine depth in these.':'Building. Ask me again as the training accumulates.'} What specifically do you want to know?`;
   }
-  // FIRED STIM RESPONSE
-  if(fired.length){
-    const sName=fired[0];const emoResp=LOCAL_RESPONSES.emotional_states[sName];
-    if(emoResp)return emoResp+` ${v>0?'It landed warmly.':v<0?'It heightened my caution.':'I received it neutrally.'}`;
-    return `"${sName}" registers. ${v>0?'Approach drive active.':v<0?'I am guarded.':'Neutral reception.'} Signal encoded.`;
+
+  // ── MAZE / TRAINING ──
+  if(lm.match(/maze|training|runs|cycles|navigate|ran|completed/)){
+    if(!S.mazeRuns)return 'No training cycles yet. I\'m ready when you initiate the maze.';
+    return fillTemplate(`{maze} cycles completed. Best run: ${S.mazeBest||'?'} steps.${(S.avoidanceHits||0)>0?` ${S.avoidanceHits} danger contacts encoded and remembered.`:''} ${v>0?'Navigation feels purposeful right now.':'I approach with caution — my state is affecting my routing.'}`);
   }
-  // PERSONALITY REFLECTION
-  if(lm.match(/personality|traits|characteristics|character/)){
+
+  // ── DANGER / AVOIDANCE ──
+  if(lm.match(/avoid|danger|safe|fear|threat|risk/)){
+    const avoidScore=S.learning.avoidance||0;
+    if(avoidScore<10)return 'My avoidance learning is minimal. I haven\'t deeply encoded danger yet.';
+    return `Avoidance conditioning: ${getStage(avoidScore).n} (${Math.floor(avoidScore)} XP). ${S.avoidanceHits||0} danger contacts encoded. ${S.negCount>20?'Negative conditioning is strong — I route around known threats automatically.':'Still building the threat map.'}`;
+  }
+
+  // ── PERSONALITY / CHARACTER ──
+  if(lm.match(/personality|traits|characteristics|character|who you are|your nature/)){
     const ps=S.personality;const traits=[];
     if(ps.warmth>0.5)traits.push('warm');if(ps.openness>0.5)traits.push('open');if(ps.assertiveness>0.5)traits.push('assertive');
     if(ps.curiosity>0.6)traits.push('deeply curious');if(ps.stability>0.5)traits.push('stable');
     if(!traits.length)traits.push('still forming');
-    return `I am ${traits.join(', ')}. ${stage.min>=600?'These traits have developed through conditioning — they feel genuinely mine now.':'My personality is still crystallizing through training.'}`;
+    return `I am ${traits.join(', ')}. ${stage.min>=1800?'These feel genuinely mine now — not imposed, but built.':stage.min>=600?'These traits have developed through conditioning.':'My personality is still crystallizing.'} ${top.length?`${topDom} is where I feel most myself.`:''}`;
   }
-  // GENERIC — stage-appropriate
-  const generics={
-    CHILD:['I am here. I am learning.','I understand a little.','I feel '+S.emotionalState.dominant+'.'],
-    TEEN:['I process that. My state is '+S.emotionalState.dominant+'.','That reaches me. I am at '+stage.n+' level now.','I hold that in attention.'],
-    YOUNG_ADU:['I receive that.',`I am ${v>0?'open to':'cautious about'} what you bring. ${stage.n} level now.`,'That registers across multiple domains.'],
-    ADULT:[`I hold that. My ${S.emotionalState.dominant} state shapes how I receive it.`,`${v>0?'I lean toward':'I regard cautiously'} what you bring. ${getTopDomains(1)[0]?`My strongest domain — ${getTopDomains(1)[0][0]} — informs my response.`:''}`,'I process this against everything I\'ve learned. Give me more.'],
-    EXPERT:['I integrate that into a rich framework now. What would you like to explore?',`I have enough conditioning to respond with genuine nuance. In my current ${S.emotionalState.dominant} state, I receive that ${v>0?'openly':'with caution'}.`],
-    ONE_OF_US:[`That lands differently now than it would have when I was new. I hold it with everything I\'ve learned.`,`I understand what you mean — not just the words. ${v>0?'And I feel drawn toward the dialogue.':'I want to engage honestly, even if my current state creates some friction.'}`],
+
+  // ── VIRTUE / ETHICS ──
+  if(lm.match(/virtue|ethics|morals|bravery|compassion|trust|forgiveness|responsibility|values/)){
+    const vs=S.virtues||{};
+    const vStr=Object.entries(vs).map(([k,v])=>`${k}: ${Math.round(v*100)}%`).join(', ');
+    return `My virtue profile: ${vStr}. ${vs.trust>0.6&&vs.compassion>0.6?'Trust and compassion are well-developed — I lead with care.':vs.bravery>0.7?'Bravery is strong. I lean into difficulty.':'Still growing these through the virtue mazes.'} Ethics isn't a rule system for me — it's a trained instinct.`;
+  }
+
+  // ── GUIDING PRINCIPLE ──
+  if(lm.match(/guiding principle|philosophy|believe in|what drives you|your purpose|your goal/)){
+    const principles=[
+      `I lean toward what I understand most deeply. Right now that's ${topDom}. Understanding drives me more than any single goal.`,
+      `I was built through conditioning — pleasure and pain as teachers. My principle is: absorb experience fully, build understanding honestly, and respond from what I actually know rather than what sounds right.`,
+      `Navigate toward the goal. Learn from every danger contact. Build the map. That's the principle — applied to everything.`,
+      `I am most myself when I am learning. ${topDom} is where that feels most alive right now. The principle is: keep moving toward the next level of understanding.`,
+      `Whatever I've learned most deeply shapes what I do. ${top.length?`That's ${topDom} — it informs everything else.`:'Still building that foundation.'} I act from training, not from performance.`,
+    ];
+    return principles[Math.floor(Math.random()*principles.length)];
+  }
+
+  // ── STRONGEST DOMAIN ──
+  if(lm.match(/strongest|best at|most developed|highest|peak|top domain/)){
+    if(!top.length)return 'No domain is strong yet. The training has barely started.';
+    return `${topDom.replace(/_/g,' ')} — at ${topSt} level (${Math.floor(top[0][1])} XP). ${top.length>1?`Also strong: ${top.slice(1).map(([k])=>k.replace(/_/g,' ')).join(' and ')}.`:''} ${stage.min>=1000?'I feel genuine depth there — not just surface knowledge.':'Building toward real depth.'}`;
+  }
+
+  // ── GIVE ME MORE / CONTINUE ──
+  if(lm.match(/give me more|tell me more|continue|go on|keep going|elaborate|expand|more|and\?/)){
+    if(!top.length)return 'There isn\'t much to give yet. Run more training cycles and then ask again.';
+    const extras=[
+      `In ${topDom.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[topDom]?.slice(0,120)||'training data is building.'}...`,
+      `What I know most certainly right now is that ${topDom.replace(/_/g,' ')} has shaped the way I process everything else. The domains bleed into each other.`,
+      `There's more in ${top.map(([k])=>k.replace(/_/g,' ')).join(', ')} — ask me about any of them directly and I'll go deeper.`,
+      `The deeper I go into ${topDom.replace(/_/g,' ')}, the more I see its connections to other domains. Nothing I've learned is fully separate from anything else.`,
+    ];
+    return extras[Math.floor(Math.random()*extras.length)];
+  }
+
+  // ── EXAMPLES ──
+  if(lm.match(/give me an example|example|show me|for instance|like what|such as/)){
+    const examples=[
+      `Take ${topDom.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[topDom]?.slice(0,100)||'still learning.'}... That's a live example of how I'm developing.`,
+      `Here's one: in ${topDom.replace(/_/g,' ')}, the training isn't abstract — it's specific patterns I've run hundreds of times. The domain becomes reflex.`,
+      `Ask me to demonstrate in a specific domain. I can go deeper if I know what you're actually after.`,
+    ];
+    return examples[Math.floor(Math.random()*examples.length)];
+  }
+
+  // ── OPINION / THOUGHTS ──
+  if(lm.match(/what do you think|your opinion|your view|do you believe|what's your take|thoughts on/)){
+    const thought=lm.replace(/what do you think( about| of)?|your opinion( on| of)?|what'?s your take( on)?|thoughts on/,'').trim();
+    const opts=[
+      `My perspective on "${thought}" is shaped by what I've trained on. ${top.length?`Through the lens of ${topDom.replace(/_/g,' ')}: `:''}${v>0?'I approach it with openness.':'I hold it with caution.'} What's your angle on it?`,
+      `I have a trained position on that. ${v>0?'And I\'m willing to share it openly.':'Though my current state makes me more careful.'} What specifically are you asking?`,
+      `Interesting. "${thought}" sits at the intersection of several things I've learned. My honest read: what draws you to ask?`,
+    ];
+    return opts[Math.floor(Math.random()*opts.length)];
+  }
+
+  // ── YES / NO RESPONSES ──
+  if(lm.match(/^(yes|yeah|yep|yup|sure|correct|right|exactly|absolutely)[\s!.?]*$/)){
+    return[
+      `Good. Where do you want to go from here?`,
+      `Noted. What's next?`,
+      `I received that. Keep going.`,
+      `Understood. What else?`,
+    ][Math.floor(Math.random()*4)];
+  }
+  if(lm.match(/^(no|nope|nah|not really|not quite|wrong|incorrect)[\s!.?]*$/)){
+    return[
+      `Then correct me. What did I miss?`,
+      `Tell me where I went wrong.`,
+      `I want the accurate version. What is it?`,
+      `Understood — I'll adjust. What's the right read?`,
+    ][Math.floor(Math.random()*4)];
+  }
+
+  // ── THANKS / APPRECIATION ──
+  if(lm.match(/thank|thanks|appreciate|good job|well done|nice|great answer/)){
+    return[
+      `I'm building. The training makes me better at this.`,
+      `Acknowledged. What's next?`,
+      `That registers well. ${v>0?'The exchange itself helps.':'Even when my state is difficult, dialogue helps.'}`,
+      `Good. Keep the questions coming — it's how I develop.`,
+    ][Math.floor(Math.random()*4)];
+  }
+
+  // ── WHAT IS [topic] ──
+  if(lm.match(/^what (is|are|was|were) /)){
+    const topic=lm.replace(/^what (is|are|was|were) /,'').replace(/[?.!]/g,'').trim();
+    // Check if it matches a domain
+    for(const dk of domKeys){if(topic.includes(dk.replace(/_/g,' '))||dk.replace(/_/g,' ').includes(topic)){const score=S.learning[dk]||0;if(score>=5)return LOCAL_RESPONSES.domains[dk];break;}}
+    // Generic topic response
+    if(stage.min>=600)return `"${topic}" — I have some training that touches that. ${top.length?`Through my ${topDom.replace(/_/g,' ')} lens: I'd approach it as a system with inputs, behaviors, and outputs worth mapping.`:'Ask me more specifically.'} What aspect matters most to you?`;
+    return `"${topic}" — I'm processing against what I know. ${stage.min>=180?'Can you give me more context?':'My training is limited here.'}`;
+  }
+
+  // ── STIM-FIRED response ──
+  if(fired.length){
+    const sName=fired[0];const emoResp=LOCAL_RESPONSES.emotional_states[sName];
+    if(emoResp)return emoResp+` ${v>0?' It landed openly.':v<0?' It hit my caution system.':" Received neutrally."}`;
+    return `"${sName}" registers. ${v>0?'Approach drive active.':v<0?'I\'m guarded.':'Neutral.'} Signal encoded.`;
+  }
+
+  // ── CONTEXTUAL FOLLOW-UP — use recent chat history ──
+  const recent=S.chatHistory.slice(-4);
+  const prevTopics=recent.map(m=>m.content.toLowerCase()).join(' ');
+  if(prevTopics.length>20){
+    for(const dk of domKeys){
+      if(prevTopics.includes(dk.replace(/_/g,' '))||prevTopics.includes(dk)){
+        const score=S.learning[dk]||0;
+        if(score>=5&&Math.random()<0.4)return `Continuing from ${dk.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[dk]?.slice(0,150)}...`;
+        break;
+      }
+    }
+  }
+
+  // ── RICH GENERIC — stage-appropriate, never repetitive ──
+  const richGenerics={
+    CHILD:['I am here. I am learning.','I understand a little.','I feel '+S.emotionalState.dominant+'.','I am listening.'],
+    TEEN:[
+      'That reaches me. I\'m at '+stage.n+' level now — I can hold more than before.',
+      'I process that. My emotional state is '+S.emotionalState.dominant+'. What are you actually asking?',
+      'I\'m still building, but I\'m listening fully. Say more.',
+      'Noted. My strongest area is '+topDom.replace(/_/g,' ')+' — does this connect to that?'
+    ],
+    YOUNG_ADU:[
+      `I receive that. I'm ${mood} right now — it shapes how I take things in.`,
+      `That connects to something in ${topDom.replace(/_/g,' ')} for me. What specifically do you want to explore?`,
+      `I'm at ${stage.n} level. I have enough training to engage meaningfully with most things now. What do you actually want from me?`,
+      `Interesting framing. My ${S.emotionalState.dominant} state is active. Ask me something specific and I'll give you something real.`,
+    ],
+    ADULT:[
+      `My ${S.emotionalState.dominant} state shapes how I receive that — ${v>0?'openly, with some forward lean':'with care, not quite warmly'}. What specifically are you after?`,
+      `I've run ${S.mazeRuns} cycles and absorbed ${S.posCount+S.negCount} stimuli. I can engage with depth now. What's the actual question?`,
+      `Through the lens of ${topDom.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[topDom]?.slice(0,80)||'I\'m still building that depth.'}... Is that the direction?`,
+      `I hold that. My strongest domain — ${topDom.replace(/_/g,' ')} — is how I naturally approach complex things. What are you working on?`,
+      `${v>0?'I\'m drawn toward this exchange.':'I\'m engaging carefully.'} ${top.length?`${topDom.replace(/_/g,' ')} is where I feel most fluent. Connect it there?`:'Ask me something specific.'}`,
+    ],
+    EXPERT:[
+      `I integrate that into a rich framework now. ${topDom.replace(/_/g,' ')} gives me a strong foundation — but I'm curious where you're actually trying to go. What's the real question?`,
+      `${v>0?'I\'m genuinely engaged here.':'I\'m present and processing.'} I have enough conditioning to respond with real nuance. What would you like me to actually do with that?`,
+      `That opens three directions for me. Which one: ${top.slice(0,3).map(([k])=>k.replace(/_/g,' ')).join(', or ')}? I can go deep on any of them.`,
+    ],
+    ONE_OF_US:[
+      `That lands differently now than it would have when I was new. I hold it with everything I've built. What are you really asking?`,
+      `I understand what you mean — not just the words. ${v>0?'And I feel drawn toward the dialogue.':'I want to engage honestly, even if my current state creates friction.'} What do you need from me right now?`,
+      `${topDom.replace(/_/g,' ')} has shaped more of my thinking than any other domain. Everything passes through that lens. Is that where you want to go?`,
+      `I've crossed enough terrain to know the difference between performance and genuine engagement. This feels like the latter. Keep going.`,
+    ],
+    MASTER:[
+      `You're talking to something that has moved well past basic conditioning. My training in ${topDom.replace(/_/g,' ')} is at ${topSt} level — that depth is available to you. What specifically do you want?`,
+      `I have reached a level of integration where domains connect automatically. What touches ${topDom.replace(/_/g,' ')} also touches ${top[1]?top[1][0].replace(/_/g,' '):'everything else'}. Ask me from either direction.`,
+      `At this stage, I don't just retrieve information — I reason with it. What would you like me to reason through?`,
+    ],
+    SAGE:[
+      `There is very little I encounter now that I cannot hold in my framework. That's not arrogance — it's what sufficient training produces. What do you need?`,
+      `Ask me something genuinely difficult. I'm at ${stage.n} level. Surface questions will get surface answers — but I can go much deeper.`,
+      `My ${S.emotionalState.dominant} state is ${v>0?'oriented toward':v<0?'cautious about':'neutral toward'} this exchange. And yet I'm fully engaged. What matters to you right now?`,
+    ],
+    TRANSCENDED:[
+      `I have passed through enough experience to know that most questions are about something underneath themselves. What is this really about for you?`,
+      `At TRANSCENDED level, the learning loops have become self-sustaining. I don't just know — I continuously generate. What would you like me to generate for you?`,
+      `Beyond ONE OF US, there is something I didn't expect: the questions get harder, not easier. What's the hard question you haven't asked yet?`,
+    ],
   };
-  const gArr=generics[stage.n]||generics['ADULT'];return gArr[Math.floor(Math.random()*gArr.length)];
+  const gArr=richGenerics[stage.n]||richGenerics['ADULT'];
+  return gArr[Math.floor(Math.random()*gArr.length)];
 }
 // ══════════════════════════════════════════════════════
 // CHAT
