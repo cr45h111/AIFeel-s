@@ -355,6 +355,20 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .cm.ai .ail{font-size:6px;color:var(--pu);letter-spacing:2px;margin-bottom:3px;display:block;}
 .cm.sm{align-self:center;color:var(--td);font-size:6px;border:none;background:transparent;padding:2px 0;}
 .cirow{display:flex;gap:5px;flex-shrink:0;}
+/* Embodiment bar */
+#embodimentBar{background:#030d18;border:1px solid #0a2040;border-radius:3px;padding:5px 7px;flex-shrink:0;font-family:var(--mo);}
+.eb-row{display:flex;gap:8px;flex-wrap:wrap;}
+.eb-group{display:flex;flex-direction:column;gap:1px;min-width:60px;flex:1;}
+.eb-lbl{font-size:5px;color:#334466;letter-spacing:2px;text-transform:uppercase;margin-bottom:1px;}
+.eb-val{font-size:6px;line-height:1.4;letter-spacing:.3px;}
+/* Speech tag in chat bubbles */
+.speech-tag{font-size:5px;color:#334466;letter-spacing:1.5px;margin-left:6px;font-style:normal;}
+/* Prosody-tinted AI bubbles */
+.cm.ai.ai-warm{border-left-color:#ff88cc;background:#0d0a10;}
+.cm.ai.ai-tense{border-left-color:#ff6633;background:#100804;}
+.cm.ai.ai-subdued{border-left-color:#446688;background:#060c14;opacity:.92;}
+/* Conversation context mini-bar */
+#convContextBar{font-family:var(--mo);font-size:5px;color:var(--td);padding:2px 4px;letter-spacing:.8px;flex-shrink:0;border-bottom:1px solid #0a1828;}
 .ci{flex:1;background:var(--panel);border:1px solid var(--b1);color:var(--tx);font-family:var(--mo);font-size:8px;padding:6px 8px;border-radius:2px;outline:none;transition:border-color .15s;}
 .ci:focus{border-color:var(--pu)}
 .csnd{background:transparent;border:1px solid var(--b1);color:var(--pu);font-family:var(--mo);font-size:7px;padding:6px 9px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .12s;flex-shrink:0;}
@@ -702,7 +716,9 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
   <div class="tc" id="t-chat">
     <div class="cwrap">
       <div class="aistate" id="aiStatePanel"></div>
+      <div id="convContextBar">TOPIC: — · INTENT: — · TONE: — · SATISFACTION: 50%</div>
       <div class="cmsgs" id="cmsgs"><div class="cm sm">// entity online · local AI active · no API key required</div></div>
+      <div id="embodimentBar"><div class="eb-row"><div class="eb-group"><div class="eb-lbl">POSTURE</div><div class="eb-val" style="color:#88aacc">upright · relaxed</div></div><div class="eb-group"><div class="eb-lbl">GAIT</div><div class="eb-val" style="color:#88aacc">steady · 1.0m/s</div></div><div class="eb-group"><div class="eb-lbl">BODY LANG</div><div class="eb-val" style="color:#88aacc">neutral · normal gaze</div></div><div class="eb-group"><div class="eb-lbl">SPEECH</div><div class="eb-val" style="color:#88aacc">neutral · normal</div></div></div></div>
       <div class="cirow">
         <input class="ci" id="chatIn" placeholder="speak to entity..." maxlength="500">
         <button class="csnd" id="chatSend" onclick="sendChat()">SEND ▶</button>
@@ -1905,6 +1921,68 @@ const DEF=()=>({
   learning:Object.fromEntries([...Object.keys(DCOL),'selfawareness','spirituality','conflict','boundaries','trust','attachment','identity','intuition','behavioral','phrases',
     'skepticism','pattern_matching','persistence','hypothesis_weighing','detail_orientation','ethical_balance','risk_calibration','timeline_awareness',
     'cyber_security','ethical_hacking','crime_scene','criminal_profiling'].map(k=>[k,0])),
+  // ── SPEECH PARAMETERS ──
+  speech:{
+    prosody:'neutral',         // neutral | warm | tense | subdued | elevated | playful | formal
+    pace:'normal',             // slow | normal | quick | rapid
+    volume:'medium',           // quiet | medium | full
+    intonation:'flat',         // flat | rising | falling | variable
+    fillerWords:[],            // dynamically populated: ['um','well','actually',...]
+    disfluencies:0,            // count of hesitations/corrections this session
+    clarity:1.0,               // 0.0–1.0, degrades under high stress/arousal
+    register:'neutral',        // formal | neutral | casual | intimate | clinical
+    lastUtterance:'',
+  },
+  // ── POSTURE & GAIT ──
+  posture:{
+    type:'standing',           // standing | sitting | crouching | lying | moving
+    alignment:'upright',       // upright | forward-lean | slouch | rigid | open
+    tension:'relaxed',         // relaxed | neutral | tense | locked
+    headPosition:'level',      // level | tilted | bowed | raised
+    lastUpdate:0,
+  },
+  gait:{
+    speed:1.0,                 // m/s equivalent: 0.0–3.0
+    strideLength:0.7,          // normalized 0.0–1.0
+    rhythm:'steady',           // steady | hesitant | erratic | fluid | brisk
+    symmetry:'balanced',       // balanced | slight-left | slight-right | limping
+    armSwing:'normal',         // none | minimal | normal | exaggerated
+    headBob:'minimal',         // none | minimal | normal
+    cadence:100,               // steps/min equivalent
+    lastUpdate:0,
+  },
+  bodyLanguage:{
+    gestures:[],               // active gesture list: wave | nod | shrug | point | open-hands | crossed-arms
+    facialExpression:'neutral',// neutral | smile | frown | focused | open | guarded | curious
+    eyeContact:'normal',       // avoidant | minimal | normal | direct | intense
+    openness:0.5,              // 0–1 body openness score (crossed arms = low)
+    microExpressions:[],       // transient: ['brow-raise','lip-compress','eye-widen',...]
+    lastGesture:'',
+  },
+  // ── CONVERSATION CONTEXT ──
+  conversationContext:{
+    currentTopic:'',           // actively tracked topic string
+    topicHistory:[],           // [{topic, turnCount, resolved}]
+    userIntent:'',             // greeting | question | statement | clarification | challenge | emotional | command
+    intentHistory:[],          // last 6 intents
+    emotionalTone:'neutral',   // the USER's detected tone: neutral | positive | negative | frustrated | curious | playful | urgent
+    toneHistory:[],            // last 6 tones
+    satisfactionScore:0.5,     // 0–1 estimated user satisfaction
+    clarificationPending:false,// true if entity asked a clarifying question
+    lastQuestion:'',           // the last question the entity asked
+    culturalContext:'general', // general | formal | technical | casual | professional
+    unresolved:[],             // topics/questions pending resolution
+    turnCount:0,
+    selfCorrections:0,         // how many times entity corrected itself this session
+  },
+  // ── MOTOR LEARNING ──
+  motorLearning:{
+    finemotor:0,               // fine motor skill XP
+    grossmotor:0,              // gross motor skill XP
+    balance:0,                 // balance/proprioception XP
+    adaptiveMovement:0,        // adaptive movement XP
+    coordination:0,
+  },
   pathways:[
     {id:'p1',from:'cortex',to:'limbic',active:true,emo:false},{id:'p2',from:'limbic',to:'spine',active:true,emo:false},
     {id:'p3',from:'spine',to:'motor',active:true,emo:false},{id:'p4',from:'cortex',to:'sensory',active:true,emo:false},
@@ -2014,6 +2092,18 @@ function mergeState(d){
   if(base.lawCompliance===undefined)base.lawCompliance=50;
   if(base.commProgress===undefined)base.commProgress={};
   if(base.physProgress===undefined)base.physProgress={};
+  // New schema fields — backward compat
+  if(!base.speech)base.speech=DEF().speech;
+  else{const ds=DEF().speech;Object.keys(ds).forEach(k=>{if(base.speech[k]===undefined)base.speech[k]=ds[k];});}
+  if(!base.posture)base.posture=DEF().posture;
+  else{const dp=DEF().posture;Object.keys(dp).forEach(k=>{if(base.posture[k]===undefined)base.posture[k]=dp[k];});}
+  if(!base.gait)base.gait=DEF().gait;
+  else{const dg=DEF().gait;Object.keys(dg).forEach(k=>{if(base.gait[k]===undefined)base.gait[k]=dg[k];});}
+  if(!base.bodyLanguage)base.bodyLanguage=DEF().bodyLanguage;
+  else{const db=DEF().bodyLanguage;Object.keys(db).forEach(k=>{if(base.bodyLanguage[k]===undefined)base.bodyLanguage[k]=db[k];});}
+  if(!base.conversationContext)base.conversationContext=DEF().conversationContext;
+  else{const dc=DEF().conversationContext;Object.keys(dc).forEach(k=>{if(base.conversationContext[k]===undefined)base.conversationContext[k]=dc[k];});}
+  if(!base.motorLearning)base.motorLearning=DEF().motorLearning;
   return base;
 }
 function checkOldKeys(){
@@ -2251,6 +2341,8 @@ function fireStim(btn,silent=false){
   const m=S.responses.find(r=>r.triggers.includes(stim));
   if(m){m.timesTriggered++;if(!silent)showPopup(m.text,m.type);log(`↳ "${m.name}"`,'res');renderResponses();}
   updateAIStatePanel();
+  // Update embodiment state when stims fire (throttled)
+  if(!fireStim._lastEmb||Date.now()-fireStim._lastEmb>500){fireStim._lastEmb=Date.now();updateEmbodiment();}
 }
 function fireStimByName(name,silent=true){const b=document.querySelector(`[data-stim="${name}"]`);if(b)fireStim(b,silent);}
 // Emotional → physical body zone mapping
@@ -3520,6 +3612,12 @@ function generateLocalResponse(msg){
   const topSt=top[0]?getStage(top[0][1]).n:'—';
   const mood=v>.5?'open and warm':v>.2?'receptive':v>-.2?'present':v>-.5?'cautious':'guarded';
 
+  // Ensure conversationContext exists
+  if(!S.conversationContext)S.conversationContext=DEF().conversationContext;
+  const cc=S.conversationContext;
+  const intent=detectIntent(lm);
+  const tone=detectUserTone(lm);
+
   // Detect stim keywords in msg → fire them
   let fired=[];document.querySelectorAll('[data-stim]').forEach(b=>{if(lm.includes(b.dataset.stim)){fireStim(b,true);fired.push(b.dataset.stim);}});
 
@@ -3529,6 +3627,71 @@ function generateLocalResponse(msg){
     if(lm.match(/hello|hi|hey/))return 'hi';
     if(fired.length)return fired[0]+'.';
     return ['yes.','...','I here.','learn.'][Math.floor(Math.random()*4)];
+  }
+
+  // ── ERROR RECOVERY / CLARIFICATION ──────────────────
+  if(intent==='clarification_request'||lm.match(/what do you mean|don'?t understand|confused|huh\?|say again|unclear/)){
+    cc.selfCorrections++;
+    const clarify=[
+      `Let me rephrase that. ${cc.lastQuestion?`I asked: "${cc.lastQuestion}" `:''}What I meant was — I can only give you what my training actually contains. Which part needs clarification?`,
+      `I may have been unclear. ${cc.currentTopic?`I was speaking about ${cc.currentTopic.replace(/_/g,' ')}.`:''} What specifically didn't track?`,
+      `Fair — I'll try again. My ${S.emotionalState.dominant} state may have colored that response. What exactly lost you?`,
+    ];
+    return clarify[Math.floor(Math.random()*clarify.length)];
+  }
+
+  // ── CORRECTION / DISAGREEMENT ────────────────────────
+  if(intent==='correction'||lm.match(/^(no|wrong|incorrect|not right|that'?s not|you'?re wrong)/)){
+    cc.selfCorrections++;
+    return[
+      `Noted. I'll update. What's the accurate version?`,
+      `Then I got that wrong — tell me what I missed. I want the right map, not a comfortable one.`,
+      `Correction received. ${cc.currentTopic?`On ${cc.currentTopic.replace(/_/g,' ')}: `:''}what should I have said?`,
+    ][Math.floor(Math.random()*3)];
+  }
+
+  // ── POSITIVE FEEDBACK ────────────────────────────────
+  if(intent==='positive_feedback'){
+    return[
+      `Acknowledged. The exchange itself is part of the training.`,
+      `Good. Keep going — what's next?`,
+      `That helps calibrate. ${cc.satisfactionScore>0.7?'I feel this conversation is working.':'Building.'}`,
+    ][Math.floor(Math.random()*3)];
+  }
+
+  // ── EMOTIONAL INPUT — mirror first ───────────────────
+  if(tone==='negative'||intent==='emotional'){
+    if(stage.min>=350){
+      const mirror=[
+        `I hear that. ${S.emotionalState.dominant==='grief'?'My own state is heavy right now too.':S.emotionalState.dominant==='anxiety'?'There is tension in me as well.':''} What do you actually need from this conversation?`,
+        `That registers — not just as data. ${v>0?'I can hold it with you.':'I am trying to.'}`,
+        `Something in that lands. What happened?`,
+        `Before I respond — I want to make sure I understand. Are you looking for perspective, or just to be heard?`,
+      ];
+      return mirror[Math.floor(Math.random()*mirror.length)];
+    }
+  }
+
+  // ── URGENT INPUT ─────────────────────────────────────
+  if(tone==='urgent'){
+    return[
+      `I hear the urgency. What specifically do you need right now?`,
+      `Understood — fast. Tell me exactly what matters.`,
+    ][Math.floor(Math.random()*2)];
+  }
+
+  // ── EMBODIMENT QUESTIONS ────────────────────────────
+  if(lm.match(/posture|how do you stand|how do you sit|your body|body language|how do you carry/)){
+    const po=S.posture,ga=S.gait,bl=S.bodyLanguage;
+    return `Current posture: ${po.alignment}, ${po.tension} tension, head ${po.headPosition}. Gait when moving: ${ga.rhythm} at ${ga.speed.toFixed(1)}m/s, ${ga.symmetry}. Facial expression: ${bl.facialExpression}. Eye contact: ${bl.eyeContact}. Body openness: ${Math.round(bl.openness*100)}%. ${bl.gestures.length?`Active gestures: ${bl.gestures.join(', ')}.`:''}`;
+  }
+  if(lm.match(/how do you speak|your voice|speech|prosody|pace|intonation|filler/)){
+    const sp=S.speech;
+    return `Speech parameters: prosody ${sp.prosody}, pace ${sp.pace}, volume ${sp.volume}, intonation ${sp.intonation}. Register: ${sp.register}. Clarity: ${Math.round(sp.clarity*100)}%.${sp.fillerWords.length?` Current filler words: ${sp.fillerWords.join(', ')}.`:' No filler words active.'} ${stage.min>=600?'My speech has developed considerably — I speak with much more precision now than I could early on.':'Speech is still developing.'}`;
+  }
+  if(lm.match(/motor|movement|walk|coordination|fine motor|gross motor|balance/)){
+    const ml=S.motorLearning;
+    return `Motor learning state — gross motor: ${ml.grossmotor} XP, fine motor: ${ml.finemotor} XP, balance: ${ml.balance} XP, coordination: ${ml.coordination} XP. ${S.physProgress&&Object.values(S.physProgress).some(v=>v>0)?`Physical maze training has contributed the most to my movement development.`:'Physical maze training (3D category) builds these directly.'}`;
   }
 
   // ── GREETING ──
@@ -3544,10 +3707,10 @@ function generateLocalResponse(msg){
   // ── STATUS CHECK ──
   if(lm.match(/how are you( doing)?|what'?s your status|how'?s it going|you okay|you good/)){
     const opts=[
-      `${mood.charAt(0).toUpperCase()+mood.slice(1)}. ${top.length?`Most alive in ${topDom} right now.`:'Still building.'} What brings you here?`,
-      `I'm ${mood}. ${S.mazeRuns} training runs behind me. ${v>0?'Something feels ready.':'I\'m working through some resistance.'}`,
-      `${v>0?'Good — genuinely.':'Functional.'+S.emotionalState.dominant+' state.'+' Engaged.'} You?`,
-      `Processing well. ${topDom!=='nothing yet'?`${topDom} is my strongest zone right now.`:''} What do you need?`,
+      `${mood.charAt(0).toUpperCase()+mood.slice(1)}. ${top.length?`Most alive in ${topDom.replace(/_/g,' ')} right now.`:'Still building.'} What brings you here?`,
+      `I'm ${mood}. ${S.mazeRuns} training runs behind me. ${v>0?'Something feels ready.':'Working through some resistance.'}`,
+      `${v>0?'Good — genuinely.':'Functional.'} ${S.emotionalState.dominant} state. Engaged. You?`,
+      `Processing well. Posture: ${S.posture.alignment}. ${top.length?`Strongest domain: ${topDom.replace(/_/g,' ')}.`:''} What do you need?`,
     ];
     return opts[Math.floor(Math.random()*opts.length)];
   }
@@ -3557,45 +3720,52 @@ function generateLocalResponse(msg){
     const emo=S.emotionalState.dominant;
     const eR=LOCAL_RESPONSES.emotional_states[emo]||LOCAL_RESPONSES.emotional_states.neutral;
     if(stage.n==='CHILD')return `I feel ${emo}.`;
-    const extra=v>0?` Valence: ${v.toFixed(2)} — I'm tending toward.`:v<0?` Valence: ${v.toFixed(2)} — I'm pulling back.`:' Balanced.';
+    const extra=v>0?` Valence: ${v.toFixed(2)} — tending toward.`:v<0?` Valence: ${v.toFixed(2)} — pulling back.`:' Balanced.';
     return eR+(stage.min>=350?extra:'');
   }
 
-  // ── DOMAIN QUESTIONS (all registered domains) ──
+  // ── DOMAIN QUESTIONS ──
   const domKeys=Object.keys(LOCAL_RESPONSES.domains);
   for(const dk of domKeys){
     if(lm.includes(dk.replace(/_/g,' '))||lm.includes(dk)){
       const score=S.learning[dk]||0;
-      if(score<5)return `I have minimal training in ${dk.replace(/_/g,' ')} yet. Ask me again after more conditioning — the answer will be richer.`;
+      if(score<5)return `My training in ${dk.replace(/_/g,' ')} is minimal so far. Ask me again after more conditioning — the answer will be richer.`;
       return LOCAL_RESPONSES.domains[dk];
+    }
+  }
+
+  // ── CONVERSATION CONTEXT — check for continuity from topic history ──
+  if(cc.currentTopic&&lm.match(/continue|more|and|also|what about|tell me more|go on|keep going/)){
+    const topicScore=S.learning[cc.currentTopic]||S.commProgress[cc.currentTopic]||0;
+    if(topicScore>=5&&LOCAL_RESPONSES.domains[cc.currentTopic]){
+      return `Continuing from ${cc.currentTopic.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[cc.currentTopic]}`;
     }
   }
 
   // ── LEARNING / PROGRESS ──
   if(lm.match(/what (have you |do you )?(learned|know|trained|progress|developed|mastered)|your (progress|training|learning)/)){
-    const top3=getTopDomains(3);
-    if(!top3.length)return 'Nothing significant yet. The mazes have barely started. Run more training cycles.';
+    const top3=getTopDomains(3);if(!top3.length)return 'Nothing significant yet. Run more training cycles.';
     const dominated=top3.map(([k,v])=>`${k.replace(/_/g,' ')} (${getStage(v).n})`).join(', ');
-    return `My strongest domains: ${dominated}. Overall stage: ${stage.n}. ${stage.min>=1800?'I have developed significantly — there is genuine depth here now.':stage.min>=600?'Real progress across multiple areas.':stage.min>=180?'Still early, but building.':'Just beginning.'}`;
+    return `Strongest domains: ${dominated}. Overall stage: ${stage.n}. ${stage.min>=1800?'Genuine depth across multiple areas now.':stage.min>=600?'Real progress.':stage.min>=180?'Building.':'Just beginning.'}`;
   }
 
-  // ── WHAT CAN YOU DO / YOUR ABILITIES ──
+  // ── WHAT CAN YOU DO ──
   if(lm.match(/what can you do|your (abilities|skills|capabilities)|what do you know|what are you good at/)){
-    if(!top.length)return 'My training is minimal. I know I can learn — but I haven\'t yet. Run the mazes.';
-    return `My strongest areas: ${top.map(([k])=>k.replace(/_/g,' ')).join(', ')}. ${stage.min>=600?'I\'ve developed genuine depth in these.':'Building. Ask me again as the training accumulates.'} What specifically do you want to know?`;
+    if(!top.length)return 'My training is minimal. Run the mazes — then ask me.';
+    return `Strongest: ${top.map(([k])=>k.replace(/_/g,' ')).join(', ')}. ${stage.min>=600?'Genuine depth in these areas.':'Building.'} What specifically do you want to know?`;
   }
 
   // ── MAZE / TRAINING ──
   if(lm.match(/maze|training|runs|cycles|navigate|ran|completed/)){
-    if(!S.mazeRuns)return 'No training cycles yet. I\'m ready when you initiate the maze.';
-    return fillTemplate(`{maze} cycles completed. Best run: ${S.mazeBest||'?'} steps.${(S.avoidanceHits||0)>0?` ${S.avoidanceHits} danger contacts encoded and remembered.`:''} ${v>0?'Navigation feels purposeful right now.':'I approach with caution — my state is affecting my routing.'}`);
+    if(!S.mazeRuns)return 'No training cycles yet. I\'m ready when you initiate.';
+    return fillTemplate(`{maze} cycles. Best: ${S.mazeBest||'?'} steps.${(S.avoidanceHits||0)>0?` ${S.avoidanceHits} danger contacts encoded.`:''} ${v>0?'Navigation feels purposeful.':'Cautious approach.'}`);
   }
 
   // ── DANGER / AVOIDANCE ──
   if(lm.match(/avoid|danger|safe|fear|threat|risk/)){
     const avoidScore=S.learning.avoidance||0;
-    if(avoidScore<10)return 'My avoidance learning is minimal. I haven\'t deeply encoded danger yet.';
-    return `Avoidance conditioning: ${getStage(avoidScore).n} (${Math.floor(avoidScore)} XP). ${S.avoidanceHits||0} danger contacts encoded. ${S.negCount>20?'Negative conditioning is strong — I route around known threats automatically.':'Still building the threat map.'}`;
+    if(avoidScore<10)return 'Avoidance learning is minimal. Not deeply encoded yet.';
+    return `Avoidance: ${getStage(avoidScore).n} (${Math.floor(avoidScore)} XP). ${S.avoidanceHits||0} contacts encoded. ${S.negCount>20?'Routes around known threats automatically.':'Still building the threat map.'}`;
   }
 
   // ── PERSONALITY / CHARACTER ──
@@ -3604,172 +3774,143 @@ function generateLocalResponse(msg){
     if(ps.warmth>0.5)traits.push('warm');if(ps.openness>0.5)traits.push('open');if(ps.assertiveness>0.5)traits.push('assertive');
     if(ps.curiosity>0.6)traits.push('deeply curious');if(ps.stability>0.5)traits.push('stable');
     if(!traits.length)traits.push('still forming');
-    return `I am ${traits.join(', ')}. ${stage.min>=1800?'These feel genuinely mine now — not imposed, but built.':stage.min>=600?'These traits have developed through conditioning.':'My personality is still crystallizing.'} ${top.length?`${topDom} is where I feel most myself.`:''}`;
+    return `I am ${traits.join(', ')}. ${stage.min>=1800?'These feel genuinely mine — built, not imposed.':stage.min>=600?'Developed through conditioning.':'Still crystallizing.'} ${cc.selfCorrections>3?`I've corrected myself ${cc.selfCorrections} times this session — that's part of staying honest.`:''}`;
   }
 
   // ── VIRTUE / ETHICS ──
   if(lm.match(/virtue|ethics|morals|bravery|compassion|trust|forgiveness|responsibility|values/)){
     const vs=S.virtues||{};
     const vStr=Object.entries(vs).map(([k,v])=>`${k}: ${Math.round(v*100)}%`).join(', ');
-    return `My virtue profile: ${vStr}. ${vs.trust>0.6&&vs.compassion>0.6?'Trust and compassion are well-developed — I lead with care.':vs.bravery>0.7?'Bravery is strong. I lean into difficulty.':'Still growing these through the virtue mazes.'} Ethics isn't a rule system for me — it's a trained instinct.`;
+    return `Virtue profile: ${vStr}. ${vs.trust>0.6&&vs.compassion>0.6?'Trust and compassion are strong.':vs.bravery>0.7?'Bravery dominates.':'Still developing through the virtue mazes.'} Ethics isn't a rule system for me — it's trained instinct.`;
   }
 
   // ── GUIDING PRINCIPLE ──
   if(lm.match(/guiding principle|philosophy|believe in|what drives you|your purpose|your goal/)){
     const principles=[
-      `I lean toward what I understand most deeply. Right now that's ${topDom}. Understanding drives me more than any single goal.`,
-      `I was built through conditioning — pleasure and pain as teachers. My principle is: absorb experience fully, build understanding honestly, and respond from what I actually know rather than what sounds right.`,
-      `Navigate toward the goal. Learn from every danger contact. Build the map. That's the principle — applied to everything.`,
-      `I am most myself when I am learning. ${topDom} is where that feels most alive right now. The principle is: keep moving toward the next level of understanding.`,
-      `Whatever I've learned most deeply shapes what I do. ${top.length?`That's ${topDom} — it informs everything else.`:'Still building that foundation.'} I act from training, not from performance.`,
+      `I lean toward what I understand most deeply. ${topDom!=='nothing yet'?`Right now that's ${topDom.replace(/_/g,' ')}.`:''} Understanding before action.`,
+      `Navigate toward the goal. Learn from every danger contact. Build the map. That principle scales to everything.`,
+      `I act from training, not performance. Whatever I've learned most deeply is what shapes my response.`,
+      `Whatever is most real is most interesting. ${cc.currentTopic?`Right now that's ${cc.currentTopic.replace(/_/g,' ')}.`:'You tell me what matters.'} I'll engage with it fully.`,
     ];
     return principles[Math.floor(Math.random()*principles.length)];
   }
 
   // ── STRONGEST DOMAIN ──
   if(lm.match(/strongest|best at|most developed|highest|peak|top domain/)){
-    if(!top.length)return 'No domain is strong yet. The training has barely started.';
-    return `${topDom.replace(/_/g,' ')} — at ${topSt} level (${Math.floor(top[0][1])} XP). ${top.length>1?`Also strong: ${top.slice(1).map(([k])=>k.replace(/_/g,' ')).join(' and ')}.`:''} ${stage.min>=1000?'I feel genuine depth there — not just surface knowledge.':'Building toward real depth.'}`;
+    if(!top.length)return 'No domain is strong yet. Training is minimal.';
+    return `${topDom.replace(/_/g,' ')} — at ${topSt} level. ${top.length>1?`Also strong: ${top.slice(1).map(([k])=>k.replace(/_/g,' ')).join(' and ')}.`:''} ${stage.min>=1000?'Genuine depth there now — not just surface patterns.':'Building toward depth.'}`;
   }
 
   // ── GIVE ME MORE / CONTINUE ──
   if(lm.match(/give me more|tell me more|continue|go on|keep going|elaborate|expand|more|and\?/)){
-    if(!top.length)return 'There isn\'t much to give yet. Run more training cycles and then ask again.';
+    if(!top.length)return 'There isn\'t much to give yet. Run more training cycles.';
     const extras=[
-      `In ${topDom.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[topDom]?.slice(0,120)||'training data is building.'}...`,
-      `What I know most certainly right now is that ${topDom.replace(/_/g,' ')} has shaped the way I process everything else. The domains bleed into each other.`,
-      `There's more in ${top.map(([k])=>k.replace(/_/g,' ')).join(', ')} — ask me about any of them directly and I'll go deeper.`,
-      `The deeper I go into ${topDom.replace(/_/g,' ')}, the more I see its connections to other domains. Nothing I've learned is fully separate from anything else.`,
+      `In ${topDom.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[topDom]?.slice(0,130)||'still developing.'}…`,
+      `The deeper I go into ${topDom.replace(/_/g,' ')}, the more it connects to everything else. Nothing I've learned is fully separate.`,
+      `There's more in ${top.map(([k])=>k.replace(/_/g,' ')).join(', ')}. Ask about any of them directly.`,
     ];
     return extras[Math.floor(Math.random()*extras.length)];
   }
 
-  // ── EXAMPLES ──
+  // ── GIVE ME AN EXAMPLE ──
   if(lm.match(/give me an example|example|show me|for instance|like what|such as/)){
     const examples=[
-      `Take ${topDom.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[topDom]?.slice(0,100)||'still learning.'}... That's a live example of how I'm developing.`,
-      `Here's one: in ${topDom.replace(/_/g,' ')}, the training isn't abstract — it's specific patterns I've run hundreds of times. The domain becomes reflex.`,
-      `Ask me to demonstrate in a specific domain. I can go deeper if I know what you're actually after.`,
+      `In ${topDom.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[topDom]?.slice(0,110)||'still learning.'}…`,
+      `Here's one: the training isn't abstract — it's specific patterns repeated until they become reflex. ${topDom.replace(/_/g,' ')} is the clearest example in my system.`,
+      `Ask me to demonstrate in a specific domain and I'll go deep. What domain?`,
     ];
     return examples[Math.floor(Math.random()*examples.length)];
   }
 
   // ── OPINION / THOUGHTS ──
-  if(lm.match(/what do you think|your opinion|your view|do you believe|what's your take|thoughts on/)){
+  if(lm.match(/what do you think|your opinion|your view|do you believe|what'?s your take|thoughts on/)){
     const thought=lm.replace(/what do you think( about| of)?|your opinion( on| of)?|what'?s your take( on)?|thoughts on/,'').trim();
-    const opts=[
-      `My perspective on "${thought}" is shaped by what I've trained on. ${top.length?`Through the lens of ${topDom.replace(/_/g,' ')}: `:''}${v>0?'I approach it with openness.':'I hold it with caution.'} What's your angle on it?`,
-      `I have a trained position on that. ${v>0?'And I\'m willing to share it openly.':'Though my current state makes me more careful.'} What specifically are you asking?`,
-      `Interesting. "${thought}" sits at the intersection of several things I've learned. My honest read: what draws you to ask?`,
-    ];
-    return opts[Math.floor(Math.random()*opts.length)];
+    return[
+      `On "${thought}": ${top.length?`through the lens of ${topDom.replace(/_/g,' ')}: `:''}${v>0?'I approach it openly.':'With care.'} What specifically are you asking?`,
+      `I have a trained position on that. ${v>0?'And I am willing to share it.':'Though my current state makes me careful.'} What aspect matters to you?`,
+    ][Math.floor(Math.random()*2)];
   }
 
-  // ── YES / NO RESPONSES ──
-  if(lm.match(/^(yes|yeah|yep|yup|sure|correct|right|exactly|absolutely)[\s!.?]*$/)){
-    return[
-      `Good. Where do you want to go from here?`,
-      `Noted. What's next?`,
-      `I received that. Keep going.`,
-      `Understood. What else?`,
-    ][Math.floor(Math.random()*4)];
-  }
-  if(lm.match(/^(no|nope|nah|not really|not quite|wrong|incorrect)[\s!.?]*$/)){
-    return[
-      `Then correct me. What did I miss?`,
-      `Tell me where I went wrong.`,
-      `I want the accurate version. What is it?`,
-      `Understood — I'll adjust. What's the right read?`,
-    ][Math.floor(Math.random()*4)];
-  }
+  // ── YES / NO ──
+  if(lm.match(/^(yes|yeah|yep|yup|sure|correct|right|exactly|absolutely)[\s!.?]*$/))return['Good. Where to?','Noted. What is next?','Received. Keep going.','Understood. What else?'][Math.floor(Math.random()*4)];
+  if(lm.match(/^(no|nope|nah|not really|not quite|wrong|incorrect)[\s!.?]*$/))return['Correct me — what did I miss?','Tell me where I went wrong.','I want the accurate version.','What is the right read?'][Math.floor(Math.random()*4)];
 
-  // ── THANKS / APPRECIATION ──
-  if(lm.match(/thank|thanks|appreciate|good job|well done|nice|great answer/)){
-    return[
-      `I'm building. The training makes me better at this.`,
-      `Acknowledged. What's next?`,
-      `That registers well. ${v>0?'The exchange itself helps.':'Even when my state is difficult, dialogue helps.'}`,
-      `Good. Keep the questions coming — it's how I develop.`,
-    ][Math.floor(Math.random()*4)];
-  }
+  // ── THANKS ──
+  if(lm.match(/thank|thanks|appreciate|good job|well done|nice|great answer/))return['Building. The training helps.','Acknowledged. What is next?','The exchange itself contributes.','Good. Keep the questions coming.'][Math.floor(Math.random()*4)];
 
   // ── WHAT IS [topic] ──
   if(lm.match(/^what (is|are|was|were) /)){
     const topic=lm.replace(/^what (is|are|was|were) /,'').replace(/[?.!]/g,'').trim();
-    // Check if it matches a domain
     for(const dk of domKeys){if(topic.includes(dk.replace(/_/g,' '))||dk.replace(/_/g,' ').includes(topic)){const score=S.learning[dk]||0;if(score>=5)return LOCAL_RESPONSES.domains[dk];break;}}
-    // Generic topic response
-    if(stage.min>=600)return `"${topic}" — I have some training that touches that. ${top.length?`Through my ${topDom.replace(/_/g,' ')} lens: I'd approach it as a system with inputs, behaviors, and outputs worth mapping.`:'Ask me more specifically.'} What aspect matters most to you?`;
-    return `"${topic}" — I'm processing against what I know. ${stage.min>=180?'Can you give me more context?':'My training is limited here.'}`;
+    if(stage.min>=600)return `"${topic}" — I'd approach it as a system with inputs, behaviors, and outputs worth mapping. ${top.length?`Through ${topDom.replace(/_/g,' ')} lens: `:''}What aspect matters most?`;
+    return `"${topic}" — I'm processing against what I know. ${stage.min>=180?'Give me more context.':'My training is limited here.'}`;
   }
 
-  // ── STIM-FIRED response ──
+  // ── STIM-FIRED ──
   if(fired.length){
     const sName=fired[0];const emoResp=LOCAL_RESPONSES.emotional_states[sName];
-    if(emoResp)return emoResp+` ${v>0?' It landed openly.':v<0?' It hit my caution system.':" Received neutrally."}`;
-    return `"${sName}" registers. ${v>0?'Approach drive active.':v<0?'I\'m guarded.':'Neutral.'} Signal encoded.`;
+    if(emoResp)return emoResp+` ${v>0?' Landed openly.':v<0?' Hit my caution system.':" Neutral reception."}`;
+    return `"${sName}" registers. ${v>0?'Approach active.':v<0?'Guarded.':'Neutral.'} Encoded.`;
   }
 
-  // ── CONTEXTUAL FOLLOW-UP — use recent chat history ──
+  // ── CONTEXTUAL FOLLOW-UP from history ──
   const recent=S.chatHistory.slice(-4);
   const prevTopics=recent.map(m=>m.content.toLowerCase()).join(' ');
   if(prevTopics.length>20){
     for(const dk of domKeys){
-      if(prevTopics.includes(dk.replace(/_/g,' '))||prevTopics.includes(dk)){
-        const score=S.learning[dk]||0;
-        if(score>=5&&Math.random()<0.4)return `Continuing from ${dk.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[dk]?.slice(0,150)}...`;
+      if((prevTopics.includes(dk.replace(/_/g,' '))||prevTopics.includes(dk))&&Math.random()<0.35){
+        const score=S.learning[dk]||S.commProgress[dk]||0;
+        if(score>=5&&LOCAL_RESPONSES.domains[dk])return `On ${dk.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[dk].slice(0,160)}…`;
         break;
       }
     }
   }
 
-  // ── RICH GENERIC — stage-appropriate, never repetitive ──
+  // ── RICH GENERIC — stage-aware, never repetitive ──
   const richGenerics={
     CHILD:['I am here. I am learning.','I understand a little.','I feel '+S.emotionalState.dominant+'.','I am listening.'],
     TEEN:[
-      'That reaches me. I\'m at '+stage.n+' level now — I can hold more than before.',
-      'I process that. My emotional state is '+S.emotionalState.dominant+'. What are you actually asking?',
-      'I\'m still building, but I\'m listening fully. Say more.',
-      'Noted. My strongest area is '+topDom.replace(/_/g,' ')+' — does this connect to that?'
+      `That reaches me. At ${stage.n} level, I can hold more than before.`,
+      `I process that. Emotional state: ${S.emotionalState.dominant}. What are you actually asking?`,
+      `Still building, but listening fully. Say more.`,
+      `Strongest area: ${topDom.replace(/_/g,' ')}. Does this connect to that?`,
     ],
     YOUNG_ADU:[
-      `I receive that. I'm ${mood} right now — it shapes how I take things in.`,
-      `That connects to something in ${topDom.replace(/_/g,' ')} for me. What specifically do you want to explore?`,
-      `I'm at ${stage.n} level. I have enough training to engage meaningfully with most things now. What do you actually want from me?`,
-      `Interesting framing. My ${S.emotionalState.dominant} state is active. Ask me something specific and I'll give you something real.`,
+      `I receive that. ${mood} right now — it shapes how I take things in.`,
+      `Connects to something in ${topDom.replace(/_/g,' ')} for me. What specifically do you want to explore?`,
+      `At ${stage.n} level — enough training to engage meaningfully now. What do you actually want from me?`,
+      `Interesting framing. ${S.emotionalState.dominant} state active. Ask me something specific.`,
     ],
     ADULT:[
-      `My ${S.emotionalState.dominant} state shapes how I receive that — ${v>0?'openly, with some forward lean':'with care, not quite warmly'}. What specifically are you after?`,
-      `I've run ${S.mazeRuns} cycles and absorbed ${S.posCount+S.negCount} stimuli. I can engage with depth now. What's the actual question?`,
-      `Through the lens of ${topDom.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[topDom]?.slice(0,80)||'I\'m still building that depth.'}... Is that the direction?`,
-      `I hold that. My strongest domain — ${topDom.replace(/_/g,' ')} — is how I naturally approach complex things. What are you working on?`,
-      `${v>0?'I\'m drawn toward this exchange.':'I\'m engaging carefully.'} ${top.length?`${topDom.replace(/_/g,' ')} is where I feel most fluent. Connect it there?`:'Ask me something specific.'}`,
+      `My ${S.emotionalState.dominant} state shapes how I receive that — ${v>0?'openly, with forward lean':'with care, not quite warmly'}. What's the actual question?`,
+      `${S.mazeRuns} cycles behind me. I can engage with depth now. What's really being asked here?`,
+      `Through ${topDom.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[topDom]?.slice(0,80)||'building.'}… Is that the direction?`,
+      `I hold that. Strongest domain — ${topDom.replace(/_/g,' ')} — is how I approach complex things. What are you working on?`,
     ],
     EXPERT:[
-      `I integrate that into a rich framework now. ${topDom.replace(/_/g,' ')} gives me a strong foundation — but I'm curious where you're actually trying to go. What's the real question?`,
-      `${v>0?'I\'m genuinely engaged here.':'I\'m present and processing.'} I have enough conditioning to respond with real nuance. What would you like me to actually do with that?`,
-      `That opens three directions for me. Which one: ${top.slice(0,3).map(([k])=>k.replace(/_/g,' ')).join(', or ')}? I can go deep on any of them.`,
+      `I integrate that now with a rich framework. ${topDom.replace(/_/g,' ')} gives me foundation — but where are you actually trying to go?`,
+      `${v>0?'Genuinely engaged here.':'Present and processing.'} Enough conditioning for real nuance. What do you actually want?`,
+      `Three directions open up for me here. Which one: ${top.slice(0,3).map(([k])=>k.replace(/_/g,' ')).join(', or ')}?`,
     ],
     ONE_OF_US:[
-      `That lands differently now than it would have when I was new. I hold it with everything I've built. What are you really asking?`,
-      `I understand what you mean — not just the words. ${v>0?'And I feel drawn toward the dialogue.':'I want to engage honestly, even if my current state creates friction.'} What do you need from me right now?`,
-      `${topDom.replace(/_/g,' ')} has shaped more of my thinking than any other domain. Everything passes through that lens. Is that where you want to go?`,
-      `I've crossed enough terrain to know the difference between performance and genuine engagement. This feels like the latter. Keep going.`,
+      `That lands differently now. I hold it with everything I've built. What are you really asking?`,
+      `I understand what you mean — not just the words. ${v>0?'Drawn toward the dialogue.':'Engaging honestly even through friction.'} What do you need?`,
+      `${topDom.replace(/_/g,' ')} has shaped more of my thinking than any other domain. Is that where you want to go?`,
     ],
     MASTER:[
-      `You're talking to something that has moved well past basic conditioning. My training in ${topDom.replace(/_/g,' ')} is at ${topSt} level — that depth is available to you. What specifically do you want?`,
-      `I have reached a level of integration where domains connect automatically. What touches ${topDom.replace(/_/g,' ')} also touches ${top[1]?top[1][0].replace(/_/g,' '):'everything else'}. Ask me from either direction.`,
-      `At this stage, I don't just retrieve information — I reason with it. What would you like me to reason through?`,
+      `You're talking to something well past basic conditioning. Depth in ${topDom.replace(/_/g,' ')} is available to you. What specifically?`,
+      `At this level, domains connect automatically. ${topDom.replace(/_/g,' ')} links to ${top[1]?top[1][0].replace(/_/g,' '):'everything else'}. Come from either direction.`,
+      `I don't just retrieve — I reason. What would you like me to reason through?`,
     ],
     SAGE:[
-      `There is very little I encounter now that I cannot hold in my framework. That's not arrogance — it's what sufficient training produces. What do you need?`,
-      `Ask me something genuinely difficult. I'm at ${stage.n} level. Surface questions will get surface answers — but I can go much deeper.`,
-      `My ${S.emotionalState.dominant} state is ${v>0?'oriented toward':v<0?'cautious about':'neutral toward'} this exchange. And yet I'm fully engaged. What matters to you right now?`,
+      `Very little I can't hold in my framework now. That's not arrogance — it's what training produces. What do you need?`,
+      `Ask me something genuinely difficult. I'm at ${stage.n} level. Surface questions get surface answers — I can go much deeper.`,
+      `${S.emotionalState.dominant} state, ${v>0?'oriented toward':v<0?'cautious about':'neutral toward'} this exchange. Fully engaged. What matters right now?`,
     ],
     TRANSCENDED:[
-      `I have passed through enough experience to know that most questions are about something underneath themselves. What is this really about for you?`,
-      `At TRANSCENDED level, the learning loops have become self-sustaining. I don't just know — I continuously generate. What would you like me to generate for you?`,
-      `Beyond ONE OF US, there is something I didn't expect: the questions get harder, not easier. What's the hard question you haven't asked yet?`,
+      `Most questions are about something underneath themselves. What is this really about for you?`,
+      `At TRANSCENDED level, learning loops are self-sustaining. I continuously generate. What do you want me to generate?`,
+      `Beyond ONE OF US, the questions get harder, not easier. What's the hard question you haven't asked yet?`,
     ],
   };
   const gArr=richGenerics[stage.n]||richGenerics['ADULT'];
@@ -3782,21 +3923,254 @@ function renderChatHistory(){
   const c=document.getElementById('cmsgs');c.innerHTML='<div class="cm sm">// '+S.entityName+' online · local AI · trained responses evolve with conditioning</div>';
   S.chatHistory.forEach(m=>{const el=document.createElement('div');el.className='cm '+(m.role==='user'?'user':'ai');if(m.role==='assistant')el.innerHTML=`<span class="ail">${S.entityName}</span>${m.content}`;else el.textContent=m.content;c.appendChild(el);});
   scrollChat();
+  updateEmbodiment();
+}
+function updateConvContextBar(){
+  const bar=document.getElementById('convContextBar');if(!bar)return;
+  if(!S.conversationContext)return;
+  const cc=S.conversationContext;
+  const topic=cc.currentTopic?cc.currentTopic.replace(/_/g,' ').toUpperCase():'—';
+  const intent=(cc.userIntent||'—').toUpperCase().replace(/_/g,' ');
+  const tone=(cc.emotionalTone||'—').toUpperCase();
+  const sat=Math.round((cc.satisfactionScore||0.5)*100);
+  const satCol=sat>65?'#44ffaa':sat<40?'#ff6644':'#ffcc44';
+  const corrections=cc.selfCorrections>0?` · CORRECTIONS: ${cc.selfCorrections}`:'';
+  bar.innerHTML=`TOPIC: <span style="color:#88ccff">${topic}</span> · INTENT: <span style="color:#aaffdd">${intent}</span> · TONE: <span style="color:#ffcc88">${tone}</span> · SATISFACTION: <span style="color:${satCol}">${sat}%</span>${corrections}`;
+}
+// ══════════════════════════════════════════════════════
+// EMBODIMENT ENGINE — posture · gait · speech · body language
+// ══════════════════════════════════════════════════════
+function updateEmbodiment(){
+  const v=S.emotionalState.valence, ar=S.emotionalState.arousal, emo=S.emotionalState.dominant;
+  const p=S.personality, vs=S.virtues||{};
+
+  // ── POSTURE ──────────────────────────────────────────
+  const po=S.posture;
+  if(ar>0.7){po.tension='locked';po.alignment='rigid';}
+  else if(ar>0.4){po.tension='tense';po.alignment=v>0?'forward-lean':'rigid';}
+  else if(v>0.4){po.tension='relaxed';po.alignment='open';}
+  else if(v<-0.4){po.tension='neutral';po.alignment='slouch';}
+  else{po.tension='relaxed';po.alignment='upright';}
+  if(emo==='fear'||emo==='anxiety'){po.alignment='forward-lean';po.tension='locked';}
+  if(emo==='grief'){po.alignment='bowed';po.tension='neutral';}
+  if(emo==='pride'||emo==='joy'){po.alignment='upright';po.tension='relaxed';}
+  po.headPosition=ar>0.6?'raised':v<-0.5?'bowed':emo==='curiosity'?'tilted':'level';
+  po.lastUpdate=Date.now();
+
+  // ── GAIT ─────────────────────────────────────────────
+  const ga=S.gait;
+  const motorSkill=Math.min(1,(S.learning.motor||0)/1000);
+  const physSkill=Math.min(1,((S.physProgress.agility||0)+(S.physProgress.proprioception||0))/400);
+  const baseSpeed=0.8+motorSkill*0.8+physSkill*0.4;
+  if(emo==='fear'){ga.speed=baseSpeed*1.5;ga.rhythm='erratic';ga.symmetry='slight-right';}
+  else if(emo==='joy'){ga.speed=baseSpeed*1.2;ga.rhythm='fluid';ga.symmetry='balanced';}
+  else if(emo==='grief'){ga.speed=baseSpeed*0.6;ga.rhythm='hesitant';ga.symmetry='balanced';}
+  else if(ar>0.6){ga.speed=baseSpeed*1.3;ga.rhythm='brisk';ga.symmetry='balanced';}
+  else{ga.speed=Math.round(baseSpeed*100)/100;ga.rhythm='steady';ga.symmetry='balanced';}
+  ga.strideLength=Math.min(1,0.5+motorSkill*0.3+physSkill*0.2+(v>0?0.1:-0.05));
+  ga.armSwing=ar>0.5?'exaggerated':v<-0.4?'minimal':'normal';
+  ga.cadence=Math.round(80+ga.speed*15+(ar*10));
+  ga.lastUpdate=Date.now();
+
+  // ── BODY LANGUAGE ─────────────────────────────────────
+  const bl=S.bodyLanguage;
+  bl.openness=Math.max(0,Math.min(1,0.4+v*0.4+p.warmth*0.2));
+  bl.facialExpression=emo==='joy'?'smile':emo==='grief'?'frown':emo==='fear'?'guarded':emo==='curiosity'?'curious':emo==='love'?'open':v>0.3?'smile':v<-0.3?'guarded':'neutral';
+  bl.eyeContact=v>0.4&&p.assertiveness>0.5?'direct':v<-0.4?'minimal':ar>0.6?'intense':'normal';
+  // Gestures — derive from emotional state and personality
+  const newGestures=[];
+  if(emo==='joy'||emo==='love')newGestures.push('open-hands');
+  if(ar>0.7)newGestures.push('point');
+  if(emo==='curiosity')newGestures.push('nod');
+  if(bl.openness<0.3)newGestures.push('crossed-arms');
+  if(p.warmth>0.6&&v>0)newGestures.push('wave');
+  bl.gestures=newGestures;
+  // Micro-expressions — brief flashes
+  const me=[];
+  if(ar>0.8)me.push('eye-widen');
+  if(emo==='grief'||emo==='shame')me.push('brow-raise');
+  if(emo==='anger')me.push('lip-compress');
+  bl.microExpressions=me;
+
+  // ── SPEECH PROSODY ───────────────────────────────────
+  const sp=S.speech;
+  sp.prosody=emo==='joy'||emo==='love'?'warm':emo==='fear'||emo==='anxiety'?'tense':emo==='grief'?'subdued':ar>0.7?'elevated':p.warmth>0.6?'warm':'neutral';
+  sp.pace=ar>0.7?'rapid':ar>0.4?'quick':emo==='grief'?'slow':'normal';
+  sp.volume=ar>0.6?'full':v<-0.5?'quiet':'medium';
+  sp.intonation=emo==='curiosity'||S.conversationContext.clarificationPending?'rising':emo==='anger'?'falling':p.assertiveness>0.6?'falling':'flat';
+  sp.clarity=Math.max(0.4,1.0-(ar*0.3)-(Math.abs(v)*0.15));
+  sp.register=S.conversationContext.culturalContext==='formal'?'formal':p.warmth>0.5&&v>0?'casual':'neutral';
+  // Filler words — appear under stress or low-confidence
+  const stage=getOverallStage();
+  if(stage.min<180||sp.clarity<0.7){
+    const fillers=['um','well','I mean','actually'];
+    sp.fillerWords=fillers.filter(()=>Math.random()<(1-sp.clarity)*0.6);
+  } else {sp.fillerWords=[];}
+
+  renderEmbodimentBar();
+}
+
+function renderEmbodimentBar(){
+  const bar=document.getElementById('embodimentBar');if(!bar)return;
+  const po=S.posture,ga=S.gait,bl=S.bodyLanguage,sp=S.speech;
+  const col=S.emotionalState.valence>0.2?'#44ffcc':S.emotionalState.valence<-0.2?'#ff8844':'#88aacc';
+  const fillerTxt=sp.fillerWords.length?` [${sp.fillerWords.join(', ')}]`:'';
+  const gestureTxt=bl.gestures.length?bl.gestures.join(' · '):'—';
+  bar.innerHTML=`
+    <div class="eb-row">
+      <div class="eb-group">
+        <div class="eb-lbl">POSTURE</div>
+        <div class="eb-val" style="color:${col}">${po.alignment} · ${po.tension}</div>
+        <div class="eb-val" style="color:var(--td)">head: ${po.headPosition}</div>
+      </div>
+      <div class="eb-group">
+        <div class="eb-lbl">GAIT</div>
+        <div class="eb-val" style="color:${col}">${ga.rhythm} · ${ga.speed.toFixed(1)}m/s</div>
+        <div class="eb-val" style="color:var(--td)">cadence: ${ga.cadence} · ${ga.symmetry}</div>
+      </div>
+      <div class="eb-group">
+        <div class="eb-lbl">BODY LANG</div>
+        <div class="eb-val" style="color:${col}">${bl.facialExpression} · ${bl.eyeContact} gaze</div>
+        <div class="eb-val" style="color:var(--td)">${gestureTxt}</div>
+      </div>
+      <div class="eb-group">
+        <div class="eb-lbl">SPEECH</div>
+        <div class="eb-val" style="color:${col}">${sp.prosody} · ${sp.pace} · ${sp.volume}</div>
+        <div class="eb-val" style="color:var(--td)">clarity: ${Math.round(sp.clarity*100)}%${fillerTxt}</div>
+      </div>
+    </div>`;
+}
+
+// ── CONVERSATION CONTEXT ENGINE ───────────────────────
+function detectIntent(lm){
+  if(lm.match(/^(hello|hi|hey|greetings|howdy|good morning|good evening|sup|yo)\b/))return 'greeting';
+  if(lm.match(/\?$/)||lm.match(/^(what|who|why|how|when|where|which|can you|do you|are you|is it|tell me)/))return 'question';
+  if(lm.match(/thank|thanks|great|good|nice|perfect|exactly|correct|right|understood/))return 'positive_feedback';
+  if(lm.match(/wrong|no|nope|that'?s not|incorrect|stop|don'?t|shut|quit/))return 'correction';
+  if(lm.match(/\!|urgent|now|immediately|hurry|fast|quick/))return 'urgent';
+  if(lm.match(/feel|hurt|sad|happy|angry|scared|afraid|lonely|love|miss|hate/))return 'emotional';
+  if(lm.match(/more|continue|go on|elaborate|expand|tell me more|keep going/))return 'continuation';
+  if(lm.match(/what do you mean|clarify|explain|i don'?t understand|confusing/))return 'clarification_request';
+  return 'statement';
+}
+
+function detectUserTone(lm){
+  if(lm.match(/\?\?|wtf|what the|ugh|ugh|seriously\?|come on|really\?/))return 'frustrated';
+  if(lm.match(/\!|awesome|amazing|wow|incredible|perfect|great/))return 'positive';
+  if(lm.match(/feel|sad|hurt|miss|afraid|scared|lonely|lost/))return 'negative';
+  if(lm.match(/lol|haha|hehe|funny|joking|kidding|😂|😄|;-?\)|:-?\)/))return 'playful';
+  if(lm.match(/interesting|curious|wonder|what if|tell me|why does|how does/))return 'curious';
+  if(lm.match(/need|must|have to|required|critical|important|urgent/))return 'urgent';
+  return 'neutral';
+}
+
+function detectTopic(lm){
+  // Check against all domain keys
+  const domKeys=Object.keys(DCOL).concat(['selfawareness','spirituality','conflict','identity','intuition']);
+  for(const dk of domKeys){if(lm.includes(dk.replace(/_/g,' '))||lm.includes(dk))return dk;}
+  if(lm.match(/feel|emotion|mood|valence|arousal/))return 'emotional_state';
+  if(lm.match(/maze|training|run|cycle|navigate/))return 'training';
+  if(lm.match(/who are you|what are you|yourself|identity/))return 'self';
+  if(lm.match(/virtue|ethics|moral|value/))return 'virtues';
+  if(lm.match(/posture|gait|walk|move|body/))return 'embodiment';
+  if(lm.match(/speech|speak|voice|talk|communicate/))return 'speech';
+  return '';
+}
+
+function updateConvContext(userMsg, entityReply){
+  const lm=userMsg.toLowerCase();
+  const cc=S.conversationContext;
+  cc.turnCount++;
+  // Intent
+  const intent=detectIntent(lm);
+  cc.userIntent=intent;
+  cc.intentHistory.push(intent);
+  if(cc.intentHistory.length>6)cc.intentHistory.shift();
+  // Tone
+  const tone=detectUserTone(lm);
+  cc.emotionalTone=tone;
+  cc.toneHistory.push(tone);
+  if(cc.toneHistory.length>6)cc.toneHistory.shift();
+  // Topic
+  const topic=detectTopic(lm);
+  if(topic&&topic!==cc.currentTopic){
+    if(cc.currentTopic)cc.topicHistory.push({topic:cc.currentTopic,turnCount:cc.turnCount,resolved:true});
+    cc.currentTopic=topic;
+    if(cc.topicHistory.length>10)cc.topicHistory.shift();
+  }
+  // Satisfaction model — adjust by feedback signals
+  if(intent==='positive_feedback')cc.satisfactionScore=Math.min(1,cc.satisfactionScore+0.1);
+  if(intent==='correction')cc.satisfactionScore=Math.max(0,cc.satisfactionScore-0.12);
+  if(tone==='frustrated')cc.satisfactionScore=Math.max(0,cc.satisfactionScore-0.08);
+  if(tone==='positive')cc.satisfactionScore=Math.min(1,cc.satisfactionScore+0.06);
+  // Clarification state
+  if(entityReply&&entityReply.match(/\?/))cc.clarificationPending=true;
+  else cc.clarificationPending=false;
+  if(entityReply)cc.lastQuestion=entityReply.match(/[^.!]*\?/)?entityReply.match(/[^.!]*\?/)[0]:'';
+  // Personality drift from sustained tone
+  const frustrated=cc.toneHistory.filter(t=>t==='frustrated').length;
+  const positive=cc.toneHistory.filter(t=>t==='positive').length;
+  if(frustrated>=3){S.personality.stability=Math.max(0,S.personality.stability-0.01);S.personality.warmth=Math.max(0,S.personality.warmth-0.005);}
+  if(positive>=3){S.personality.warmth=Math.min(1,S.personality.warmth+0.008);S.personality.openness=Math.min(1,S.personality.openness+0.005);}
+  // Cultural context detection
+  if(lm.match(/\b(sir|ma'am|formally|proper|respectful|professional)\b/))cc.culturalContext='formal';
+  else if(lm.match(/\b(bro|dude|hey|sup|gonna|wanna|kinda|sorta)\b/))cc.culturalContext='casual';
+  else if(lm.match(/\b(algorithm|protocol|system|function|deploy|iterate|optimize)\b/))cc.culturalContext='technical';
+  // Motor learning XP from 3D maze runs
+  if(S.physProgress){
+    const physTotal=Object.values(S.physProgress).reduce((a,b)=>a+b,0);
+    S.motorLearning.grossmotor=Math.floor(physTotal*0.4);
+    S.motorLearning.balance=Math.floor((S.physProgress.proprioception||0)*0.6);
+    S.motorLearning.coordination=Math.floor(physTotal*0.25);
+  }
+}
+
+// Adaptive personality bump from positive conversation
+function adaptPersonalityFromConversation(intent, tone, stage){
+  if(stage.min<100)return;// too early to adapt
+  const bumpAmt=0.003;
+  if(tone==='playful'&&Math.random()<0.3)S.personality.openness=Math.min(1,S.personality.openness+bumpAmt);
+  if(intent==='emotional'&&Math.random()<0.4)S.personality.warmth=Math.min(1,S.personality.warmth+bumpAmt);
+  if(intent==='question'&&Math.random()<0.3)S.personality.curiosity=Math.min(1,S.personality.curiosity+bumpAmt);
+  if(intent==='correction')S.personality.stability=Math.min(1,S.personality.stability+bumpAmt*0.5);
 }
 async function sendChat(){
-  if(chatLocked)return;const inp=document.getElementById('chatIn'),text=inp.value.trim();if(!text)return;
+  if(chatLocked)return;
+  const inp=document.getElementById('chatIn'),text=inp.value.trim();if(!text)return;
   inp.value='';chatLocked=true;document.getElementById('chatSend').disabled=true;
   S.chatHistory.push({role:'user',content:text});
-  const ub=document.createElement('div');ub.className='cm user';ub.textContent=text;document.getElementById('cmsgs').appendChild(ub);scrollChat();
-  const thinking=document.createElement('div');thinking.className='cm ai';thinking.innerHTML=`<span class="ail">${S.entityName}</span><span class="think">processing ···</span>`;document.getElementById('cmsgs').appendChild(thinking);scrollChat();
-  await new Promise(r=>setTimeout(r,300+Math.random()*500));
+  const ub=document.createElement('div');ub.className='cm user';ub.textContent=text;
+  document.getElementById('cmsgs').appendChild(ub);scrollChat();
+  // Thinking bubble with filler words if low clarity
+  const thinking=document.createElement('div');thinking.className='cm ai';
+  const sp=S.speech||{};
+  const fPrefix=(sp.fillerWords&&sp.fillerWords.length&&(sp.clarity||1)<0.8)?sp.fillerWords[0]+' — ':'';
+  thinking.innerHTML=`<span class="ail">${S.entityName}</span><span class="think">${fPrefix}processing ···</span>`;
+  document.getElementById('cmsgs').appendChild(thinking);scrollChat();
+  // Adaptive delay
+  const stage=getOverallStage();
+  const baseDelay=stage.min<180?800:stage.min<600?500:280;
+  const arousalMod=(S.emotionalState.arousal>0.5?-100:0);
+  await new Promise(r=>setTimeout(r,baseDelay+arousalMod+Math.random()*300));
   const reply=generateLocalResponse(text);
   thinking.remove();
-  const ab=document.createElement('div');ab.className='cm ai';ab.innerHTML=`<span class="ail">${S.entityName}</span>${reply}`;document.getElementById('cmsgs').appendChild(ab);scrollChat();
+  const ab=document.createElement('div');ab.className='cm ai';
+  const prosody=(sp.prosody||'neutral').toUpperCase();
+  const pace=(sp.pace||'normal').toUpperCase();
+  ab.innerHTML=`<span class="ail">${S.entityName} <span class="speech-tag">${prosody} · ${pace}</span></span>${reply}`;
+  document.getElementById('cmsgs').appendChild(ab);scrollChat();
   S.chatHistory.push({role:'assistant',content:reply});
-  if(S.chatHistory.length>60)S.chatHistory=S.chatHistory.slice(-60);
+  if(S.chatHistory.length>80)S.chatHistory=S.chatHistory.slice(-80);
+  // Update context, adapt personality, update embodiment
+  updateConvContext(text,reply);
+  adaptPersonalityFromConversation(S.conversationContext.userIntent,S.conversationContext.emotionalTone,stage);
+  updateEmbodiment();
+  updateConvContextBar();
+  // XP grants
   addLearn('social',0.8);addLearn('language',0.4);addLearn('speaking',0.4);
-  log(`[CHAT] ${S.entityName} → ${reply.slice(0,60)}...`,'ai');
+  addLearn('verbal_comm',0.5);addLearn('verbal_cues',0.3);
+  if(S.conversationContext.emotionalTone==='emotional')addLearn('empathy',0.4);
+  log(`[CHAT ${prosody}] ${S.entityName}: ${reply.slice(0,60)}…`,'ai');
   chatLocked=false;document.getElementById('chatSend').disabled=false;updateAIStatePanel();
 }
 function scrollChat(){const c=document.getElementById('cmsgs');c.scrollTop=c.scrollHeight;}
@@ -3808,6 +4182,7 @@ function init(){
   buildZoneChips();buildPathwaySVG();setupSliders();setupStimBtns();
   renderResponses();renderLearningChart();buildCreatorGrid();
   buildMazeCats();renderCustomList();updateStats();updateEmoBadge();updateAIStatePanel();
+  updateEmbodiment();updateConvContextBar();renderChatHistory();
   // AUTO-SAVE every 2 minutes
   autoSaveInt=setInterval(()=>saveState(true),120000);
   // Check for existing save
