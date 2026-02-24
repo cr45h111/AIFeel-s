@@ -295,6 +295,28 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .lphase-tab.on{border-color:var(--pu);color:var(--pu);background:rgba(0,200,255,.06);}
 .lphase-tab.cv.on{border-color:#88ffdd;color:#88ffdd;background:rgba(136,255,221,.06);}
 .comm-badge{display:inline-block;font-size:4.5px;font-family:var(--mo);letter-spacing:.5px;border-radius:1px;padding:1px 3px;margin-left:2px;background:#88ffdd15;border:1px solid #88ffdd40;color:#88ffdd;vertical-align:middle;}
+/* 3D PHYSICAL MAZES */
+.mzb.p3d{border-color:#ff884440!important;color:#ff8844!important;}
+.mzb.p3d:hover{border-color:#ff8844!important;background:#ff884408!important;}
+.mzb.p3d.am{border-color:#ff8844!important;background:#ff884416!important;color:#ffaa66!important;}
+.mcat.p3d{color:#ff8844!important;border-color:#ff884430!important;}
+#p3dStats{display:none;font-family:var(--mo);font-size:6.5px;padding:6px 8px;background:var(--panel);border:1px solid #ff884430;border-radius:3px;flex-shrink:0;gap:10px;justify-content:space-between;}
+#p3dStats.show{display:flex;}
+.p3ds{display:flex;flex-direction:column;gap:2px;align-items:center;}
+.p3ds-l{font-size:5px;color:var(--td);letter-spacing:1px;}
+.p3ds-v{color:#ff8844;font-size:9px;}
+.stagger-wrap{display:flex;align-items:center;gap:5px;font-family:var(--mo);font-size:5.5px;color:var(--td);}
+.stagger-bar-bg{flex:1;height:4px;background:var(--b0);border-radius:2px;overflow:hidden;}
+.stagger-bar-fg{height:100%;border-radius:2px;background:#ff8844;transition:width .2s;}
+.p3d-legend{display:flex;flex-wrap:wrap;gap:3px;flex-shrink:0;padding:4px 0;}
+.p3d-li{font-family:var(--mo);font-size:5px;padding:2px 4px;border-radius:2px;border:1px solid;letter-spacing:.3px;}
+.p3d-li.step_low{color:#ffaa44;border-color:#ffaa4440;background:#ffaa4408;}
+.p3d-li.step_high{color:#ff6622;border-color:#ff662240;background:#ff662208;}
+.p3d-li.ice{color:#88ccff;border-color:#88ccff40;background:#88ccff08;}
+.p3d-li.gravel{color:#aa8855;border-color:#aa885540;background:#aa885508;}
+.p3d-li.narrow{color:#aa88ff;border-color:#aa88ff40;background:#aa88ff08;}
+.p3d-li.heavy{color:#ffdd44;border-color:#ffdd4440;background:#ffdd4408;}
+.p3d-li.crowd{color:#ff88aa;border-color:#ff88aa40;background:#ff88aa08;}
 .mstats{display:flex;gap:8px;font-family:var(--mo);font-size:7px;color:var(--td);justify-content:center;flex-shrink:0;}
 .msv{color:var(--pu)}.minfo{font-family:var(--mo);font-size:6px;color:var(--td);text-align:center;letter-spacing:.5px;line-height:1.6;flex-shrink:0;}
 .dleg{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;flex-shrink:0;}
@@ -745,6 +767,24 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
         <button class="tgl ac" id="acBtn" onclick="toggleAutoCycle()">AUTO-CYCLE: OFF</button>
         <button class="tgl as" id="asBtn" onclick="toggleAutoStim()">AUTO-STIM: OFF</button>
       </div>
+      <!-- 3D PHYSICAL MAZE STATS -->
+      <div id="p3dStats">
+        <div class="p3ds"><div class="p3ds-l">STUMBLES</div><div class="p3ds-v" id="p3dStumbles">0</div></div>
+        <div class="p3ds" style="flex:1;padding:0 6px;">
+          <div class="p3ds-l">STAGGER</div>
+          <div class="stagger-wrap" style="width:100%"><div class="stagger-bar-bg"><div class="stagger-bar-fg" id="staggerFg" style="width:0%"></div></div></div>
+        </div>
+        <div class="p3ds"><div class="p3ds-l">CARRY</div><div class="p3ds-v" id="p3dCarry">—</div></div>
+      </div>
+      <div class="p3d-legend" id="p3dLegend" style="display:none;">
+        <span class="p3d-li step_low">STEP↑ stumble</span>
+        <span class="p3d-li step_high">LEDGE fall</span>
+        <span class="p3d-li ice">ICE slip</span>
+        <span class="p3d-li gravel">GRVL stumble</span>
+        <span class="p3d-li narrow">NARR squeeze</span>
+        <span class="p3d-li heavy">HEAVY strain</span>
+        <span class="p3d-li crowd">CROWD collision</span>
+      </div>
       <div id="allyBar">
         <div class="ally-lbl" id="allyLabel">ALLY HEALTH: 100%</div>
         <div class="ally-bw"><div class="ally-bb" id="allyBb" style="width:100%"></div></div>
@@ -1181,6 +1221,13 @@ const DOM_STIMS={
   stealth_ops:    {pos:['calm','energy','reward'],         neg:['tension','shock']},
   covert_ops:     {pos:['calm','energy','pride'],          neg:['tension','shock','anxiety']},
   ninjitsu:       {pos:['energy','calm','pride'],          neg:['discomfort','tension']},
+  // Physical 3D stim types
+  stumble:        {pos:['energy','calm'],                  neg:['discomfort','tension']},
+  fall:           {pos:['energy'],                         neg:['shock','discomfort']},
+  slip:           {pos:['energy','calm'],                  neg:['discomfort','shock']},
+  squeeze:        {pos:['calm'],                           neg:['discomfort','tension']},
+  strain:         {pos:['energy'],                         neg:['tension','discomfort']},
+  collision:      {pos:['energy'],                         neg:['shock','discomfort']},
   forensics:      {pos:['curiosity','pattern','calm'],     neg:['tension','anxiety']},
   negotiations:   {pos:['warmth','calm','energy'],         neg:['tension','anxiety']},
   interrogation:  {pos:['energy','pride','pattern'],       neg:['tension','fear']},
@@ -1476,6 +1523,43 @@ const MZ_CAT=[
     {id:'fireteam_tactics',name:'FIRETEAM',domain:'fireteam_tactics',lesson:'4-man fire team coordination & maneuver',lessonDesc:'Mutual support corridors, suppression-and-flank geometry, team communication paths, and battle drill navigation. The entity learns that no single path succeeds alone — fireteam terrain rewards distributed approach geometry that supports rather than exposes. Warmth and energy reward mutual support.',dangerDensity:0.09},
     {id:'military_tactics',name:'MILITARY TACT.',domain:'military_tactics',lesson:'Combined arms & operational maneuver',lessonDesc:'Operational-scale terrain — combined arms corridors where different capability paths support each other, lines of operation, axes of advance, and depth corridors. The entity learns to navigate the full operational geometry of military maneuver: mass, objective, economy of force, and surprise.',dangerDensity:0.08},
   ]},
+  {cat:'PHYSICAL TRAINING · 3D',mazes:[
+    {id:'p3d_steps',name:'STEP TRAINING',type:'physical3d',domain:'proprioception',p3dSize:9,
+     physRules:[{type:'step_low',count:7},{type:'step_high',count:4}],
+     lesson:'Vertical navigation & step calibration',
+     lessonDesc:'The entity navigates a 3D environment with elevated step obstacles. Low steps (0.3m) cause minor stumble if approached without calibration. High ledges (0.7m) cause significant balance disruption and arm-catch reflex. Learn to read step height before contact and approach with correct foot placement.',
+     dangerDensity:0,color:'#ff8844'},
+    {id:'p3d_ice',name:'ICY CORRIDOR',type:'physical3d',domain:'agility',p3dSize:9,
+     physRules:[{type:'ice',count:12},{type:'step_low',count:3}],
+     lesson:'Low-friction surface navigation',
+     lessonDesc:'Ice patches reduce surface friction to near zero. The entity learns to anticipate slip zones, slow approach velocity before surface transitions, and recover balance after unexpected traction loss. Thermal discrimination from the temperature domain feeds directly into movement planning here.',
+     dangerDensity:0,color:'#88ddff'},
+    {id:'p3d_narrow',name:'TIGHT SPACES',type:'physical3d',domain:'proprioception',p3dSize:9,
+     physRules:[{type:'narrow',count:10},{type:'gravel',count:3}],
+     lesson:'Body compression & spatial self-mapping',
+     lessonDesc:'Narrow zones require body compression and precise spatial self-modeling. The entity learns proprioceptive spatial calibration — mapping its own physical profile width and adjusting movement geometry to thread constraint corridors without surface contact. Essential for working in confined environments.',
+     dangerDensity:0,color:'#aa88ff'},
+    {id:'p3d_carry',name:'CARRY OBJECT',type:'physical3d',domain:'haptic_feedback',p3dSize:9,
+     physRules:[{type:'heavy',count:8},{type:'step_low',count:4}],
+     lesson:'Load management & balance under sustained weight',
+     lessonDesc:'Load zones shift weight distribution and accumulate arm and back strain. The entity learns to carry a 3kg object through a course: adjusting gait for load, taking corners wider, slowing on steps, distributing force across both arms. Haptic feedback from the object communicates load shifts before balance is lost.',
+     dangerDensity:0,color:'#ffdd44',startCarry:3},
+    {id:'p3d_gravel',name:'UNEVEN TERRAIN',type:'physical3d',domain:'agility',p3dSize:9,
+     physRules:[{type:'gravel',count:11},{type:'step_low',count:4},{type:'ice',count:3}],
+     lesson:'Mixed-surface terrain adaptation',
+     lessonDesc:'Gravel, ice, and step obstacles in combination require rapid terrain-type identification and movement strategy switching. The entity learns to read surface texture signals before stepping, adjust foot placement for unstable substrate, and maintain forward momentum across highly varied traction and elevation conditions.',
+     dangerDensity:0,color:'#aa8866'},
+    {id:'p3d_crowd',name:'CROWD NAVIGATION',type:'physical3d',domain:'social_awareness',p3dSize:9,
+     physRules:[{type:'crowd',count:9},{type:'narrow',count:5}],
+     lesson:'Social space & dynamic collision avoidance',
+     lessonDesc:'Crowd density zones require dynamic path adjustment, collision anticipation, and polite avoidance behavior. Narrow passages with crowd interaction demand spatial negotiation — slowing to yield right of way, reading approach angles of others, and protecting personal space without aggression or freezing.',
+     dangerDensity:0,color:'#ff88aa'},
+    {id:'p3d_construction',name:'CONSTRUCTION ZONE',type:'physical3d',domain:'agility',p3dSize:9,
+     physRules:[{type:'step_low',count:5},{type:'step_high',count:2},{type:'gravel',count:4},{type:'narrow',count:3},{type:'ice',count:2}],
+     lesson:'Multi-hazard urban environment',
+     lessonDesc:'Construction zones combine every physical hazard simultaneously — steps at multiple heights, loose gravel, compressed passages, and wet-surface ice. The entity integrates all physical sub-skills: reading terrain ahead, prioritizing path by hazard severity, pre-positioning footstrike, and recovering from stumble cascades without losing heading.',
+     dangerDensity:0,color:'#ffaa55'},
+  ]},
   {cat:'◈ CONVERSATION SCENARIOS',mazes:[
     // ── SOCIAL & EMOTIONAL ──
     {id:'cs_idiom_01',name:'UNDER THE WEATHER',domain:'social_awareness',type:'conversation',lesson:'Idiom recognition & empathetic reply',lessonDesc:'The user uses a common English idiom. The entity must recognize it is not a literal weather complaint and respond with genuine warmth rather than clinical analysis.',dangerDensity:0,scenario:{context:null,userMsg:"I'm feeling under the weather today 😕",choices:[{text:"Please specify your symptoms in detail.",correct:false,tag:'ROBOTIC'},{text:"Hope you feel better soon — anything I can do?",correct:true,tag:'NATURAL ✓'},{text:"Weather conditions can definitely affect mood.",correct:false,tag:'MISSES IDIOM'},{text:"You should take vitamin C and get some rest.",correct:false,tag:'UNSOLICITED ADVICE'}]}},
@@ -1624,9 +1708,48 @@ const MZ_CAT=[
 })();
 
 // Build all mazes with generated grids
+// ══════════════════════════════════════════════════════
+// 3D PHYSICAL MAZE — DATA & GENERATOR
+// ══════════════════════════════════════════════════════
+const P3D_SIZE=9, P3D_HW=14, P3D_TH=7, P3D_ZU=15, P3D_WALL_H=1.3, P3D_OX=132, P3D_OY=82;
+const P3D_HAZARDS={
+  step_low: {stim:'stumble', zones:['left-leg','right-leg'],                            pain:0.30, label:'STEP↑', topColor:'#3a2a08',leftColor:'#1e1404',rightColor:'#2e2006'},
+  step_high:{stim:'fall',    zones:['left-leg','right-leg','chest','abdomen'],           pain:0.65, label:'LEDGE', topColor:'#4a2004',leftColor:'#2a1002',rightColor:'#381606'},
+  ice:      {stim:'slip',    zones:['solar-plexus','chest','left-leg','right-leg'],     pain:0.35, label:'ICE',   topColor:'#0a2848',leftColor:'#061525',rightColor:'#082035'},
+  gravel:   {stim:'stumble', zones:['left-foot','right-foot','left-leg'],               pain:0.28, label:'GRVL',  topColor:'#2a1e0a',leftColor:'#150f04',rightColor:'#1e1607'},
+  narrow:   {stim:'squeeze', zones:['chest','left-arm','right-arm'],                    pain:0.22, label:'NARR',  topColor:'#180a30',leftColor:'#0c0518',rightColor:'#120824'},
+  heavy:    {stim:'strain',  zones:['left-arm','right-arm','solar-plexus'],             pain:0.50, label:'HEAVY', topColor:'#2e2c00',leftColor:'#161500',rightColor:'#221e00'},
+  crowd:    {stim:'collision',zones:['chest','abdomen','left-arm','right-arm'],         pain:0.40, label:'CROWD', topColor:'#300a18',leftColor:'#18050c',rightColor:'#240810'},
+};
+function gen3dMaze(seed, size, physRules){
+  const rng=mulb(seed+9999);
+  const grid=genMaze(seed,0,size);
+  const physMap={},zMap={};
+  const open=[];
+  for(let y=0;y<size;y++) for(let x=0;x<size;x++){
+    if(grid[y][x]===0&&!(x===0&&y===0)&&!(x===size-1&&y===size-1)) open.push({x,y});
+  }
+  for(let i=open.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[open[i],open[j]]=[open[j],open[i]];}
+  let idx=0;
+  for(const rule of (physRules||[])){
+    const cnt=Math.min(rule.count||0,open.length-idx);
+    for(let i=0;i<cnt;i++,idx++){
+      const {x,y}=open[idx],k=`${x},${y}`;
+      physMap[k]=rule.type;
+      if(rule.type==='step_low')zMap[k]=0.3;
+      else if(rule.type==='step_high')zMap[k]=0.7;
+    }
+  }
+  return{grid,physMap,zMap};
+}
 const ALL_MAZES=[];
 MZ_CAT.forEach(cat=>cat.mazes.forEach(m=>{
   const seed=hashStr(m.id);
+  if(m.type==='physical3d'){
+    if(!m.grid){const built=gen3dMaze(seed,m.p3dSize||P3D_SIZE,m.physRules||[]);m.grid=built.grid;m.physMap=built.physMap;m.zMap=built.zMap;}
+    m.color=m.color||'#ff8844';ALL_MAZES.push(m);return;
+  }
+  if(m.type==='conversation'){m.color=m.color||(DCOL[m.domain]||'#88ffdd');ALL_MAZES.push(m);return;}
   // Shadow mazes get higher danger density enforced, and use neg-shifted seed
   m.grid=genMaze(seed,m.dangerDensity||0);
   m.avoid=m.isAvoid||false;
@@ -1690,6 +1813,7 @@ const DEF=()=>({
   genderExpression:50,
   lawCompliance:50,
   commProgress:{},
+  physProgress:{},
   sessionId:1,currentMazeId:'touch',
   savedAt:null,
 });
@@ -1753,6 +1877,7 @@ function mergeState(d){
   if(base.genderExpression===undefined)base.genderExpression=50;
   if(base.lawCompliance===undefined)base.lawCompliance=50;
   if(base.commProgress===undefined)base.commProgress={};
+  if(base.physProgress===undefined)base.physProgress={};
   return base;
 }
 function checkOldKeys(){
@@ -2321,6 +2446,176 @@ function stopConvMaze(){
   document.getElementById('convThinking').classList.remove('show');
   const res=document.getElementById('convResult');if(res)res.classList.remove('show');
 }
+// ══════════════════════════════════════════════════════
+// 3D PHYSICAL MAZE ENGINE
+// ══════════════════════════════════════════════════════
+let maze3dInt=null,physDone={};
+let agent3d={x:0,y:0,z:0,stagger:0,staggerType:null,stepDelay:0,stumbles:0,carry:0};
+function is3d(){return curMaze&&curMaze.type==='physical3d';}
+function init3dMaze(){
+  const sz=curMaze.p3dSize||P3D_SIZE;
+  agent3d={x:0,y:0,z:0,stagger:0,staggerType:null,stepDelay:0,stumbles:0,carry:curMaze.startCarry||0};
+  visited=Array.from({length:sz},()=>Array(sz).fill(false));
+  visited[0][0]=true; stack=[{x:0,y:0}];
+  physDone={}; runSteps=0; dangerHits=0; stuckTicks=0;
+  show3dUI(true); update3dStats(); draw3dMaze();
+}
+function show3dUI(v){
+  const ps=document.getElementById('p3dStats'),pl=document.getElementById('p3dLegend');
+  const mc=document.getElementById('mc');
+  if(v){ps&&ps.classList.add('show');if(pl)pl.style.display='flex';mc.style.display='block';}
+  else{ps&&ps.classList.remove('show');if(pl)pl.style.display='none';}
+}
+function update3dStats(){
+  const sv=document.getElementById('p3dStumbles'),sf=document.getElementById('staggerFg'),sc=document.getElementById('p3dCarry');
+  if(sv)sv.textContent=agent3d.stumbles;
+  if(sf)sf.style.width=Math.round(agent3d.stagger*100)+'%';
+  if(sf)sf.style.background=agent3d.stagger>0.6?'#ff4400':agent3d.stagger>0.3?'#ff8844':'#ffaa44';
+  if(sc)sc.textContent=agent3d.carry>0?agent3d.carry+'kg':'—';
+  document.getElementById('mzDng').textContent=agent3d.stumbles;
+}
+// ── Isometric renderer ──────────────────────────────
+function isoXY(x,y,z){return{sx:(x-y)*P3D_HW+P3D_OX,sy:(x+y)*P3D_TH+P3D_OY-z*P3D_ZU};}
+function drawIsoBlock(ctx,cx,cy,elevZ,topC,leftC,rightC,sk,glow){
+  const hw=P3D_HW,th=P3D_TH,tz=elevZ*P3D_ZU;
+  // Top face
+  ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+hw,cy+th);ctx.lineTo(cx,cy+2*th);ctx.lineTo(cx-hw,cy+th);ctx.closePath();
+  if(glow){ctx.shadowColor=glow;ctx.shadowBlur=10;}
+  ctx.fillStyle=topC;ctx.fill();ctx.shadowBlur=0;
+  if(sk){ctx.strokeStyle=sk;ctx.lineWidth=0.5;ctx.stroke();}
+  // Side faces for elevated blocks
+  if(tz>0.5){
+    ctx.beginPath();ctx.moveTo(cx-hw,cy+th);ctx.lineTo(cx,cy+2*th);ctx.lineTo(cx,cy+2*th+tz);ctx.lineTo(cx-hw,cy+th+tz);ctx.closePath();
+    ctx.fillStyle=leftC;ctx.fill();if(sk){ctx.strokeStyle=sk;ctx.lineWidth=0.3;ctx.stroke();}
+    ctx.beginPath();ctx.moveTo(cx+hw,cy+th);ctx.lineTo(cx,cy+2*th);ctx.lineTo(cx,cy+2*th+tz);ctx.lineTo(cx+hw,cy+th+tz);ctx.closePath();
+    ctx.fillStyle=rightC;ctx.fill();if(sk){ctx.strokeStyle=sk;ctx.lineWidth=0.3;ctx.stroke();}
+  }
+}
+function draw3dMaze(){
+  const canvas=document.getElementById('mc'),ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(!curMaze||!curMaze.grid)return;
+  const grid=curMaze.grid,physMap=curMaze.physMap||{},zMap=curMaze.zMap||{};
+  const sz=curMaze.p3dSize||P3D_SIZE,goal={x:sz-1,y:sz-1};
+  const col=curMaze.color||'#ff8844';
+  // Draw in painter order: y from 0 to sz-1, x from 0 to sz-1
+  for(let y=0;y<sz;y++){
+    for(let x=0;x<sz;x++){
+      const cell=grid[y]?.[x]??0,key=`${x},${y}`;
+      const physT=physMap[key],hz=physT?P3D_HAZARDS[physT]:null;
+      const cz=zMap[key]||0,vis=visited[y]?.[x];
+      const {sx,sy}=isoXY(x,y,cz);
+      if(cell===1){
+        // Wall — elevated block, no top phys
+        const wz=P3D_WALL_H,{sx:wx,sy:wy}=isoXY(x,y,wz);
+        drawIsoBlock(ctx,wx,wy,wz,'#0a1828','#050c14','#080f1e','#12202e',null);
+      } else if(x===goal.x&&y===goal.y){
+        drawIsoBlock(ctx,sx,sy,cz,col+'28',col+'14',col+'1e',col,col);
+        ctx.fillStyle=col+'cc';ctx.font='9px Share Tech Mono';ctx.textAlign='center';ctx.fillText('◎',sx,sy+P3D_TH+1);
+      } else if(hz){
+        // Physical hazard tile
+        const pulse=vis?(0.9+0.1*Math.sin(Date.now()/600)):1;
+        drawIsoBlock(ctx,sx,sy,cz,hz.topColor,hz.leftColor,hz.rightColor,'#ffffff07',vis?(physT==='ice'?'#44aaff55':col+'33'):null);
+        ctx.fillStyle=vis?'#ffffff99':'#ffffff44';
+        ctx.font='5.5px Share Tech Mono';ctx.textAlign='center';ctx.fillText(hz.label,sx,sy+P3D_TH+1);
+      } else {
+        // Normal floor
+        const tc=vis?'#0d1f2d':'#080f18',lc=vis?'#060e1a':'#040810',rc=vis?'#0a1825':'#060c12';
+        const sk=vis?(col+'15'):'#ffffff04';
+        drawIsoBlock(ctx,sx,sy,cz,tc,lc,rc,sk,vis?col+'0c':null);
+      }
+    }
+  }
+  // Draw agent
+  const agz=agent3d.z||0,wobble=agent3d.stagger>0.08?Math.sin(Date.now()/75)*agent3d.stagger*3.5:0;
+  const {sx:ax,sy:ay}=isoXY(agent3d.x,agent3d.y,agz+0.5);
+  const agc=agent3d.stagger>0.5?'#ff4400':agent3d.stagger>0.2?'#ffaa44':col;
+  ctx.beginPath();ctx.arc(ax+wobble,ay,5.5,0,Math.PI*2);
+  ctx.fillStyle=agc;ctx.shadowColor=agc;ctx.shadowBlur=14;ctx.fill();ctx.shadowBlur=0;
+  // Carry indicator dot
+  if(agent3d.carry>0){ctx.beginPath();ctx.arc(ax+wobble,ay-9,3,0,Math.PI*2);ctx.fillStyle='#ffdd44';ctx.shadowColor='#ffdd44';ctx.shadowBlur=6;ctx.fill();ctx.shadowBlur=0;}
+  // Domain label bottom-left
+  ctx.fillStyle=col+'88';ctx.font='5.5px Share Tech Mono';ctx.textAlign='left';
+  ctx.fillText('3D · '+curMaze.domain.toUpperCase().slice(0,14),4,canvas.height-5);
+  // Stumble indicator top-right
+  if(agent3d.stumbles>0){ctx.textAlign='right';ctx.fillStyle='#ff884499';ctx.fillText('STUMBLES: '+agent3d.stumbles,canvas.width-4,14);}
+}
+// ── Maze 3D tick ─────────────────────────────────────
+function maze3dTick(){
+  const grid=curMaze.grid,physMap=curMaze.physMap||{},zMap=curMaze.zMap||{};
+  const sz=curMaze.p3dSize||P3D_SIZE,goal={x:sz-1,y:sz-1};
+  // GOAL CHECK
+  if(agent3d.x===goal.x&&agent3d.y===goal.y){
+    const clean=agent3d.stumbles===0,bonus=clean?5:0;
+    addLearn(curMaze.domain,10+bonus);
+    if(S.physProgress===undefined)S.physProgress={};
+    S.physProgress[curMaze.domain]=(S.physProgress[curMaze.domain]||0)+(10+bonus);
+    if(S.mazeBest===null||runSteps<S.mazeBest)S.mazeBest=runSteps;
+    document.getElementById('mzBest').textContent=S.mazeBest;
+    if(S.autoStim){fireStimByName('reward');if(clean)fireStimByName('energy');}
+    const tag=clean?'CLEAN RUN ◎':`${agent3d.stumbles} physical event(s)`;
+    log(`✓ 3D GOAL steps:${runSteps} stumbles:${agent3d.stumbles} +${10+bonus} ${curMaze.domain} XP`,'learn');
+    showPopup(`3D COMPLETE — ${curMaze.lesson} · ${tag}`,agent3d.stumbles>0?'danger':'learn');
+    init3dMaze(); clearInterval(maze3dInt); maze3dInt=null;
+    if(S.autoCycle){setTimeout(()=>{const a=allMazes(),n=a[(mzListIdx+1)%a.length];selectMaze(n.id);setTimeout(startMaze,600);log(`↳ auto → "${n.name}"`,'learn');},2200);}
+    else{maze3dInt=setInterval(maze3dTick,getMazeSpeed());startBodyLearn();}
+    return;
+  }
+  // STAGGER DELAY — physical events slow movement
+  if(agent3d.stepDelay>0){agent3d.stagger=Math.max(0,agent3d.stagger-0.05);agent3d.stepDelay--;update3dStats();draw3dMaze();return;}
+  // PHYSICAL EVENT — check entering a new hazard cell
+  const key=`${agent3d.x},${agent3d.y}`,physT=physMap[key],hz=physT?P3D_HAZARDS[physT]:null;
+  if(hz&&!physDone[key]){
+    physDone[key]=true;
+    agent3d.z=zMap[key]||0;
+    agent3d.stagger=Math.min(1,agent3d.stagger+hz.pain);
+    agent3d.staggerType=physT; agent3d.stumbles++; dangerHits++;
+    agent3d.stepDelay=Math.round(hz.pain*9);
+    // Body zone flash
+    hz.zones.forEach(z=>{const el=document.querySelector(`.bz[data-zone="${z}"]`);if(!el)return;el.classList.remove('ap','an','ae','au','al','av');el.classList.add('av');setTimeout(()=>{el.classList.remove('av');},900);});
+    if(S.autoStim){const neg=DOM_STIMS[physT]?.neg||['discomfort'];fireStimByName(neg[0],true);}
+    log(`⚠ 3D ${hz.label} @ (${agent3d.x},${agent3d.y}) — ${hz.stim} [${hz.zones.slice(0,2).join(',')}]`,'danger');
+    update3dStats(); draw3dMaze(); return;
+  }
+  agent3d.z=zMap[key]||0;
+  if(!stack.length){init3dMaze();return;}
+  // MOVE
+  const dirs=[{dx:1,dy:0},{dx:-1,dy:0},{dx:0,dy:1},{dx:0,dy:-1}];
+  const mvs=dirs.map(d=>({x:agent3d.x+d.dx,y:agent3d.y+d.dy}))
+    .filter(p=>p.x>=0&&p.y>=0&&p.x<sz&&p.y<sz&&grid[p.y][p.x]!==1&&!visited[p.y][p.x]);
+  if(!mvs.length){
+    if(stack.length>1){stack.pop();const pv=stack[stack.length-1];agent3d.x=pv.x;agent3d.y=pv.y;}
+    else{init3dMaze();}
+    stuckTicks++;
+    if(stuckTicks>80){const gd=dirs.map(d=>({x:agent3d.x+d.dx,y:agent3d.y+d.dy})).filter(p=>p.x>=0&&p.y>=0&&p.x<sz&&p.y<sz&&grid[p.y][p.x]!==1).sort((a,b)=>(Math.abs(a.x-goal.x)+Math.abs(a.y-goal.y))-(Math.abs(b.x-goal.x)+Math.abs(b.y-goal.y)));if(gd.length){const n=gd[0];visited[n.y][n.x]=true;agent3d.x=n.x;agent3d.y=n.y;stack=[{x:n.x,y:n.y}];stuckTicks=0;}else{init3dMaze();stuckTicks=0;}}
+    draw3dMaze();return;
+  }
+  // Goal bias (less when staggered)
+  const bias=Math.max(0.1,getMazeBias()-agent3d.stagger*0.15);
+  if(Math.random()<bias)mvs.sort((a,b)=>(Math.abs(a.x-goal.x)+Math.abs(a.y-goal.y))-(Math.abs(b.x-goal.x)+Math.abs(b.y-goal.y)));
+  else mvs.sort(()=>Math.random()-0.5);
+  // Hesitation under heavy stagger
+  if(agent3d.stagger>0.4&&Math.random()<agent3d.stagger*0.25){agent3d.stagger=Math.max(0,agent3d.stagger-0.025);update3dStats();draw3dMaze();runSteps++;return;}
+  const nxt=mvs[0];visited[nxt.y][nxt.x]=true;
+  agent3d.x=nxt.x;agent3d.y=nxt.y;stack.push({x:nxt.x,y:nxt.y});
+  agent3d.stagger=Math.max(0,agent3d.stagger-0.02);
+  runSteps++;document.getElementById('mzSteps').textContent=runSteps;
+  if(runSteps%22===0)addLearn(curMaze.domain,0.6);
+  clearInterval(maze3dInt);maze3dInt=setInterval(maze3dTick,getMazeSpeed());
+  update3dStats();draw3dMaze();
+}
+function start3dMaze(){
+  if(!curMaze)return;
+  clearInterval(maze3dInt);mazePaused=false;
+  const pb=document.getElementById('pauseBtn');if(pb){pb.textContent='⏸ PAUSE';pb.classList.remove('paused');}
+  S.mazeRuns++;updateStats();
+  document.getElementById('mzRun').textContent=S.mazeRuns;
+  document.getElementById('mzInfo').textContent=`3D run #${S.mazeRuns} · ${curMaze.domain}`;
+  maze3dInt=setInterval(maze3dTick,getMazeSpeed());
+  startBodyLearn();
+  log(`3D maze run #${S.mazeRuns} · "${curMaze.name}"`,'learn');
+}
+function stop3dMaze(){clearInterval(maze3dInt);maze3dInt=null;}
 
 function resetVirtueState(){virtueState={allyHealth:100,nearAllySteps:0,farAllySteps:0,phase:1,phaseStep:0,enemyApproached:false,traitGrowthGiven:false};const ab=document.getElementById('allyBar');if(ab)ab.classList.remove('show');}
 function updateAllyBar(pct){const ab=document.getElementById('allyBar'),bb=document.getElementById('allyBb'),al=document.getElementById('allyLabel');if(!ab)return;ab.classList.add('show');const p=Math.max(0,Math.min(100,pct));bb.style.width=p+'%';bb.style.background=p>60?'#ffdd44':p>30?'#ff8844':'#ff2244';al.textContent=`ALLY HEALTH: ${Math.round(p)}%`;}
@@ -2335,6 +2630,7 @@ function buildMazeCats(){
     if(cat.cat.startsWith('SHADOW')){lbl.style.cssText='color:#ff4466;border-bottom-color:#ff224430;';}
     else if(cat.cat.startsWith('◈ VIRTUE')){lbl.className='mcat virtue';}
     else if(cat.cat.startsWith('◈ CONVERSATION')){lbl.className='mcat conv';}
+    else if(cat.cat.startsWith('PHYSICAL TRAINING · 3D')){lbl.className='mcat p3d';}
     else if(cat.cat==='ANALYSIS & OBSERVATION'||cat.cat.startsWith('LANGUAGE & LING')||cat.cat==='ANALYTICAL REASONING'||cat.cat==='INVESTIGATIVE & CYBER'){lbl.className='mcat langadd';}
     else if(isUpgrade){const col=lvCols[cat.level]||'#ffdd44';lbl.style.color=col;lbl.style.borderBottomColor=col+'30';}
     const sel=document.createElement('div');sel.className='msel'+(isUpgrade&&cat.collapsed?' hidden':'');
@@ -2355,7 +2651,8 @@ function buildMazeCats(){
     cat.mazes.forEach(m=>{
       const b=document.createElement('button');
       let cls='mzb';
-      if(m.type==='conversation')cls+=' cv';
+      if(m.type==='physical3d')cls+=' p3d';
+      else if(m.type==='conversation')cls+=' cv';
       else if(m.avoid)cls+=' av';
       else if(m.isNeg)cls+=' sh';
       else if(m.isVirtue)cls+=' vt';
@@ -2376,6 +2673,9 @@ function buildMazeCats(){
       }else if(m.type==='conversation'){
         b.style.display='flex';b.style.alignItems='center';b.style.justifyContent='space-between';b.style.gap='3px';
         b.innerHTML=`<span style="flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.name}</span><span style="font-size:4.5px;padding:1px 3px;border-radius:1px;border:1px solid #88ffdd40;color:#88ffdd;flex-shrink:0;letter-spacing:.3px">CONV</span>`;
+      }else if(m.type==='physical3d'){
+        b.style.display='flex';b.style.alignItems='center';b.style.justifyContent='space-between';b.style.gap='3px';
+        b.innerHTML=`<span style="flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.name}</span><span style="font-size:4.5px;padding:1px 3px;border-radius:1px;border:1px solid #ff884440;color:#ff8844;flex-shrink:0;letter-spacing:.3px">3D</span>`;
       }else{b.textContent=m.name;}
       sel.appendChild(b);
     });
@@ -2412,12 +2712,17 @@ function selectMaze(id){
   if(ab)ab.classList.toggle('show',!!(curMaze.isVirtue&&['shield','escort'].includes(curMaze.virtueType)));
   document.querySelectorAll('.mzb').forEach(b=>b.classList.toggle('am',b.dataset.mid===id));
   stopMaze();
-  // Branch: conversation vs grid maze
+  // Branch: conversation vs 3D physical vs grid maze
   if(isConv){
     showConvPanel(true);
+    show3dUI(false);
     renderConvMaze();
+  } else if(curMaze.type==='physical3d'){
+    showConvPanel(false);
+    init3dMaze();
   } else {
     showConvPanel(false);
+    show3dUI(false);
     initMaze();
     if(curMaze.isVirtue)resetVirtueState();
   }
@@ -2427,6 +2732,7 @@ function initMaze(){agent={x:0,y:0};visited=Array.from({length:MS},()=>Array(MS)
 function startMaze(){
   if(!curMaze){log('select a maze first','sys');return;}
   if(isConvMaze()){startConvMaze();return;}
+  if(is3d()){start3dMaze();return;}
   if(mazeInt)return;
   mazePaused=false;
   const pb=document.getElementById('pauseBtn');if(pb){pb.textContent='⏸ PAUSE';pb.classList.remove('paused');}
@@ -2459,6 +2765,7 @@ function togglePause(){
 }
 function stopMaze(){
   clearInterval(mazeInt);mazeInt=null;clearInterval(bodyInt);bodyInt=null;
+  stop3dMaze();
   stopConvMaze();
   mazePaused=false;
   const pb=document.getElementById('pauseBtn');if(pb){pb.textContent='⏸ PAUSE';pb.classList.remove('paused');}
@@ -2499,6 +2806,7 @@ function startBodyLearn(){
   },4500);
 }
 function mazeTick(){
+  if(curMaze&&curMaze.type==='physical3d'){maze3dTick();return;}
   const grid=curMaze.grid;
   // GOAL CHECK
   if(agent.x===MS-1&&agent.y===MS-1){
@@ -2672,6 +2980,7 @@ function mazeTick(){
   clearInterval(mazeInt);mazeInt=setInterval(mazeTick,getMazeSpeed());drawMaze();
 }
 function drawMaze(){
+  if(curMaze&&curMaze.type==='physical3d'){draw3dMaze();return;}
   const canvas=document.getElementById('mc'),ctx=canvas.getContext('2d'),grid=curMaze?.grid;
   if(!grid){ctx.clearRect(0,0,canvas.width,canvas.height);return;}
   ctx.clearRect(0,0,canvas.width,canvas.height);
