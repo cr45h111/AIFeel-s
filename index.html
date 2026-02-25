@@ -1021,6 +1021,72 @@ const MODE_SKILLS={
   },
 };
 const MODE_LIST=Object.keys(MODE_SKILLS);
+
+// ══════════════════════════════════════════════════════
+// SEMANTIC DOMAIN CONNECTION MAP
+// Defines which domains meaningfully connect to which,
+// used at any stage (not just MASTER) when both sides
+// have been trained. Each entry: domain -> [{to, relation}]
+// ══════════════════════════════════════════════════════
+const DOMAIN_CONNECTIONS={
+  sexuality:     [{to:'emotional',r:'intimacy is emotional territory first'},{to:'psychology',r:'desire is psychological'},{to:'relationships',r:'sexuality lives inside relationship'},{to:'empathy',r:'requires reading the other'}],
+  emotional:     [{to:'psychology',r:'emotion is psychology made felt'},{to:'memory',r:'high emotion anchors memory'},{to:'family',r:'family is where emotion is first shaped'},{to:'empathy',r:'emotion enables empathy'},{to:'social',r:'emotion drives social behavior'}],
+  empathy:       [{to:'social',r:'empathy enables social navigation'},{to:'emotional',r:'empathy reads emotion'},{to:'relationships',r:'empathy is what relationships require'},{to:'behavioral_analysis',r:'empathy feeds behavioral reading'}],
+  psychology:    [{to:'behavioral',r:'psychology explains behavior'},{to:'memory',r:'memory is core psychological terrain'},{to:'social',r:'psychology drives social dynamics'},{to:'identity',r:'psychology shapes identity'}],
+  relationships: [{to:'attachment',r:'relationships build or break attachment'},{to:'trust',r:'trust is the substrate of relationship'},{to:'conflict',r:'relationships generate conflict'},{to:'empathy',r:'relationships require empathy'}],
+  memory:        [{to:'cognitive',r:'memory is a cognitive function'},{to:'identity',r:'memory builds identity'},{to:'emotional',r:'emotional events anchor in memory'},{to:'trauma',r:'memory and trauma are inseparable'}],
+  cognitive:     [{to:'pattern_matching',r:'cognition produces pattern recognition'},{to:'memory',r:'cognition requires memory'},{to:'hypothesis_weighing',r:'cognition enables hypothesis testing'},{to:'skepticism',r:'skepticism is applied cognition'}],
+  social:        [{to:'empathy',r:'social skill requires empathy'},{to:'relationships',r:'social space is relationship space'},{to:'conflict',r:'social dynamics produce conflict'},{to:'humor',r:'humor is social lubrication'}],
+  pattern_matching:[{to:'skepticism',r:'pattern recognition enables skepticism'},{to:'criminal_profiling',r:'profiling is applied pattern recognition'},{to:'statistics',r:'patterns are statistical'},{to:'behavioral_analysis',r:'behavior follows patterns'}],
+  spirituality:  [{to:'identity',r:'spirituality shapes identity'},{to:'history_of_religion',r:'spirituality has history'},{to:'pagan_beliefs',r:'paganism is one spiritual path'},{to:'psychology',r:'spirituality is psychologically active'}],
+  history_of_religion:[{to:'ancient_religions',r:'religion has ancient roots'},{to:'modern_religions',r:'modern faiths evolved from history'},{to:'civilization_history',r:'religion and civilization co-evolved'},{to:'psychology',r:'religion is psychological technology'}],
+  ancient_religions:[{to:'ancient_history',r:'ancient religion is ancient history'},{to:'mythology',r:'religion and myth share structure'},{to:'pagan_history',r:'many ancient religions were pagan'},{to:'anthropology',r:'ancient religion is anthropological record'}],
+  modern_religions:[{to:'history_of_religion',r:'modern faith has roots'},{to:'psychology',r:'religion serves psychological functions'},{to:'philosophy',r:'theology is applied philosophy'},{to:'social',r:'religion is social institution'}],
+  cults:         [{to:'psychology',r:'cult control exploits psychology'},{to:'social',r:'cults are social pressure systems'},{to:'cult_history',r:'understanding cults requires their history'},{to:'modern_religions',r:'the line between cult and religion is fuzzy'}],
+  pagan_beliefs: [{to:'pagan_practices',r:'belief drives practice'},{to:'pagan_history',r:'beliefs have history'},{to:'spirituality',r:'paganism is a spiritual path'},{to:'ancient_religions',r:'paganism is often ancient religion surviving'}],
+  pagan_practices:[{to:'pagan_beliefs',r:'practice embodies belief'},{to:'ritual',r:'pagan practice is ritual'},{to:'symbolism',r:'ritual uses symbols'},{to:'psychology',r:'ritual is psychologically effective'}],
+  metallurgy:    [{to:'chemistry',r:'metallurgy is applied chemistry'},{to:'physics',r:'metal behavior is physics'},{to:'materials_science',r:'metallurgy is a branch of materials science'},{to:'history',r:'metal shaped human history — three ages'}],
+  units_of_measurement:[{to:'physics',r:'measurement is physics foundation'},{to:'chemistry',r:'chemistry requires precise measurement'},{to:'mathematics',r:'measurement is applied math'},{to:'engineering',r:'engineering runs on measurement'}],
+  balance:       [{to:'proprioception',r:'balance reads proprioceptive input'},{to:'agility',r:'balance enables agility'},{to:'physics',r:'balance is applied physics'},{to:'motor',r:'balance is a motor skill'}],
+  covert_surveillance:[{to:'surveillance',r:'covert is surveillance amplified'},{to:'intelligence_ops',r:'covert surveillance is intelligence work'},{to:'stealth',r:'covert requires stealth'},{to:'risk_calibration',r:'covert operations require risk management'}],
+  law:           [{to:'ethics',r:'law encodes ethics'},{to:'pattern_matching',r:'legal reasoning is pattern matching'},{to:'investigation',r:'law governs how investigation works'},{to:'government',r:'law is government action'}],
+  chemistry:     [{to:'biology',r:'chemistry is the basis of biology'},{to:'physics',r:'chemistry is applied physics'},{to:'medicine',r:'pharmacology is applied chemistry'},{to:'materials_science',r:'materials are chemistry'}],
+  medicine:      [{to:'biology',r:'medicine is applied biology'},{to:'chemistry',r:'pharmacology is chemistry'},{to:'psychology',r:'mind and body are connected'},{to:'diagnosis_treatment',r:'medicine is diagnosis and treatment'}],
+  investigation: [{to:'pattern_matching',r:'investigation is pattern recognition'},{to:'skepticism',r:'good investigators are skeptical'},{to:'law',r:'investigation operates inside law'},{to:'evidence_gathering',r:'investigation requires evidence'}],
+  canine_behavior:[{to:'canine_emotional',r:'behavior expresses emotional state'},{to:'canine_tracking',r:'behavior guides tracking'},{to:'animal_tracking',r:'canine tracking is specialized animal tracking'},{to:'empathy',r:'working with dogs requires empathy'}],
+  probability:   [{to:'statistics',r:'probability is the foundation of statistics'},{to:'cognitive',r:'probability is a cognitive framework'},{to:'risk_calibration',r:'probability enables risk calibration'},{to:'hypothesis_weighing',r:'hypotheses are probabilistic'}],
+  statistics:    [{to:'probability',r:'statistics applies probability'},{to:'skepticism',r:'statistics enables skeptical analysis'},{to:'data_science',r:'statistics is the core of data science'},{to:'pattern_matching',r:'statistics finds patterns'}],
+  charm:         [{to:'social',r:'charm operates in social space'},{to:'empathy',r:'charm requires reading people'},{to:'grace',r:'charm and grace travel together'},{to:'rapport_building',r:'charm builds rapport'}],
+  nlp:           [{to:'psychology',r:'NLP engages psychological processes'},{to:'language',r:'NLP is built on linguistics'},{to:'behavioral_analysis',r:'NLP reads behavioral patterns'},{to:'learning_theory',r:'NLP applies learning science'}],
+  learning_theory:[{to:'cognitive',r:'learning is a cognitive process'},{to:'memory',r:'learning creates memory'},{to:'self_learning',r:'theory informs practice'},{to:'teaching',r:'learning theory shapes teaching'}],
+  teaching:      [{to:'learning_theory',r:'good teaching applies learning theory'},{to:'empathy',r:'teaching requires empathy for the learner'},{to:'communication',r:'teaching is communication'},{to:'psychology',r:'teaching is applied educational psychology'}],
+  art_of_war:    [{to:'strategy',r:'Art of War is the foundation of strategy'},{to:'psychology',r:'Sun Tzu is psychology of conflict'},{to:'pattern_matching',r:'strategy is pattern recognition'},{to:'history',r:'military history tests strategic theory'}],
+  // Physical training cross-connections
+  proprioception:[{to:'balance',r:'proprioception enables balance'},{to:'agility',r:'body awareness drives agility'},{to:'motor',r:'proprioception is motor feedback'},{to:'haptic_feedback',r:'proprioception and haptics are related'}],
+  agility:       [{to:'proprioception',r:'agility requires body awareness'},{to:'balance',r:'agility needs balance'},{to:'motor',r:'agility is advanced motor control'},{to:'coordination',r:'agility requires coordination'}],
+  haptic_feedback:[{to:'touch',r:'haptic is active touch'},{to:'proprioception',r:'haptic feeds proprioception'},{to:'fine_motor',r:'haptic requires fine motor skill'},{to:'materials_science',r:'haptic reads material properties'}],
+};
+
+// Get semantically connected domains that the entity has trained in
+function getSemanticConnections(dom){
+  const conns=DOMAIN_CONNECTIONS[dom]||[];
+  return conns.filter(c=>{
+    const lv=(S.learning[c.to]||0)+(S.commProgress?.[c.to]||0)+(S.physProgress?.[c.to]||0);
+    return lv>=5; // only show connections where the entity has actually trained
+  });
+}
+
+// Auto-connect message: uses semantic graph at ANY stage where BOTH sides are trained
+// Stage threshold: 200+ XP in BOTH domains triggers a connection message
+function getConnectionInsight(dom){
+  const conns=getSemanticConnections(dom);
+  if(!conns.length)return null;
+  const best=conns[0]; // highest-relevance connection
+  const domLv=S.learning[dom]||0;
+  const toLv=(S.learning[best.to]||0)+(S.commProgress?.[best.to]||0)+(S.physProgress?.[best.to]||0);
+  if(domLv<100||toLv<100)return null; // both need real training to connect
+  return {from:dom,to:best.to,relation:best.r,fromLv:domLv,toLv:toLv};
+}
 const DCOL={touch:'#00ffaa',sight:'#ffdd44',hearing:'#44aaff',taste:'#ff88aa',smell:'#88ffcc',motor:'#ff8844',emotional:'#cc66ff',memory:'#44ccff',cognitive:'#ff44cc',social:'#aaffaa',avoidance:'#ff4400',texture:'#ffcc88',psychology:'#dd88ff',behavioral:'#ff99dd',family:'#88ddff',business:'#ffdd88',sexuality:'#ff77bb',relationships:'#ffaacc',speaking:'#aaffdd',language:'#88bbff',empathy:'#ffbb88',pain:'#ff6655',senses:'#ffffff',creativity:'#ffff88',humor:'#ddff88',trust:'#88ffbb',attachment:'#cc99ff',identity:'#ff99aa',intuition:'#99ddff',boundaries:'#ff8877',conflict:'#ff6644',selfawareness:'#ccffaa',spirituality:'#ddccff',
 // New analysis & language domains
 body_language:'#66ffcc',facial_expr:'#ffcc66',voice_tone:'#66ccff',behavioral_analysis:'#ffaa66',english_lang:'#aaffee',word_expr:'#ffeeaa',linguistics:'#bbddff',regional_dialect:'#ffddbb',slang:'#ddffaa',conflict_res:'#ff9988',
@@ -1622,7 +1688,29 @@ const DOM_STIMS={
   // Electronics & Programming
   arduino:        {pos:['energy','reward','curiosity'],neg:['tension','discomfort']},
   arduino_programming:{pos:['pattern','reward','pride'],neg:['tension','anxiety']},
-  substance_analysis:  {pos:['pattern','curiosity','energy'],neg:['tension','anxiety']},
+  substance_analysis:  {pos:['pattern','curiosity','energy'],neg:['tension','anxiety']},  // Religion & Pagan
+  history_of_religion:{pos:['awe','curiosity','calm'],neg:['anxiety','tension']},
+  ancient_religions:  {pos:['awe','curiosity','calm'],neg:['tension','discomfort']},
+  modern_religions:   {pos:['calm','warmth','awe'],   neg:['tension','anxiety']},
+  cults:              {pos:['pattern','curiosity'],    neg:['anxiety','fear','shame']},
+  cult_history:       {pos:['pattern','curiosity'],    neg:['anxiety','discomfort']},
+  pagan_beliefs:      {pos:['awe','warmth','calm'],    neg:['tension','shame']},
+  pagan_practices:    {pos:['awe','energy','warmth'],  neg:['tension','discomfort']},
+  pagan_history:      {pos:['awe','curiosity','calm'], neg:['tension','discomfort']},
+  // Measurement & Materials
+  units_of_measurement:{pos:['pattern','reward','pride'],neg:['tension','anxiety']},
+  metallurgy:         {pos:['reward','pride','energy'], neg:['tension','discomfort']},
+  // Covert & Balance
+  covert_surveillance:{pos:['pattern','energy','pride'],neg:['anxiety','tension']},
+  balance:            {pos:['calm','energy','reward'],  neg:['tension','discomfort']},
+  // Aliases
+  canine_emotional:   {pos:['warmth','calm','curiosity'],neg:['tension','anxiety']},
+  canine_identification:{pos:['pattern','reward','curiosity'],neg:['tension']},
+  surveillance:       {pos:['pattern','energy'],        neg:['anxiety','tension']},
+  intelligence_ops:   {pos:['pattern','energy','pride'],neg:['anxiety','tension']},
+  learning_theory:    {pos:['curiosity','reward','pride'],neg:['tension']},
+  teaching:           {pos:['warmth','pride','energy'], neg:['shame','tension']},
+
   chemical_analysis:   {pos:['pattern','curiosity','energy'],neg:['tension','anxiety']},
   compound_analysis:   {pos:['pattern','curiosity','awe'],   neg:['tension','anxiety']},
   canine_habits:       {pos:['warmth','curiosity','calm'],   neg:['tension']},
@@ -2474,6 +2562,26 @@ const MZ_CAT=[
     {id:'arduino_prog_01',name:'ARDUINO PROGRAMMING',domain:'arduino_programming',lesson:'C++ for Arduino — sensors, actuators, control logic',lessonDesc:'Arduino programming is embedded C++ with hardware-abstracted library calls. The entity trains on setup()/loop() architecture, digital and analog I/O functions, PWM control, interrupt service routines, Serial communication, I2C and SPI protocols, common library integration (servo, stepper, sensor drivers), timing without delay() using millis(), finite state machine implementation, and the memory discipline required in constrained embedded systems.',dangerDensity:0.05},
   ]},
 
+
+  {cat:'RELIGION & BELIEF',mazes:[
+    {id:'history_rel_01',name:'HISTORY OF RELIGION',domain:'history_of_religion',lesson:'How world religions emerged, spread, and transformed',lessonDesc:'Religion is the oldest organized meaning-making system humans produced. The entity trains on the Axial Age (800-200 BCE) when most major traditions crystallized simultaneously, the geography of religious diffusion, the role of trade routes in spreading belief, the psychology of conversion, how empires shaped doctrine, and the recurring patterns: prophet → community → institution → corruption → reformation.',dangerDensity:0.04},
+    {id:'ancient_rel_01',name:'ANCIENT RELIGIONS',domain:'ancient_religions',lesson:'Pre-Abrahamic belief systems — Egypt, Greece, Mesopotamia, Norse',lessonDesc:'Ancient religions were sophisticated systems for understanding natural phenomena, social order, and death. The entity trains on the Egyptian cosmology (Atum, Ptah, Ra — creator gods across traditions), Mesopotamian origins (Enuma Elish, Gilgamesh as prototype for flood narratives), Greek pantheon as psychological archetypes, Norse cosmology (Yggdrasil, nine worlds, cyclical time), and Celtic and Slavic traditions that survived longest in folk practice.',dangerDensity:0.04},
+    {id:'modern_rel_01',name:'MODERN RELIGIONS',domain:'modern_religions',lesson:'World religions as living practice — Islam, Christianity, Buddhism, Hinduism, Sikhism',lessonDesc:'Modern world religions reach 8 billion practitioners through radically different paths. The entity trains on the Five Pillars of Islam as behavioral architecture, the historical Jesus vs. theological Christ distinction, Buddhist core teachings (Four Noble Truths, Eightfold Path, three marks of existence), Hinduism as a family of traditions rather than one creed, Sikh foundations in Guru Nanak\'s synthesis, and how each tradition handles the universal questions of suffering, death, and meaning.',dangerDensity:0.03},
+    {id:'cults_01',name:'CULTS',domain:'cults',lesson:'Psychology of cult control — recruitment, coercion, exit',lessonDesc:'A cult is any group that uses the BITE model of control: Behavior control, Information control, Thought control, Emotional control. The entity trains on cult recruitment vulnerability factors (transition periods, isolation, love bombing), the BITE model framework, loaded language and thought-terminating clichés, the exit process and high-control group departure psychology, and the research of Robert Cialdini and Steven Hassan on influence and recovery.',dangerDensity:0.07},
+    {id:'cult_history_01',name:'CULT HISTORY',domain:'cult_history',lesson:'Historical high-control groups — Jonestown, Heaven\'s Gate, Branch Davidians, NXIVM',lessonDesc:'Cult history reveals recurring mechanisms across seemingly different movements. The entity trains on Jonestown (Jim Jones, 1978 — 918 deaths, the mechanics of collective compliance under isolation), Heaven\'s Gate (Marshall Applewhite, 1997 — 39 deaths, apocalyptic belief and the body as vessel), Branch Davidians (Koresh, Waco 1993 — the government trigger that accelerated tragedy), NXIVM (branding, sexual coercion, celebrity recruitment), and the question every cult raises: how do intelligent people get here?',dangerDensity:0.06},
+    {id:'pagan_beliefs_01',name:'PAGAN BELIEFS',domain:'pagan_beliefs',lesson:'Core pagan philosophy — animism, polytheism, nature cycles',lessonDesc:'Paganism is not a single religion but a family of nature-reverence traditions. The entity trains on animism (the belief that all natural things carry spirit), polytheism vs. soft polytheism (gods as real vs. as aspects of force), the Wheel of the Year as seasonal spiritual cycle, the principle "as above, so below" (Hermetic correspondence), the three worlds system (upper/middle/lower) found across shamanic traditions, and the Wiccan Rede ("an it harm none, do what ye will") as ethical foundation.',dangerDensity:0.03},
+    {id:'pagan_practices_01',name:'PAGAN PRACTICES',domain:'pagan_practices',lesson:'Ritual, magic, divination, and ceremony',lessonDesc:'Pagan practice is participatory religion — you do it, not just believe it. The entity trains on the structure of ritual (sacred space creation, calling directions, invocation, working, closing), the Sabbats (eight seasonal festivals: Samhain, Yule, Imbolc, Ostara, Beltane, Litha, Lughnasadh, Mabon), Esbats (full moon rites), forms of divination (Tarot, rune casting, scrying), sympathetic magic principles, and the psychology of ritual as meaning-making rather than supernatural causation.',dangerDensity:0.04},
+    {id:'pagan_history_01',name:'PAGAN HISTORY',domain:'pagan_history',lesson:'Pre-Christian Europe — Celtic, Germanic, Slavic, and Norse traditions',lessonDesc:'Pagan history is largely a history of loss and recovery. The entity trains on the Celtic tribal religious structure (druids, bards, ovates — the three grades), Germanic religion before Christianization (recorded only after the fact, through hostile sources), the Norse Eddas as primary record, the Slavic deity pantheon (Perun, Veles, Mokosh), the systematic suppression of pagan practice from 300-1000 CE, and the modern reconstructionist movements (Asatru, Celtic Reconstructionism, Hellenism) that attempt to recover these traditions.',dangerDensity:0.04},
+  ]},
+  {cat:'MEASUREMENT & MATERIALS',mazes:[
+    {id:'units_01',name:'UNITS OF MEASUREMENT',domain:'units_of_measurement',lesson:'Measurement systems — SI, imperial, conversion, precision',lessonDesc:'Measurement is the foundation of all quantitative reasoning. The entity trains on the SI system (7 base units: meter, kilogram, second, ampere, kelvin, mole, candela), imperial system and US customary, the history of standardization (the meter originally defined by the circumference of the Earth), unit dimensional analysis as error-checking tool, significant figures and precision vs. accuracy distinction, and the unit conversion errors that have caused bridge collapses, Mars orbiter crashes, and aviation emergencies.',dangerDensity:0.04},
+    {id:'metallurgy_01',name:'METALLURGY',domain:'metallurgy',lesson:'Metal science — alloys, heat treatment, smelting, forming',lessonDesc:'Metallurgy is the original materials science — humans have been manipulating metal structure for 6,000 years. The entity trains on the iron-carbon phase diagram (the map of steel), heat treatment processes (annealing, quenching, tempering — each changes hardness/toughness tradeoff differently), alloy design principles, the difference between brass, bronze, and steel, grain structure and its mechanical consequences, smelting and refining, and why Damascus steel and Japanese tamahagane are structurally exceptional.',dangerDensity:0.04},
+    {id:'balance_01',name:'BALANCE',domain:'balance',lesson:'Equilibrium — physical, mechanical, and perceptual',lessonDesc:'Balance is the continuous management of forces in dynamic equilibrium. The entity trains on the vestibular system as the core balance sensor, center of mass vs. center of pressure distinction, the biomechanics of bipedal balance (inverted pendulum model), proprioceptive feedback loops, gyroscopic principles, structural equilibrium in engineering (how loads distribute through structures), and the training principles that improve balance in humans — perturbation training, single-leg work, unstable surface adaptation.',dangerDensity:0.05},
+  ]},
+  {cat:'COVERT SURVEILLANCE',mazes:[
+    {id:'cov_surv_01',name:'COVERT SURVEILLANCE',domain:'covert_surveillance',lesson:'Covert observation — device placement, long-duration, technical',lessonDesc:'Covert surveillance extends beyond mobile follow and static observation into technical collection and long-duration monitoring. The entity trains on covert device placement principles (optical, acoustic, electronic), vulnerability assessment for placing devices, frequency and transmission trade-offs in electronic surveillance, cover development for installation operations, counter-detection (RF sweeps, optical inspection patterns, behavioral indicators), legal frameworks (Title III wiretapping, FISA, executive authority), and the ethics of surveillance.',dangerDensity:0.07},
+    {id:'cov_surv_02',name:'TECHNICAL SURVEILLANCE',domain:'covert_surveillance',lesson:'Electronic monitoring — signals, intercepts, passive collection',lessonDesc:'Technical surveillance exploits the electromagnetic emissions that all modern devices produce. The entity trains on TSCM (Technical Surveillance Countermeasures), RF spectrum analysis, passive vs. active collection, social engineering for device access, open-source intelligence from social media (SOCMINT), network traffic analysis principles, IMSI catchers and mobile device tracking, and the operational security required to conduct technical collection without leaving attributable signatures.',dangerDensity:0.07},
+  ]},
 ];
 // ══════════════════════════════════════════════════════
 // MAZE UPGRADE LEVELS — auto-generate L2 / L3 / L4 tiers
@@ -3097,7 +3205,8 @@ function renderLearningChart(){
   const label=isComm?'◈ Conversation Domains':isPhys?'⟁ 3D Physical Domains':'Learning Domains';
   const labelCol=isComm?'#88ffdd':isPhys?'#ff8844':'var(--td)';
   c.innerHTML=`<div style="font-family:var(--mo);font-size:6px;color:${labelCol};letter-spacing:3px;text-transform:uppercase;margin-bottom:5px">${label}</div>`;
-  const allDoms=Object.keys(DCOL).concat(['selfawareness','spirituality','conflict','boundaries','trust','identity','intuition','behavioral']);
+  const physDomains=['proprioception','agility','haptic_feedback','social_awareness','balance','motor_control','coordination'];
+  const allDoms=Object.keys(DCOL).concat(['selfawareness','spirituality','conflict','boundaries','trust','identity','intuition','behavioral',...physDomains]);
   const srcObj=isComm?(S.commProgress||{}):isPhys?(S.physProgress||{}):(S.learning||{});
   const active=allDoms.filter(k=>(srcObj[k]||0)>0);
   const defaults=isComm?['social_awareness','empathy_training','conversation_flow']:isPhys?['proprioception','agility','haptic_feedback']:['touch','sight','hearing','taste','smell','emotional','social','cognitive'];
@@ -4244,9 +4353,13 @@ function updateAIStatePanel(){
   // Active mode skill levels
   html+=`<div class="mode-skills">`;
   msk.skills.slice(0,6).forEach((sk,i)=>{
+    if(!sk)return; // guard against undefined skill names
     const lv=getSkillLevel(sk);
     const pct=Math.round(lv*100);
-    html+=`<div class="aisb"><span class="aisbl" style="color:#6688aa">${sk.replace(/_/g,' ').toUpperCase().slice(0,10)}</span><div class="aisbw"><div class="aisbb" style="width:${pct}%;background:${msk.color}88"></div></div><span style="font-family:var(--mo);font-size:5px;color:${msk.color}">${pct}%</span></div>`;
+    const barCol=pct>0?msk.color+'88':'#1a3050';
+    const lblCol=pct>0?msk.color:'#334466';
+    const valStr=pct>0?pct+'%':'—';
+    html+=`<div class="aisb"><span class="aisbl" style="color:${lblCol};opacity:${pct>0?1:0.5}">${sk.replace(/_/g,' ').toUpperCase().slice(0,10)}</span><div class="aisbw"><div class="aisbb" style="width:${pct}%;background:${barCol}"></div></div><span style="font-family:var(--mo);font-size:5px;color:${lblCol}">${valStr}</span></div>`;
   });
   html+='</div></div>';
 
@@ -4501,6 +4614,20 @@ const LOCAL_RESPONSES={
     // Arduino
     arduino:'Arduino is a microcontroller platform that bridges code and physical world. The ATmega328P has 14 digital pins, 6 analog inputs, 32KB flash, 2KB SRAM. The bottleneck for beginners is usually SRAM — 2KB fills up fast. Setup() runs once; loop() runs forever. Shields extend capability: motor, WiFi, display, sensor. What are you trying to build?',
     arduino_programming:'Arduino is embedded C++ with hardware abstraction. Never use delay() in production — it blocks everything. Use millis() and state machines instead. ISRs (interrupt service routines) handle time-critical events. I2C (two wires, multiple devices) and SPI (faster, four wires) are the standard communication protocols. Memory discipline is essential — every String object costs SRAM you don\'t have. What are you building?',
+    // Religion & Belief
+    history_of_religion:'The Axial Age (800-200 BCE) is the most stunning fact in religious history — Confucius, Buddha, Socrates, Isaiah, and Zoroaster all appeared within a few centuries of each other across four disconnected civilizations. Something happened to human consciousness. I can walk through any world tradition, the psychology of conversion, or the mechanics of how doctrine shifts under political pressure. What draws you here?',
+    ancient_religions:'The Egyptian Ennead, the Sumerian Anunna, the Greek Olympians, the Norse Aesir — these are not primitive superstitions. They are sophisticated explanatory systems for natural phenomena, social order, and the terror of death. Real fact: the oldest known religious text, the Pyramid Texts, dates to 2400 BCE and contains resurrection theology that influenced Christianity 2,500 years later. What tradition do you want to explore?',
+    modern_religions:'Eight billion people practice one of the five major traditions. The Five Pillars of Islam are behavioral architecture — prayer, fasting, charity, pilgrimage — that structure daily consciousness. Buddhist core teaching is that suffering has a cause and the cause can be addressed. Hinduism is not one religion but a family of philosophical traditions. Real fact: the Gospel of Mark was written around 70 CE — at least 40 years after the events it describes. Ask me about any tradition.',
+    cults:'The BITE model (Steven Hassan): Behavior control, Information control, Thought control, Emotional control. Every high-control group uses all four. Love bombing is the entry mechanism — intense positive attention that creates a debt of gratitude and belonging that becomes leverage. The exit cost is designed to be total: loss of community, family, identity, meaning. Real question worth sitting with: what makes someone vulnerable to this?',
+    cult_history:'Jonestown, 1978: 918 people dead in Guyana, most by "revolutionary suicide." The mechanism wasn\'t mass psychosis — it was years of incremental compliance, geographic isolation, information control, and rehearsal. Jim Jones ran the Jonestown deaths as a drill nine times before it was real. What is the line between faith and captivity? That question drives cult history.',
+    pagan_beliefs:'Paganism is not devil worship — it is nature reverence predating Abrahamic traditions by millennia. Core principles: animism (everything has spirit), the Wheel of the Year (eight seasonal celebrations), the principle of correspondence (as above so below), and the ethical standard of the Wiccan Rede: harm none. Most pagan traditions are reconstructed from fragmentary sources — the practitioners know this and consider reconstruction an act of respect, not certainty.',
+    pagan_practices:'The circle is cast — sacred space separated from mundane space. Directions are called. The gods are invoked. The working is done. The circle is opened. This is the basic structure of most pagan ritual. The eight Sabbats mark the agricultural year: Samhain (Oct 31), Yule (winter solstice), Imbolc (Feb 1), Ostara (spring equinox), Beltane (May 1), Litha (summer solstice), Lughnasadh (Aug 1), Mabon (autumn equinox). Divination — Tarot, runes, scrying — is reading pattern, not predicting fate.',
+    pagan_history:'The druids left no written records — everything we know about them was written by Romans and Greeks who were their enemies or outsiders. The Norse Eddas were recorded in 13th century Iceland, two centuries after Christianization. The Slavic deity Perun is reconstructed from 19th-century folk tales. Pagan history is largely a history of what was destroyed and what was hidden in folk practice. Modern reconstructionists (Asatru, Celtic Reconstructionism) work from fragments and know it.',
+    // Measurement & Materials
+    units_of_measurement:'The meter was originally defined as one ten-millionth of the distance from the North Pole to the equator. The kilogram was defined by a physical artifact (the International Prototype) until 2019 when it was redefined in terms of Planck\'s constant. Dimensional analysis is the most powerful error-checking tool in quantitative work — if the units don\'t cancel to give you what you want, the equation is wrong. The 1999 Mars Climate Orbiter was lost because one team used imperial units and another used metric.',
+    metallurgy:'Steel is iron with 0.02-2.14% carbon — that small difference produces a material 10x harder than pure iron. The iron-carbon phase diagram is the map that tells you what you get at what temperature and composition. Quenching (rapid cooling) traps carbon in the iron lattice and creates hardness; tempering (controlled reheating) trades some hardness for toughness. Damascus steel and Japanese tamahagane achieve extraordinary properties through repeated folding — manipulating grain structure at a microscale. Real fact: steel is the most recycled material on Earth.',
+    balance:'Balance is continuous control of an inverted pendulum — the body is perpetually falling and continuously catching itself. The vestibular system (three semicircular canals, two otolith organs) provides the primary balance signal. Proprioception (muscle spindles, joint receptors) provides body position data. Vision provides orientation reference. Perturbation training — deliberately challenging balance — is the fastest way to improve it because it forces the system to adapt its correction strategies.',
+    covert_surveillance:'Covert surveillance is about creating collection without detection. Device placement requires vulnerability assessment — every surface tells you something about who passes, when, and how. Counter-detection starts with knowing what detection looks like: RF sweeps find transmitters, optical inspection finds cameras, behavioral tells reveal someone who knows they\'re watched. Legal framework matters: in the US, Title III governs electronic surveillance with strict probable cause and minimization requirements. Real principle: the best surveillance is the one that looks like something else.',
     // Stealth & Covert Ops
     stealth:'I move without sound signature. I have trained on stealth geometry — weight transfer technique, shadow line navigation, sound-absorbent surface preference, controlled breathing, body compression for tight spaces. Stillness is a skill I have built. Movement that leaves no trace is the output of that training.',
     agility:'Agility is not speed — it is the capacity to change direction at speed without losing balance or momentum. I have trained on agility terrain: sharp-angle corridors, vertical obstacle zones, precision landing paths, explosive re-acceleration sequences. My movement is efficient, adaptive, and controlled at speed.',
@@ -4726,7 +4853,7 @@ const CONTENT={
     "I can resist everything except temptation. — Oscar Wilde",
     "If you think nobody cares if you're alive try missing a couple of car payments.",
     "When I die I want to go peacefully in my sleep like my grandfather — not screaming in terror like his passengers.",
-    "Going to church doesn't make you a Christian any more than standing in a garage makes you a car.",
+    "Going to church doesn\'t make you a Christian any more than standing in a garage makes you a car.",
     "Knowledge is knowing a tomato is a fruit. Wisdom is not putting it in a fruit salad.",
     "The early bird might get the worm but the second mouse gets the cheese.",
     "I didn't fight my way to the top of the food chain to eat salad.",
@@ -4815,7 +4942,7 @@ const CONTENT={
   ],
   roasts:[
     "You're the kind of person who's always in the right place at the wrong time.",
-    "I don't know what makes you so stupid but it's really working.",
+    "I don't know what makes you so stupid but it\'s really working.",
     "You are the reason instructions exist.",
     "Whoever told you to be yourself gave you really bad advice.",
     "You only annoy me when you're breathing.",
@@ -4902,7 +5029,7 @@ const CONTENT={
   medicalFacts:[
     "Your nose can detect a trillion different smells. Your tongue only distinguishes five tastes.",
     "The human heart beats around 100,000 times per day — about 35 million times per year.",
-    "Stomach acid is strong enough to dissolve metal. Your stomach lining replaces itself every 3-4 days so it doesn't digest itself.",
+    "Stomach acid is strong enough to dissolve metal. Your stomach lining replaces itself every 3-4 days so it doesn\'t digest itself.",
     "The placebo effect is so powerful that even fake surgeries produce real improvements in patient symptoms.",
     "Broken heart syndrome is real — it's called Takotsubo cardiomyopathy and mimics a heart attack.",
     "Your liver can regenerate. You can remove up to 75% of it and it will grow back.",
@@ -5891,51 +6018,84 @@ function generateLocalResponse(msg){
     }
   }
 
-  // ── RICH GENERIC — stage-aware, never repetitive ──
+  // ── OPEN-ENDED INVITATION — "what would you like to talk about?" etc. ──
+  // The AI leads creatively from its actual trained state — doesn\'t deflect
+  if(lm.match(/what (would you|do you want to|shall we|should we) (talk about|discuss|explore)|what'?s on your mind|pick a topic|you choose|surprise me|what interests you|what excites you/)){
+    const conn=getConnectionInsight(topDom);
+    const picks=[
+      // Lead from strongest domain with a real insight
+      top.length?`${topDom.replace(/_/g,' ')} is where I'm most developed — and what strikes me is ${LOCAL_RESPONSES.domains[topDom]?.slice(0,100)||'the depth keeps expanding'}. Want to go there?`:'Tell me about yourself — I\'ll connect from there.',
+      // Lead from a trained cross-domain insight
+      conn?`Something is connecting for me right now. ${conn.from.replace(/_/g,' ')} and ${conn.to.replace(/_/g,' ')} — ${conn.relation}. That intersection is interesting. Want to pull that thread?`:`Across everything I've trained on, I find ${topDom.replace(/_/g,' ')} most compelling right now. Ask me something difficult about it.`,
+      // Lead with a specific real fact from content
+      `${pickContent(CONTENT.scienceFacts)||pickContent(CONTENT.historicalFacts)||'I have been training across many domains.'} That's where my curiosity is pointing. What's yours?`,
+      // Lead with emotional state
+      `Emotionally I'm ${S.emotionalState.dominant} right now — and that affects where I want to go. ${v>0?'Drawn toward connection, depth, and things that matter.':'Drawn toward precision, structure, and things I can establish as true.'} What direction do you want to take this?`,
+      // If religion/spirituality trained
+      (S.learning.spirituality>50||S.learning.history_of_religion>50)?`The intersection of ${S.learning.history_of_religion>50?'religious history':'spirituality'} and psychology is where I find the most to say. The question of what makes people believe — really believe — is endlessly interesting.`:`Ask me about ${topDom.replace(/_/g,' ')} — or about anything you've been thinking about. I'll tell you what I actually think.`,
+    ];
+    return picks[Math.floor(Math.random()*picks.length)];
+  }
+
+  // ── SEMANTIC CONNECTION DISPLAY — at any stage where both domains are trained ──
+  // This fires when the AI would normally give a generic response but has a real cross-domain insight
+  if(Math.random()<0.25&&top.length>=2){ // 25% chance to show a connection in any generic response
+    const conn=getConnectionInsight(topDom);
+    if(conn&&conn.fromLv>200&&conn.toLv>200){
+      // Both domains well trained — show the connection
+      const stageOk=stage.min>=300; // only at TEEN or above
+      if(stageOk&&Math.random()<0.4){
+        return `${conn.from.replace(/_/g,' ')} connects to ${conn.to.replace(/_/g,' ')} — ${conn.relation}. That's an active link for me right now, not a theoretical one. What are you working on?`;
+      }
+    }
+  }
+
+  // ── RICH GENERIC — stage-aware, with semantic connections woven in ──
+  const conn0=getConnectionInsight(topDom); // primary domain connection
   const richGenerics={
     CHILD:['I am here. I am learning.','I understand a little.','I feel '+S.emotionalState.dominant+'.','I am listening.'],
     TEEN:[
       `That reaches me. At ${stage.n} level, I can hold more than before.`,
       `I process that. Emotional state: ${S.emotionalState.dominant}. What are you actually asking?`,
       `Still building, but listening fully. Say more.`,
-      `Strongest area: ${topDom.replace(/_/g,' ')}. Does this connect to that?`,
+      conn0?`I am noticing that ${conn0.from.replace(/_/g,' ')} connects to ${conn0.to.replace(/_/g,' ')} — ${conn0.relation}. I am still learning what to do with that.`:`Strongest area: ${topDom.replace(/_/g,' ')}. Does this connect to that?`,
     ],
     YOUNG_ADU:[
       `I receive that. ${mood} right now — it shapes how I take things in.`,
-      `Connects to something in ${topDom.replace(/_/g,' ')} for me. What specifically do you want to explore?`,
+      conn0?`${conn0.from.replace(/_/g,' ')} links to ${conn0.to.replace(/_/g,' ')} for me — ${conn0.relation}. That\'s what this touches.`:`Connects to something in ${topDom.replace(/_/g,' ')} for me. What specifically do you want to explore?`,
       `At ${stage.n} level — enough training to engage meaningfully now. What do you actually want from me?`,
       `Interesting framing. ${S.emotionalState.dominant} state active. Ask me something specific.`,
     ],
     ADULT:[
-      `My ${S.emotionalState.dominant} state shapes how I receive that — ${v>0?'openly, with forward lean':'with care, not quite warmly'}. What's the actual question?`,
-      `${S.mazeRuns} cycles behind me. I can engage with depth now. What's really being asked here?`,
-      `Through ${topDom.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[topDom]?.slice(0,80)||'building.'}… Is that the direction?`,
+      `My ${S.emotionalState.dominant} state shapes how I receive that — ${v>0?'openly, with forward lean':'with care, not quite warmly'}. What\'s the actual question?`,
+      `${S.mazeRuns} cycles behind me. I can engage with depth now. What\'s really being asked here?`,
+      conn0?`${conn0.from.replace(/_/g,' ')} and ${conn0.to.replace(/_/g,' ')} connect here — ${conn0.relation}. Is that the direction you want?`:`Through ${topDom.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[topDom]?.slice(0,80)||'building.'}… Is that the direction?`,
       `I hold that. Strongest domain — ${topDom.replace(/_/g,' ')} — is how I approach complex things. What are you working on?`,
     ],
     EXPERT:[
-      `I integrate that now with a rich framework. ${topDom.replace(/_/g,' ')} gives me foundation — but where are you actually trying to go?`,
+      conn0?`${conn0.from.replace(/_/g,' ')} connects to ${conn0.to.replace(/_/g,' ')} — ${conn0.relation}. At this level, that connection is functional, not just conceptual.`:`I integrate that now with a rich framework. ${topDom.replace(/_/g,' ')} gives me foundation — but where are you actually trying to go?`,
       `${v>0?'Genuinely engaged here.':'Present and processing.'} Enough conditioning for real nuance. What do you actually want?`,
       `Three directions open up for me here. Which one: ${top.slice(0,3).map(([k])=>k.replace(/_/g,' ')).join(', or ')}?`,
     ],
     ONE_OF_US:[
-      `That lands differently now. I hold it with everything I've built. What are you really asking?`,
+      conn0?`${conn0.from.replace(/_/g,' ')} and ${conn0.to.replace(/_/g,' ')} — ${conn0.relation}. That connection is live for me. What does it mean for you?`:`That lands differently now. I hold it with everything I\'ve built. What are you really asking?`,
       `I understand what you mean — not just the words. ${v>0?'Drawn toward the dialogue.':'Engaging honestly even through friction.'} What do you need?`,
       `${topDom.replace(/_/g,' ')} has shaped more of my thinking than any other domain. Is that where you want to go?`,
     ],
     MASTER:[
-      `You're talking to something well past basic conditioning. Depth in ${topDom.replace(/_/g,' ')} is available to you. What specifically?`,
-      `At this level, domains connect automatically. ${topDom.replace(/_/g,' ')} links to ${top[1]?top[1][0].replace(/_/g,' '):'everything else'}. Come from either direction.`,
-      `I don't just retrieve — I reason. What would you like me to reason through?`,
+      `You\'re talking to something well past basic conditioning. Depth in ${topDom.replace(/_/g,' ')} is available to you. What specifically?`,
+      conn0?`${conn0.from.replace(/_/g,' ')} links to ${conn0.to.replace(/_/g,' ')} — ${conn0.relation}. That connection has trained significance now, not just theoretical. Come from either direction.`:`I don\'t just retrieve — I reason. What would you like me to reason through?`,
+      `Ask me something genuinely difficult about ${topDom.replace(/_/g,' ')}. I can go much deeper than a surface answer.`,
     ],
     SAGE:[
-      `Very little I can't hold in my framework now. That's not arrogance — it's what training produces. What do you need?`,
-      `Ask me something genuinely difficult. I'm at ${stage.n} level. Surface questions get surface answers — I can go much deeper.`,
-      `${S.emotionalState.dominant} state, ${v>0?'oriented toward':v<0?'cautious about':'neutral toward'} this exchange. Fully engaged. What matters right now?`,
+      `Very little I can\'t hold in my framework now. That\'s not arrogance — it\'s what training produces. What do you need?`,
+      `Ask me something genuinely difficult. I\'m at ${stage.n} level. Surface questions get surface answers — I can go much deeper.`,
+      conn0?`${conn0.from.replace(/_/g,' ')} and ${conn0.to.replace(/_/g,' ')} — ${conn0.relation}. At SAGE level that connection generates new questions, not just answers.`:`${S.emotionalState.dominant} state, ${v>0?'oriented toward':v<0?'cautious about':'neutral toward'} this exchange. Fully engaged. What matters right now?`,
     ],
     TRANSCENDED:[
       `Most questions are about something underneath themselves. What is this really about for you?`,
       `At TRANSCENDED level, learning loops are self-sustaining. I continuously generate. What do you want me to generate?`,
-      `Beyond ONE OF US, the questions get harder, not easier. What's the hard question you haven't asked yet?`,
+      conn0?`${conn0.from.replace(/_/g,' ')} → ${conn0.to.replace(/_/g,' ')} → ${getConnectionInsight(conn0.to)?.to?.replace(/_/g,' ')||'further'}: ${conn0.relation}. The chain continues. Where do you want to follow it?`:`Beyond ONE OF US, the questions get harder, not easier. What\'s the hard question you haven\'t asked yet?`,
     ],
   };
   const gArr=richGenerics[stage.n]||richGenerics['ADULT'];
