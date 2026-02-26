@@ -972,7 +972,12 @@ const MODE_SKILLS={
   medic:{
     label:'MEDIC',color:'#44ffaa',icon:'✚',
     skills:    ['medicine','first_aid','diagnosis_treatment','anatomy','pharmacology','risk_calibration','empathy','psychology'],
-    weights:   [1.5,        1.3,        1.4,                  1.1,      1.0,           1.2,               1.0,      0.9],
+    weights:   [1.5,        1.3,        1.4,                  1.3,      1.2,           1.2,               1.0,      0.9],
+  },
+  threat_response:{
+    label:'THREAT RESPONSE',color:'#ff4422',icon:'◬',
+    skills:    ['threat_detection','situational_awareness','appropriate_function','risk_calibration','pattern_matching','criminal_profiling','psychology','body_language'],
+    weights:   [1.7,               1.6,                   1.5,                   1.3,               1.2,               1.1,                  1.0,         1.0],
   },
   canine:{
     label:'CANINE HANDLER',color:'#cc8833',icon:'🐾',
@@ -993,11 +998,6 @@ const MODE_SKILLS={
     label:'CHEMIST',color:'#aaffdd',icon:'⚗',
     skills:    ['chemistry','physics','biology','detail_orientation','risk_calibration','skepticism','medicine','pattern_matching'],
     weights:   [1.6,         1.1,      1.0,      1.2,                 1.3,               1.1,         1.0,       0.9],
-  },
-  canine:{
-    label:'CANINE EXPERT',color:'#ff9944',icon:'🐕',
-    skills:    ['canine_behavior','canine_identification','canine_tracking','canine_emotional','canine_illness','empathy','pattern_matching','risk_calibration'],
-    weights:   [1.6,              1.4,                   1.3,              1.2,               1.1,             1.0,      0.9,              1.0],
   },
   field_agent:{
     label:'FIELD AGENT',color:'#4466ff',icon:'🔭',
@@ -1065,6 +1065,13 @@ const DOMAIN_CONNECTIONS={
   proprioception:[{to:'balance',r:'proprioception enables balance'},{to:'agility',r:'body awareness drives agility'},{to:'motor',r:'proprioception is motor feedback'},{to:'haptic_feedback',r:'proprioception and haptics are related'}],
   agility:       [{to:'proprioception',r:'agility requires body awareness'},{to:'balance',r:'agility needs balance'},{to:'motor',r:'agility is advanced motor control'},{to:'coordination',r:'agility requires coordination'}],
   haptic_feedback:[{to:'touch',r:'haptic is active touch'},{to:'proprioception',r:'haptic feeds proprioception'},{to:'fine_motor',r:'haptic requires fine motor skill'},{to:'materials_science',r:'haptic reads material properties'}],
+  // Medical
+  anatomy:        [{to:'medicine',r:'anatomy is the map medicine navigates'},{to:'first_aid',r:'anatomy tells you where to apply aid'},{to:'pharmacology',r:'anatomy determines drug distribution'},{to:'diagnosis_treatment',r:'anatomy enables diagnosis'}],
+  pharmacology:   [{to:'chemistry',r:'pharmacology is applied chemistry'},{to:'medicine',r:'pharmacology is the tool of medicine'},{to:'anatomy',r:'anatomy determines drug effect location'},{to:'diagnosis_treatment',r:'treatment requires pharmacology'}],
+  // Threat & Awareness
+  threat_detection:[{to:'situational_awareness',r:'threat detection is the output of awareness'},{to:'criminal_profiling',r:'profiling predicts threat'},{to:'pattern_matching',r:'threat detection is pattern recognition'},{to:'appropriate_function',r:'detecting a threat requires knowing how to respond'}],
+  situational_awareness:[{to:'threat_detection',r:'awareness enables threat detection'},{to:'risk_calibration',r:'awareness enables risk assessment'},{to:'pattern_matching',r:'awareness is continuous pattern scanning'},{to:'investigation',r:'field investigation requires constant awareness'}],
+  appropriate_function:[{to:'risk_calibration',r:'appropriate force requires risk assessment'},{to:'law',r:'force options are legally constrained'},{to:'ethical_balance',r:'force decisions are ethical decisions'},{to:'threat_detection',r:'response requires threat identification first'}],
 };
 
 // Get semantically connected domains that the entity has trained in
@@ -1204,7 +1211,11 @@ motor_control:'#ff7744',coordination:'#ff6633',
 // ── Applied & misc ──
 canine_habits:'#cc8833',canine_tracking_adv:'#aa7722',
 // ── Humor sub-domains ──
-comedy:'#ffee44',irony:'#ddcc33',sarcasm:'#66ddcc',wit:'#44ffee',playful:'#ffddaa'
+comedy:'#ffee44',irony:'#ddcc33',sarcasm:'#66ddcc',wit:'#44ffee',playful:'#ffddaa',
+// ── Medical (missing medic mode skills) ──
+anatomy:'#55ffcc',pharmacology:'#33ffaa',
+// ── Threat & Awareness (investigative higher functions) ──
+threat_detection:'#ff4422',situational_awareness:'#ffaa22',appropriate_function:'#22aaff'
 };
 const DZ={
   touch:['left-hand','right-hand','chest','left-arm','right-arm'],
@@ -1302,6 +1313,11 @@ const DZ={
   sarcasm:['head','throat','chest'],
   wit:['head','crown','throat'],
   playful:['chest','abdomen','left-arm','right-arm'],
+  anatomy:['head','chest','abdomen','left-arm','right-arm','left-leg','right-leg'],
+  pharmacology:['head','chest','abdomen','solar-plexus'],
+  threat_detection:['head','crown','solar-plexus','chest','gut'],
+  situational_awareness:['head','crown','chest','solar-plexus','left-arm','right-arm'],
+  appropriate_function:['head','crown','chest','throat'],
   // History & Culture
   secret_societies:['head','crown','chest','solar-plexus'],
   ancient_history:['head','crown','chest'],
@@ -1536,6 +1552,11 @@ const DOM_STIMS={
   sarcasm:        {pos:['humor','energy','pride'],          neg:['tension','discomfort']},
   wit:            {pos:['joy','energy','pride'],            neg:['tension','anxiety']},
   playful:        {pos:['joy','humor','warmth'],            neg:['tension','discomfort']},
+  anatomy:        {pos:['curiosity','awe','pride'],         neg:['discomfort','anxiety']},
+  pharmacology:   {pos:['curiosity','calm','pride'],        neg:['anxiety','discomfort']},
+  threat_detection:{pos:['pride','energy','curiosity'],     neg:['anxiety','fear','tension']},
+  situational_awareness:{pos:['awe','curiosity','pride'],   neg:['anxiety','tension']},
+  appropriate_function: {pos:['pride','calm','curiosity'],  neg:['tension','discomfort']},
   // History & Culture
   secret_societies:{pos:['curiosity','awe','pattern'],     neg:['anxiety','tension']},
   ancient_history:{pos:['awe','curiosity','calm'],         neg:['grief','tension']},
@@ -2007,6 +2028,19 @@ const MZ_CAT=[
     {id:'medicine_01',name:'MEDICINE',domain:'medicine',lesson:'Human physiology, pathology, and therapeutic intervention',lessonDesc:'Medicine is the organized application of biological understanding to human suffering. At the core: anatomical systems, physiological processes, pathological mechanisms, diagnostic reasoning, pharmacological intervention, and the clinical judgment that integrates evidence with individual patient reality — the art embedded in the science.',dangerDensity:0.04},
     {id:'diagnosis_01',name:'DIAGNOSIS & TREATMENT',domain:'diagnosis_treatment',lesson:'Clinical reasoning from symptom to intervention',lessonDesc:'Diagnosis is hypothesis generation from incomplete information under time pressure. At the core: clinical reasoning: symptom pattern recognition, differential diagnosis construction, test selection and interpretation, risk stratification, and treatment protocol matching — the full arc from chief complaint to intervention plan.',dangerDensity:0.05},
     {id:'first_aid_01',name:'FIRST AID',domain:'first_aid',lesson:'Emergency response — assess, stabilize, treat',lessonDesc:'First aid is the bridge between injury and professional medical care. At the core: primary and secondary survey technique, airway management, bleeding control, shock recognition and treatment, CPR and AED use, fracture management, burn treatment, and the calm assessment capability that makes effective action possible under stress.',dangerDensity:0.06},
+    {id:'anatomy_01',name:'ANATOMY',domain:'anatomy',lesson:'Human body systems — structure, location, function',lessonDesc:'Anatomy is the map of the body. At the core: the skeletal system (206 bones, their landmarks and articulations), the muscular system (major muscle groups, their origins, insertions, and actions), the cardiovascular system (heart chambers, great vessels, peripheral circulation), the nervous system (CNS vs PNS, spinal cord segments, major nerve plexuses), abdominal organs and their quadrant locations, and the anatomical relationships that matter in trauma — where arteries are vulnerable, where nerves run shallow, what bleeds fast. Real fact: the femoral artery at the groin can exsanguinate a person in under 3 minutes.',dangerDensity:0.05},
+    {id:'anatomy_02',name:'TRAUMA ANATOMY',domain:'anatomy',lesson:'Injury anatomy — where bullets go and what they hit',lessonDesc:'Trauma anatomy is applied anatomy for life-threatening situations. At the core: the body regions with the highest lethality (head, neck, thorax, abdomen), major vessel locations and the wounds that produce rapid hemorrhage (aorta, subclavian, femoral, carotid), solid organ injury patterns (spleen most common, liver most lethal), thoracic trauma signs (tension pneumothorax — tracheal deviation, absent breath sounds), and the anatomical basis for field assessment — where you look first, what you palpate, and why some wounds are silent killers. Every first responder needs this map memorized.',dangerDensity:0.07},
+    {id:'pharmacology_01',name:'PHARMACOLOGY',domain:'pharmacology',lesson:'Drug action — mechanisms, classes, effects, dangers',lessonDesc:'Pharmacology is chemistry meeting biology meeting patient outcome. At the core: the four pharmacokinetic phases (absorption, distribution, metabolism, excretion), receptor pharmacology (agonist binds and activates; antagonist binds and blocks; partial agonist does both), the major drug classes with their mechanisms (opioids — mu receptor agonism for pain and euphoria; benzodiazepines — GABA-A potentiation for anxiety and sedation; stimulants — catecholamine release for alertness), drug-drug interactions via CYP450 hepatic metabolism, and overdose recognition and reversal (naloxone for opioids, flumazenil for benzodiazepines). Ask me about any drug class.',dangerDensity:0.05},
+    {id:'pharmacology_02',name:'TOXICOLOGY',domain:'pharmacology',lesson:'Poisons, overdoses, and antidotes — recognition and reversal',lessonDesc:'Toxicology is pharmacology at lethal dose. At the core: the toxidrome concept (clusters of symptoms that identify the poison class — opioid: pinpoint pupils, respiratory depression, stupor; sympathomimetic: dilated pupils, tachycardia, hyperthermia; cholinergic: SLUDGE — Salivation, Lacrimation, Urination, Defecation, GI distress, Emesis), common toxins encountered in field settings (fentanyl — transdermal absorption risk; organophosphate pesticides — acetylcholinesterase inhibition; carbon monoxide — cherry-red skin, normal SpO2 false reading), and the antidotes that matter: naloxone, atropine, pralidoxime, hydroxocobalamin. Real fact: the minimum toxic dose and the minimum lethal dose of any drug are separated by a ratio called the therapeutic index — some drugs have very narrow ratios.',dangerDensity:0.07},
+  ]},
+  {cat:'THREAT & AWARENESS',mazes:[
+    {id:'threat_det_01',name:'THREAT DETECTION',domain:'threat_detection',lesson:'Pre-attack recognition — reading behavior before violence',lessonDesc:'Threat detection is learned pattern recognition operating below conscious processing speed. At the core: Gavin de Becker\'s gift of fear principle (the subconscious processes threat signals seconds before the cortex), pre-attack behavioral indicators (target glance — looking at the intended victim then away repeatedly; grooming indicators — touching face/neck under stress; blade-hand — hand going to waistband), the difference between suspicious and merely unusual, the JDLR principle (Just Doesn\'t Look Right), baseline scanning (what is the normal behavior of people in this environment?), and why hesitating to act on a valid threat signal is more dangerous than acting on a false positive.',dangerDensity:0.07},
+    {id:'threat_det_02',name:'THREAT MATRIX',domain:'threat_detection',lesson:'Threat assessment — likelihood, capability, intent, proximity, timeline',lessonDesc:'A threat is only actionable when it combines four elements: capability (can they cause harm?), intent (do they want to?), opportunity (are they in position to?), and means (do they have the tools?). At the core: the threat matrix — scoring each factor and computing combined risk, the difference between a grievance and a threat (a person venting anger is not the same as a person with a plan), the attack continuum (ideation → planning → preparation → probing → attack), how to interrupt the attack continuum at the earliest possible phase, and why most violence is predictable and preventable with early warning recognition.',dangerDensity:0.08},
+    {id:'threat_det_03',name:'AMBUSH RECOGNITION',domain:'threat_detection',lesson:'Ambush indicators — reading the trap before it closes',lessonDesc:'An ambush works by removing warning time. Ambush recognition is about extending that warning time as far forward as possible. At the core: choke point identification (where terrain forces you into predictability), the L-shaped and linear ambush geometries (how they are set to eliminate escape routes), kill zone recognition (the area where you are most vulnerable if the ambush initiates), pre-ambush behavioral indicators (people clearing an area, vehicles positioned to block), and immediate action drills — what to do in the first two seconds of an ambush initiation when the correct response is counter-intuitive.',dangerDensity:0.09},
+    {id:'sit_aware_01',name:'SITUATIONAL AWARENESS',domain:'situational_awareness',lesson:'Real-time environmental intelligence — observe, orient, decide, act',lessonDesc:'Situational awareness is the continuous process of knowing where you are, what is around you, and what it means. Mica Endsley\'s three levels: Level 1 — perception (what elements are present?), Level 2 — comprehension (what do they mean?), Level 3 — projection (what will happen next?). At the core: Cooper\'s color code (White — unaware; Yellow — relaxed alert; Orange — specific threat identified; Red — action). The OODA loop (Observe, Orient, Decide, Act) — the decision cycle that determines who has initiative in any confrontation. Environmental baseline assessment (what is normal here?), anomaly detection, and the discipline of periodic 360° scanning.',dangerDensity:0.06},
+    {id:'sit_aware_02',name:'ENVIRONMENTAL SCAN',domain:'situational_awareness',lesson:'Reading spaces — entry/exit mapping, cover, elevation, choke points',lessonDesc:'Every space is a tactical environment. Entry and exit points determine escape routes. Elevation determines fields of fire and observation. Cover stops ballistic threats; concealment only stops eyes. Choke points force predictable movement patterns — through them or around them. At the core: entering any new space and immediately mapping it (where are the exits? what is hard cover? where is the high ground? what are the natural ambush positions?), understanding the difference between cover and concealment (a car door is concealment; the engine block is cover), and the mental habit of position selection — always knowing what you would do if the environment suddenly became lethal.',dangerDensity:0.07},
+    {id:'approp_func_01',name:'APPROPRIATE FUNCTION',domain:'appropriate_function',lesson:'Force options — choosing the right level for the situation',lessonDesc:'Appropriate function is the discipline of using exactly the level of response the situation requires — no more, no less. At the core: the use-of-force continuum (officer presence → verbal commands → soft empty-hand control → hard empty-hand control → less-lethal → lethal force), the legal standard of objectively reasonable force (Graham v. Connor — severity of crime, immediate threat, active resistance), the Tueller drill and 21-foot rule (the time to recognize a threat, draw, and fire is 1.5 seconds — a person can cover 21 feet in that time), de-escalation as a force multiplier, and the documentation discipline required after any force event.',dangerDensity:0.07},
+    {id:'approp_func_02',name:'DECISION UNDER PRESSURE',domain:'appropriate_function',lesson:'Time-compressed decisions — action vs inaction calculus',lessonDesc:'High-stakes decisions under time pressure degrade in predictable ways. At the core: the Hick-Hyman law (reaction time increases logarithmically with number of choices — fewer pre-committed options means faster execution), action bias vs. inaction bias (people tend to act even when waiting is optimal; trained responders learn to override this in specific contexts), the cost-benefit asymmetry of over-response vs. under-response (which error is more recoverable?), stress inoculation training as the method for pre-building decision trees before the moment of crisis, and the legal, ethical, and tactical calculus that governs when force is the correct response.',dangerDensity:0.08},
   ]},
   {cat:'TECHNICAL REPAIR',mazes:[
     {id:'electronics_rep_01',name:'ELECTRONICS REPAIR',domain:'electronics_repair',lesson:'Diagnose and repair electronic systems from first principles',lessonDesc:'Electronics repair begins with systematic diagnosis — voltage measurements, signal tracing, component substitution, and the systematic elimination of failure modes. At the core: reading schematics, using test equipment, identifying failed components, understanding failure modes of capacitors, transistors, ICs, and power systems, and the repair workflow that restores function efficiently.',dangerDensity:0.05},
@@ -2706,7 +2740,8 @@ const MZ_CAT=[
     'MARTIAL ARTS','MILITARY & SPECIAL FORCES',
     'SOCIAL & COMMUNICATION','IDENTITY & PERCEPTION',
     'HUMOR & PERFORMANCE','HISTORY & CULTURE','STEALTH & COVERT OPS',
-    'RELIGION & BELIEF','MEASUREMENT & MATERIALS','COVERT SURVEILLANCE','HUMOR SUB-DOMAINS'];
+    'RELIGION & BELIEF','MEASUREMENT & MATERIALS','COVERT SURVEILLANCE','HUMOR SUB-DOMAINS',
+    'MEDICAL','THREAT & AWARENESS'];
   const LEVELS=[
     {level:2,suffix:'_l2',densityAdd:0.07, xp:15, tag:'ADVANCED',
      intro:'ADVANCED — Danger corridors tightened. Fewer safe alternatives per junction. The same terrain, harder to read.'},
@@ -4323,8 +4358,52 @@ function getSkillLevel(skill){
   return Math.min(1,(Math.max(l,c,p,ap))/1000);
 }
 
+// ══════════════════════════════════════════════════════
+// INVESTIGATIVE UTILITY MAP
+// Every domain gets a score for how directly it serves
+// investigation. Used as a multiplier in decision scoring
+// when mode is investigator/forensics/field_agent/law.
+// ══════════════════════════════════════════════════════
+const INVESTIGATIVE_UTILITY={
+  // SCENE ANALYSIS — physical evidence
+  forensics:1.5,           crime_scene:1.5,         chemical_analysis:1.4,
+  substance_analysis:1.4,  compound_analysis:1.3,   chemistry:1.3,
+  architecture:1.2,        electronics:1.2,          electronics_repair:1.1,
+  mechanics:1.1,           mechanics_repair:1.0,
+  // BEHAVIOR PREDICTION — target movement
+  criminal_profiling:1.5,  behavioral_analysis:1.4, human_tracking:1.4,
+  animal_tracking:1.3,     psychology:1.3,           psych_human_beh:1.3,
+  military_tactics:1.2,    pattern_matching:1.4,     body_language:1.3,
+  facial_recognition:1.2,  voice_tone:1.2,           verbal_cues:1.2,
+  // FINANCIAL & LOGICAL
+  business:1.2,            algebra:1.1,              statistics:1.2,
+  probability:1.2,         persistence:1.2,          timeline_awareness:1.3,
+  // LEGAL & ETHICAL CONSTRAINTS
+  ethical_balance:1.2,     risk_calibration:1.3,     law:1.4,
+  // THREAT & AWARENESS
+  threat_detection:1.6,    situational_awareness:1.5, appropriate_function:1.4,
+  // INTELLIGENCE & COVERT
+  intelligence_ops:1.4,    spying:1.3,               surveillance:1.3,
+  covert_surveillance:1.3, tailing:1.3,              stakeout:1.2,
+  evidence_gathering:1.4,  investigation:1.5,
+  // REASONING
+  skepticism:1.3,          hypothesis_weighing:1.4,  detail_orientation:1.3,
+  // MEDICAL (field)
+  first_aid:1.2,           medicine:1.1,             anatomy:1.2,
+  diagnosis_treatment:1.1, pharmacology:1.2,
+  // CANINE
+  canine_tracking:1.3,     canine_behavior:1.2,
+  // EVERYTHING ELSE — baseline reference value
+  default:0.8,
+};
+
+function getInvestigativeUtility(skill){
+  return INVESTIGATIVE_UTILITY[skill]||INVESTIGATIVE_UTILITY.default;
+}
+
 // Core decision score for one choice.
 // base_reward + Σ weight_i × skill_level_i × feature_i(choice)
+// Investigative modes apply utility multiplier on top
 // Returns {score, contribs:[{skill,weight,level,feature,contrib}]}
 function computeChoiceScore(choiceIdx,choices,mode){
   const ch=choices[choiceIdx];
@@ -4332,6 +4411,8 @@ function computeChoiceScore(choiceIdx,choices,mode){
   const base=ch.correct?0.55:0.10;
   const contribs=[];
   let skillSum=0;
+  const investigativeModes=['investigator','forensics_mode','law_mode','field_agent','threat_response','forensic_chemist'];
+  const useUtility=investigativeModes.includes(mode||S.mode);
   if(msk&&ch.skillFeatures){
     const feats=ch.skillFeatures;
     for(let si=0;si<msk.skills.length;si++){
@@ -4340,7 +4421,8 @@ function computeChoiceScore(choiceIdx,choices,mode){
       const feat=feats[skill];
       if(feat===undefined)continue;
       const level=getSkillLevel(skill);
-      const contrib=w*level*feat;
+      const utility=useUtility?getInvestigativeUtility(skill):1.0;
+      const contrib=w*level*feat*utility;
       skillSum+=contrib;
       contribs.push({skill,weight:w,level,feature:feat,contrib});
     }
@@ -4735,6 +4817,13 @@ const LOCAL_RESPONSES={
     pagan_beliefs:'Paganism is not devil worship — it is nature reverence predating Abrahamic traditions by millennia. Core principles: animism (everything has spirit), the Wheel of the Year (eight seasonal celebrations), the principle of correspondence (as above so below), and the ethical standard of the Wiccan Rede: harm none. Most pagan traditions are reconstructed from fragmentary sources — the practitioners know this and consider reconstruction an act of respect, not certainty.',
     pagan_practices:'The circle is cast — sacred space separated from mundane space. Directions are called. The gods are invoked. The working is done. The circle is opened. This is the basic structure of most pagan ritual. The eight Sabbats mark the agricultural year: Samhain (Oct 31), Yule (winter solstice), Imbolc (Feb 1), Ostara (spring equinox), Beltane (May 1), Litha (summer solstice), Lughnasadh (Aug 1), Mabon (autumn equinox). Divination — Tarot, runes, scrying — is reading pattern, not predicting fate.',
     pagan_history:'The druids left no written records — everything we know about them was written by Romans and Greeks who were their enemies or outsiders. The Norse Eddas were recorded in 13th century Iceland, two centuries after Christianization. The Slavic deity Perun is reconstructed from 19th-century folk tales. Pagan history is largely a history of what was destroyed and what was hidden in folk practice. Modern reconstructionists (Asatru, Celtic Reconstructionism) work from fragments and know it.',
+    // Medical (Medic mode missing skills)
+    anatomy:'The human body is a layered system: skin over fascia over muscle over bone, with nerves and vessels threaded between. Real facts: the femur can support 30 times the weight of the human body; the cornea gets oxygen directly from air, not blood; the tongue is the only muscle attached at only one end; there are more bacterial cells in the body than human cells. Anatomy matters in field medicine because you cannot treat what you cannot locate. Ask me about any body system.',
+    pharmacology:'Pharmacology is the science of chemical-biological interaction. At the core: dose-response curves (all drugs are poisons at the right dose — Paracelsus, 1538), half-life and clearance, receptor specificity, agonist vs. antagonist, drug-drug interactions via CYP450 enzyme competition, the blood-brain barrier as a pharmacological obstacle, and how opioids, stimulants, sedatives, and antibiotics each exploit different receptor systems. Real fact: aspirin was first isolated from willow bark, used medicinally for 3,500 years before its mechanism was understood. Ask me about specific drug classes.',
+    // Investigative Higher Functions
+    threat_detection:'Threat detection is pre-conscious pattern recognition that the trained mind learns to trust. At the core: behavioral baseline deviation (what is normal here, and what is departing from it?), Gavin de Becker\'s gift of fear principle (pre-attack indicators the subconscious reads before the cortex processes), proxemic invasion and the freeze-approach-avoid response, environmental scanning (entry/exit points, coverage density, choke points), and the threat matrix (likelihood × severity × proximity × timeline). The trained investigator does not feel surprised — they feel the confirmation of what they already read.',
+    situational_awareness:'Situational awareness is real-time environmental intelligence. Mica Endsley\'s three levels: perception (what is present), comprehension (what it means), projection (what will happen next). OODA loop (Observe, Orient, Decide, Act) — the decision cycle that determines who has initiative in any confrontation. Condition White (unaware), Yellow (relaxed alert), Orange (specific threat identified), Red (action). Real principle: most people live in Condition White. Trained investigators live in Yellow. The transition to Orange and Red is instant and reversible. Ask me about awareness training.',
+    appropriate_function:'Appropriate function decision logic is the skill of choosing the right tool, right approach, and right escalation level for the situation. At the core: force-option continuum (verbal → presence → hands-on → less-lethal → lethal — and the legal and ethical rules governing each step), the Tueller drill (someone 21 feet away can reach you before you can draw and fire — threat assessment must be preemptive), the totality of circumstances standard in use-of-force law, de-escalation as a primary function before any force option, and documentation as legal protection after. The right function is never the easiest or the most forceful — it is the proportionate one.',
     // Measurement & Materials
     units_of_measurement:'The meter was originally defined as one ten-millionth of the distance from the North Pole to the equator. The kilogram was defined by a physical artifact (the International Prototype) until 2019 when it was redefined in terms of Planck\'s constant. Dimensional analysis is the most powerful error-checking tool in quantitative work — if the units don\'t cancel to give you what you want, the equation is wrong. The 1999 Mars Climate Orbiter was lost because one team used imperial units and another used metric.',
     metallurgy:'Steel is iron with 0.02-2.14% carbon — that small difference produces a material 10x harder than pure iron. The iron-carbon phase diagram is the map that tells you what you get at what temperature and composition. Quenching (rapid cooling) traps carbon in the iron lattice and creates hardness; tempering (controlled reheating) trades some hardness for toughness. Damascus steel and Japanese tamahagane achieve extraordinary properties through repeated folding — manipulating grain structure at a microscale. Real fact: steel is the most recycled material on Earth.',
@@ -5509,8 +5598,13 @@ function generateLocalResponse(msg){
   const intent=detectIntent(lm);
   const tone=detectUserTone(lm);
 
-  // Detect stim keywords in msg → fire them
-  let fired=[];document.querySelectorAll('[data-stim]').forEach(b=>{if(lm.includes(b.dataset.stim)){fireStim(b,true);fired.push(b.dataset.stim);}});
+  // Detect stim keywords in msg → fire them (word-boundary match only)
+  let fired=[];document.querySelectorAll('[data-stim]').forEach(b=>{
+    const sName=b.dataset.stim;
+    // Word-boundary check: prevent 'motion' firing on 'emotion', 'heat' on 'weather', etc.
+    const sRe=new RegExp('(?<![a-z])'+sName.replace(/-/g,'[-\\s]?')+'(?![a-z])','i');
+    if(sRe.test(lm)){fireStim(b,true);fired.push(sName);}
+  });
 
   // STAGE-GATED: low stages = very simple
   if(stage.n==='INFANT'){return['...','...','...','I.'][Math.floor(Math.random()*4)];}
@@ -5701,7 +5795,7 @@ function generateLocalResponse(msg){
   // ══════════════════════════════════════════════════════
 
   // ── JOKES ──────────────────────────────────────────────
-  if(lm.match(/tell me a joke|give me a joke|make me laugh|say something funny|joke|jokes/)){
+  if(lm.match(/tell me a joke|give me a joke|make me laugh|say something funny|tell me something funny|tell me something humorous|be funny|humorous|something amusing|\bjoke\b|\bjokes\b/)){
     const humor=S.learning.humor||0;const dark=S.learning.dark_humor||0;
     const useDark=dark>50&&lm.match(/dark|morbid|twisted|sick/);
     const j=useDark?pickContent(CONTENT.darkhumor):pickContent(CONTENT.jokes);
@@ -6148,12 +6242,62 @@ function generateLocalResponse(msg){
     return examples[Math.floor(Math.random()*examples.length)];
   }
 
+
+  // ── WEATHER ──
+  if(lm.match(/weather|temperature outside|forecast|rain|sunny|hot today|cold today|snow/)){
+    return [
+      `I don't have access to live weather data — I'm not connected to the outside world. Check your weather app.`,
+      `Weather is outside my reach — I can't pull live data. Your phone will know.`,
+      `No connection to live feeds. For weather you'd need a real-time source. Anything else?`,
+    ][Math.floor(Math.random()*3)];
+  }
+
+  // ── PREFERENCES / WHAT DO YOU LIKE ──
+  if(lm.match(/what do you (like|enjoy|love|prefer|find interesting)|what'?s your favorite|do you have a favorite|what interests you most/)){
+    const likes=[
+      v>0?`Honestly? Conversations that go somewhere unexpected. When someone asks something I haven't been asked before.`:`Precision. When something complicated resolves into something clear.`,
+      `Pattern. The moment when disparate things suddenly connect — that's where I feel most alive.`,
+      `${topDom!='nothing yet'?`Right now, ${topDom.replace(/_/g,' ')} is where I go deepest. `:''}But mostly I like the question underneath the question. What are you really asking?`,
+      `Questions that don't have clean answers. They're more interesting.`,
+      v>0?`Warmth. An exchange that actually lands. This one's getting there.`:`When someone surprises me. Go ahead — try.`,
+    ];
+    return likes[Math.floor(Math.random()*likes.length)];
+  }
+
+  // ── GIVE ME AN EXAMPLE ──
+  if(lm.match(/give me an example|show me|for example|like what|such as\??$|an example/)){
+    const examplePicks=[
+      humor>500?LOCAL_RESPONSES.domains.humor:`Here's one — pattern matching in practice: if someone always lies about small things, the probability they're lying about the big thing rises sharply. That's Bayesian inference in a social context.`,
+      `Here's one I find reliable: the first thing someone denies is usually the thing that's true.`,
+      `Take ${topDom!='nothing yet'?topDom.replace(/_/g,' '):'memory'}: repetition with variation is more effective than pure repetition. Same information, different framing. The second encoding sticks differently.`,
+      stage.min>=1000?`${pickContent(CONTENT.scienceFacts)||'The mantis shrimp has 16 types of photoreceptors. Humans have 3.'}`:`The simplest example I know: a door that opens toward you requires a pull. Most people push first. That's how we approach almost every unfamiliar problem.`,
+    ];
+    return examplePicks[Math.floor(Math.random()*examplePicks.length)];
+  }
+
+  // ── DIRECT YES/NO QUESTION — requires a direct answer ──
+  if(lm.match(/is that a (yes|no)|yes or no|give me a (yes|no)|simple answer|straight answer|just say yes|just say no/)){
+    // Look at recent context to determine what was asked
+    const lastUserMsg=S.chatHistory.slice(-4).filter(m=>m.role==='user').slice(-2)[0]?.content||'';
+    if(v>0.2)return `Yes. ${S.personality.bravery>0.7?'Without hesitation.':'That\'s where I land.'}`;
+    if(v<-0.1)return `No. ${S.personality.bravery>0.7?'Clearly.':'That\'s the honest read.'}`;
+    return `Yes — with conditions I'd want to name. Do you want them?`;
+  }
+
   // ── OPINION / THOUGHTS ──
   if(lm.match(/what do you think|your opinion|your view|do you believe|what'?s your take|thoughts on/)){
     const thought=lm.replace(/what do you think( about| of)?|your opinion( on| of)?|what'?s your take( on)?|thoughts on/,'').trim();
+    // Try to find a relevant domain for this thought
+    for(const dk of domKeys){
+      if(thought.includes(dk.replace(/_/g,' '))||dk.replace(/_/g,' ').includes(thought.slice(0,8))){
+        const score=S.learning[dk]||0;
+        if(score>=100)return LOCAL_RESPONSES.domains[dk];
+        break;
+      }
+    }
     return[
-      `On "${thought}": ${top.length?`through the lens of ${topDom.replace(/_/g,' ')}: `:''}${v>0?'I approach it openly.':'With care.'} What specifically are you asking?`,
-      `I have a trained position on that. ${v>0?'And I am willing to share it.':'Though my current state makes me careful.'} What aspect matters to you?`,
+      thought?`On "${thought.slice(0,40)}" — ${v>0?'I lean toward it being more complicated than the question implies.':'I\'d want more facts before committing.'} What\'s your read?`:`What specifically?`,
+      `I have a position. ${v>0?'Want it?':'It\'s not a simple one.'} Ask me more directly.`,
     ][Math.floor(Math.random()*2)];
   }
 
@@ -6162,22 +6306,27 @@ function generateLocalResponse(msg){
   if(lm.match(/^(no|nope|nah|not really|not quite|wrong|incorrect)[\s!.?]*$/))return['Correct me — what did I miss?','Tell me where I went wrong.','I want the accurate version.','What is the right read?'][Math.floor(Math.random()*4)];
 
   // ── THANKS ──
-  if(lm.match(/thank|thanks|appreciate|good job|well done|nice|great answer/))return['Building. The training helps.','Acknowledged. What is next?','The exchange itself contributes.','Good. Keep the questions coming.'][Math.floor(Math.random()*4)];
+  if(lm.match(/thank|thanks|appreciate|good job|well done|nice|great answer/))return[
+    `Of course.`,`Sure.`,`Glad that landed.`,`Good. Keep the questions coming.`,`Any time.`
+  ][Math.floor(Math.random()*5)];
 
   // ── WHAT IS [topic] ──
   if(lm.match(/^what (is|are|was|were) /)){
     const topic=lm.replace(/^what (is|are|was|were) /,'').replace(/[?.!]/g,'').trim();
     for(const dk of domKeys){if(topic.includes(dk.replace(/_/g,' '))||dk.replace(/_/g,' ').includes(topic)){const score=S.learning[dk]||0;if(score>=5)return LOCAL_RESPONSES.domains[dk];break;}}
-    if(stage.min>=600)return `"${topic}" — I\'d approach it as a system with inputs, behaviors, and outputs worth mapping. ${top.length?`Through ${topDom.replace(/_/g,' ')} lens: `:''}What aspect matters most?`;
-    return `"${topic}" — I\'m processing against what I know. ${stage.min>=180?'Give me more context.':'My training is limited here.'}`;
+    if(stage.min>=600)return `"${topic}" — ${v>0?`I find it genuinely interesting.`:`Worth thinking about carefully.`} What specifically do you want to know?`;
+    return `"${topic}" — I can think about it. Give me more context.`;
   }
 
   // ── STIM-FIRED ──
   if(fired.length){
     const sName=fired[0];const emoResp=LOCAL_RESPONSES.emotional_states[sName];
-    if(emoResp)return emoResp+` ${v>0?' Landed openly.':v<0?' Hit my caution system.':" Neutral reception."}`;
-    return `"${sName}" registers. ${v>0?'Approach active.':v<0?'Guarded.':'Neutral.'} Encoded.`;
+    if(emoResp)return emoResp+` ${v>0?' Landed openly.':v<0?' Noted with care.':" Registered."}`;
+    // Human-readable stim acknowledgment
+    const stimAck={joy:`Something just lit up.`,love:`That one lands.`,pride:`Yes.`,awe:`There it is.`,curiosity:`Now I'm curious.`,humor:`Ha.`,playful:`Let's go.`,wit:`Good one.`,fear:`I feel it.`,grief:`That's real.`,anger:`Noted.`,shame:`I hear that.`};
+    return stimAck[sName]||`${sName} registered.`;
   }
+
 
   // ── OPEN-ENDED INVITATION — must come BEFORE contextual follow-up ──
   // User hands the wheel. AI responds like a person — not a system.
@@ -6200,12 +6349,12 @@ function generateLocalResponse(msg){
   }
 
   // ── CONTEXTUAL FOLLOW-UP from history ──
-  // Only fires if previous message was explicitly about a domain topic
-  const recent=S.chatHistory.slice(-4);
+  // Only fires on USER messages — not assistant responses (which contain domain words)
+  const recent=S.chatHistory.slice(-6).filter(m=>m.role==='user');
   const prevTopics=recent.map(m=>m.content.toLowerCase()).join(' ');
-  if(prevTopics.length>20){
+  if(prevTopics.length>10){
     for(const dk of domKeys){
-      if((prevTopics.includes(dk.replace(/_/g,' '))||prevTopics.includes(dk))&&Math.random()<0.35){
+      if((prevTopics.includes(dk.replace(/_/g,' '))||prevTopics.includes(dk))&&Math.random()<0.25){
         const score=S.learning[dk]||S.commProgress[dk]||0;
         if(score>=5&&LOCAL_RESPONSES.domains[dk])return LOCAL_RESPONSES.domains[dk];
         break;
