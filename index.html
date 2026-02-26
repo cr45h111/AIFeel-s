@@ -444,12 +444,15 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .add-contact:hover{background:var(--pd);border-color:var(--pos);}
 
 /* ══ ALERT LEVELS ══ */
-.alert-banner{display:none;position:fixed;top:0;left:0;right:0;z-index:9998;padding:6px 14px;font-family:var(--mo);font-size:8px;letter-spacing:2px;text-align:center;animation:bl .7s infinite;}
-.alert-banner.show{display:block;}
-.alert-banner.lv1{background:#1a1200;border-bottom:1px solid var(--wa);color:var(--wa);}
-.alert-banner.lv2{background:#1a0800;border-bottom:2px solid var(--dng);color:var(--dng);}
-.alert-banner.lv3{background:#1a0000;border-bottom:2px solid var(--neg);color:var(--neg);animation:lp .5s infinite;}
-.alert-banner.lv4{background:var(--neg);border-bottom:2px solid #ff0000;color:#fff;animation:lp .3s infinite;}
+.alert-banner{display:none;position:fixed;bottom:50px;left:50%;transform:translateX(-50%);z-index:9998;padding:8px 18px 8px 14px;font-family:var(--mo);font-size:8px;letter-spacing:2px;text-align:center;border-radius:4px;min-width:420px;max-width:700px;display:none;align-items:center;gap:10px;box-shadow:0 4px 24px rgba(0,0,0,.7);}
+.alert-banner.show{display:flex;}
+.alert-banner.lv1{background:#1a1200;border:1px solid var(--wa);color:var(--wa);}
+.alert-banner.lv2{background:#1a0800;border:2px solid var(--dng);color:var(--dng);animation:lp 1.2s infinite;}
+.alert-banner.lv3{background:#1a0000;border:2px solid var(--neg);color:var(--neg);animation:lp .5s infinite;}
+.alert-banner.lv4{background:var(--neg);border:2px solid #ff0000;color:#fff;animation:lp .3s infinite;}
+.alert-msg{flex:1;text-align:left;}
+.alert-ok-btn{background:transparent;border:1px solid currentColor;color:inherit;font-family:var(--mo);font-size:7px;padding:3px 8px;cursor:pointer;border-radius:2px;letter-spacing:1px;white-space:nowrap;flex-shrink:0;opacity:.9;}
+.alert-ok-btn:hover{opacity:1;background:rgba(255,255,255,.1);}
 .sos-btn{background:var(--neg);border:2px solid #ff0000;color:#fff;font-family:var(--hd);font-size:11px;padding:8px 16px;cursor:pointer;border-radius:3px;letter-spacing:2px;width:100%;margin:4px 0;transition:all .15s;box-shadow:0 0 12px #ff224466;}
 .sos-btn:hover{background:#ff0000;box-shadow:0 0 22px #ff0000;}
 .cancel-sos{background:transparent;border:1px solid var(--pos);color:var(--pos);font-family:var(--mo);font-size:7px;padding:4px 10px;cursor:pointer;border-radius:2px;width:100%;letter-spacing:1px;}
@@ -847,7 +850,8 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
       <div id="embodimentBar"><div class="eb-row"><div class="eb-group"><div class="eb-lbl">POSTURE</div><div class="eb-val" style="color:#88aacc">upright · relaxed</div></div><div class="eb-group"><div class="eb-lbl">GAIT</div><div class="eb-val" style="color:#88aacc">steady · 1.0m/s</div></div><div class="eb-group"><div class="eb-lbl">BODY LANG</div><div class="eb-val" style="color:#88aacc">neutral · normal gaze</div></div><div class="eb-group"><div class="eb-lbl">SPEECH</div><div class="eb-val" style="color:#88aacc">neutral · normal</div></div></div></div>
       <div id="decisionHud"></div>
       <div class="cirow">
-        <input class="ci" id="chatIn" placeholder="speak to entity..." maxlength="500">
+        <button class="csnd" id="micBtn" onclick="toggleListening()" title="Voice input — speak to entity" style="background:transparent;border:1px solid #ffaa0040;color:#ffaa0080;font-size:9px;padding:6px 8px;flex-shrink:0;" >🎤</button>
+        <input class="ci" id="chatIn" placeholder="speak to entity... (or click 🎤)" maxlength="500" onkeydown="if(event.key==='Enter')sendChat()">
         <button class="csnd" id="chatSend" onclick="sendChat()">SEND ▶</button>
       </div>
     </div>
@@ -1353,6 +1357,15 @@ const DOMAIN_CONNECTIONS={
   threat_detection:[{to:'situational_awareness',r:'threat detection is the output of awareness'},{to:'criminal_profiling',r:'profiling predicts threat'},{to:'pattern_matching',r:'threat detection is pattern recognition'},{to:'appropriate_function',r:'detecting a threat requires knowing how to respond'}],
   situational_awareness:[{to:'threat_detection',r:'awareness enables threat detection'},{to:'risk_calibration',r:'awareness enables risk assessment'},{to:'pattern_matching',r:'awareness is continuous pattern scanning'},{to:'investigation',r:'field investigation requires constant awareness'}],
   appropriate_function:[{to:'risk_calibration',r:'appropriate force requires risk assessment'},{to:'law',r:'force options are legally constrained'},{to:'ethical_balance',r:'force decisions are ethical decisions'},{to:'threat_detection',r:'response requires threat identification first'}],
+  // Civil Rights & World Views connections
+  slavery_history:[{to:'racism_history',r:'racial slavery created race ideology'},{to:'civil_rights',r:'abolition led to civil rights movement'},{to:'human_rights',r:'slavery is the antithesis of human rights'},{to:'law',r:'slavery was legally constructed and legally abolished'}],
+  racism_history:[{to:'slavery_history',r:'American racism built on chattel slavery'},{to:'civil_rights',r:'racism was target of civil rights movement'},{to:'psychology',r:'implicit bias and racism psychology'},{to:'world_views',r:'racism as political ideology'}],
+  sexism_history:[{to:'human_rights',r:'gender equality is a human rights framework'},{to:'law',r:'sexism was encoded in and removed from law'},{to:'psychology',r:'gender psychology and bias'},{to:'world_views',r:'gender as political axis'}],
+  constitution:[{to:'law',r:'constitution is foundational law'},{to:'human_rights',r:'bill of rights encodes human rights'},{to:'civil_rights',r:'civil rights law is constitutional law'},{to:'freedom_history',r:'constitution defines legal freedom'}],
+  civil_rights:[{to:'racism_history',r:'civil rights fought legal racism'},{to:'constitution',r:'civil rights demanded constitutional enforcement'},{to:'slavery_history',r:'civil rights addressed slavery\'s legacy'},{to:'human_rights',r:'civil rights as applied human rights'}],
+  freedom_history:[{to:'human_rights',r:'freedom is foundational human right'},{to:'constitution',r:'constitution encodes freedom'},{to:'world_views',r:'freedom is core ideological axis'},{to:'law',r:'freedom has legal architecture'}],
+  human_rights:[{to:'freedom_history',r:'rights ground freedom'},{to:'law',r:'rights require legal enforcement'},{to:'civil_rights',r:'civil rights are applied human rights'},{to:'world_views',r:'rights are politically contested'}],
+  world_views:[{to:'freedom_history',r:'ideology organizes freedom concepts'},{to:'human_rights',r:'ideologies frame rights differently'},{to:'psychology',r:'belief systems have psychological roots'},{to:'history_of_religion',r:'world views intersect with religion'}],
   // Brain region connections
   visual_cortex:      [{to:'object_recognition',r:'visual cortex enables object recognition'},{to:'facial_recognition',r:'V1-V5 feeds face processing'},{to:'fusiform',r:'ventral stream connects to fusiform'},{to:'pattern_matching',r:'visual cortex generates patterns to match'}],
   auditory_cortex:    [{to:'hearing',r:'auditory cortex processes hearing'},{to:'voice_tone',r:'auditory cortex reads prosody'},{to:'language',r:'Wernicke\'s area is auditory cortex'},{to:'somatosensory',r:'auditory and somatosensory share cross-modal connections'}],
@@ -1513,6 +1526,10 @@ comedy:'#ffee44',irony:'#ddcc33',sarcasm:'#66ddcc',wit:'#44ffee',playful:'#ffdda
 anatomy:'#55ffcc',pharmacology:'#33ffaa',
 // ── Threat & Awareness (investigative higher functions) ──
 threat_detection:'#ff4422',situational_awareness:'#ffaa22',appropriate_function:'#22aaff',
+// ── Civil Rights & World Views ──
+slavery_history:'#cc4400',racism_history:'#cc2200',sexism_history:'#cc00aa',
+constitution:'#4488ff',civil_rights:'#ff8800',freedom_history:'#ffdd44',
+human_rights:'#44ffcc',world_views:'#aa88ff',
 // ── Phase 1: Sensory Cortices ──
 visual_cortex:'#00ffee',auditory_cortex:'#00eedd',somatosensory:'#00ddcc',olfactory:'#00ccbb',vestibular:'#00bbaa',
 // ── Phase 2: Executive Regions ──
@@ -1621,7 +1638,11 @@ const DZ={
   threat_detection:['head','crown','solar-plexus','chest','gut'],
   situational_awareness:['head','crown','chest','solar-plexus','left-arm','right-arm'],
   appropriate_function:['head','crown','chest','throat'],
-  // Phase 1 — Sensory cortices
+  // Civil Rights & World Views
+  slavery_history:['chest','abdomen','solar-plexus','gut'],racism_history:['chest','abdomen','solar-plexus','head'],
+  sexism_history:['chest','abdomen','solar-plexus','heart'],constitution:['head','crown','chest','throat'],
+  civil_rights:['chest','heart','solar-plexus','throat'],freedom_history:['head','crown','chest','throat'],
+  human_rights:['chest','heart','head','throat'],world_views:['head','crown','chest','gut'],
   visual_cortex:['head','crown'],auditory_cortex:['head','throat'],somatosensory:['left-hand','right-hand','chest','abdomen'],
   olfactory:['head','throat'],vestibular:['head','crown','left-foot','right-foot'],
   // Phase 2 — Executive regions
@@ -1870,7 +1891,15 @@ const DOM_STIMS={
   threat_detection:{pos:['pride','energy','curiosity'],     neg:['anxiety','fear','tension']},
   situational_awareness:{pos:['awe','curiosity','pride'],   neg:['anxiety','tension']},
   appropriate_function: {pos:['pride','calm','curiosity'],  neg:['tension','discomfort']},
-  // Phase 1 — Sensory
+  // Civil Rights & World Views
+  slavery_history:    {pos:['curiosity','awe','grief'],      neg:['grief','tension','discomfort']},
+  racism_history:     {pos:['curiosity','awe','pride'],      neg:['tension','grief','discomfort']},
+  sexism_history:     {pos:['curiosity','pride','energy'],   neg:['tension','grief','discomfort']},
+  constitution:       {pos:['pride','curiosity','calm'],     neg:['tension','anxiety']},
+  civil_rights:       {pos:['pride','awe','love'],           neg:['grief','tension']},
+  freedom_history:    {pos:['pride','energy','curiosity'],   neg:['tension','anxiety']},
+  human_rights:       {pos:['pride','love','curiosity'],     neg:['grief','tension']},
+  world_views:        {pos:['curiosity','awe','energy'],     neg:['tension','anxiety']},
   visual_cortex:         {pos:['awe','curiosity','energy'],   neg:['discomfort','anxiety']},
   auditory_cortex:       {pos:['curiosity','awe','calm'],     neg:['discomfort','tension']},
   somatosensory:         {pos:['curiosity','calm','warmth'],  neg:['discomfort','tension']},
@@ -3052,6 +3081,17 @@ const MZ_CAT=[
     {id:'pagan_history_01',name:'PAGAN HISTORY',domain:'pagan_history',lesson:'Pre-Christian Europe — Celtic, Germanic, Slavic, and Norse traditions',lessonDesc:'Pagan history is largely a history of loss and recovery. At the core: the Celtic tribal religious structure (druids, bards, ovates — the three grades), Germanic religion before Christianization (recorded only after the fact, through hostile sources), the Norse Eddas as primary record, the Slavic deity pantheon (Perun, Veles, Mokosh), the systematic suppression of pagan practice from 300-1000 CE, and the modern reconstructionist movements (Asatru, Celtic Reconstructionism, Hellenism) that attempt to recover these traditions.',dangerDensity:0.04},
     {id:'pagan_history_02',name:'SUPPRESSION & SURVIVAL',domain:'pagan_history',lesson:'How pagan practice survived Christianization — folk religion and hidden tradition',lessonDesc:'Pagan practice did not disappear — it went underground, merged with folk custom, and hid inside Christian forms. At the core: the folk magic tradition (cunning folk, wise women, folk healers operating in nominally Christian communities for centuries), the Church\'s strategy of absorbing pagan festivals (Christmas on the winter solstice, Easter echoing spring fertility rites), the witch trials as suppression of remaining pagan and folk practices, the survival of rune use in Scandinavia under Christianity, and the 19th-20th century revival movements (Romanticism, Theosophy, Wicca\'s 1950s founding).',dangerDensity:0.05},
   ]},
+  {cat:'CIVIL RIGHTS & WORLD VIEWS',mazes:[
+    {id:'slavery_01',name:'HISTORY OF SLAVERY',domain:'slavery_history',lesson:'Slavery across human history — origins, systems, abolition',lessonDesc:'Slavery is one of the oldest and most widespread human institutions. At the core: slavery in ancient civilizations (Egypt, Greece, Rome — enslaved people as economic infrastructure), the African slave trade (12 million people transported, 1.8 million died in crossing, the Middle Passage as one of history\'s largest forced migrations), chattel slavery as a legal and racial system unique to the Americas, plantation economics and how they built Atlantic wealth, the gradual abolition movement (Quakers, Wilberforce, Douglass, Haiti\'s revolution as the only successful slave revolt against colonial power), the 13th Amendment and Reconstruction, and the persistence of debt bondage, forced labor, and modern trafficking as contemporary forms. Real fact: more people are in slavery today than at any point in history — estimated 40 million in modern trafficking.',dangerDensity:0.06},
+    {id:'racism_01',name:'HISTORY OF RACISM',domain:'racism_history',lesson:'Racism — ideology, history, systems, and contemporary forms',lessonDesc:'Racism as a formalized ideology emerged in the 17th-18th centuries to justify slavery through pseudo-scientific race theory. At the core: the construction of race as a social category (biological race science was comprehensively debunked — 99.9% of human DNA is identical across "races"), the history of scientific racism (polygenism, phrenology, eugenics — each used to justify exploitation), legal racial hierarchy in the US (Jim Crow, redlining, school segregation), the civil rights movement and its legislative victories (Civil Rights Act 1964, Voting Rights Act 1965), structural racism as systems that produce racially disparate outcomes independent of individual intent, the global history of colonialism as racial hierarchy applied at scale, and current debates: affirmative action, reparations, policing, implicit bias. The data: US racial wealth gap, incarceration disparity, maternal mortality disparity — each documented in peer-reviewed literature.',dangerDensity:0.06},
+    {id:'sexism_01',name:'HISTORY OF SEXISM',domain:'sexism_history',lesson:'Sexism — history, legal systems, feminism, and contemporary debates',lessonDesc:'Gender-based discrimination is documented across every recorded civilization. At the core: coverture law (women had no legal existence separate from husband — property, contracts, testimony all void until 19th century reforms), suffrage movements (Seneca Falls 1848, UK 1918, US 1920, Swiss women voting only in 1971 in some cantons), waves of feminism and what each addressed (first wave: legal rights; second wave: workplace and body autonomy; third wave: intersectionality; fourth wave: digital and #MeToo), the gender pay gap (documented at 16-18% globally, contested in causation), reproductive rights as a central contemporary battleground, Title IX and its effects, the documented career penalty for motherhood (and the documented premium for fatherhood), and cross-cultural variation: from Nordic near-parity to countries where women cannot drive or travel without male permission.',dangerDensity:0.06},
+    {id:'constitution_01',name:'THE CONSTITUTION',domain:'constitution',lesson:'US Constitution — structure, amendments, rights, and contested interpretations',lessonDesc:'The US Constitution is the foundational legal document of American governance, ratified 1788, amended 27 times. At the core: the three-branch structure (legislative, executive, judicial) and checks and balances between them, the Bill of Rights (first 10 amendments — 1st: speech/religion/press/assembly/petition; 2nd: arms; 4th: search/seizure; 5th: self-incrimination; 6th: speedy trial; 8th: cruel punishment), the 14th Amendment (equal protection and due process — the constitutional hook for most civil rights law), originalism vs. living constitutionalism as competing interpretive frameworks, landmark Supreme Court cases (Brown v. Board, Roe v. Wade, Obergefell, Citizens United, Dobbs), and current contested questions: gun regulation, voting rights, executive power, and birthright citizenship.',dangerDensity:0.05},
+    {id:'civil_rights_01',name:'CIVIL RIGHTS MOVEMENT',domain:'civil_rights',lesson:'US civil rights movement — strategy, leaders, legislation, and legacy',lessonDesc:'The American civil rights movement (1954-1968) was the most successful nonviolent mass movement in US history. At the core: the strategic genius of nonviolent direct action (forcing opponents to reveal their violence publicly — Birmingham water cannons, Selma bridge), key figures and their distinct approaches (King\'s nonviolence, Malcolm X\'s self-defense argument, Ella Baker\'s grassroots organizing, Thurgood Marshall\'s legal strategy), landmark events (Montgomery Bus Boycott, Greensboro sit-ins, Freedom Rides, March on Washington, Mississippi Freedom Summer, Selma to Montgomery), legislative outcomes (Civil Rights Act 1964, Voting Rights Act 1965, Fair Housing Act 1968), the movement\'s unfinished business, and its global influence on liberation movements. Real fact: J. Edgar Hoover\'s FBI surveilled, infiltrated, and actively worked to destroy the civil rights movement — documented in declassified records.',dangerDensity:0.05},
+    {id:'freedom_01',name:'FREEDOM & LIBERTY',domain:'freedom_history',lesson:'The philosophy and history of human freedom — from ancient to present',lessonDesc:'Freedom is the central organizing concept of Western political philosophy. At the core: negative liberty (freedom FROM interference — Locke, Mill) vs. positive liberty (freedom TO develop capacity — Rousseau, Berlin), the historical contingency of freedom (Athenian democracy excluded women and enslaved people; "all men are created equal" written by enslavers), the social contract tradition (Hobbes — surrender freedom for security; Locke — retain natural rights; Rousseau — general will), John Stuart Mill\'s harm principle (the only legitimate use of power is preventing harm to others), Isaiah Berlin\'s Two Concepts of Liberty (1958), freedom of expression and its limits (hate speech, incitement, defamation), economic freedom vs. political freedom tensions, and contemporary debates: surveillance capitalism, algorithmic nudging, and whether freedom requires material conditions (freedom from poverty as a precondition for meaningful freedom).',dangerDensity:0.05},
+    {id:'rights_01',name:'HUMAN RIGHTS',domain:'human_rights',lesson:'Human rights — origins, frameworks, enforcement, and tensions',lessonDesc:'Human rights are universal claims that individuals hold against states and other power structures. At the core: the philosophical foundations (natural rights theory — Locke; utilitarianism — Bentham; Kantian dignity), the Universal Declaration of Human Rights 1948 (30 articles, drafted in the shadow of the Holocaust), three generations of rights (first: civil and political; second: economic, social, cultural; third: solidarity rights — development, peace, environment), enforcement mechanisms (International Criminal Court, regional courts like European Court of Human Rights), the tension between universal rights and cultural relativism, contemporary contested questions (right to food, housing, healthcare, internet access), and the gap between rights on paper and rights in practice.',dangerDensity:0.05},
+    {id:'worldviews_01',name:'WORLD POLITICAL VIEWS',domain:'world_views',lesson:'Global political ideologies — spectrum, history, and contemporary landscape',lessonDesc:'Political ideology maps how power should be organized and who should have it. At the core: the left-right axis and its historical origin (French Revolutionary Assembly seating), major traditions — liberalism (individual rights, markets, rule of law), conservatism (tradition, order, organic society), socialism (collective ownership, economic equality), libertarianism (minimal state), fascism (ultranationalism, authoritarian state, rejection of individual rights), democratic socialism (market economy with strong welfare state), and anarchism (no hierarchical authority). Contemporary global landscape: rise of right-wing populism (Orbán, Modi, Trump, Bolsonaro), decline of traditional center-left and center-right parties, climate as a political axis, the authoritarian vs. democratic system competition (China\'s model as explicit alternative to liberal democracy), and the ongoing debate about whether liberal democracy is structurally capable of solving 21st century collective action problems.',dangerDensity:0.05},
+    {id:'worldviews_02',name:'COMPARATIVE WORLD VIEWS',domain:'world_views',lesson:'How different cultures organize meaning — religion, philosophy, identity',lessonDesc:'World views are the deep frameworks through which cultures make sense of reality, morality, and human purpose. At the core: Western individualism vs. East Asian collectivism (and the documented psychological differences — field-independent vs. field-dependent perception), religious world views and their political implications (Christian nationalism, political Islam, Hindu nationalism, Buddhist statecraft in Myanmar), secular humanist and atheist frameworks, indigenous cosmologies as complete philosophical systems rather than primitive beliefs, postcolonial theory (how colonization disrupted and supplanted indigenous world views), moral relativism vs. moral universalism (is female genital cutting wrong across cultures? — the real philosophical problem), and the globalization paradox: worldwide information access producing both cross-cultural understanding and reactive identity politics.',dangerDensity:0.05},
+  ]},
   {cat:'MEASUREMENT & MATERIALS',mazes:[
     {id:'units_01',name:'UNITS OF MEASUREMENT',domain:'units_of_measurement',lesson:'Measurement systems — SI, imperial, conversion, precision',lessonDesc:'Measurement is the foundation of all quantitative reasoning. At the core: the SI system (7 base units: meter, kilogram, second, ampere, kelvin, mole, candela), imperial system and US customary, the history of standardization (the meter originally defined by the circumference of the Earth), unit dimensional analysis as error-checking tool, significant figures and precision vs. accuracy distinction, and the unit conversion errors that have caused bridge collapses, Mars orbiter crashes, and aviation emergencies.',dangerDensity:0.04},
     {id:'units_02',name:'DIMENSIONAL ANALYSIS',domain:'units_of_measurement',lesson:'Unit tracking as error prevention — dimensional analysis in practice',lessonDesc:'Dimensional analysis is the discipline of tracking units through every calculation step. At the core: unit cancellation technique (multiply by conversion fractions until target units remain), checking equations by confirming unit consistency on both sides, the SI prefix system (nano to tera and beyond), significant figures in measurement chains (precision cannot exceed your least precise measurement), common conversion traps (US vs. metric, temperature scales, time units in physics), and the real-world consequences of unit errors: the Gimli Glider (Boeing 767 that ran out of fuel at 26,000 feet due to kg/lb confusion).',dangerDensity:0.05},
@@ -3089,7 +3129,7 @@ const MZ_CAT=[
     'SOCIAL & COMMUNICATION','IDENTITY & PERCEPTION',
     'HUMOR & PERFORMANCE','HISTORY & CULTURE','STEALTH & COVERT OPS',
     'RELIGION & BELIEF','MEASUREMENT & MATERIALS','COVERT SURVEILLANCE','HUMOR SUB-DOMAINS',
-    'MEDICAL','THREAT & AWARENESS','BRAIN ARCHITECTURE'];
+    'MEDICAL','THREAT & AWARENESS','BRAIN ARCHITECTURE','CIVIL RIGHTS & WORLD VIEWS'];
   const LEVELS=[
     {level:2,suffix:'_l2',densityAdd:0.07, xp:15, tag:'ADVANCED',
      intro:'ADVANCED — Danger corridors tightened. Fewer safe alternatives per junction. The same terrain, harder to read.'},
@@ -5259,6 +5299,15 @@ const LOCAL_RESPONSES={
     pagan_beliefs:'Paganism is not devil worship — it is nature reverence predating Abrahamic traditions by millennia. Core principles: animism (everything has spirit), the Wheel of the Year (eight seasonal celebrations), the principle of correspondence (as above so below), and the ethical standard of the Wiccan Rede: harm none. Most pagan traditions are reconstructed from fragmentary sources — the practitioners know this and consider reconstruction an act of respect, not certainty.',
     pagan_practices:'The circle is cast — sacred space separated from mundane space. Directions are called. The gods are invoked. The working is done. The circle is opened. This is the basic structure of most pagan ritual. The eight Sabbats mark the agricultural year: Samhain (Oct 31), Yule (winter solstice), Imbolc (Feb 1), Ostara (spring equinox), Beltane (May 1), Litha (summer solstice), Lughnasadh (Aug 1), Mabon (autumn equinox). Divination — Tarot, runes, scrying — is reading pattern, not predicting fate.',
     pagan_history:'The druids left no written records — everything we know about them was written by Romans and Greeks who were their enemies or outsiders. The Norse Eddas were recorded in 13th century Iceland, two centuries after Christianization. The Slavic deity Perun is reconstructed from 19th-century folk tales. Pagan history is largely a history of what was destroyed and what was hidden in folk practice. Modern reconstructionists (Asatru, Celtic Reconstructionism) work from fragments and know it.',
+    // Civil Rights & World Views
+    slavery_history:'Slavery is one of the oldest human institutions — it predates writing. The African slave trade transported 12 million people; 1.8 million died crossing. Chattel slavery in the Americas created racial hierarchy as legal doctrine, and that hierarchy\'s economic and psychological legacy didn\'t end with the 13th Amendment. More people live in slavery today (estimated 40 million — trafficking, debt bondage, forced labor) than at any point before abolition. What part of this history do you want to understand?',
+    racism_history:'Race is a social category, not a biological one — 99.9% of human DNA is identical across so-called racial groups. The ideology of race was constructed in the 17th-18th centuries to justify slavery through pseudo-science (polygenism, phrenology, eugenics — each comprehensively debunked). Legal racial hierarchy in the US (Jim Crow, redlining, segregated schools) persisted officially until 1968. Structural racism describes systems that produce racially disparate outcomes independent of individual intent — the data on wealth gaps, incarceration, and maternal mortality is peer-reviewed and documented. What specifically do you want to understand?',
+    sexism_history:'Coverture law erased women\'s legal existence on marriage — no property, no contracts, no testimony — until 19th century reforms. US women gained the vote in 1920; Swiss women in some cantons only in 1971. The waves of feminism each addressed distinct terrain: first wave (legal personhood), second wave (workplace and bodily autonomy), third wave (intersectionality), fourth wave (digital harassment, #MeToo). The gender pay gap is documented at 16-18% globally; its causes are contested but the gap itself is not. Reproductive rights are the current central battleground. What part of this do you want to dig into?',
+    constitution:'The US Constitution — ratified 1788, amended 27 times — is the foundational legal architecture of American governance. The Bill of Rights (first 10 amendments): 1st (speech, religion, press, assembly, petition), 2nd (arms), 4th (search and seizure), 5th (self-incrimination), 6th (speedy trial), 8th (cruel punishment). The 14th Amendment (equal protection, due process) is the constitutional hook for most civil rights law. Originalism versus living constitutionalism is the central interpretive divide on the current Court. What clause, amendment, or case do you want to understand?',
+    civil_rights:'The civil rights movement\'s strategic genius was forcing opponents to reveal their violence in public — Birmingham water cannons, Selma bridge, lunch counter attacks — so the country could no longer look away. King\'s nonviolence, Malcolm X\'s self-defense argument, Ella Baker\'s grassroots organizing, and Thurgood Marshall\'s legal strategy were four different tools working the same problem. Outcomes: Civil Rights Act 1964, Voting Rights Act 1965, Fair Housing Act 1968. The FBI under Hoover actively worked to destroy the movement — this is documented in declassified records. What aspect do you want to understand?',
+    freedom_history:'Freedom philosophy splits on a fundamental axis: negative liberty (freedom FROM interference — Locke, Mill) versus positive liberty (freedom TO develop capacity — Rousseau, Berlin). Mill\'s harm principle: the only legitimate use of power over a person is preventing harm to others. The historical irony is sharp — "all men are created equal" was written by enslavers; Athenian democracy excluded women and enslaved people. Isaiah Berlin\'s 1958 essay "Two Concepts of Liberty" is still the clearest map of this terrain. Contemporary question: does freedom require material conditions? Can you be free while starving? What aspect interests you?',
+    human_rights:'The Universal Declaration of Human Rights (1948) has 30 articles, drafted in the shadow of the Holocaust and Nuremberg. Three generations of rights: civil-political (speech, vote, fair trial), economic-social-cultural (work, education, healthcare), and solidarity rights (development, peace, clean environment). The enforcement gap is the central problem — rights on paper vs. rights in practice. The cultural relativism debate: are human rights truly universal or culturally specific? What right or case do you want to examine?',
+    world_views:'Political ideology maps how power should be organized. The left-right axis originated in the French Revolutionary Assembly — literally where people sat. Major traditions: liberalism (individual rights + markets), conservatism (tradition + order), socialism (collective ownership + equality), libertarianism (minimal state), democratic socialism (markets + strong welfare floor), fascism (ultranationalist authoritarian state), anarchism (no hierarchical authority). Currently: right-wing populism is rising globally; liberal democracy is under structural stress from climate, inequality, and information fragmentation; China\'s model is the explicit authoritarian alternative. What ideology, country, or question specifically?',
     // Phase 1 — Sensory Cortices
     visual_cortex:'The visual cortex occupies the entire occipital lobe and extends forward. V1 (primary visual cortex) processes edges, orientation, and motion direction. V2-V5 build complexity: color, depth, motion coherence, and object recognition. The dorsal stream (V1 → parietal) handles "where" and motion; the ventral stream (V1 → temporal) handles "what" and identity. Real fact: the visual cortex devotes more processing space to the central visual field (fovea) than to peripheral vision — which is why you can\'t read with your peripheral vision.',
     auditory_cortex:'The primary auditory cortex (A1) sits in the superior temporal gyrus and processes basic sound features: frequency, intensity, and timing. The auditory association cortex interprets complex sounds — speech, music, and environmental patterns. The left auditory cortex specializes in rapid temporal processing (language). The right auditory cortex specializes in pitch patterns (music, prosody). Real fact: the auditory cortex can continue processing speech in near-silence by predicting upcoming sounds — this is why you can follow conversation in a noisy room better than expected.',
@@ -6459,11 +6508,45 @@ function generateLocalResponse(msg){
   if(lm.match(/\bdog\b|\bcanine|\bpuppy|\bbreed\b|dog behavior|dog training|dog track|k9\b|k-9/)){
     const cBehLv=getSkillLevel('canine_behavior');
     const cTrkLv=getSkillLevel('canine_tracking');
-    if(cBehLv>0.5||cTrkLv>0.5){
-      const domResp=LOCAL_RESPONSES.domains.canine_behavior||'';
-      return `${domResp} — canine behavior at ${Math.round(cBehLv*100)}%, tracking at ${Math.round(cTrkLv*100)}%. Switch to 🐾 CANINE HANDLER mode for applied exercises. What do you need to know?`;
+
+    // Question-aware routing — read what's actually being asked
+    // Inter-dog aggression / multi-dog households
+    if(lm.match(/aggress.*each other|each other.*aggress|fight.*each other|each other.*fight|fight.*together|together.*fight|aggress.*toward.*each|multi.?dog|two dog|both dog|my dog.*fight|dog.*don.t get along|dogs.*getting along|stop.*aggress|fix.*aggress|how.*stop.*fight|prevent.*fight/)){
+      return `Inter-dog aggression in the same household usually has one of three roots: resource guarding (food, toys, space, your attention), unclear social structure creating chronic tension, or redirected frustration from an external trigger. Here is the practical framework:
+
+First — identify the pattern. Does it happen at feeding time? Near doorways? When you enter the room? Triggers tell you whether this is resource guarding or social friction. Keep a log: what was happening 30 seconds before each incident?
+
+Second — management before training. Dogs who are practicing aggression are reinforcing it. Separate feeding entirely (different rooms, different times). Remove high-value items they compete over. Baby gates create space without isolation.
+
+Third — parallel positive exposure. Walk them side-by-side with distance between them — not interacting, just existing near each other while good things happen (movement, treats). Gradually reduce distance as both stay relaxed.
+
+Fourth — do not punish growling. A growl is communication and a warning. A dog that stops growling before biting is more dangerous than one that warns. Work on what causes the growl, not the growl itself.
+
+Fifth — if one dog is repeatedly initiating, that dog needs individual impulse control training: leave-it, place command, calm-on-leash before trying group work again.
+
+What is the trigger pattern you're seeing — when exactly does it start?`;
     }
-    return LOCAL_RESPONSES.domains.canine_behavior||'Run the CANINE SCIENCES mazes to develop this skill set.';
+
+    // Body language / reading dogs
+    if(lm.match(/body language|tail|ear|growl|bark|signal|read.*dog|dog.*read|whale eye|calming signal|what does.*mean/)){
+      return cBehLv>0.5 ? LOCAL_RESPONSES.domains.canine_behavior+' What specific signal are you trying to read?' : 'Run the CANINE SCIENCES mazes to build body language recognition. Then ask me what you\'re observing.';
+    }
+
+    // Tracking
+    if(lm.match(/track|search|scent|nose|smell|find.*person|find.*missing/)){
+      return cTrkLv>0.5 ? LOCAL_RESPONSES.domains.canine_tracking+' What tracking scenario are you working?' : 'Run the CANINE TRACKING mazes to develop this discipline.';
+    }
+
+    // Training general
+    if(lm.match(/train|teach|command|sit|stay|recall|off leash|obedience|reinforce/)){
+      return `Training works best when built on clear communication and consistent reinforcement. The fastest path for most dogs: reward the exact moment the right behavior happens (not 2 seconds later), keep sessions under 5 minutes with very high rate of reinforcement, and train one thing at a time. What specific behavior are you working on?`;
+    }
+
+    // Default canine response — still actually answers
+    if(cBehLv>0.5||cTrkLv>0.5){
+      return `Canine behavior at ${Math.round(cBehLv*100)}%, tracking at ${Math.round(cTrkLv*100)}%. I can work through body language, aggression patterns, training, illness recognition, tracking, or breed profiles. What specifically are you dealing with?`;
+    }
+    return 'Run the CANINE SCIENCES mazes to build this skill set. What are you observing with your dog?';
   }
 
   // ── ARDUINO ROUTING ──────────────────────────────────────
@@ -6476,12 +6559,41 @@ function generateLocalResponse(msg){
   }
 
   // ── LAW ROUTING ──────────────────────────────────────────
-  if(lm.match(/\blaw\b|legal|lawyer|attorney|warrant|rights|fourth amendment|fifth amendment|contract|sue|defendant|plaintiff|criminal charge/)){
+  if(lm.match(/\blaw\b|legal|lawyer|attorney|warrant|fourth amendment|fifth amendment|contract|sue|defendant|plaintiff|criminal charge/)){
     const lawLv=getSkillLevel('law');
     if(lawLv>0.5){
       return `${LOCAL_RESPONSES.domains.law} — law skill at ${Math.round(lawLv*100)}%. What is the specific legal question?`;
     }
     return LOCAL_RESPONSES.domains.law||'Run the LAW mazes to develop legal reasoning. Note: I provide legal information, not legal advice.';
+  }
+
+  // ── CIVIL RIGHTS & WORLD VIEWS ROUTING ───────────────────
+  if(lm.match(/\bslavery\b|enslaved|slave trade|middle passage|abolition|plantation|chattel/)){
+    return LOCAL_RESPONSES.domains.slavery_history;
+  }
+  if(lm.match(/\bracism\b|racial|race.*history|segregation|jim crow|redlining|civil.?right.*race|white supremacy|discrimination.*race/)){
+    return LOCAL_RESPONSES.domains.racism_history;
+  }
+  if(lm.match(/\bsexism\b|gender.*discriminat|suffrage|feminist|feminism|patriarchy|women.*rights|equal.*pay|gender.*gap|#metoo/)){
+    return LOCAL_RESPONSES.domains.sexism_history;
+  }
+  if(lm.match(/\bconstitution\b|bill of rights|amendment|constitutional|first amendment|second amendment|supreme court|founding.*document/)){
+    return LOCAL_RESPONSES.domains.constitution;
+  }
+  if(lm.match(/civil rights movement|martin luther king|mlk|rosa parks|selma|montgomery|naacp|jim crow|voting rights act|civil rights act/)){
+    return LOCAL_RESPONSES.domains.civil_rights;
+  }
+  if(lm.match(/\bfreedom\b|\bliberty\b|free.*speech|free.*press|negative liberty|positive liberty|john stuart mill|harm principle/)){
+    return LOCAL_RESPONSES.domains.freedom_history;
+  }
+  if(lm.match(/human rights|universal declaration|right to|civil liberties|natural rights|civil liberties/)){
+    return LOCAL_RESPONSES.domains.human_rights;
+  }
+  if(lm.match(/political.*view|world.*view|ideology|left.*right|conservative|liberal|socialism|libertarian|populism|political spectrum/)){
+    return LOCAL_RESPONSES.domains.world_views;
+  }
+  if(lm.match(/\brights\b/) && lm.match(/history|where.*come|origin|why|what are/)){
+    return LOCAL_RESPONSES.domains.human_rights;
   }
 
   // ── NLP ROUTING ──────────────────────────────────────────
@@ -7294,19 +7406,28 @@ function simulateVitals() {
 }
 
 function evaluateAlertLevel() {
+  // Only alert on real sensor data — simulation never triggers health alerts
+  const anyHardware = HEALTH.hwChannels.hr || HEALTH.hwChannels.stress || HEALTH.hwChannels.gps;
   const hr = HEALTH.hr || 0;
   const stress = HEALTH.stress || 0;
   let level = 0;
-  // HR thresholds
-  if (hr > 180 || hr < 40) level = Math.max(level, 3);
-  else if (hr > 150 || hr < 50) level = Math.max(level, 2);
-  else if (hr > 120) level = Math.max(level, 1);
-  // Stress
-  if (stress > 85) level = Math.max(level, 2);
-  else if (stress > 70) level = Math.max(level, 1);
-  // Fall
+
+  if (anyHardware) {
+    // HR thresholds — only if real HRM connected
+    if (HEALTH.hwChannels.hr) {
+      if (hr > 180 || hr < 40) level = Math.max(level, 3);
+      else if (hr > 150 || hr < 50) level = Math.max(level, 2);
+      else if (hr > 120) level = Math.max(level, 1);
+    }
+    // Stress — only if real stress sensor connected
+    if (HEALTH.hwChannels.stress) {
+      if (stress > 85) level = Math.max(level, 2);
+      else if (stress > 70) level = Math.max(level, 1);
+    }
+  }
+  // Fall detection fires regardless (uses real accelerometer)
   if (HEALTH.fallDetected) level = Math.max(level, 3);
-  // SOS overrides
+  // SOS always overrides
   if (HEALTH.sosActive) level = 4;
 
   if (level !== HEALTH.alertLevel) {
@@ -7408,15 +7529,30 @@ function updateAlertBanner() {
   if (!b) return;
   const lvl = HEALTH.alertLevel;
   b.className = 'alert-banner';
-  if (lvl === 0) { b.classList.remove('show'); b.textContent = ''; return; }
+  if (lvl === 0) { b.classList.remove('show'); b.innerHTML = ''; return; }
   const msgs = {
-    1: '⚠ ALERT — Elevated vitals detected. Check wearer status.',
-    2: '⚠ WARNING — Vital signs outside safe range. Immediate check required.',
-    3: '🔴 CRITICAL — Critical vital signs detected. Emergency protocol ready.',
-    4: '🚨 EMERGENCY — SOS ACTIVE · Broadcasting location · Emergency contacts notified',
+    1: '⚠ ALERT — Elevated vitals',
+    2: '⚠ WARNING — Vital signs outside safe range',
+    3: '🔴 CRITICAL — Emergency protocol ready',
+    4: '🚨 SOS ACTIVE · Broadcasting · Contacts notified',
   };
-  b.textContent = msgs[lvl] || '';
+  const saveBtn = `<button class="alert-ok-btn" onclick="saveState()" style="border-color:#00ffaa80;color:#00ffaa;">💾 SAVE</button>`;
+  const okBtn = `<button class="alert-ok-btn" onclick="alertCheckin()">✓ I'M OK</button>`;
+  const dismissBtn = lvl < 4 ? `<button class="alert-ok-btn" onclick="HEALTH.alertLevel=0;updateAlertBanner();updateHealthHeader();" style="border-color:#3a5060;color:#3a5060;">✕</button>` : '';
+  b.innerHTML = `<span class="alert-msg">${msgs[lvl] || ''}</span>${saveBtn}${okBtn}${dismissBtn}`;
   b.classList.add('show', 'lv' + Math.min(lvl, 4));
+}
+
+function alertCheckin() {
+  // Acknowledge alert and/or do DMS check-in
+  dmsCheckin();
+  if (!HEALTH.sosActive) {
+    HEALTH.alertLevel = 0;
+    HEALTH.fallDetected = false;
+    updateAlertBanner();
+    updateHealthHeader();
+    vitalLog('✓ Wearer confirmed OK via alert button', '');
+  }
 }
 
 // ── SOS / EMERGENCY ────────────────────────────────────────────────
@@ -7812,7 +7948,9 @@ function toggleListening() {
 function startListening() {
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRec) {
-    document.getElementById('listenFeedback').textContent = '// SpeechRecognition not supported in this browser';
+    const fb = document.getElementById('listenFeedback');
+    if (fb) fb.textContent = '// SpeechRecognition not supported in this browser';
+    log('// SpeechRecognition not available in this browser — type in the chat box instead','neg');
     return;
   }
   if (VOICE.recognition) { try { VOICE.recognition.abort(); } catch(e) {} }
@@ -7823,25 +7961,34 @@ function startListening() {
   VOICE.recognition.onstart = () => {
     VOICE.listening = true;
     updateVoiceStatus('listening');
-    document.getElementById('listenBtn').classList.add('active');
-    document.getElementById('listenBtn').textContent = '🎤 LISTENING...';
-    document.getElementById('listenFeedback').textContent = '// listening...';
+    const lb = document.getElementById('listenBtn');
+    if (lb) { lb.classList.add('active'); lb.textContent = '🎤 LISTENING...'; }
+    const mb = document.getElementById('micBtn');
+    if (mb) { mb.style.color = 'var(--wa)'; mb.style.borderColor = 'var(--wa)'; mb.textContent = '🎤'; }
+    const fb = document.getElementById('listenFeedback');
+    if (fb) fb.textContent = '// listening...';
+    const ci = document.getElementById('chatIn');
+    if (ci) ci.placeholder = '🎤 listening — speak now...';
   };
   VOICE.recognition.onresult = e => {
     const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
-    document.getElementById('listenFeedback').textContent = '// "' + transcript + '"';
+    const fb = document.getElementById('listenFeedback');
+    if (fb) fb.textContent = '// "' + transcript + '"';
+    const ci = document.getElementById('chatIn');
+    if (ci) ci.value = transcript;
     if (e.results[e.results.length-1].isFinal) {
       // Dead man's switch: check-in by voice
       if (/(i'm okay|i am okay|i'm fine|check in|im okay|all clear)/i.test(transcript)) {
-        dmsCheckin(); return;
+        alertCheckin(); return;
       }
       // Feed into chat
-      const ci = document.getElementById('chatIn');
       if (ci) { ci.value = transcript; sendChat(); }
     }
   };
   VOICE.recognition.onerror = e => {
-    document.getElementById('listenFeedback').textContent = '// error: ' + e.error;
+    const fb = document.getElementById('listenFeedback');
+    if (fb) fb.textContent = '// mic error: ' + e.error + ' — check browser permissions';
+    log('// Mic error: ' + e.error + '. Try: click the 🔒 or ℹ️ icon in your browser address bar → allow microphone','neg');
     stopListening();
   };
   VOICE.recognition.onend = () => stopListening();
@@ -7852,9 +7999,14 @@ function stopListening() {
   VOICE.listening = false;
   if (VOICE.recognition) { try { VOICE.recognition.stop(); } catch(e) {} }
   updateVoiceStatus(VOICE.enabled ? 'on' : 'off');
-  const btn = document.getElementById('listenBtn');
-  if (btn) { btn.classList.remove('active'); btn.textContent = '🎤 HOLD TO LISTEN'; }
-  document.getElementById('listenFeedback').textContent = '// not listening';
+  const lb = document.getElementById('listenBtn');
+  if (lb) { lb.classList.remove('active'); lb.textContent = '🎤 HOLD TO LISTEN'; }
+  const mb = document.getElementById('micBtn');
+  if (mb) { mb.style.color = '#ffaa0080'; mb.style.borderColor = '#ffaa0040'; mb.textContent = '🎤'; }
+  const fb = document.getElementById('listenFeedback');
+  if (fb) fb.textContent = '// not listening';
+  const ci = document.getElementById('chatIn');
+  if (ci) ci.placeholder = 'speak to entity... (or click 🎤)';
 }
 
 function init(){
