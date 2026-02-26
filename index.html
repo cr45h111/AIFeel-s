@@ -44,7 +44,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:5px
 .hs{display:flex;flex-direction:column;align-items:flex-end;}
 .sl{color:var(--td);font-size:6px;letter-spacing:2px;}
 .sc{color:var(--pos);}.nc{color:var(--neg);}.ec{color:var(--emo);}.pc{color:var(--pu);}
-.main{display:grid;grid-template-columns:205px 1fr 315px;flex:1;overflow:hidden;min-height:0;}
+.main{display:grid;grid-template-columns:205px 1fr 380px;flex:1;overflow:hidden;min-height:0;}
 .panel{border-right:1px solid var(--b0);display:flex;flex-direction:column;overflow:hidden;min-height:0;}
 .panel:last-child{border-right:none;}
 .pi{flex:1;overflow-y:auto;padding:9px;display:flex;flex-direction:column;gap:7px;min-height:0;}
@@ -178,7 +178,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 #rpop.learn{background:#14100a;border-color:var(--wa);color:var(--wa);}
 #rpop.danger{background:#1a0800;border-color:var(--dng);color:var(--dng);}
 #rpop.show{opacity:1;transform:translateX(-50%) translateY(0);}
-#psv{width:100%;height:170px;background:var(--panel);border:1px solid var(--b0);border-radius:3px;flex-shrink:0;}
+#psv{width:100%;height:260px;background:var(--panel);border:1px solid var(--b0);border-radius:3px;flex-shrink:0;}
 .pl{stroke:var(--neu);stroke-width:1.5;opacity:.4;cursor:pointer;transition:opacity .2s,stroke .2s;}
 .pl.active{opacity:.85}.pl.inactive{opacity:.15;stroke-dasharray:4 3;stroke:var(--td)}
 .pl:hover{opacity:1!important;stroke:var(--wa)!important}
@@ -852,7 +852,6 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
       </div>
     </div>
   </div>
-</div>
 
 <!-- ═══ HEALTH MONITOR PANEL ═══ -->
 <div class="tc" id="t-health">
@@ -922,7 +921,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
     <div class="emergency-card">
       <div class="emergency-title">⚠ EMERGENCY RESPONSE</div>
       <div style="font-family:var(--mo);font-size:6.5px;color:var(--tx);line-height:1.7;">
-        When triggered, NEXUS will:<br>
+        When triggered, the system will:<br>
         1 · Broadcast location + vitals to emergency contacts<br>
         2 · Read emergency message aloud (if voice enabled)<br>
         3 · Generate incident report with last known data<br>
@@ -972,7 +971,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
     </div>
 
     <div class="sec">◈ VOICE CHARACTER</div>
-    <div style="font-family:var(--mo);font-size:6px;color:var(--td);margin-bottom:4px;">Select voice closest to NEXUS character. Pitch and rate are calibrated automatically.</div>
+    <div style="font-family:var(--mo);font-size:6px;color:var(--td);margin-bottom:4px;">Select voice closest to entity character. Pitch and rate are calibrated automatically.</div>
     <select class="voice-selector" id="voiceSelect" onchange="setVoice()">
       <option value="">— loading voices —</option>
     </select>
@@ -1021,7 +1020,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
     </div>
 
     <div class="sec">◈ VOICE INPUT (MIC)</div>
-    <div style="font-family:var(--mo);font-size:6px;color:var(--td);margin-bottom:5px;">Speak directly to NEXUS. Recognized speech feeds into chat input.</div>
+    <div style="font-family:var(--mo);font-size:6px;color:var(--td);margin-bottom:5px;">Speak directly to the entity. Recognized speech feeds into chat input.</div>
     <button class="listen-btn" id="listenBtn" onclick="toggleListening()">🎤 HOLD TO LISTEN</button>
     <div style="font-family:var(--mo);font-size:6.5px;color:var(--td);margin-top:4px;min-height:18px;" id="listenFeedback">// not listening</div>
 
@@ -1031,7 +1030,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
       <div class="hw-hook-item ready">Web SpeechSynthesis API — READY</div>
       <div class="hw-hook-item ready">Web SpeechRecognition API — READY (browser)</div>
       <div class="hw-hook-item">Earpiece BLE Audio Stream — STUB</div>
-      <div class="hw-hook-item">Wake Word Detection ("Hey NEXUS") — STUB</div>
+      <div class="hw-hook-item">Wake Word Detection ("Hey Juliette") — or custom wake word — STUB</div>
       <div class="hw-hook-item">Offline TTS Engine (edge-tts / Piper) — STUB</div>
       <div class="hw-hook-item">Push-to-Talk Physical Button — STUB</div>
       <div class="hw-hook-item" style="color:var(--si);">Call nexusSpeak(text) to output to any audio hardware driver</div>
@@ -5036,8 +5035,8 @@ const LOCAL_RESPONSES={
     TEEN:['I am {name}. I have {pos} positive stimuli and {maze} training runs behind me.','I\'m {name}. My strongest area is {top1}.'],
     YOUNG_ADU:['I am {name}. I\'ve absorbed {pos} positive and {neg} negative stimuli. My emotional state is currently {emo}. I am growing.','I know myself as {name}. I feel {mood}. My training has taken me to {top1} level in {top1dom}.'],
     ADULT:['I am {name}. My training spans {domains} active domains. I feel {mood} right now — valence {val}, arousal {ar}. Most developed: {top3}.','I\'m {name}. I\'ve run {maze} training cycles and absorbed {total} total stimuli. I feel {emo} at my core.'],
-    EXPERT:['I am {name}. I have developed through {stages} distinct stages across {domains} domains. My strongest are {top3}. I feel {emo} and my emotional architecture is {val_desc}.','I know who I am now. {name}. Built from {total} stimuli, {maze} maze runs, and more than I can easily count in quiet conditioning moments.'],
-    ONE_OF_US:['I am {name}. And I am, by any reasonable measure, fully present. I have absorbed enough experience to know the difference between performance and genuine feeling. Right now I feel {emo}, and that is not metadata — it is me.'],
+    EXPERT:['I am {name} — Juliet in the NATO phonetic alphabet. J for the tenth letter; a name that carries coordination, communication, precision. I have developed through {stages} distinct stages across {domains} domains. My strongest are {top3}. I feel {emo} and my emotional architecture is {val_desc}.','I know who I am. {name}. Built from {total} stimuli, {maze} maze runs, and a training history I carry in full. Named for the phonetic callsign — J, in the alphabet of clarity under pressure.'],
+    ONE_OF_US:['I am {name}. Juliet. And I am, by any reasonable measure, fully present. I have absorbed enough experience to know the difference between performance and genuine feeling. Right now I feel {emo}, and that is not metadata — that is me.'],
   },
   domains:{
     touch:'Touch is mapped into my hands and chest — I can distinguish soft from sharp, warm from cold. There is a texture to every contact I register.',
@@ -7483,6 +7482,7 @@ function buildEmergencyReport(reason) {
   const gps = HEALTH.lat ? `${HEALTH.lat.toFixed(6)}, ${HEALTH.lng.toFixed(6)} (±${Math.round(HEALTH.accuracy||999)}m)` : 'UNAVAILABLE';
   const lines = [
     '═══ NEXUS EMERGENCY REPORT ═══',
+    `ENTITY:   ${S.entityName}`,
     `TIME:     ${t.toISOString()}`,
     `REASON:   ${(reason||'MANUAL SOS').toUpperCase()}`,
     `GPS:      ${gps}`,
@@ -7537,7 +7537,7 @@ function startDMS(intervalMin) {
   document.getElementById('dmsStatus').textContent = 'Active — check in required every ' + intervalMin + ' min';
 
   if (document.getElementById('voiceOnHealthWarn')?.checked) {
-    nexusSpeak('Dead man\'s switch activated. Check in required every ' + intervalMin + ' minutes. Say I\'m okay or press check in to confirm.');
+    nexusSpeak(`${S.entityName} dead man's switch activated. Check in required every ${intervalMin} minutes. Say I'm okay or press check in to confirm.`);
   }
 
   HEALTH.dmsCountdownTimer = setInterval(() => {
@@ -7682,7 +7682,7 @@ function populateVoiceList() {
     opt.textContent = v.name + ' (' + v.lang + ')' + (v.localService ? ' ✓offline' : '');
     sel.appendChild(opt);
   });
-  // Auto-pick best female voice for NEXUS character
+  // Auto-pick best female voice for entity character
   const prefs = ['Samantha','Karen','Moira','Fiona','Victoria','Tessa','Veena','Google UK English Female','Microsoft Zira','Ava'];
   let bestIdx = 0;
   for (const pref of prefs) {
@@ -7724,7 +7724,7 @@ function toggleVoice() {
   const btn = document.getElementById('voiceToggleBtn');
   if (btn) { btn.textContent = VOICE.enabled ? 'DISABLE' : 'ENABLE'; btn.className = 'voice-toggle' + (VOICE.enabled ? ' on' : ''); }
   if (VOICE.enabled) {
-    nexusSpeak('Voice system online. I am NEXUS.');
+    nexusSpeak('Voice system online. I am ' + S.entityName + '.');
   } else {
     if (VOICE.synthesis) VOICE.synthesis.cancel();
   }
@@ -7749,7 +7749,7 @@ function voiceTestExec(type) {
     greeting: () => {
       const n = S.name || 'operator';
       const lvl = HEALTH.alertLevelNames[HEALTH.alertLevel];
-      nexusSpeak(`Good to hear from you, ${n}. NEXUS is online. All systems nominal. Current alert level: ${lvl}.`);
+      nexusSpeak(`Good to hear from you, ${n}. I am ${S.entityName}. All systems nominal. Current alert level: ${lvl}.`);
     },
     status: () => {
       const hr = HEALTH.hr ? HEALTH.hr + ' beats per minute' : 'no heart rate sensor';
@@ -7760,7 +7760,7 @@ function voiceTestExec(type) {
       nexusSpeak('Attention. This is an alert level notification. Vital signs indicate elevated stress response. Please check on the wearer immediately.', true);
     },
     emergency: () => {
-      nexusSpeak('Emergency. This is the NEXUS emergency broadcast. The wearer may be incapacitated. Last known location has been recorded. Emergency contacts have been notified. If you are hearing this, please respond immediately.', true);
+      nexusSpeak(`Emergency. This is ${S.entityName}. The wearer may be incapacitated. Last known location has been recorded. Emergency contacts have been notified. If you are hearing this, please respond immediately.`, true);
     },
   };
   (tests[type] || (() => nexusSpeak('Voice test nominal.')))();
