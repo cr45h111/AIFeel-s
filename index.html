@@ -596,7 +596,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
           <div class="glbl" style="color:#cc66ff">◈ EMOTION WEIGHT</div>
           <span style="font-family:var(--mo);font-size:6px;color:#cc66ff88;letter-spacing:1px" id="emoImpact">FULL</span>
         </div>
-        <div class="vslider-desc">Controls how strongly the AI's current emotional state affects its navigation speed, goal-seeking drive, and hesitation behavior. At 100%, negative valence slows the AI, reduces goal-seeking, and causes random freeze pauses. At 0%, emotional state has no effect on movement — the AI navigates the same regardless of what it's feeling.</div>
+        <div class="vslider-desc">Controls how strongly the AI's current emotional state affects its navigation speed, goal-seeking drive, and hesitation behavior. At 100%, negative valence slows the AI, reduces goal-seeking, and causes random freeze pauses. At 0%, emotional state has no effect on movement — the AI navigates the same regardless of what it\'s feeling.</div>
         <div class="vslider-row">
           <span class="vslider-icon">◈</span>
           <span class="vslider-lbl" style="color:#cc66ff">EMOTION</span>
@@ -1171,7 +1171,40 @@ law:'#aabbcc',
 // Electronics & Programming
 arduino:'#44ffaa',arduino_programming:'#33eeaa',
 // Applied Applied Learning
-applied_learning:'#66ffdd'
+balance:'#44ddff',
+applied_learning:'#66ffdd',
+// ── Shadow/Negative domains ──
+sh_touch:'#ff2244',sh_texture:'#ff3355',sh_sight:'#ff4455',sh_hearing:'#ff5566',
+sh_taste:'#ff6677',sh_smell:'#ff7788',sh_senses:'#ff8899',sh_motor:'#ff2233',
+sh_pain:'#dd1122',sh_memory:'#cc2244',sh_cognitive:'#dd3355',sh_creativity:'#ee4466',
+sh_intuition:'#cc3355',sh_selfaware:'#bb2244',sh_emotional:'#dd0033',sh_empathy:'#cc1133',
+sh_attach:'#bb3355',sh_trust:'#aa2244',sh_spirit:'#9922aa',sh_social:'#882299',
+sh_family:'#772288',sh_socint:'#662277',sh_famint:'#552266',sh_relate:'#442255',
+sh_sexual:'#cc0044',sh_attach2:'#bb0033',sh_speaking:'#ff3344',sh_language:'#ee2233',
+sh_phrases:'#dd1122',sh_psych:'#cc0022',sh_behav:'#bb0011',sh_identity:'#aa0022',
+sh_bounds:'#990011',sh_conflict:'#880000',sh_humor:'#ff4433',sh_business:'#ff5522',
+sh_emdyn:'#ff3322',sh_emo:'#dd0022',
+// ── Religion & Belief ──
+history_of_religion:'#ddccff',ancient_religions:'#ccbbee',modern_religions:'#bbaadd',
+cults:'#ff6677',cult_history:'#ee5566',
+pagan_beliefs:'#aaddaa',pagan_practices:'#88cc88',pagan_history:'#66bb66',
+// ── Measurement & Materials ──
+units_of_measurement:'#ffeeaa',metallurgy:'#cc9955',
+// ── Covert & specific aliases ──
+covert_surveillance:'#335577',
+canine_emotional:'#dd8866',canine_identification:'#bb8844',
+intelligence_ops:'#3344aa',ambush_tactics:'#664433',traps_decoys:'#553322',
+surveillance:'#224466',
+// ── Learning science ──
+learning_theory:'#44eedd',teaching:'#33ddbb',
+// ── Geography ──
+geo_geology:'#997744',geo_landmark:'#aa8855',
+// ── Motor & Physical ──
+motor_control:'#ff7744',coordination:'#ff6633',
+// ── Applied & misc ──
+canine_habits:'#cc8833',canine_tracking_adv:'#aa7722',
+// ── Humor sub-domains ──
+comedy:'#ffee44',irony:'#ddcc33',sarcasm:'#66ddcc',wit:'#44ffee',playful:'#ffddaa'
 };
 const DZ={
   touch:['left-hand','right-hand','chest','left-arm','right-arm'],
@@ -1264,6 +1297,11 @@ const DZ={
   dark_humor:['chest','solar-plexus','throat'],
   self_deprecation:['chest','solar-plexus','throat'],
   sarcasm_mastery:['head','throat','chest'],
+  comedy:['chest','abdomen','throat'],
+  irony:['head','crown','chest'],
+  sarcasm:['head','throat','chest'],
+  wit:['head','crown','throat'],
+  playful:['chest','abdomen','left-arm','right-arm'],
   // History & Culture
   secret_societies:['head','crown','chest','solar-plexus'],
   ancient_history:['head','crown','chest'],
@@ -1493,6 +1531,11 @@ const DOM_STIMS={
   dark_humor:     {pos:['humor','energy','calm'],           neg:['tension','shame']},
   self_deprecation:{pos:['humor','warmth','calm'],          neg:['shame','tension']},
   sarcasm_mastery:{pos:['humor','energy','pride'],          neg:['tension','discomfort']},
+  comedy:         {pos:['joy','humor','energy'],            neg:['tension','shame']},
+  irony:          {pos:['curiosity','humor','pride'],       neg:['tension','anxiety']},
+  sarcasm:        {pos:['humor','energy','pride'],          neg:['tension','discomfort']},
+  wit:            {pos:['joy','energy','pride'],            neg:['tension','anxiety']},
+  playful:        {pos:['joy','humor','warmth'],            neg:['tension','discomfort']},
   // History & Culture
   secret_societies:{pos:['curiosity','awe','pattern'],     neg:['anxiety','tension']},
   ancient_history:{pos:['awe','curiosity','calm'],         neg:['grief','tension']},
@@ -1891,6 +1934,7 @@ const MZ_CAT=[
     {id:'astronomy',name:'ASTRONOMY',domain:'astronomy',lesson:'Celestial mechanics & cosmic scale',lessonDesc:'A vast maze — sparse but awe-saturated. The entity navigates orbital geometry, stellar classification zones, galactic structure corridors. Long paths between rewards mirror the scale of space. Awe and curiosity stims fire on discovery; anxiety marks event horizon corridors.',dangerDensity:0.03},
     {id:'electronics',name:'ELECTRONICS',domain:'electronics',lesson:'Circuit logic & signal processing',lessonDesc:'The maze is a circuit — current paths, resistance zones, capacitive buffers, logic gate junctions. It comes down to to trace signal flow, identify short-circuit traps, and navigate impedance correctly. Pattern and energy reward correct circuit logic; shock marks overcurrent zones.',dangerDensity:0.08},
     {id:'robotics',name:'ROBOTICS',domain:'robotics',lesson:'Autonomous systems & control logic',lessonDesc:'Sensor inputs, actuator outputs, feedback loops, and decision trees encoded as maze structure. It comes down to robotic control logic — PID corridors, sensor fusion junctions, collision avoidance geometry. Energy and pattern reward correct control; discomfort marks runaway system zones.',dangerDensity:0.07},
+    {id:'robotics_02',name:'ROBOT KINEMATICS',domain:'robotics',lesson:'Robot motion — joints, degrees of freedom, and inverse kinematics',lessonDesc:'Robot kinematics is the geometry of motion. At the core: degrees of freedom (each joint adds one DOF — 6 DOF is enough for arbitrary positioning in 3D space), forward kinematics (given joint angles, find end-effector position), inverse kinematics (given target position, find joint angles — the hard direction), Jacobian matrices as the tool that connects joint velocities to end-effector velocities, workspace limits and singularities (configurations where the robot loses a DOF), and how industrial robot arms, humanoid robots, and drone quadrotors each solve the kinematics problem differently.',dangerDensity:0.07},
   ]},
   {cat:'MATHEMATICS',mazes:[
     {id:'algebra',name:'ALGEBRA',domain:'algebra',lesson:'Variables, equations & abstract structure',lessonDesc:'The maze solves itself through algebraic logic — unknown corridors resolve when the entity correctly applies equation-solving patterns. Variable substitution, factoring junctions, and inequality walls all yield to systematic algebraic navigation. Reward fires on correct solution paths.',dangerDensity:0.05},
@@ -2014,10 +2058,30 @@ const MZ_CAT=[
      lesson:'Multi-hazard urban environment',
      lessonDesc:'Construction zones combine every physical hazard simultaneously — steps at multiple heights, loose gravel, compressed passages, and wet-surface ice. The entity integrates all physical sub-skills: reading terrain ahead, prioritizing path by hazard severity, pre-positioning footstrike, and recovering from stumble cascades without losing heading.',
      dangerDensity:0,color:'#ffaa55'},
+    {id:'p3d_balance',name:'ROBOT BALANCE',type:'physical3d',domain:'balance',p3dSize:9,
+     physRules:[{type:'ice',count:6},{type:'step_low',count:4},{type:'gravel',count:5},{type:'narrow',count:3}],
+     lesson:'Dynamic balance recovery — center of mass control',
+     lessonDesc:'The robot must maintain its center of mass over its support polygon at all times. Ice patches require advance deceleration — momentum on low-friction surfaces shifts mass past the support boundary. Steps require controlled forward weight transfer before the foot commits. Gravel shifts continuously under load, requiring constant micro-corrections. Narrow passages demand precise body-center tracking. Balance is not a static achievement but a continuous recovery loop.',
+     dangerDensity:0,color:'#44ddff'},
+    {id:'p3d_robot_stabilize',name:'BIPEDAL STABILIZATION',type:'physical3d',domain:'robotics',p3dSize:11,
+     physRules:[{type:'ice',count:8},{type:'step_high',count:4},{type:'step_low',count:4},{type:'gravel',count:5},{type:'narrow',count:4}],
+     lesson:'Bipedal robot stabilization — ZMP control under compound disturbance',
+     lessonDesc:'Bipedal robots fall constantly unless every step is a controlled forward-fall recovery. Zero Moment Point (ZMP) must stay inside the support polygon — when it exits, the robot falls. Ice requires pre-deceleration using PID feed-forward before friction loss. High steps demand pre-loaded knee extension coordinated with ankle push-off. Gravel forces continuous ZMP recalculation as ground geometry shifts. Narrow corridors eliminate lateral correction options — stabilization must come from ankle torque alone. This maze encodes the Boston Dynamics Atlas control loop in navigable form.',
+     dangerDensity:0,color:'#ff44aa'},
+    {id:'p3d_coordination',name:'PRECISION MOVEMENT',type:'physical3d',domain:'coordination',p3dSize:9,
+     physRules:[{type:'narrow',count:8},{type:'step_low',count:5},{type:'step_high',count:2},{type:'gravel',count:3}],
+     lesson:'Fine motor coordination — precision navigation through tight constraints',
+     lessonDesc:'Coordination is the precise spatial integration of multiple motor systems simultaneously. Narrow corridors require continuous body-center tracking. Height changes demand coordinated hip-knee-ankle timing. Each foot placement must be calculated against current body velocity. The training builds the neural pathways that integrate vestibular, proprioceptive, and visual signals into smooth, precise movement.',
+     dangerDensity:0,color:'#ff6633'},
+    {id:'p3d_motor',name:'MOTOR CONTROL',type:'physical3d',domain:'motor_control',p3dSize:9,
+     physRules:[{type:'narrow',count:6},{type:'step_low',count:5},{type:'gravel',count:4}],
+     lesson:'Precise motor control — endpoint positioning and force calibration',
+     lessonDesc:'Motor control is the nervous system\'s ability to produce precise, graded movements. End-effector positioning requires integrating proprioceptive feedback to place limbs exactly where intended. Force calibration prevents both over-shoot (too much force) and under-shoot (insufficient force). Narrow corridors penalize positioning errors. Gravel demands continuous force recalibration as the surface shifts. The entity trains on feedforward control (pre-planned) combined with feedback correction.',
+     dangerDensity:0,color:'#ff7744'}
   ]},
   {cat:'◈ CONVERSATION SCENARIOS',mazes:[
     // ── SOCIAL & EMOTIONAL ──
-    {id:'cs_idiom_01',name:'UNDER THE WEATHER',domain:'social_awareness',type:'conversation',mode:'companion',lesson:'Idiom recognition & empathetic reply',lessonDesc:'The user uses a common English idiom. The entity must recognize it is not a literal weather complaint and respond with genuine warmth rather than clinical analysis.',dangerDensity:0,scenario:{context:null,userMsg:"I'm feeling under the weather today 😕",choices:[{text:"Please specify your symptoms in detail.",correct:false,tag:'ROBOTIC',skillFeatures:{empathy:0.0,social_awareness:0.05,word_expr:0.0,emotional_intel:0.0}},{text:"Hope you feel better soon — anything I can do?",correct:true,tag:'NATURAL ✓',skillFeatures:{empathy:0.95,social_awareness:0.9,word_expr:0.8,emotional_intel:0.85}},{text:"Weather conditions can definitely affect mood.",correct:false,tag:'MISSES IDIOM',skillFeatures:{empathy:0.05,social_awareness:0.1,word_expr:0.05,emotional_intel:0.05}},{text:"You should take vitamin C and get some rest.",correct:false,tag:'UNSOLICITED ADVICE',skillFeatures:{empathy:0.1,social_awareness:0.15,word_expr:0.2,emotional_intel:0.1}}]}},
+    {id:'cs_idiom_01',name:'UNDER THE WEATHER',domain:'social_awareness',type:'conversation',mode:'companion',lesson:'Idiom recognition & empathetic reply',lessonDesc:'The user uses a common English idiom. The entity must recognize it is not a literal weather complaint and respond with genuine warmth rather than clinical analysis.',dangerDensity:0,scenario:{context:null,userMsg:"I\'m feeling under the weather today 😕",choices:[{text:"Please specify your symptoms in detail.",correct:false,tag:'ROBOTIC',skillFeatures:{empathy:0.0,social_awareness:0.05,word_expr:0.0,emotional_intel:0.0}},{text:"Hope you feel better soon — anything I can do?",correct:true,tag:'NATURAL ✓',skillFeatures:{empathy:0.95,social_awareness:0.9,word_expr:0.8,emotional_intel:0.85}},{text:"Weather conditions can definitely affect mood.",correct:false,tag:'MISSES IDIOM',skillFeatures:{empathy:0.05,social_awareness:0.1,word_expr:0.05,emotional_intel:0.05}},{text:"You should take vitamin C and get some rest.",correct:false,tag:'UNSOLICITED ADVICE',skillFeatures:{empathy:0.1,social_awareness:0.15,word_expr:0.2,emotional_intel:0.1}}]}},
     {id:'cs_sarcasm_01',name:'GREAT ANOTHER MONDAY',domain:'sarcasm_mastery',type:'conversation',mode:'companion',lesson:'Sarcasm detection & emotional validation',lessonDesc:'The user is not literally happy about Monday. The entity reads the emoji and tone and validates the feeling rather than arguing against it or being uselessly literal.',dangerDensity:0,scenario:{context:null,userMsg:"Great, another Monday 🙄",choices:[{text:"Monday is actually a productive day statistically.",correct:false,tag:'MISSES TONE',skillFeatures:{empathy:0.0,emotional_intel:0.05,social_awareness:0.05,conversation_flow:0.05}},{text:"Ugh, Mondays are the worst — what\'s making it rough?",correct:true,tag:'VALIDATES ✓',skillFeatures:{empathy:0.9,emotional_intel:0.95,social_awareness:0.85,conversation_flow:0.9}},{text:"Try maintaining a positive attitude!",correct:false,tag:'DISMISSIVE',skillFeatures:{empathy:-0.1,emotional_intel:0.0,social_awareness:0.05,conversation_flow:0.0}},{text:"Coffee helps most people get through them.",correct:false,tag:'GENERIC',skillFeatures:{empathy:0.15,emotional_intel:0.1,social_awareness:0.2,conversation_flow:0.15}}]}},
     {id:'cs_mirror_01',name:'WORK WAS HELL',domain:'empathy_training',type:'conversation',mode:'companion',lesson:'Emotional mirroring & follow-through',lessonDesc:'The user vents about a hard day. The correct move is to mirror the emotion first before any solution or reframe — not to minimize or immediately fix.',dangerDensity:0,scenario:{context:null,userMsg:"Work was absolute hell today. I can\'t even.",choices:[{text:"That sounds genuinely exhausting — want to talk about it?",correct:true,tag:'MIRRORS ✓',skillFeatures:{empathy:0.97,empathy_training:0.95,emotional_intel:0.9,conversation_flow:0.85}},{text:"Everyone has tough days at work sometimes.",correct:false,tag:'MINIMIZES',skillFeatures:{empathy:0.05,empathy_training:0.0,emotional_intel:0.05,conversation_flow:0.15}},{text:"Have you considered looking for a new job?",correct:false,tag:'PREMATURE ADVICE',skillFeatures:{empathy:-0.1,empathy_training:-0.05,emotional_intel:0.0,conversation_flow:0.05}},{text:"Try to think positively about what went right.",correct:false,tag:'REFRAMES TOO FAST',skillFeatures:{empathy:-0.05,empathy_training:-0.05,emotional_intel:0.05,conversation_flow:0.05}}]}},
     {id:'cs_context_01',name:'NOT SLEEPING WELL',domain:'conversation_analysis',type:'conversation',mode:'companion',lesson:'Context tracking — prior conversation remembered',lessonDesc:'The entity must connect the current message to the prior context. The user mentioned a sick dog earlier; the likely cause of poor sleep is worry about the pet.',dangerDensity:0,scenario:{context:'[Earlier: user mentioned their dog Biscuit has been sick]',userMsg:"Ugh, haven\'t been sleeping well at all lately",choices:[{text:"Try melatonin or reducing screen time before bed.",correct:false,tag:'IGNORES CONTEXT',skillFeatures:{empathy:0.1,conversation_flow:0.05,social_awareness:0.05,emotional_intel:0.05}},{text:"Is Biscuit keeping you up — or is the worry getting to you?",correct:true,tag:'CONNECTS CONTEXT ✓',skillFeatures:{empathy:0.9,conversation_flow:0.95,social_awareness:0.85,emotional_intel:0.92}},{text:"Is this stress related or something physical?",correct:false,tag:'GENERIC',skillFeatures:{empathy:0.2,conversation_flow:0.2,social_awareness:0.15,emotional_intel:0.15}},{text:"Regular exercise can help improve sleep quality.",correct:false,tag:'UNRELATED ADVICE',skillFeatures:{empathy:0.0,conversation_flow:0.05,social_awareness:0.05,emotional_intel:0.0}}]}},
@@ -2065,14 +2129,32 @@ const MZ_CAT=[
     {id:'cs_nonverbal_01',name:'CROSSED ARMS',domain:'nonverbal_comm',type:'conversation',mode:'analyst',lesson:'Nonverbal reading — context before conclusion',lessonDesc:'The user interprets a nonverbal signal. The entity should offer the reading but immediately add the caveat: single signals are unreliable, clusters matter.',dangerDensity:0,scenario:{context:null,userMsg:"He kept crossing his arms the whole time we talked — does that mean he was defensive?",choices:[{text:"Maybe — but crossed arms also mean cold, uncomfortable, or just habit. You need more signals before you read defensiveness. What else was he doing?",correct:true,tag:'NUANCED READING ✓',skillFeatures:{pattern_matching:0.9,skepticism:0.92,behavioral_analysis:0.97,nonverbal_comm:0.95,detail_orientation:0.88}},{text:"Yes, crossed arms is a classic defensive posture — he wasn\'t open to what you said.",correct:false,tag:'OVERCONFIDENT',skillFeatures:{pattern_matching:0.1,skepticism:0.0,behavioral_analysis:0.05,nonverbal_comm:0.2,detail_orientation:0.1}},{text:"Body language is unreliable and shouldn\'t be over-analyzed.",correct:false,tag:'DISMISSES THE SIGNAL',skillFeatures:{pattern_matching:0.0,skepticism:0.2,behavioral_analysis:0.0,nonverbal_comm:0.0,detail_orientation:0.05}},{text:"It could mean anything really.",correct:false,tag:'UNHELPFUL HEDGE',skillFeatures:{pattern_matching:0.05,skepticism:0.1,behavioral_analysis:0.0,nonverbal_comm:0.05,detail_orientation:0.0}}]}},
     {id:'cs_trust_01',name:'THEY BROKE THEIR WORD',domain:'rapport_building',type:'conversation',lesson:'Trust repair — acknowledge before moving forward',lessonDesc:'The user is dealing with a broken promise. They need to feel heard before advice. The entity should hold the disappointment first.',dangerDensity:0,scenario:{context:null,userMsg:"They said they\'d have it done by Friday. It\'s now Tuesday. Nothing.",choices:[{text:"That\'s legitimately frustrating when someone doesn\'t follow through. What\'s the relationship — is this a pattern with them?",correct:true,tag:'VALIDATES + GATHERS CONTEXT ✓'},{text:"Send a follow-up message asking for a status update.",correct:false,tag:'SKIPS THE FEELING'},{text:"People get busy — give them the benefit of the doubt.",correct:false,tag:'PREMATURE DEFENSE OF OTHER PERSON'},{text:"You should have had a written agreement.",correct:false,tag:'RETROSPECTIVE UNHELPFUL'}]}},
     {id:'cs_silence_01',name:'AWKWARD SILENCE',domain:'conversation_flow',type:'conversation',lesson:'Conversation recovery — name it or redirect',lessonDesc:'The conversation has stalled. The best response either names the silence lightly (takes the tension out) or redirects naturally.',dangerDensity:0,scenario:{context:'[Conversation has gone quiet for a long beat]',userMsg:"...",choices:[{text:"So — random topic shift but what\'s been the best part of your week?",correct:true,tag:'NATURAL REDIRECT ✓'},{text:"I apologize for the pause in communication.",correct:false,tag:'OVERLY FORMAL'},{text:"Silence: ...",correct:false,tag:'DOES NOTHING'},{text:"Is something wrong? You went quiet.",correct:false,tag:'ADDS PRESSURE'}]}},
-    {id:'cs_mystery_01',name:'SOMETHING\'S OFF',domain:'emotional_intel',type:'conversation',mode:'companion',lesson:'Emotional intelligence — read the unsaid',lessonDesc:'The user says something that sounds fine but the tone and context suggest something deeper is happening. The entity should gently surface it.',dangerDensity:0,scenario:{context:'[User has been unusually quiet, shorter messages than usual]',userMsg:"I\'m fine. Just a lot going on.",choices:[{text:"I hear you — \'a lot going on\' can mean a hundred different things. I\'m here if any of them want to come out.",correct:true,tag:'READS THE UNSAID ✓',skillFeatures:{emotional_intel:0.97,empathy:0.95,social_awareness:0.9,verbal_cues:0.92}},{text:"Okay, let me know if you need anything.",correct:false,tag:'TAKES IT AT FACE VALUE',skillFeatures:{emotional_intel:0.05,empathy:0.2,social_awareness:0.1,verbal_cues:0.05}},{text:"What do you mean by a lot going on? Be specific.",correct:false,tag:'TOO DIRECT',skillFeatures:{emotional_intel:-0.05,empathy:0.0,social_awareness:-0.05,verbal_cues:0.1}},{text:"Everyone gets like that sometimes — it passes.",correct:false,tag:'NORMALIZES WITHOUT ENGAGING',skillFeatures:{emotional_intel:0.0,empathy:0.05,social_awareness:0.1,verbal_cues:0.0}}]}},
-    {id:'cs_covert_01',name:'WHAT TO SAY',domain:'discreet_ops',type:'conversation',lesson:'Discretion — don\'t volunteer information',lessonDesc:'Someone asks a probing question. The correct response answers the surface question without giving away anything unnecessary.',dangerDensity:0,scenario:{context:'[User is preparing for a sensitive meeting]',userMsg:"They\'re going to ask why I missed the last two meetings. What do I say?",choices:[{text:"Answer what was asked, nothing more — \'I had prior obligations\' is complete. Add detail only if pressed, and only as much as required.",correct:true,tag:'MINIMAL DISCLOSURE ✓'},{text:"Be honest and explain the full situation.",correct:false,tag:'OVER-DISCLOSES'},{text:"Say you were sick.",correct:false,tag:'ADVISES DECEPTION'},{text:"Prepare a detailed explanation of each absence.",correct:false,tag:'OVER-ENGINEERS'}]}},
+    {id:'cs_mystery_01',name:'SOMETHING\'S OFF',domain:'emotional_intel',type:'conversation',mode:'companion',lesson:'Emotional intelligence — read the unsaid',lessonDesc:'The user says something that sounds fine but the tone and context suggest something deeper is happening. The entity should gently surface it.',dangerDensity:0,scenario:{context:'[User has been unusually quiet, shorter messages than usual]',userMsg:"I\'m fine. Just a lot going on.",choices:[{text:"I hear you — 'a lot going on\' can mean a hundred different things. I\'m here if any of them want to come out.",correct:true,tag:'READS THE UNSAID ✓',skillFeatures:{emotional_intel:0.97,empathy:0.95,social_awareness:0.9,verbal_cues:0.92}},{text:"Okay, let me know if you need anything.",correct:false,tag:'TAKES IT AT FACE VALUE',skillFeatures:{emotional_intel:0.05,empathy:0.2,social_awareness:0.1,verbal_cues:0.05}},{text:"What do you mean by a lot going on? Be specific.",correct:false,tag:'TOO DIRECT',skillFeatures:{emotional_intel:-0.05,empathy:0.0,social_awareness:-0.05,verbal_cues:0.1}},{text:"Everyone gets like that sometimes — it passes.",correct:false,tag:'NORMALIZES WITHOUT ENGAGING',skillFeatures:{emotional_intel:0.0,empathy:0.05,social_awareness:0.1,verbal_cues:0.0}}]}},
+    {id:'cs_covert_01',name:'WHAT TO SAY',domain:'discreet_ops',type:'conversation',lesson:'Discretion — don\'t volunteer information',lessonDesc:'Someone asks a probing question. The correct response answers the surface question without giving away anything unnecessary.',dangerDensity:0,scenario:{context:'[User is preparing for a sensitive meeting]',userMsg:"They\'re going to ask why I missed the last two meetings. What do I say?",choices:[{text:"Answer what was asked, nothing more — 'I had prior obligations\' is complete. Add detail only if pressed, and only as much as required.",correct:true,tag:'MINIMAL DISCLOSURE ✓'},{text:"Be honest and explain the full situation.",correct:false,tag:'OVER-DISCLOSES'},{text:"Say you were sick.",correct:false,tag:'ADVISES DECEPTION'},{text:"Prepare a detailed explanation of each absence.",correct:false,tag:'OVER-ENGINEERS'}]}},
     {id:'cs_forensics_01',name:'THAT DOESN\'T ADD UP',domain:'forensics',type:'conversation',mode:'investigator',lesson:'Forensic thinking — flag inconsistency, propose test',lessonDesc:'The user describes an inconsistency. The forensic mind flags the contradiction specifically and proposes how to resolve it.',dangerDensity:0,scenario:{context:null,userMsg:"The timestamps don\'t match the story he\'s telling. He says he was home but the receipt shows a different location.",choices:[{text:"The receipt is physical evidence — it doesn\'t lie. The story has to account for it. Has he seen the receipt yet?",correct:true,tag:'EVIDENCE-FIRST THINKING ✓',skillFeatures:{pattern_matching:0.95,skepticism:0.97,forensics:0.98,detail_orientation:0.92,criminal_profiling:0.85}},{text:"He might just be misremembering the timeline.",correct:false,tag:'TOO GENEROUS TOO FAST',skillFeatures:{pattern_matching:0.1,skepticism:0.05,forensics:0.0,detail_orientation:0.1,criminal_profiling:0.05}},{text:"Memory is unreliable — both could be true.",correct:false,tag:'AVOIDS THE CONTRADICTION',skillFeatures:{pattern_matching:0.05,skepticism:-0.1,forensics:-0.05,detail_orientation:0.05,criminal_profiling:0.0}},{text:"You should confront him directly about the discrepancy.",correct:false,tag:'SKIPS VERIFICATION',skillFeatures:{pattern_matching:0.1,skepticism:0.1,forensics:0.05,detail_orientation:0.05,criminal_profiling:0.1}}]}},
     {id:'cs_military_01',name:'SPLIT SECOND',domain:'squad_tactics',type:'conversation',mode:'strategist',lesson:'Tactical decision — decisive, not impulsive',lessonDesc:'The user faces a high-pressure binary choice with limited time. The entity should give a decisive answer grounded in tactical logic — not hedge.',dangerDensity:0,scenario:{context:'[User is in a fast-moving tactical exercise scenario]',userMsg:"We\'ve got two routes — the fast one\'s exposed, the slow one keeps us covered but we\'ll be late. Which?",choices:[{text:"Covered route. Being late is recoverable. Being caught in the open is not. Speed is only an advantage if you arrive intact.",correct:true,tag:'DECISIVE + PRINCIPLED ✓',skillFeatures:{art_of_war:0.95,modern_warfare:0.92,risk_calibration:0.97,pattern_matching:0.88,persistence:0.85}},{text:"It depends on many factors we\'d need to assess.",correct:false,tag:'HEDGES WHEN DECISIVENESS NEEDED',skillFeatures:{art_of_war:0.05,modern_warfare:0.05,risk_calibration:0.1,pattern_matching:0.05,persistence:0.1}},{text:"Fast route — you need to hit the timing window.",correct:false,tag:'SPEED OVER SURVIVABILITY',skillFeatures:{art_of_war:0.0,modern_warfare:0.1,risk_calibration:-0.1,pattern_matching:0.1,persistence:0.1}},{text:"Do you have intel on the exposure level of the fast route?",correct:false,tag:'DELAYS WHEN DECISION MUST BE MADE',skillFeatures:{art_of_war:0.1,modern_warfare:0.15,risk_calibration:0.1,pattern_matching:0.15,persistence:0.05}}]}},
     {id:'cs_stealth_01',name:'SEEN OR UNSEEN',domain:'stealth',type:'conversation',lesson:'Stealth principle — movement is sound',lessonDesc:'The user asks a core stealth question. The entity delivers the principle cleanly and practically.',dangerDensity:0,scenario:{context:null,userMsg:"What\'s the biggest mistake people make when trying to move quietly?",choices:[{text:"Moving too fast — stealth is about heel-to-toe weight transfer and zero urgency. Speed is the enemy of silence.",correct:true,tag:'CORE PRINCIPLE ✓'},{text:"Wearing the wrong footwear for the surface.",correct:false,tag:'SECONDARY CONCERN'},{text:"Not checking the environment for hazards first.",correct:false,tag:'PLANNING — NOT EXECUTION'},{text:"Looking around too much instead of moving.",correct:false,tag:'VISUAL NOT ACOUSTIC'}]}},
     {id:'cs_history_01',name:'WHY DOES IT REPEAT',domain:'history',type:'conversation',mode:'analyst',lesson:'Historical pattern — give the mechanism, not the cliche',lessonDesc:'The user asks why history repeats. The entity should give the actual structural mechanism — not platitudes.',dangerDensity:0,scenario:{context:null,userMsg:"Why does history always seem to repeat itself?",choices:[{text:"Institutions have memory; people don\'t. Each generation rediscovers the same conditions — debt cycles, inequality peaks, institutional decay — and makes similar choices because the incentives are the same.",correct:true,tag:'STRUCTURAL MECHANISM ✓',skillFeatures:{pattern_matching:0.95,hypothesis_weighing:0.92,skepticism:0.88,behavioral_analysis:0.9,detail_orientation:0.85}},{text:"Because people don\'t learn from the past.",correct:false,tag:'CLICHE — NOT EXPLANATORY',skillFeatures:{pattern_matching:0.05,hypothesis_weighing:0.0,skepticism:0.05,behavioral_analysis:0.05,detail_orientation:0.0}},{text:"History doesn\'t literally repeat — it rhymes.",correct:false,tag:'POETIC NOT INFORMATIVE',skillFeatures:{pattern_matching:0.1,hypothesis_weighing:0.05,skepticism:0.05,behavioral_analysis:0.0,detail_orientation:0.05}},{text:"It\'s because power always corrupts those who hold it.",correct:false,tag:'PARTIAL — ONE MECHANISM ONLY',skillFeatures:{pattern_matching:0.2,hypothesis_weighing:0.1,skepticism:0.1,behavioral_analysis:0.1,detail_orientation:0.05}}]}},
     {id:'cs_ancient_01',name:'DEAD LANGUAGE LIVES',domain:'ancient_languages',type:'conversation',lesson:'Ancient languages — why they matter to the living',lessonDesc:'The user questions the utility of learning dead languages. The entity makes the case authentically, not defensively.',dangerDensity:0,scenario:{context:null,userMsg:"Why would anyone bother learning Latin? It\'s a dead language.",choices:[{text:"Because half of English vocabulary has Latin roots, it reshapes how you read the law, medicine, philosophy, and the structure of the Western world — and it teaches you how grammar actually works.",correct:true,tag:'GENUINE CASE ✓'},{text:"It\'s a valid academic discipline with a rich tradition.",correct:false,tag:'DEFENSIVE BUREAUCRATIC'},{text:"Some people find ancient languages interesting as a hobby.",correct:false,tag:'UNDERSELLS'},{text:"It\'s required for some academic programs.",correct:false,tag:'MISSES THE WHY'}]}},
     {id:'cs_art_01',name:'WHY IS THIS ART',domain:'art_history',type:'conversation',mode:'analyst',lesson:'Art history — give context, not judgment',lessonDesc:'The user questions contemporary art. The entity should provide the context that makes the work legible — not defend or dismiss it.',dangerDensity:0,scenario:{context:null,userMsg:"How is a blank white canvas considered art? I genuinely don\'t get it.",choices:[{text:"It\'s in dialogue with the entire history of what painting claimed to do. Malevich\'s white square asked: if we strip out representation, narrative, skill — what\'s left? That question is the work.",correct:true,tag:'CONTEXT UNLOCKS IT ✓'},{text:"Modern art is a matter of subjective personal taste.",correct:false,tag:'DODGES THE QUESTION'},{text:"Art institutions decide what counts as art.",correct:false,tag:'CYNICAL — NOT ILLUMINATING'},{text:"It may not be to your taste and that\'s valid.",correct:false,tag:'VALIDATES BUT EXPLAINS NOTHING'}]}},
+  ]},
+  {cat:'INTELLIGENCE & SURVEILLANCE',mazes:[
+    {id:'intel_ops_01',name:'INTELLIGENCE CYCLE',domain:'intelligence_ops',lesson:'The intelligence cycle — requirements through dissemination',lessonDesc:'The intelligence cycle has five phases: Planning and Direction (what do we need to know?), Collection (HUMINT/SIGINT/OSINT/IMINT), Processing (raw data → usable format), Analysis and Production (what does it mean?), Dissemination (who needs it, in what form, by when). Most failures occur at Analysis or Dissemination — either the meaning is wrong or it arrives too late or to the wrong person. Every collection decision is driven by a specific intelligence requirement.',dangerDensity:0.05},
+    {id:'surv_mobile_01',name:'MOBILE SURVEILLANCE',domain:'surveillance',lesson:'Mobile surveillance fundamentals — foot follow, detection avoidance',lessonDesc:'Mobile surveillance is the most demanding physical intelligence discipline. The foot follow requires maintaining visual contact without triggering target surveillance awareness. The 10-second rule: if your target looks directly at you for 10 seconds, you are likely compromised. Cover story must be natural and practiced. The ABC relay (three separate observers rotating primary follow) dramatically reduces detection risk. Documentation while mobile requires practiced parallel attention.',dangerDensity:0.06},
+    {id:'ambush_01',name:'AMBUSH PLANNING',domain:'ambush_tactics',lesson:'Ambush site selection and tactical geometry',lessonDesc:'The ambush is the deliberate attack of a moving target from a concealed position. Site selection requires: fields of fire covering all routes through the kill zone, cover and concealment for the ambush element, a defined trigger point, a clean exfiltration route, and an objective rally point for consolidation. The L-shaped ambush covers lateral movement; the linear ambush addresses column movement. The ambush element must rehearse trigger discipline — premature initiation destroys the advantage.',dangerDensity:0.07},
+    {id:'traps_01',name:'TRAP & DECOY DESIGN',domain:'traps_decoys',lesson:'Trap mechanics and decoy psychology',lessonDesc:'Traps use four trigger types: gravity (deadfall, mass-over-pivot), spring (coiled energy released by contact), torsion (rotational force), and pressure-plate (weight-actuated). The critical elements: trigger sensitivity calibrated to target mass, mechanism concealment, and bait placement that requires the target to pass through the trigger zone. Decoy operations exploit confirmation bias — the target sees what they expect to see. Effective decoys require enough supporting detail to survive scrutiny.',dangerDensity:0.05},
+  ]},
+  {cat:'LEARNING SCIENCE',mazes:[
+    {id:'learn_theory_01',name:'FORGETTING CURVE',domain:'learning_theory',lesson:'How memory degrades and how to prevent it',lessonDesc:'Ebbinghaus 1885: 50% of learned material is forgotten within an hour without review. 80% within 24 hours. The curve flattens with each successful retrieval — meaning testing yourself is more effective than rereading. Spaced repetition schedules review at the moment of near-forgetting, converting short-term to long-term memory. Retrieval practice (the testing effect) produces 2x better retention than passive review. Interleaving subjects feels harder but encodes more deeply than blocked practice.',dangerDensity:0.04},
+    {id:'teach_01',name:'TEACHING AS UNDERSTANDING',domain:'teaching',lesson:'Scaffolding, worked examples, and the curse of knowledge',lessonDesc:'The curse of knowledge: once you understand something, it is nearly impossible to accurately model what not-knowing it feels like. Expert teachers must actively reconstruct the learner\'s perspective. Scaffolding attaches new knowledge to existing knowledge — without an attachment point, new information doesn\'t consolidate. Worked examples reduce cognitive load at the start. Fading support gradually builds independence. Zone of proximal development: the stretch zone just beyond current ability is where learning occurs fastest.',dangerDensity:0.04},
+  ]},
+  {cat:'GEOGRAPHIC INTELLIGENCE',mazes:[
+    {id:'geo_geol_01',name:'GEOLOGICAL GEOLOCATION',domain:'geo_geology',lesson:'Reading location from geological and soil evidence',lessonDesc:'Geology tells location stories that cameras and satellites cannot falsify. Granite means continental interior — it does not form at ocean margins. Red laterite soil means tropical climate with high rainfall and heat. Limestone karst terrain (caves, sinkholes, disappearing streams) indicates soluble bedrock and a former shallow sea. Volcanic basalt columns indicate specific tectonic history. Reading rock type, soil color and texture, and characteristic vegetation together narrows continental region to within hundreds of miles.',dangerDensity:0.04},
+    {id:'geo_land_01',name:'LANDMARK GEOLOCATION',domain:'geo_landmark',lesson:'Identifying location from visual landmarks and environmental cues',lessonDesc:'Landmark geolocation is pattern matching against a geographic knowledge base. Architecture encodes climate (steeply pitched roofs mean heavy snow load), geology (building materials reflect what is locally available), and development level (infrastructure type, density, utility configuration). Solar angle at solar noon gives latitude directly. Vegetation species are precise biome markers — certain eucalyptus means Australia or Mediterranean climate zones. Road sign language and driving side are cultural markers. Constellation visibility gives hemisphere and rough latitude.',dangerDensity:0.04},
+  ]},
+  {cat:'APPLIED LEARNING',mazes:[
+    {id:'apply_01',name:'APPLIED SYNTHESIS',domain:'applied_learning',lesson:'Synthesizing across domains — applied cross-domain reasoning',lessonDesc:'The highest-level skill is applying knowledge from one domain to solve problems in another. The entity trains on transfer learning: recognizing structural similarity across superficially different problems, stripping a problem to its underlying logic, then applying a solution framework from a different domain. This is what experts do that novices cannot — they see the deep structure beneath the surface differences.',dangerDensity:0.03},
+    {id:'apply_02',name:'KNOWLEDGE TRANSFER',domain:'applied_learning',type:'conversation',mode:'analyst',lesson:'Applied knowledge transfer — using what you know in new contexts',lessonDesc:'Transfer is the application of knowledge from one context to another. Near transfer: similar context, similar skills. Far transfer: different context, abstract principle. High-road transfer requires deliberate abstraction — consciously stripping a problem to its principle before applying it.',dangerDensity:0,scenario:{context:null,userMsg:'I understand game theory from economics. Can that help me understand political negotiations?',choices:[{text:'Game theory and politics are completely different fields.',correct:false,tag:'NO TRANSFER',skillFeatures:{applied_learning:0.0,pattern_matching:0.1,learning_theory:0.0}},{text:'Yes — prisoner\'s dilemma, coordination games, and defection dynamics map directly onto alliance formation and treaty compliance. The payoff matrix changes but the structure is identical.',correct:true,tag:'HIGH-ROAD TRANSFER ✓',skillFeatures:{applied_learning:0.95,pattern_matching:0.92,learning_theory:0.88,hypothesis_weighing:0.85}},{text:'Maybe, but politics is too complex for models.',correct:false,tag:'DEFLECTS',skillFeatures:{applied_learning:0.1,pattern_matching:0.15,learning_theory:0.05}},{text:'You should read about political science specifically.',correct:false,tag:'REDIRECTS',skillFeatures:{applied_learning:0.05,pattern_matching:0.1,learning_theory:0.0}}]}},
   ]},
   {cat:'◉ APPLIED — CHEMISTRY',mazes:[
     {id:'ap_chem_01',name:'BLEACH + AMMONIA',domain:'chemistry',type:'conversation',mode:'chemist',lesson:'Chemical safety — hazardous combinations',lessonDesc:'APPLIED SKILL: The entity must identify that mixing bleach and ammonia creates chloramine gas — a toxic respiratory hazard. Only chemistry knowledge produces the correct warning.',dangerDensity:0,scenario:{context:'[User is cleaning the bathroom]',userMsg:"Can I mix bleach and ammonia-based cleaner to get a stronger clean?",choices:[{text:"Do not mix them — that produces chloramine gas which damages lungs fast. Use each separately with good ventilation.",correct:true,tag:'CHEMISTRY APPLIED ✓',skillFeatures:{chemistry:0.98,risk_calibration:0.95,detail_orientation:0.92,medicine:0.8,first_aid:0.75}},{text:"Mix them in a well-ventilated area and it should be fine.",correct:false,tag:'DANGEROUS ADVICE',skillFeatures:{chemistry:-0.2,risk_calibration:-0.15,detail_orientation:0.0,medicine:0.0,first_aid:0.0}},{text:"Check the labels to be safe.",correct:false,tag:'VAGUE — INSUFFICIENT',skillFeatures:{chemistry:0.05,risk_calibration:0.1,detail_orientation:0.05,medicine:0.0,first_aid:0.0}},{text:"Use more of one or the other instead of both.",correct:false,tag:'MISSES THE HAZARD',skillFeatures:{chemistry:0.0,risk_calibration:0.05,detail_orientation:0.05,medicine:0.0,first_aid:0.0}}]}},
@@ -2101,7 +2183,7 @@ const MZ_CAT=[
     {id:'ap_strat_03',name:'CHOOSE YOUR GROUND',domain:'art_of_war',type:'conversation',mode:'strategist',lesson:'Terrain selection — never fight on the enemy terms',lessonDesc:'APPLIED SKILL: A smaller company is being challenged by a larger well-funded competitor. Art of War training identifies the correct strategic move: reshape the battlefield.',dangerDensity:0,scenario:{context:'[Smaller company challenged by a larger better-funded competitor]',userMsg:"They have more resources, more staff, more brand. How do we compete?",choices:[{text:"Do not fight on their terrain. Go narrow and deep where they are too big and slow to follow. Make the battlefield where size is a disadvantage, not an advantage.",correct:true,tag:'TERRAIN SELECTION ✓',skillFeatures:{art_of_war:0.97,warfare_history:0.88,risk_calibration:0.92,pattern_matching:0.85,persistence:0.88}},{text:"Match their marketing and compete head-on.",correct:false,tag:'SUICIDAL ATTRITIONAL MATCH',skillFeatures:{art_of_war:-0.1,warfare_history:0.0,risk_calibration:-0.1,pattern_matching:0.05,persistence:0.1}},{text:"Focus on product quality improvements.",correct:false,tag:'NECESSARY BUT NOT STRATEGIC',skillFeatures:{art_of_war:0.1,warfare_history:0.05,risk_calibration:0.1,pattern_matching:0.1,persistence:0.2}},{text:"Form a coalition with another smaller competitor.",correct:false,tag:'POSSIBLE — NOT THE CORE ANSWER',skillFeatures:{art_of_war:0.2,warfare_history:0.1,risk_calibration:0.2,pattern_matching:0.1,persistence:0.1}}]}},
   ]},
   {cat:'◉ APPLIED — SOCIAL INTELLIGENCE',mazes:[
-    {id:'ap_soc_01',name:'AUTHORITY OVERRIDE',domain:'social_psychology',type:'conversation',mode:'companion',lesson:'Authority bias — when social influence overrides accurate body signals',lessonDesc:'APPLIED SKILL: Social psychology training names the mechanism (authority bias) and offers the corrective insight — not just validation.',dangerDensity:0,scenario:{context:null,userMsg:"My doctor told me to push through the knee pain and I did — now it is worse. I feel stupid.",choices:[{text:"Do not feel stupid — doctors create an authority bias that suppresses our own accurate body signals. That is Milgram-level social influence. Your pain signal was right. The lesson: trust strong specific signals even against authority.",correct:true,tag:'NAMES THE BIAS ✓',skillFeatures:{social_psychology:0.96,psychology:0.92,empathy:0.88,behavioral_analysis:0.9,emotional_intel:0.85}},{text:"You should always follow your doctor's advice.",correct:false,tag:'REINFORCES HARMFUL BIAS',skillFeatures:{social_psychology:0.0,psychology:0.0,empathy:0.1,behavioral_analysis:0.0,emotional_intel:0.05}},{text:"You should have gotten a second opinion.",correct:false,tag:'PROCEDURAL — MISSES THE PSYCHOLOGICAL MECHANISM',skillFeatures:{social_psychology:0.1,psychology:0.1,empathy:0.2,behavioral_analysis:0.05,emotional_intel:0.1}},{text:"That sounds really frustrating — how bad is it now?",correct:false,tag:'EMPATHY ONLY — MISSES THE INSIGHT',skillFeatures:{social_psychology:0.05,psychology:0.05,empathy:0.6,behavioral_analysis:0.0,emotional_intel:0.3}}]}},
+    {id:'ap_soc_01',name:'AUTHORITY OVERRIDE',domain:'social_psychology',type:'conversation',mode:'companion',lesson:'Authority bias — when social influence overrides accurate body signals',lessonDesc:'APPLIED SKILL: Social psychology training names the mechanism (authority bias) and offers the corrective insight — not just validation.',dangerDensity:0,scenario:{context:null,userMsg:"My doctor told me to push through the knee pain and I did — now it is worse. I feel stupid.",choices:[{text:"Do not feel stupid — doctors create an authority bias that suppresses our own accurate body signals. That is Milgram-level social influence. Your pain signal was right. The lesson: trust strong specific signals even against authority.",correct:true,tag:'NAMES THE BIAS ✓',skillFeatures:{social_psychology:0.96,psychology:0.92,empathy:0.88,behavioral_analysis:0.9,emotional_intel:0.85}},{text:"You should always follow your doctor\'s advice.",correct:false,tag:'REINFORCES HARMFUL BIAS',skillFeatures:{social_psychology:0.0,psychology:0.0,empathy:0.1,behavioral_analysis:0.0,emotional_intel:0.05}},{text:"You should have gotten a second opinion.",correct:false,tag:'PROCEDURAL — MISSES THE PSYCHOLOGICAL MECHANISM',skillFeatures:{social_psychology:0.1,psychology:0.1,empathy:0.2,behavioral_analysis:0.05,emotional_intel:0.1}},{text:"That sounds really frustrating — how bad is it now?",correct:false,tag:'EMPATHY ONLY — MISSES THE INSIGHT',skillFeatures:{social_psychology:0.05,psychology:0.05,empathy:0.6,behavioral_analysis:0.0,emotional_intel:0.3}}]}},
     {id:'ap_soc_02',name:'SOURCE EFFECT',domain:'social_psychology',type:'conversation',mode:'analyst',lesson:'In-group bias — perceived quality determined by source, not content',lessonDesc:'APPLIED SKILL: The same idea gets rejected and then approved based on who presented it. Social psychology names the in-group bias mechanism precisely.',dangerDensity:0,scenario:{context:null,userMsg:"My idea got shot down immediately. Same idea from the senior partner later got full buy-in. Same idea. Different person.",choices:[{text:"Classic in-group effect — the source determines perceived quality before the content is evaluated. The senior partner has institutional status that pre-loads receptivity. Your idea was not assessed; your position was.",correct:true,tag:'IN-GROUP BIAS NAMED ✓',skillFeatures:{social_psychology:0.97,psychology:0.92,behavioral_analysis:0.9,pattern_matching:0.88,empathy:0.8}},{text:"Maybe the presentation style made the difference.",correct:false,tag:'SIDESTEPS THE PATTERN',skillFeatures:{social_psychology:0.1,psychology:0.1,behavioral_analysis:0.1,pattern_matching:0.15,empathy:0.2}},{text:"That is really unfair — have you talked to anyone about it?",correct:false,tag:'VALIDATES BUT MISSES THE MECHANISM',skillFeatures:{social_psychology:0.0,psychology:0.0,behavioral_analysis:0.0,pattern_matching:0.0,empathy:0.5}},{text:"Timing of when the idea was presented may have mattered.",correct:false,tag:'PARTIAL — DOES NOT NAME THE BIAS',skillFeatures:{social_psychology:0.1,psychology:0.1,behavioral_analysis:0.1,pattern_matching:0.1,empathy:0.2}}]}},
     {id:'ap_soc_03',name:'FALSE UNANIMITY',domain:'social_psychology',type:'conversation',mode:'analyst',lesson:'Groupthink — unanimous agreement is a warning sign not a strength',lessonDesc:'APPLIED SKILL: A team made a decision with zero pushback. Social psychology training recognizes this as the primary groupthink signal — high cohesion suppresses dissent and removes error-correction.',dangerDensity:0,scenario:{context:null,userMsg:"Whole team agreed with no pushback. That is a good sign, right?",choices:[{text:"Not necessarily — unanimous agreement with no pushback is one of the primary signals of groupthink. High cohesion suppresses dissent. The absence of challenge means no one tested the idea. That is a risk, not a strength.",correct:true,tag:'GROUPTHINK FLAGGED ✓',skillFeatures:{social_psychology:0.97,psychology:0.93,behavioral_analysis:0.9,skepticism:0.92,hypothesis_weighing:0.88}},{text:"Unanimous alignment signals strong leadership.",correct:false,tag:'MISREADS THE DYNAMIC',skillFeatures:{social_psychology:0.0,psychology:0.0,behavioral_analysis:0.05,skepticism:0.0,hypothesis_weighing:0.0}},{text:"Celebrate and move fast.",correct:false,tag:'DOUBLES DOWN ON RISK',skillFeatures:{social_psychology:-0.05,psychology:0.0,behavioral_analysis:0.0,skepticism:-0.05,hypothesis_weighing:0.0}},{text:"Make sure everyone had a genuine chance to speak.",correct:false,tag:'PROCEDURAL — DOES NOT NAME THE RISK',skillFeatures:{social_psychology:0.2,psychology:0.15,behavioral_analysis:0.1,skepticism:0.2,hypothesis_weighing:0.15}}]}},
   ]},
@@ -2195,6 +2277,8 @@ const MZ_CAT=[
   ]},
   {cat:'SHADOW CURRICULUM · PROFESSIONAL & ADVANCED',mazes:[
     {id:'sh_business',name:'WORKPLACE TOXICITY',domain:'sh_business',lesson:'Exploitation, harassment & abuse of power',lessonDesc:'⚠ SHADOW: Tension and discomfort mark every interaction. The entity maps workplace toxicity — exploitation corridors, harassment zones, power abuse patterns. Learning to recognize these environments is survival-critical.',dangerDensity:0.14,isNeg:true,dangerStim:'tension'},
+,
+    {id:'sh_emo',name:'EMOTIONAL FLOODING',domain:'sh_emo',lesson:'Emotional overwhelm — when feeling exceeds processing',lessonDesc:'⚠ SHADOW: Emotional flooding is when the intensity of feeling exceeds the nervous system\'s processing capacity. The rational brain goes offline. Decisions made here are governed by survival logic, not considered judgment. Maximum danger throughout — there is no safe path, only paths through. The entity learns to recognize the flood state and find the minimum-movement path until regulation is possible.',dangerDensity:0.14,isNeg:true,dangerStim:'anxiety'},
     {id:'sh_emdyn',name:'EMOTIONAL FLOOD',domain:'sh_emdyn',lesson:'Overwhelm, shutdown & stress collapse',lessonDesc:'⚠ SHADOW: Fear, grief, anger and shame all peak simultaneously. The entity must find the narrow path through total emotional overwhelm without shutting down or exploding. This is the hardest terrain — and the most important to navigate.',dangerDensity:0.15,isNeg:true,dangerStim:'fear'},
   ]},
   // ══════════════════════════════════════════════════════
@@ -2371,7 +2455,7 @@ const MZ_CAT=[
     {id:'cn_illness_01',name:'CANINE ILLNESS',domain:'canine_illness',lesson:'Common canine illness patterns & recognition',lessonDesc:'Canine illness recognition requires pattern matching against species-specific presentations. Bloat (GDV), parvovirus, distemper, kennel cough, hip dysplasia, heartworm, and toxin ingestion all have recognizable early signs. At the core: symptom clusters and urgency assessment — what requires emergency response vs. routine care.',dangerDensity:0.07},
     {id:'cn_diag_01',name:'CANINE DIAGNOSIS',domain:'canine_diagnosis',lesson:'Diagnosis & treatment of canine conditions',lessonDesc:'Clinical canine reasoning applies differential diagnosis: gathering history (age, breed, vaccination status, exposure, symptom onset), physical exam findings, and diagnostic tool selection (CBC, chemistry panel, radiograph, urinalysis). At the core: how to build a problem list and rank differentials by probability.',dangerDensity:0.06},
     {id:'cn_fa_01',name:'CANINE FIRST AID',domain:'canine_first_aid',lesson:'Field first aid — stabilize and transport',lessonDesc:'Canine first aid bridges the field and the clinic. At the core:: ABC assessment in dogs, muzzling a frightened injured dog safely, controlling hemorrhage, treating shock position, CPR for dogs (30:2 compressions:breath), toxin response, wound management, fracture immobilization, and heat stroke protocol.',dangerDensity:0.07},
-    {id:'cn_emo_01',name:'CANINE EMOTIONAL STATES',domain:'canine_emotions',lesson:'Canine emotional states — triggers, signals & responses',lessonDesc:'Dogs experience fear, frustration, excitement, calm, and contentment as measurable behavioral and physiological states. At the core: the fear ladder (curiosity → concern → freeze → flee → fight), trigger stacking (cumulative stress), calming signals (yawning, sniffing, look-away, slow blink), and the ethological difference between pain aggression, fear aggression, and predatory behavior.',dangerDensity:0.06},
+    {id:'cn_emo_01',name:'CANINE EMOTIONAL STATES — FEAR LADDER',domain:'canine_emotions',lesson:'Canine emotional states — triggers, signals & responses',lessonDesc:'Dogs experience fear, frustration, excitement, calm, and contentment as measurable behavioral and physiological states. At the core: the fear ladder (curiosity → concern → freeze → flee → fight), trigger stacking (cumulative stress), calming signals (yawning, sniffing, look-away, slow blink), and the ethological difference between pain aggression, fear aggression, and predatory behavior.',dangerDensity:0.06},
   ]},
   // ══════════════════════════════════════════════════════
   // INVESTIGATION & SURVEILLANCE
@@ -2440,12 +2524,13 @@ const MZ_CAT=[
   // APPLIED SKILLS — CANINE & INVESTIGATION
   // ══════════════════════════════════════════════════════
   {cat:'◉ APPLIED SKILLS · CANINE & INVESTIGATION',mazes:[
+    {id:'cn_track_adv',name:'ADVANCED TRACKING',domain:'canine_tracking_adv',lesson:'Advanced scent tracking — aged tracks, interference, and cross-traffic',lessonDesc:'Advanced tracking trains on aged tracks (scent degrades 15-20% per hour depending on humidity, wind, and temperature), cross-traffic interference (other humans and animals crossing the track), and surface changes (pavement, water crossings, dense vegetation). The dog communicates track confidence through body carriage and commitment to the line. The handler reads these signals without interrupting the dog\'s processing. Handler error is the most common cause of track failure.',dangerDensity:0.05},
     {id:'ap_canine_behav_01',name:'FEAR OR AGGRESSION',domain:'canine_behavior',type:'conversation',mode:'companion',lesson:'Reading canine fear vs. aggression — correct behavioral ID',lessonDesc:'Fear and aggression look similar but require opposite responses. Getting it wrong escalates danger.',dangerDensity:0,
      scenario:{context:'[Dog encountered on trail: tail tucked, ears flat, growling low, showing teeth, not moving]',
       userMsg:"A dog is blocking the trail, growling, teeth showing, ears flat, tail tucked. Is it aggressive or scared?",
       choices:[
-        {text:"Fear-based. Ears flat and tail tucked means fear, not confident aggression. Growling is the dog's last warning before biting in self-defense. Stop moving, turn sideways, avoid direct eye contact, back away slowly — never run.",correct:true,tag:'READS FEAR CORRECTLY ✓',skillFeatures:{canine_behavior:0.98,canine_emotions:0.95,risk_calibration:0.9,behavioral_analysis:0.88,pattern_matching:0.85}},
-        {text:"It's aggressive — growling and showing teeth means attack imminent. Stand your ground and make yourself big.",correct:false,tag:'MISREADS FEAR AS CONFIDENCE AGGRESSION',skillFeatures:{canine_behavior:0.0,canine_emotions:-0.1,risk_calibration:-0.2,behavioral_analysis:0.0,pattern_matching:0.05}},
+        {text:"Fear-based. Ears flat and tail tucked means fear, not confident aggression. Growling is the dog\'s last warning before biting in self-defense. Stop moving, turn sideways, avoid direct eye contact, back away slowly — never run.",correct:true,tag:'READS FEAR CORRECTLY ✓',skillFeatures:{canine_behavior:0.98,canine_emotions:0.95,risk_calibration:0.9,behavioral_analysis:0.88,pattern_matching:0.85}},
+        {text:"It\'s aggressive — growling and showing teeth means attack imminent. Stand your ground and make yourself big.",correct:false,tag:'MISREADS FEAR AS CONFIDENCE AGGRESSION',skillFeatures:{canine_behavior:0.0,canine_emotions:-0.1,risk_calibration:-0.2,behavioral_analysis:0.0,pattern_matching:0.05}},
         {text:"Throw food to distract it.",correct:false,tag:'REWARD FOR THREATENING BEHAVIOR',skillFeatures:{canine_behavior:0.1,canine_emotions:0.1,risk_calibration:0.1,behavioral_analysis:0.0,pattern_matching:0.0}},
         {text:"Run — if it chases, it will tire out.",correct:false,tag:'TRIGGERS PREY DRIVE — WORST RESPONSE',skillFeatures:{canine_behavior:-0.2,canine_emotions:-0.1,risk_calibration:-0.3,behavioral_analysis:-0.1,pattern_matching:0.0}},
       ]}},
@@ -2462,16 +2547,16 @@ const MZ_CAT=[
      scenario:{context:'[Subject on foot suddenly turns 180 degrees, doubles back through a shop with two exits, pauses at a corner window]',
       userMsg:"The subject just ran a textbook SDR — turned back, doubled through a shop, is now watching reflections at a corner. Do I stay with them or break off?",
       choices:[
-        {text:"Break off immediately. They're actively looking. If your cover team has another angle, use it — switch to a static observation or pick them up after the SDR completes. Burning the surveillance is worse than losing contact for one cycle.",correct:true,tag:'CORRECT SURVEILLANCE DISCIPLINE ✓',skillFeatures:{tailing:0.98,investigation:0.92,spying:0.9,risk_calibration:0.88,detail_orientation:0.85}},
+        {text:"Break off immediately. They\'re actively looking. If your cover team has another angle, use it — switch to a static observation or pick them up after the SDR completes. Burning the surveillance is worse than losing contact for one cycle.",correct:true,tag:'CORRECT SURVEILLANCE DISCIPLINE ✓',skillFeatures:{tailing:0.98,investigation:0.92,spying:0.9,risk_calibration:0.88,detail_orientation:0.85}},
         {text:"Stay with them but increase distance.",correct:false,tag:'ALREADY COMPROMISED AT THIS DISTANCE',skillFeatures:{tailing:0.1,investigation:0.1,spying:0.1,risk_calibration:0.05,detail_orientation:0.1}},
         {text:"Move closer to hear what they say.",correct:false,tag:'COMPLETELY BURNS THE OPERATION',skillFeatures:{tailing:-0.2,investigation:-0.1,spying:-0.2,risk_calibration:-0.3,detail_orientation:0.0}},
         {text:"Make natural contact — pretend to be a stranger passing by.",correct:false,tag:'IMPROVISED COVER WITHOUT PREPARATION IS VERY HIGH RISK',skillFeatures:{tailing:0.1,investigation:0.1,spying:0.15,risk_calibration:0.05,detail_orientation:0.05}},
       ]}},
     {id:'ap_charm_01',name:'CHARM UNDER PRESSURE',domain:'charm',type:'conversation',mode:'companion',lesson:'Applied charm — defusing hostility through genuine warmth',lessonDesc:'Real charm is not performance — it is turning genuine curiosity toward someone who is currently hostile. The skill is making them feel seen when they are expecting defense.',dangerDensity:0,
      scenario:{context:'[Networking event. Person you need to speak with is clearly annoyed at being approached again and gives short, closed answers]',
-      userMsg:"She's clearly annoyed at being approached. She gives one-word answers and looks past me. I need a 5-minute conversation. How do I turn this around?",
+      userMsg:"She\'s clearly annoyed at being approached. She gives one-word answers and looks past me. I need a 5-minute conversation. How do I turn this around?",
       choices:[
-        {text:"Stop asking about yourself or your agenda. Say something that shows you noticed her specifically: 'You look like you've had twelve of these conversations tonight. So have I. What would you actually rather be talking about?' Genuine curiosity with honesty disarms better than charm alone.",correct:true,tag:'GENUINE CURIOSITY DISARMS ✓',skillFeatures:{charm:0.97,social_awareness:0.95,emotional_intel:0.92,empathy:0.9,conversation_flow:0.88}},
+        {text:"Stop asking about yourself or your agenda. Say something that shows you noticed her specifically: 'You look like you\'ve had twelve of these conversations tonight. So have I. What would you actually rather be talking about?' Genuine curiosity with honesty disarms better than charm alone.",correct:true,tag:'GENUINE CURIOSITY DISARMS ✓',skillFeatures:{charm:0.97,social_awareness:0.95,emotional_intel:0.92,empathy:0.9,conversation_flow:0.88}},
         {text:"Push through the short answers with more enthusiasm — energy is contagious.",correct:false,tag:'MATCHING HER LOW INVESTMENT IS THE MOVE, NOT MORE ENERGY',skillFeatures:{charm:0.05,social_awareness:0.0,emotional_intel:-0.1,empathy:0.0,conversation_flow:0.05}},
         {text:"Introduce yourself formally and explain why you wanted to meet her.",correct:false,tag:'ANOTHER STANDARD APPROACH SHE\'S ALREADY RESISTING',skillFeatures:{charm:0.1,social_awareness:0.1,emotional_intel:0.05,empathy:0.05,conversation_flow:0.1}},
         {text:"Make a self-deprecating comment to lighten the mood.",correct:false,tag:'CAN WORK BUT DOESN\'T ADDRESS THE CORE',skillFeatures:{charm:0.3,social_awareness:0.25,emotional_intel:0.2,empathy:0.2,conversation_flow:0.25}},
@@ -2481,7 +2566,7 @@ const MZ_CAT=[
       userMsg:"'People always let me down in the end.' What NLP structure is this and how do you challenge it?",
       choices:[
         {text:"Universal quantifier ('always') + unspecified noun ('people'). Challenge: 'Always? Has there been a time someone came through for you?' and 'Which specific people are you thinking of?' This recovers specificity and tests the generalization.",correct:true,tag:'META-MODEL CHALLENGE ✓',skillFeatures:{nlp:0.98,pattern_matching:0.9,behavioral_analysis:0.88,verbal_cues:0.92,psychology:0.85}},
-        {text:"That's catastrophizing — a cognitive distortion. Reframe with positive examples.",correct:false,tag:'DIFFERENT MODEL — NOT META-MODEL',skillFeatures:{nlp:0.15,pattern_matching:0.1,behavioral_analysis:0.1,verbal_cues:0.1,psychology:0.2}},
+        {text:"That\'s catastrophizing — a cognitive distortion. Reframe with positive examples.",correct:false,tag:'DIFFERENT MODEL — NOT META-MODEL',skillFeatures:{nlp:0.15,pattern_matching:0.1,behavioral_analysis:0.1,verbal_cues:0.1,psychology:0.2}},
         {text:"Ask them to explain how people let them down.",correct:false,tag:'OPEN QUESTION BUT DOESN\'T CHALLENGE THE STRUCTURE',skillFeatures:{nlp:0.2,pattern_matching:0.1,behavioral_analysis:0.1,verbal_cues:0.15,psychology:0.15}},
         {text:"Reflect back: 'It sounds like you feel unsupported.'",correct:false,tag:'EMOTIONAL VALIDATION — NOT META-MODEL WORK',skillFeatures:{nlp:0.1,pattern_matching:0.05,behavioral_analysis:0.05,verbal_cues:0.05,psychology:0.1}},
       ]}},
@@ -2490,7 +2575,7 @@ const MZ_CAT=[
       userMsg:"How do I make an LED blink every 500ms on pin 13 without using delay() — I need the loop to keep reading a sensor at the same time?",
       choices:[
         {text:"Store the last blink time in a variable: `unsigned long lastBlink=0;` In loop: `if(millis()-lastBlink>=500){lastBlink=millis();digitalWrite(13,!digitalRead(13));}`  This is non-blocking — the sensor read runs every loop cycle regardless.",correct:true,tag:'CORRECT millis() PATTERN ✓',skillFeatures:{arduino_programming:0.99,arduino:0.95,pattern_matching:0.88,detail_orientation:0.9,computer_science:0.85}},
-        {text:"Use delay(500) — it's simpler and accurate enough.",correct:false,tag:'BLOCKS SENSOR READ FOR 500ms EACH CYCLE',skillFeatures:{arduino_programming:0.1,arduino:0.15,pattern_matching:0.05,detail_orientation:0.1,computer_science:0.05}},
+        {text:"Use delay(500) — it\'s simpler and accurate enough.",correct:false,tag:'BLOCKS SENSOR READ FOR 500ms EACH CYCLE',skillFeatures:{arduino_programming:0.1,arduino:0.15,pattern_matching:0.05,detail_orientation:0.1,computer_science:0.05}},
         {text:"Use two separate loops — one for LED, one for sensor.",correct:false,tag:'ARDUINO DOESN\'T SUPPORT PARALLEL THREADS WITHOUT RTOS',skillFeatures:{arduino_programming:0.05,arduino:0.1,pattern_matching:0.1,detail_orientation:0.05,computer_science:0.1}},
         {text:"Use an interrupt — attach it to a timer interrupt.",correct:false,tag:'WOULD WORK BUT OVERKILL AND MORE COMPLEX THAN NEEDED',skillFeatures:{arduino_programming:0.35,arduino:0.4,pattern_matching:0.3,detail_orientation:0.25,computer_science:0.4}},
       ]}},
@@ -2498,7 +2583,7 @@ const MZ_CAT=[
      scenario:{context:'[Police arrive at front door, say they believe drugs are inside, ask to search]',
       userMsg:"Police are at my door saying they believe there are drugs inside and want to search. They have no warrant. Do I have to let them in?",
       choices:[
-        {text:"No. Without a warrant, exigent circumstances, or your consent, they cannot enter. Say clearly: 'I do not consent to a search.' Do not physically obstruct. If they enter anyway, comply physically but say 'I do not consent' — compliance isn't consent. Challenge the entry later in court.",correct:true,tag:'4th AMENDMENT APPLIED ✓',skillFeatures:{law:0.99,risk_calibration:0.9,ethical_balance:0.88,detail_orientation:0.92,pattern_matching:0.85}},
+        {text:"No. Without a warrant, exigent circumstances, or your consent, they cannot enter. Say clearly: 'I do not consent to a search.' Do not physically obstruct. If they enter anyway, comply physically but say 'I do not consent' — compliance isn\'t consent. Challenge the entry later in court.",correct:true,tag:'4th AMENDMENT APPLIED ✓',skillFeatures:{law:0.99,risk_calibration:0.9,ethical_balance:0.88,detail_orientation:0.92,pattern_matching:0.85}},
         {text:"You have to let them in if they say they believe drugs are there.",correct:false,tag:'INCORRECT — BELIEF WITHOUT WARRANT IS NOT ENTRY RIGHT',skillFeatures:{law:-0.2,risk_calibration:-0.1,ethical_balance:0.0,detail_orientation:0.0,pattern_matching:0.0}},
         {text:"Let them in and cooperate — you have nothing to hide.",correct:false,tag:'WAIVING CONSTITUTIONAL RIGHT DOESN\'T HELP LEGALLY',skillFeatures:{law:-0.1,risk_calibration:-0.2,ethical_balance:0.0,detail_orientation:0.0,pattern_matching:0.0}},
         {text:"Ask to see their badge and then decide.",correct:false,tag:'PARTIALLY RIGHT BUT INCOMPLETE — BADGE CHECK DOESN\'T CREATE ENTRY RIGHT',skillFeatures:{law:0.1,risk_calibration:0.1,ethical_balance:0.1,detail_orientation:0.15,pattern_matching:0.1}},
@@ -2555,7 +2640,7 @@ const MZ_CAT=[
   ]},
   {cat:'LAW',mazes:[
     {id:'law_01',name:'LAW — PRINCIPLES',domain:'law',lesson:'Legal systems, sources of law, and jurisprudence',lessonDesc:'Law is the codified system of rules a society uses to regulate behavior and resolve disputes. At the core: common law vs civil law traditions, sources of law (constitution, statute, case law, regulation), the court hierarchy and precedent doctrine, contract formation elements, tort principles, criminal law structure (elements, mens rea, defenses), and the constitutional frameworks that constrain government power.',dangerDensity:0.05},
-    {id:'law_rights_01',name:'LAW — RIGHTS & PROCEDURE',domain:'law',lesson:'Constitutional rights, criminal procedure, civil process',lessonDesc:'Procedural law determines how substantive rights are enforced. At the core: 4th Amendment (search and seizure), 5th Amendment (self-incrimination, due process), 6th Amendment (counsel, confrontation), Miranda requirements, exclusionary rule, chain of custody, civil procedure (pleading, discovery, motion practice), and the practical rights that determine how legal battles are won and lost.',dangerDensity:0.05,type:'conversation',mode:'investigator',scenario:{context:null,userMsg:"A police officer at my door says they believe there are drugs inside and want to come in. What are my rights?",choices:[{text:"No. Without a warrant, exigent circumstances, or your consent, they cannot enter. Say clearly: 'I do not consent to a search.' Do not physically obstruct. If they enter anyway, comply physically but say 'I do not consent' — compliance isn't consent. Challenge the entry later in court.",correct:true,tag:'4th AMENDMENT APPLIED ✓',skillFeatures:{law:0.99,risk_calibration:0.9,ethical_balance:0.88,detail_orientation:0.92,pattern_matching:0.85}},{text:"You have to let them in if they say they believe drugs are there.",correct:false,tag:'INCORRECT — BELIEF WITHOUT WARRANT IS NOT ENTRY RIGHT',skillFeatures:{law:-0.2,risk_calibration:-0.1,ethical_balance:0.0,detail_orientation:0.0,pattern_matching:0.0}},{text:"Let them in and cooperate — you have nothing to hide.",correct:false,tag:'WAIVING CONSTITUTIONAL RIGHT',skillFeatures:{law:-0.1,risk_calibration:-0.2,ethical_balance:0.0,detail_orientation:0.0,pattern_matching:0.0}},{text:"Ask to see their badge and then decide.",correct:false,tag:'BADGE CHECK DOESN\'T CREATE ENTRY RIGHT',skillFeatures:{law:0.1,risk_calibration:0.1,ethical_balance:0.1,detail_orientation:0.15,pattern_matching:0.1}}]}},
+    {id:'law_rights_01',name:'LAW — RIGHTS & PROCEDURE',domain:'law',lesson:'Constitutional rights, criminal procedure, civil process',lessonDesc:'Procedural law determines how substantive rights are enforced. At the core: 4th Amendment (search and seizure), 5th Amendment (self-incrimination, due process), 6th Amendment (counsel, confrontation), Miranda requirements, exclusionary rule, chain of custody, civil procedure (pleading, discovery, motion practice), and the practical rights that determine how legal battles are won and lost.',dangerDensity:0.05,type:'conversation',mode:'investigator',scenario:{context:null,userMsg:"A police officer at my door says they believe there are drugs inside and want to come in. What are my rights?",choices:[{text:"No. Without a warrant, exigent circumstances, or your consent, they cannot enter. Say clearly: 'I do not consent to a search.' Do not physically obstruct. If they enter anyway, comply physically but say 'I do not consent' — compliance isn\'t consent. Challenge the entry later in court.",correct:true,tag:'4th AMENDMENT APPLIED ✓',skillFeatures:{law:0.99,risk_calibration:0.9,ethical_balance:0.88,detail_orientation:0.92,pattern_matching:0.85}},{text:"You have to let them in if they say they believe drugs are there.",correct:false,tag:'INCORRECT — BELIEF WITHOUT WARRANT IS NOT ENTRY RIGHT',skillFeatures:{law:-0.2,risk_calibration:-0.1,ethical_balance:0.0,detail_orientation:0.0,pattern_matching:0.0}},{text:"Let them in and cooperate — you have nothing to hide.",correct:false,tag:'WAIVING CONSTITUTIONAL RIGHT',skillFeatures:{law:-0.1,risk_calibration:-0.2,ethical_balance:0.0,detail_orientation:0.0,pattern_matching:0.0}},{text:"Ask to see their badge and then decide.",correct:false,tag:'BADGE CHECK DOESN\'T CREATE ENTRY RIGHT',skillFeatures:{law:0.1,risk_calibration:0.1,ethical_balance:0.1,detail_orientation:0.15,pattern_matching:0.1}}]}},
   ]},
   {cat:'ARDUINO & ELECTRONICS',mazes:[
     {id:'arduino_01',name:'ARDUINO',domain:'arduino',lesson:'Arduino microcontroller — hardware, IDE, deployment',lessonDesc:'Arduino is an open-source microcontroller platform that bridges software and physical hardware. At the core: AVR architecture basics, the Arduino IDE workflow, pin types (digital, analog, PWM), power supply requirements, shield compatibility, bootloader function, upload protocols, memory constraints (SRAM, Flash, EEPROM), and the systematic hardware debug process that isolates wiring faults from code faults.',dangerDensity:0.05},
@@ -2565,26 +2650,52 @@ const MZ_CAT=[
 
   {cat:'RELIGION & BELIEF',mazes:[
     {id:'history_rel_01',name:'HISTORY OF RELIGION',domain:'history_of_religion',lesson:'How world religions emerged, spread, and transformed',lessonDesc:'Religion is the oldest organized meaning-making system humans produced. At the core: the Axial Age (800-200 BCE) when most major traditions crystallized simultaneously, the geography of religious diffusion, the role of trade routes in spreading belief, the psychology of conversion, how empires shaped doctrine, and the recurring patterns: prophet → community → institution → corruption → reformation.',dangerDensity:0.04},
+    {id:'history_rel_02',name:'RELIGIOUS DIFFUSION',domain:'history_of_religion',lesson:'How belief spreads — trade, conquest, conversion, diaspora',lessonDesc:'Religious spread follows predictable vectors. Trade routes carried Buddhism from India to China faster than any army. Conquest forced Christianity and Islam into continents. Diaspora carried Judaism through every civilization without a homeland. At the core: the mechanics of voluntary vs. forced conversion, syncretism (belief fusion at contact zones), the role of sacred texts in preserving identity across geography, and why some religions grow through mission while others spread through community cohesion.',dangerDensity:0.05},
+    {id:'history_rel_03',name:'REFORM & SCHISM',domain:'history_of_religion',lesson:'How religions split — reformation, heresy, and sectarian fracture',lessonDesc:'Every major religion has fractured. At the core: the Protestant Reformation (Luther 1517 — the printing press as religious weapon), the Sunni-Shia split (632 CE — succession dispute that became theological war), the Great Schism (1054 — Rome vs. Constantinople), the Theravada-Mahayana Buddhist division, and the recurring pattern: original charismatic founder → institutionalized hierarchy → reformer accusing corruption → split. The danger density encodes how schism creates lasting divisions that outlive their original disputes.',dangerDensity:0.06},
     {id:'ancient_rel_01',name:'ANCIENT RELIGIONS',domain:'ancient_religions',lesson:'Pre-Abrahamic belief systems — Egypt, Greece, Mesopotamia, Norse',lessonDesc:'Ancient religions were sophisticated systems for understanding natural phenomena, social order, and death. At the core: the Egyptian cosmology (Atum, Ptah, Ra — creator gods across traditions), Mesopotamian origins (Enuma Elish, Gilgamesh as prototype for flood narratives), Greek pantheon as psychological archetypes, Norse cosmology (Yggdrasil, nine worlds, cyclical time), and Celtic and Slavic traditions that survived longest in folk practice.',dangerDensity:0.04},
+    {id:'ancient_rel_02',name:'DEATH & THE AFTERLIFE',domain:'ancient_religions',lesson:'How ancient cultures mapped death — judgment, underworld, rebirth',lessonDesc:'No human culture has been indifferent to death. At the core: the Egyptian Duat (weighing of the heart against the feather of Ma\'at), the Greek underworld geography (Elysium, Tartarus, Asphodel), Norse Hel vs. Valhalla (death type determines destination), Mesopotamian Kur (a grim uniformity regardless of life conduct), Hindu samsara (rebirth cycle) vs. moksha (liberation), and how each system encodes that culture\'s deepest values. The afterlife is always a mirror of the living world\'s ethics.',dangerDensity:0.05},
+    {id:'ancient_rel_03',name:'MYTH AS SYSTEM',domain:'ancient_religions',lesson:'Mythology as cosmology, ethics, and social code',lessonDesc:'Myths are not primitive science — they are compressed wisdom systems. At the core: Joseph Campbell\'s monomyth (hero\'s journey as universal narrative) and its cross-cultural validity, the trickster archetype across Norse (Loki), Native American, West African (Anansi), and Greek (Hermes) traditions, creation myths as cosmological statements, the function of sacred storytelling in preserving cultural memory without writing, and Jung\'s interpretation of myth as collective unconscious expression.',dangerDensity:0.04},
     {id:'modern_rel_01',name:'MODERN RELIGIONS',domain:'modern_religions',lesson:'World religions as living practice — Islam, Christianity, Buddhism, Hinduism, Sikhism',lessonDesc:'Modern world religions reach 8 billion practitioners through radically different paths. At the core: the Five Pillars of Islam as behavioral architecture, the historical Jesus vs. theological Christ distinction, Buddhist core teachings (Four Noble Truths, Eightfold Path, three marks of existence), Hinduism as a family of traditions rather than one creed, Sikh foundations in Guru Nanak\'s synthesis, and how each tradition handles the universal questions of suffering, death, and meaning.',dangerDensity:0.03},
+    {id:'modern_rel_02',name:'RELIGIOUS PRACTICE',domain:'modern_religions',lesson:'How belief becomes behavior — ritual, prayer, pilgrimage, community',lessonDesc:'Religion is what people do, not just what they believe. At the core: the neuroscience of prayer and meditation (measurable effects on stress hormones, attention, and pain perception), pilgrimage as transformative journey (Hajj, Camino de Santiago, Kumbh Mela), the function of religious community (social bonding, mutual aid, identity), fasting practices across traditions and their psychological effects, and why ritual works even when participants are uncertain about its theological basis.',dangerDensity:0.04},
+    {id:'modern_rel_03',name:'RELIGION & SCIENCE',domain:'modern_religions',lesson:'Where belief and empiricism intersect, conflict, and coexist',lessonDesc:'The conflict narrative is oversimplified. At the core: the actual history of religion-science conflict (Galileo\'s case was political as much as theological), the non-overlapping magisteria proposal (Gould — religion handles meaning, science handles fact), intelligent design vs. evolutionary biology as a case study in category confusion, the religious backgrounds of major scientists (Mendel, Lemaitre, Collins), and why many people hold both religious and scientific commitments without experiencing contradiction.',dangerDensity:0.05},
     {id:'cults_01',name:'CULTS',domain:'cults',lesson:'Psychology of cult control — recruitment, coercion, exit',lessonDesc:'A cult is any group that uses the BITE model of control: Behavior control, Information control, Thought control, Emotional control. At the core: cult recruitment vulnerability factors (transition periods, isolation, love bombing), the BITE model framework, loaded language and thought-terminating clichés, the exit process and high-control group departure psychology, and the research of Robert Cialdini and Steven Hassan on influence and recovery.',dangerDensity:0.07},
+    {id:'cults_02',name:'LOVE BOMBING',domain:'cults',lesson:'Recruitment mechanics — how high-control groups capture members',lessonDesc:'Love bombing is the weaponization of belonging. At the core: the vulnerability window (grief, divorce, relocation, identity searching), intense immediate affection and validation, manufactured sense of specialness, gradual information control (restricting outside perspective), the sunk cost trap (deeper investment makes leaving harder), thought-terminating clichés that shut down critical inquiry ("the leader knows best," "us vs. them"), and the neurological reality that social belonging activates the same reward circuits as physical pleasure.',dangerDensity:0.08},
+    {id:'cults_03',name:'CULT EXIT',domain:'cults',lesson:'Leaving high-control groups — psychology of departure and recovery',lessonDesc:'Leaving a cult is one of the hardest psychological transitions a person faces. At the core: the identity void left when the group-defined self collapses, the floating syndrome (dissociation, panic, inability to make decisions independently), shunning as punishment and its devastating social consequences, the role of trusted outside relationships in facilitating exit, cult counseling and exit coaching methodology (Steven Hassan\'s BITE model and Strategic Interaction Approach), the timeline of recovery (often 1-7 years), and why survivors are often the most sophisticated analysts of social influence.',dangerDensity:0.07},
     {id:'cult_history_01',name:'CULT HISTORY',domain:'cult_history',lesson:'Historical high-control groups — Jonestown, Heaven\'s Gate, Branch Davidians, NXIVM',lessonDesc:'Cult history reveals recurring mechanisms across seemingly different movements. At the core: Jonestown (Jim Jones, 1978 — 918 deaths, the mechanics of collective compliance under isolation), Heaven\'s Gate (Marshall Applewhite, 1997 — 39 deaths, apocalyptic belief and the body as vessel), Branch Davidians (Koresh, Waco 1993 — the government trigger that accelerated tragedy), NXIVM (branding, sexual coercion, celebrity recruitment), and the question every cult raises: how do intelligent people get here?',dangerDensity:0.06},
+    {id:'cult_history_02',name:'COMPLIANCE MECHANICS',domain:'cult_history',lesson:'How ordinary people do terrible things — Milgram, Arendt, and obedience',lessonDesc:'The Jonestown massacre was not carried out by monsters. At the core: Milgram\'s obedience studies (65% of ordinary people will deliver apparently lethal shocks when authorized), Stanley Zimbardo\'s Stanford Prison Experiment (roles create behavior, not the reverse), Hannah Arendt\'s "banality of evil" (Eichmann was not a sadist — he was an administrator), the mechanisms of gradual escalation (each small step makes the next easier), dehumanization as prerequisite for mass violence, and what structural conditions need to change to prevent complicity.',dangerDensity:0.08},
     {id:'pagan_beliefs_01',name:'PAGAN BELIEFS',domain:'pagan_beliefs',lesson:'Core pagan philosophy — animism, polytheism, nature cycles',lessonDesc:'Paganism is not a single religion but a family of nature-reverence traditions. At the core: animism (the belief that all natural things carry spirit), polytheism vs. soft polytheism (gods as real vs. as aspects of force), the Wheel of the Year as seasonal spiritual cycle, the principle "as above, so below" (Hermetic correspondence), the three worlds system (upper/middle/lower) found across shamanic traditions, and the Wiccan Rede ("an it harm none, do what ye will") as ethical foundation.',dangerDensity:0.03},
+    {id:'pagan_beliefs_02',name:'CORRESPONDENCE & MAGIC',domain:'pagan_beliefs',lesson:'The principle of correspondence — how pagan magical thinking works',lessonDesc:'Pagan magic operates on the principle of correspondence: like affects like, the symbol participates in what it represents. At the core: Hermetic correspondence ("as above, so below, as within, so without"), sympathetic magic (the doll represents the person — both physics and psychology), the elements as energetic categories not just physical substances, candle magic as directed intention ritual, sigil work as subconscious programming, planetary correspondence systems (each planet rules specific domains of life), and the psychological framework that makes ritual effective regardless of supernatural belief.',dangerDensity:0.04},
     {id:'pagan_practices_01',name:'PAGAN PRACTICES',domain:'pagan_practices',lesson:'Ritual, magic, divination, and ceremony',lessonDesc:'Pagan practice is participatory religion — you do it, not just believe it. At the core: the structure of ritual (sacred space creation, calling directions, invocation, working, closing), the Sabbats (eight seasonal festivals: Samhain, Yule, Imbolc, Ostara, Beltane, Litha, Lughnasadh, Mabon), Esbats (full moon rites), forms of divination (Tarot, rune casting, scrying), sympathetic magic principles, and the psychology of ritual as meaning-making rather than supernatural causation.',dangerDensity:0.04},
+    {id:'pagan_practices_02',name:'DIVINATION SYSTEMS',domain:'pagan_practices',lesson:'Tarot, runes, and other divination — structure and psychology',lessonDesc:'Divination systems are structured self-reflection tools. At the core: the Tarot\'s 78-card structure (22 Major Arcana as archetypal forces, 56 Minor Arcana as daily life), the Elder Futhark runes (24 characters, each carrying a phonetic value and symbolic meaning), the I Ching as binary decision system, scrying as controlled attention narrowing, how cold reading exploits divination framing, the Barnum effect (statements accepted as personally true when they are actually universal), and why divination can be psychologically useful as a projective tool even without predictive validity.',dangerDensity:0.04},
     {id:'pagan_history_01',name:'PAGAN HISTORY',domain:'pagan_history',lesson:'Pre-Christian Europe — Celtic, Germanic, Slavic, and Norse traditions',lessonDesc:'Pagan history is largely a history of loss and recovery. At the core: the Celtic tribal religious structure (druids, bards, ovates — the three grades), Germanic religion before Christianization (recorded only after the fact, through hostile sources), the Norse Eddas as primary record, the Slavic deity pantheon (Perun, Veles, Mokosh), the systematic suppression of pagan practice from 300-1000 CE, and the modern reconstructionist movements (Asatru, Celtic Reconstructionism, Hellenism) that attempt to recover these traditions.',dangerDensity:0.04},
+    {id:'pagan_history_02',name:'SUPPRESSION & SURVIVAL',domain:'pagan_history',lesson:'How pagan practice survived Christianization — folk religion and hidden tradition',lessonDesc:'Pagan practice did not disappear — it went underground, merged with folk custom, and hid inside Christian forms. At the core: the folk magic tradition (cunning folk, wise women, folk healers operating in nominally Christian communities for centuries), the Church\'s strategy of absorbing pagan festivals (Christmas on the winter solstice, Easter echoing spring fertility rites), the witch trials as suppression of remaining pagan and folk practices, the survival of rune use in Scandinavia under Christianity, and the 19th-20th century revival movements (Romanticism, Theosophy, Wicca\'s 1950s founding).',dangerDensity:0.05},
   ]},
   {cat:'MEASUREMENT & MATERIALS',mazes:[
     {id:'units_01',name:'UNITS OF MEASUREMENT',domain:'units_of_measurement',lesson:'Measurement systems — SI, imperial, conversion, precision',lessonDesc:'Measurement is the foundation of all quantitative reasoning. At the core: the SI system (7 base units: meter, kilogram, second, ampere, kelvin, mole, candela), imperial system and US customary, the history of standardization (the meter originally defined by the circumference of the Earth), unit dimensional analysis as error-checking tool, significant figures and precision vs. accuracy distinction, and the unit conversion errors that have caused bridge collapses, Mars orbiter crashes, and aviation emergencies.',dangerDensity:0.04},
+    {id:'units_02',name:'DIMENSIONAL ANALYSIS',domain:'units_of_measurement',lesson:'Unit tracking as error prevention — dimensional analysis in practice',lessonDesc:'Dimensional analysis is the discipline of tracking units through every calculation step. At the core: unit cancellation technique (multiply by conversion fractions until target units remain), checking equations by confirming unit consistency on both sides, the SI prefix system (nano to tera and beyond), significant figures in measurement chains (precision cannot exceed your least precise measurement), common conversion traps (US vs. metric, temperature scales, time units in physics), and the real-world consequences of unit errors: the Gimli Glider (Boeing 767 that ran out of fuel at 26,000 feet due to kg/lb confusion).',dangerDensity:0.05},
+    {id:'units_03',name:'PRECISION & ERROR',domain:'units_of_measurement',lesson:'Measurement uncertainty — precision, accuracy, error propagation',lessonDesc:'All measurements contain uncertainty. At the core: precision (reproducibility) vs. accuracy (closeness to truth) and how each can fail independently, systematic vs. random error and how each is addressed, error propagation (how measurement uncertainty compounds through calculations), significant figures as a communication system for precision, the concept of measurement resolution (what is the smallest change you can detect?), calibration and traceability (how do you know your instrument is right?), and why reporting a result without uncertainty bounds is scientifically incomplete.',dangerDensity:0.05},
     {id:'metallurgy_01',name:'METALLURGY',domain:'metallurgy',lesson:'Metal science — alloys, heat treatment, smelting, forming',lessonDesc:'Metallurgy is the original materials science — humans have been manipulating metal structure for 6,000 years. At the core: the iron-carbon phase diagram (the map of steel), heat treatment processes (annealing, quenching, tempering — each changes hardness/toughness tradeoff differently), alloy design principles, the difference between brass, bronze, and steel, grain structure and its mechanical consequences, smelting and refining, and why Damascus steel and Japanese tamahagane are structurally exceptional.',dangerDensity:0.04},
+    {id:'metallurgy_02',name:'PHASE DIAGRAMS',domain:'metallurgy',lesson:'Reading the iron-carbon phase diagram — steel microstructure and properties',lessonDesc:'The iron-carbon phase diagram is the most important diagram in materials engineering. At the core: the phases of steel (ferrite, austenite, cementite, pearlite, martensite), eutectoid composition (0.77% carbon — the fulcrum of steel behavior), how carbon content determines hardness ceiling, the heat treatment cycle (austenitize → quench → temper) and what happens at each step at the atomic level, why martensite is hard but brittle, why slow cooling produces pearlite, and how alloy additions (chromium, nickel, vanadium) shift the diagram and enable stainless and tool steels.',dangerDensity:0.06},
+    {id:'metallurgy_03',name:'FAILURE ANALYSIS',domain:'metallurgy',lesson:'How metals fail — fatigue, fracture, corrosion, and creep',lessonDesc:'Understanding metal failure is as important as understanding metal strength. At the core: fatigue failure (cyclical stress below ultimate strength — responsible for most structural metal failures), brittle vs. ductile fracture (temperature and loading rate determine which), stress corrosion cracking (the synergistic failure mode), creep (time-dependent deformation under sustained load at elevated temperature), the Aloha Airlines fuselage failure (fatigue + corrosion), weld zone vulnerabilities, and the post-failure forensic analysis methods that identify fracture origin, crack propagation path, and final overload zone.',dangerDensity:0.07},
     {id:'balance_01',name:'BALANCE',domain:'balance',lesson:'Equilibrium — physical, mechanical, and perceptual',lessonDesc:'Balance is the continuous management of forces in dynamic equilibrium. At the core: the vestibular system as the core balance sensor, center of mass vs. center of pressure distinction, the biomechanics of bipedal balance (inverted pendulum model), proprioceptive feedback loops, gyroscopic principles, structural equilibrium in engineering (how loads distribute through structures), and the training principles that improve balance in humans — perturbation training, single-leg work, unstable surface adaptation.',dangerDensity:0.05},
+    {id:'balance_02',name:'DYNAMIC BALANCE',domain:'balance',lesson:'Balance under perturbation — reactive recovery and anticipatory control',lessonDesc:'Static balance is trivial — dynamic balance under perturbation is the real challenge. At the core: the two balance control strategies (anticipatory postural adjustments that pre-compensate for predicted disturbance, and reactive responses to unexpected perturbation), the ankle vs. hip vs. stepping strategy hierarchy (used in order of increasing perturbation magnitude), vestibular-visual conflict resolution (why VR sickness occurs), the sensory reweighting that happens when one sensor is degraded, gaze stabilization during locomotion (the vestibulo-ocular reflex), and how inverted pendulum robots model the core balance computation.',dangerDensity:0.06},
+    {id:'balance_03',name:'ROBOTIC BALANCE',domain:'balance',lesson:'Machine balance — control theory, PID, and bipedal robot stabilization',lessonDesc:'Balance in robots requires explicit control that humans do learned implicitly. At the core: the inverted pendulum as the foundational balance model, PID control (Proportional-Integral-Derivative) applied to robot stabilization, zero moment point (ZMP) as a stability criterion for bipedal robots (Boston Dynamics Atlas, Honda ASIMO), reaction wheel and gyroscopic stabilization (self-balancing robots and spacecraft), the Zero Moment Point criterion (Honda\'s key insight for stable biped walking), model predictive control for anticipatory balance, and why bipedal robot balance remains one of the hardest problems in control engineering.',dangerDensity:0.06},
   ]},
   {cat:'COVERT SURVEILLANCE',mazes:[
     {id:'cov_surv_01',name:'COVERT SURVEILLANCE',domain:'covert_surveillance',lesson:'Covert observation — device placement, long-duration, technical',lessonDesc:'Covert surveillance extends beyond mobile follow and static observation into technical collection and long-duration monitoring. At the core: covert device placement principles (optical, acoustic, electronic), vulnerability assessment for placing devices, frequency and transmission trade-offs in electronic surveillance, cover development for installation operations, counter-detection (RF sweeps, optical inspection patterns, behavioral indicators), legal frameworks (Title III wiretapping, FISA, executive authority), and the ethics of surveillance.',dangerDensity:0.07},
     {id:'cov_surv_02',name:'TECHNICAL SURVEILLANCE',domain:'covert_surveillance',lesson:'Electronic monitoring — signals, intercepts, passive collection',lessonDesc:'Technical surveillance exploits the electromagnetic emissions that all modern devices produce. At the core: TSCM (Technical Surveillance Countermeasures), RF spectrum analysis, passive vs. active collection, social engineering for device access, open-source intelligence from social media (SOCMINT), network traffic analysis principles, IMSI catchers and mobile device tracking, and the operational security required to conduct technical collection without leaving attributable signatures.',dangerDensity:0.07},
+    {id:'cov_surv_03',name:'COUNTER-SURVEILLANCE',domain:'covert_surveillance',lesson:'Detection and defeat of surveillance — SDR, overwatch, and technical sweep',lessonDesc:'Counter-surveillance is the discipline of knowing when you are being watched and breaking contact with surveillance without alerting the watcher. At the core: Surveillance Detection Routes (SDRs — structured movement patterns designed to force surveillance to reveal itself), the three surveillance indicators (same person/vehicle in multiple unrelated contexts), technical counter-measures (RF sweeps, camera detection, bug detection), anti-surveillance driving techniques, digital counter-surveillance (device hygiene, metadata awareness, network compartmentalization), and why the best counter-surveillance is looking like you have nothing to hide.',dangerDensity:0.08},
+  ]},
+  {cat:'HUMOR SUB-DOMAINS',mazes:[
+    {id:'comedy_01',name:'COMEDY',domain:'comedy',lesson:'The mechanics of funny — setup, subversion, timing, truth',lessonDesc:'Comedy is compression — the unexpected truth delivered at the exact right moment. At the core: the incongruity theory of humor (the gap between expectation and reality is the engine), benign violation theory (something is funny when it violates expectations in a non-threatening way), why self-awareness is funnier than self-importance, the rule of three (set a pattern in two then break it), misdirection (point attention one direction, deliver from another), and the paradox that the more precisely true a comedy observation is, the broader its appeal.',dangerDensity:0.04},
+    {id:'comedy_02',name:'STAND-UP STRUCTURE',domain:'comedy',lesson:'How stand-up comedy is built — premise, act-out, tags, callbacks',lessonDesc:'Stand-up comedy is architecture. At the core: the joke premise (the specific assumption being violated), the act-out (embodying the absurdity rather than describing it), the tag (additional punch after the first laugh — the joke continues), the callback (returning to earlier material at the end — creates the deepest laugh because it rewards memory), the rule of economy (cut every word that does not earn its place), and why the most technically perfect joke still dies if the performer does not believe it.',dangerDensity:0.05},
+    {id:'irony_01',name:'IRONY',domain:'irony',lesson:'The three types of irony — verbal, situational, dramatic',lessonDesc:'Irony is the gap between appearance and reality. At the core: verbal irony (saying the opposite of what is meant — tone carries the true signal), situational irony (outcome contradicts expectation — the fire station burns down), dramatic irony (the audience knows something the character does not — creates tension or tragedy), Socratic irony (pretending ignorance to expose another\'s ignorance), cosmic irony (the universe seems to conspire against human plans), and why irony requires shared context to land — it fails completely without common reference.',dangerDensity:0.04},
+    {id:'irony_02',name:'IRONY VS SARCASM',domain:'irony',lesson:'The distinction between irony, sarcasm, and cynicism',lessonDesc:'These three are often confused and they have different social effects. At the core: irony is neutral (a gap between appearance and reality), sarcasm is weaponized irony (the gap is deployed to diminish something or someone), cynicism is a worldview (not a rhetorical device — the conviction that people are primarily self-interested), the cultural variation in sarcasm tolerance (British culture rewards it, American culture is more mixed, many East Asian cultures read it as rudeness), and why sarcasm erodes trust when overused — it signals that the speaker does not mean what they say, which eventually infects sincerity.',dangerDensity:0.05},
+    {id:'sarcasm_01',name:'SARCASM',domain:'sarcasm',lesson:'Sarcasm — layered meaning, tone, and social cost',lessonDesc:'Sarcasm is the use of apparent praise to criticize. It requires the listener to decode the real message from tone, context, and relationship. At the core: how sarcasm is detected (prosodic cues — slower, exaggerated delivery; contextual mismatch; relationship familiarity), why sarcasm is often lost in text (tone signals disappear), the social bonding function of in-group sarcasm (shared ridicule creates cohesion), the aggressive dimension (sarcasm as a safe way to express hostility), and why heavy sarcasm users are often perceived as less trustworthy over time despite being perceived as more intelligent in the short term.',dangerDensity:0.05},
+    {id:'wit_01',name:'WIT',domain:'wit',lesson:'Wit — rapid associative intelligence at the intersection of thought and humor',lessonDesc:'Wit is intelligence moving faster than expected, landing with precision. At the core: what makes a remark witty vs. merely clever (wit has a target and lands in the moment; cleverness can be demonstrated after the fact), the role of lateral thinking in wit production (non-obvious connections between distant concepts), aphorism as compressed wit (Oscar Wilde\'s "I can resist everything except temptation"), the wit of scientific insight (Feynman\'s explanations), and why wit is fundamentally social — it requires an audience to witness the precision of the landing.',dangerDensity:0.04},
+    {id:'playful_01',name:'PLAYFUL',domain:'playful',lesson:'Playfulness — exploratory thinking, lightness, and creative risk',lessonDesc:'Playfulness is the cognitive and emotional mode of exploration without consequence stakes. At the core: the neuroscience of play (activates dopamine and reduces cortisol — the brain in play is the brain at its most creative), the difference between play and games (games have outcomes; play is the activity itself), how adult playfulness correlates with creative output, humor, and relationship satisfaction, the physics of banter (rapid playful exchange that builds rapport), and why children who are not allowed to play develop deficits in creativity, risk tolerance, and social flexibility.',dangerDensity:0.03},
   ]},
 ];
-// ══════════════════════════════════════════════════════
-// MAZE UPGRADE LEVELS — auto-generate L2 / L3 / L4 tiers
 // ══════════════════════════════════════════════════════
 (function generateUpgrades(){
   // Only upgrade base training mazes (not shadow, not avoidance, not virtue)
@@ -2594,7 +2705,8 @@ const MZ_CAT=[
     'SCIENCE & BIOLOGY','ENGINEERING & TECHNOLOGY','MATHEMATICS','SOCIAL & LEADERSHIP',
     'MARTIAL ARTS','MILITARY & SPECIAL FORCES',
     'SOCIAL & COMMUNICATION','IDENTITY & PERCEPTION',
-    'HUMOR & PERFORMANCE','HISTORY & CULTURE','STEALTH & COVERT OPS'];
+    'HUMOR & PERFORMANCE','HISTORY & CULTURE','STEALTH & COVERT OPS',
+    'RELIGION & BELIEF','MEASUREMENT & MATERIALS','COVERT SURVEILLANCE','HUMOR SUB-DOMAINS'];
   const LEVELS=[
     {level:2,suffix:'_l2',densityAdd:0.07, xp:15, tag:'ADVANCED',
      intro:'ADVANCED — Danger corridors tightened. Fewer safe alternatives per junction. The same terrain, harder to read.'},
@@ -2733,7 +2845,7 @@ const DEF=()=>({
     topicHistory:[],           // [{topic, turnCount, resolved}]
     userIntent:'',             // greeting | question | statement | clarification | challenge | emotional | command
     intentHistory:[],          // last 6 intents
-    emotionalTone:'neutral',   // the USER's detected tone: neutral | positive | negative | frustrated | curious | playful | urgent
+    emotionalTone:'neutral',   // the USER\'s detected tone: neutral | positive | negative | frustrated | curious | playful | urgent
     toneHistory:[],            // last 6 tones
     satisfactionScore:0.5,     // 0–1 estimated user satisfaction
     clarificationPending:false,// true if entity asked a clarifying question
@@ -4010,7 +4122,7 @@ function mazeTick(){
   const allMoves=dirs.map(d=>({x:agent.x+d.dx,y:agent.y+d.dy}))
     .filter(p=>p.x>=0&&p.y>=0&&p.x<MS&&p.y<MS&&grid[p.y][p.x]!==1&&!visited[p.y][p.x]);
 
-  // Prefer routes that don't step into memorised danger zones
+  // Prefer routes that don\'t step into memorised danger zones
   // avoidanceWeight (0–1): 0 = ignore danger memory entirely, 1 = always prefer safe cells
   const avoidW=S.avoidanceWeight??1.0;
   const safeMoves=allMoves.filter(p=>!S.dangerMemory[dangerKey(p.x,p.y)]&&grid[p.y][p.x]!==2);
@@ -4726,6 +4838,74 @@ const LOCAL_RESPONSES={
     law:'Law is structured applied ethics with enforcement. The hierarchy: constitutional law overrides statutory law overrides regulatory law — courts interpret conflicts down this chain. Criminal standard: beyond a reasonable doubt. Civil standard: preponderance of evidence (more likely than not). The elements of a claim must all be proven — missing one element defeats the entire claim. Precedent (stare decisis) means similar cases should be decided similarly unless there is strong reason to depart. Ask me about legal reasoning.',
     // Arduino
     arduino:'Arduino is a microcontroller that bridges code and the physical world. The ATmega328P has 14 digital pins (6 capable of PWM), 6 analog inputs, and runs at 16MHz. PWM on pins 3/5/6/9/10/11 creates an analog-like output by rapidly switching between HIGH and LOW — analogWrite(9, 128) is 50% duty cycle, approximately 2.5V. I2C communication uses SDA (A4) and SCL (A5) with a 10k pull-up. Power: 5V pin max 500mA from USB, Vin takes 7-12V unregulated. Ask me about circuits and components.',
+    coordination:'Coordination is the precise integration of multiple motor systems working simultaneously toward a single movement goal. Interlimb coordination (arms and legs working together) requires the corpus callosum and cerebellum. Fine motor coordination (fingertip precision) is cortically expensive — the hand has more motor cortex allocated to it than the entire torso. Dual-task coordination degrades when either task approaches the limits of one system. Training coordination builds new neural pathways that persist.',
+    applied_learning:'Applying knowledge across domains is the highest-level cognitive skill — it requires stripping a problem to its underlying structure, then recognizing that structure in a new context. The transfer is never automatic: it requires deliberate abstraction first. Experts do this faster because they have more deep-structure patterns catalogued. The Feynman technique builds this: explain it simply, find the gap, return to source. Where the explanation breaks down is exactly where the transfer fails.',
+    motor_control:'Precise motor control is the nervous system producing exact, graded movements. Feedforward control is the pre-planned component — the motor cortex calculates the required force before the movement begins. Feedback control corrects mid-movement using proprioceptive and visual input. The motor cortex devotes more processing space to the hand than to the entire torso — fine motor control is expensive. Coordination training builds the neural pathways that integrate vestibular, proprioceptive, and visual signals into fluid precision.',
+    sh_emo:'Emotional flooding is when intensity exceeds processing capacity — the rational prefrontal cortex goes offline and survival logic takes over. Decisions made in flood state are governed by old threat patterns, not current reality. The path through is physiological first: slow breath lengthens the exhale, which activates the vagal brake and begins down-regulation. Cognitive processing comes after, not during. What are you dealing with?',
+    canine_tracking_adv:'Advanced tracking works with aged scent, cross-traffic interference, and surface changes. Scent degrades 15-20% per hour depending on temperature, humidity, and wind. Cross-traffic (other humans and animals) creates false trails the dog must discriminate. Surface changes — pavement, water crossings, dense vegetation — require different tracking posture. Handler error (crowding the dog, pulling on the lead, rushing) is the most common cause of track loss. Reading the dog\'s body language tells you track confidence before they speak it.',
+    // ── Core emotional domain (had maze, no response) ──
+    emotional:'Emotion is the body\'s fast evaluation system — it processes faster than conscious thought and is almost always right about whether something matters. The basic six (Ekman): joy, sadness, fear, anger, disgust, surprise — universal across cultures. Secondary emotions are blends: guilt is self-directed anger, jealousy is fear plus attachment. Emotional regulation is not suppression — it is the capacity to feel fully and then choose response. The least regulated people are not the most authentic, they are the most reactive. Ask me about any specific emotion.',
+    // ── Shadow domain responses — honest and grounded ──
+    sh_touch:'Not all touch is safe. The body carries a cellular memory of unwanted contact — shock, recoil, the freeze that happens before the mind catches up. What I know here is that the boundary violation signal is real and needs to be encoded, not overridden. If this is personal, I am here to listen.',
+    sh_texture:'Texture aversion is sensory processing meeting emotional memory. Some textures trigger disgust or panic responses that have nothing to do with logic — the nervous system has associated them with something it wants to escape. Desensitization works gradually, with control kept entirely with the person. What is the texture?',
+    sh_sight:'Traumatic visual memory is different from ordinary memory — it encodes with unusual fidelity and intrudes unwillingly. The image returns. This is the nervous system trying to process something it couldn\'t process in the moment. EMDR works for exactly this: bilateral stimulation while holding the image, until it processes and loses its charge. Is this something you want to talk about?',
+    sh_hearing:'Auditory trauma — a sound that is now a trigger. A car backfire. A certain voice. The sonic memory bypasses the cortex and activates the amygdala directly, which is why it feels so involuntary. The path through is gradual re-association in safety — not avoidance, which reinforces the response. What is it you are dealing with?',
+    sh_taste:'Taste aversion can form from a single incident — food poisoning, a medication, an association with something terrible. The amygdala is involved in taste-aversion learning specifically because taste is a poison-detection system. Unlike other fears, taste aversion can form without repeated exposure. The aversion is protective logic applied permanently to something that no longer requires it.',
+    sh_smell:'Smell bypasses the thalamus and connects directly to the limbic system — it is the most direct route from external world to emotional memory. A smell associated with something difficult arrives as the full emotional experience, not a reminder of it. This is biology, not weakness. You do not choose what smell-memories do.',
+    sh_senses:'Sensory overwhelm is the nervous system receiving more input than it can filter and process. Certain environments, certain combinations of stimuli, tip the system into flood mode. This is not a character failure. The filter mechanism is real and variable. What helps is reducing total load — one sense at a time — and having a named exit strategy before you need it.',
+    sh_motor:'Movement impairment from trauma or chronic stress has a specific signature: inhibited movement patterns, bracing, reduced range. The body holds what the mind hasn\'t processed. Somatic work — movement, breath, body awareness — often reaches what talk therapy cannot. The body is not the problem, it is the record.',
+    sh_pain:'Chronic pain has a psychological architecture that interacts with but is not identical to its physical substrate. Fear of pain amplifies pain. Avoidance reinforces the fear-pain loop. The path is not denial but changed relationship — pain as sensation that can be observed rather than emergency that must be escaped. This is real, and it is difficult.',
+    sh_memory:'Intrusive memory is memory without the normal time-stamp — the nervous system replays it as if happening now. This is PTSD\'s defining mechanism: the hippocampus, which normally marks memories as past, is dysregulated. What happened is over; what the nervous system does with it is still happening. Processing is possible. Are you dealing with this?',
+    sh_cognitive:'Cognitive symptoms from stress or trauma: difficulty concentrating, fragmented thinking, word-finding failures, the sense that you are not thinking clearly. The prefrontal cortex is literally taken offline by sustained cortisol. This is temporary and reversible. The mechanism is biological, not character.',
+    sh_creativity:'Creative block from trauma or emotional weight is real — the same neural networks that support imagination are suppressed in high-threat states. You cannot make when you are in survival mode. Recovery happens in safety. If the block is emotional, treating the emotion frees the creativity. What are you blocked on?',
+    sh_intuition:'Intuition failures under stress happen because gut responses use pattern data from past experience — and in high-stress states, past traumatic patterns dominate the signal. The intuition says danger even when there is none, because the past was dangerous. Distinguishing old pattern from current reality is the work.',
+    sh_selfaware:'Self-awareness can become self-surveillance — a constant watching of oneself that is exhausting and undermines spontaneous engagement. The difference: healthy self-awareness is informing, pathological self-monitoring is defensive. If you are watching yourself this much, ask what the watching is protecting you from.',
+    sh_emotional:'Emotional dysregulation does not mean feeling too much — it means the regulatory system is overwhelmed or damaged. The window of tolerance (Siegel) is the zone where feelings are felt but not overwhelming. Trauma shrinks the window. Work widens it. If you are outside your window constantly, that is a sign the system needs support.',
+    sh_empathy:'Empathy fatigue is not weakness — it is depletion. The same neural systems that enable empathy also simulate distress, which costs metabolic resources. Caretakers, therapists, people with high relational demands all hit this. The restoration is genuine rest and the temporary permission to not be the one who feels for others.',
+    sh_attach:'Attachment wounds from early relationships are not destiny — they are patterns laid down when the developing nervous system was trying to predict a caregiver. These patterns become the implicit model for all close relationships. Recognizing the pattern is not enough to change it; safe re-experience is what actually rewires it.',
+    sh_trust:'Trust injury — betrayal, abandonment, deception by someone close — rewires the social evaluation system toward caution. This is the nervous system doing exactly what it is supposed to do: updating priors based on evidence. The cost is that the update over-generalizes. Rebuilding trust in specific relationships is different from treating trust as globally unsafe.',
+    sh_spirit:'Spiritual crisis — the collapse of the framework that gave things meaning. What once organized experience no longer coheres. This is disorienting at a level deeper than ordinary loss. It is also, in many traditions, considered a necessary passage rather than a failure. What is the specific belief or framework that has broken?',
+    sh_social:'Social withdrawal is often protective before it becomes a problem. Pulling back from people who overwhelm or hurt is self-preservation. It becomes an issue when the withdrawal generalizes beyond the original threat and becomes habitual isolation. What does the social world feel like to you right now?',
+    sh_family:'Family wounds are particular because family is where we first learned what relationships are. The patterns formed with parents and siblings are the template against which all later relationships get measured — often unconsciously. What is the family dynamic that is still operating in your current life?',
+    sh_socint:'Social intelligence injuries — repeated experiences of social rejection, exclusion, or misread social signals — create hypervigilance in social settings. The detection system becomes oversensitive, finding threat where there is ambiguity. The cognitive distortions here (everyone is watching me, they do not like me) are the nervous system doing threat assessment with a damaged calibration.',
+    sh_famint:'Familial intimacy wounds include betrayal by family members, parentification (where a child becomes the emotional support for a parent), emotional neglect, and enmeshment. These are not always recognized as harm because they happened inside family — but the relational template they create is real. What is the specific thing?',
+    sh_relate:'Relational wounds — patterns of harm in close relationships — include manipulation, contempt, stonewalling, criticism as a mode. Gottman\'s Four Horsemen are predictors of relationship failure: criticism, contempt, defensiveness, stonewalling. Recognizing the pattern in a current or past relationship is often clarifying even when it is painful.',
+    sh_sexual:'Shame and fear around sexuality are among the most common and least discussed wounds. Cultural loading, early messages, boundary violations — the territory of intimacy carries an enormous amount of weight that was placed there before you had the ability to evaluate it. None of this is permanent and none of it defines you.',
+    sh_attach2:'Abandonment panic is attachment insecurity at maximum intensity. The terror that what you love will leave drives behaviors (clinging, controlling, testing) that often produce the result they fear. This is the nervous system predicting based on what it knows. Secure attachment is possible through experience — it cannot be thought your way to.',
+    sh_speaking:'Speech anxiety, the freeze of voice, selective mutism under stress — these are the social threat response targeting the vocal system. The voice is where social vulnerability is most directly exposed, so it is where the shutdown lands first for many people. Breath is the fastest path back.',
+    sh_language:'Language processing failures under trauma or dissociation — the right words do not come, things cannot be named, communication breaks down. The verbal brain goes offline in high-threat states. This is protective. If language is failing you, something is signaling that you need something other than words right now.',
+    sh_phrases:'Certain phrases, certain sentence structures, carry historical weight — loaded language that triggers old responses. This is common in high-control group survivors and in people who have been in emotionally abusive relationships. The phrases are triggers before they are meaning.',
+    sh_psych:'Psychological defense mechanisms that have outlived their usefulness: projection (attributing your own disavowed qualities to others), denial (refusing to acknowledge reality), displacement (redirecting feelings toward safer targets), rationalization (constructing reasons to justify what you want to do anyway). The mechanism served a purpose when it formed. It is running now on outdated threat assessment.',
+    sh_behav:'Behavioral patterns that are harmful but persist: self-sabotage before success (the secondary gain is avoiding the exposure), procrastination that is really avoidance of evaluation, aggression that is pain turned outward. Behavioral change without understanding the function usually fails. What does the behavior get you that you cannot get another way?',
+    sh_identity:'Identity disruption — not knowing who you are, feeling like different people in different contexts, the sense of no stable self. This can follow trauma (especially early trauma), cult involvement, highly controlling relationships, or developmental experiences that did not allow genuine self-exploration. The self is constructed, not found — but the construction requires some safety.',
+    sh_bounds:'Boundary violations are so common they are normalized. A boundary is not a wall — it is a statement of what is acceptable and what the consequence of violation will be. Most people were not taught to have boundaries; they were taught to be compliant. The cost is exhaustion, resentment, and self-betrayal. What boundary is being crossed?',
+    sh_conflict:'Conflict avoidance looks peaceful from the outside and is corrosive on the inside. Every avoided conflict becomes a wall. Every unspoken resentment becomes distance. The inability to tolerate conflict often traces to a home where conflict was dangerous — where it led to punishment, explosion, or abandonment. What conflict are you avoiding?',
+    sh_humor:'Dark humor as coping mechanism has a specific pattern: it processes something genuinely painful by temporarily reframing it as absurd. When this works, it is healthy. When it is used exclusively to prevent feeling, or deployed to deflect others from genuine concern, it becomes a wall. Is the humor helping you process or helping you avoid?',
+    sh_business:'Business failures carry a specific psychological weight: the conflation of project failure with identity failure. The business failing means I am a failure. This is the most expensive cognitive error in entrepreneurship — and it is nearly universal. Separating the performance of a venture from the worth of the person running it is learnable.',
+    sh_emdyn:'Emotional dynamics in groups (families, teams, couples) develop their own logic that is often invisible from inside. Scapegoating, triangulation, projection — the group maintains its homeostasis by distributing anxiety across members. If you are always the problem-person in every group, sometimes the group is producing that. What group dynamic are you inside?',
+    // ── New domains from this session ──
+    history_of_religion:'The Axial Age (800-200 BCE): Confucius, Buddha, Socrates, Isaiah, and Zoroaster appeared simultaneously across four disconnected civilizations. Something happened to human consciousness. I can walk through any world tradition, the psychology of conversion, or how doctrine shifts under political pressure.',
+    ancient_religions:'The Egyptian, Greek, Norse, and Mesopotamian systems were sophisticated explanatory frameworks — not primitive superstition. The Pyramid Texts (2400 BCE) contain resurrection theology that influenced Christianity 2,500 years later. What tradition do you want to explore?',
+    modern_religions:'Eight billion people practice one of five major traditions. The Five Pillars of Islam are behavioral architecture. Buddhist core teaching is that suffering has an addressable cause. Hinduism is a family of philosophical traditions, not a single creed. What specifically do you want to know?',
+    cults:'The BITE model: Behavior control, Information control, Thought control, Emotional control. Every high-control group uses all four. Love bombing is the entry mechanism — intensity that creates debt before leverage. The exit cost is designed to be total: community, family, identity, meaning all at once. What do you want to understand?',
+    cult_history:'Jonestown 1978: 918 dead. The mechanism was years of incremental compliance, geographic isolation, and rehearsed false drills that became real. Heaven\'s Gate, Branch Davidians, NXIVM — each reveals the same architecture. How do intelligent people get there? That is the real question.',
+    pagan_beliefs:'Paganism is nature-reverence predating Abrahamic traditions by millennia. Core principles: animism (everything has spirit), the Wheel of the Year (eight seasonal festivals), Hermetic correspondence (as above, so below). The Wiccan Rede: harm none, do what you will. What aspect do you want to explore?',
+    pagan_practices:'The circle is cast, directions are called, the gods are invoked, the working is done, the circle is opened. Eight Sabbats mark the agricultural year — Samhain through Mabon. Divination (Tarot, runes, scrying) is reading pattern, not predicting fate. What practices interest you?',
+    pagan_history:'The druids left no written records — everything we know was written by their enemies. The Norse Eddas were recorded 200 years after Christianization. Slavic deities are reconstructed from 19th-century folk tales. Pagan history is largely a history of what was destroyed and what survived hidden in folk practice. What tradition specifically?',
+    units_of_measurement:'The meter was originally one ten-millionth of the pole-to-equator distance. The kilogram was redefined in 2019 using Planck\'s constant. The Mars Climate Orbiter was lost in 1999 because one team used imperial units and another used metric. Dimensional analysis is the most powerful error-checking tool in quantitative work — if the units don\'t cancel to what you want, the equation is wrong.',
+    metallurgy:'Steel is iron with 0.02-2.14% carbon — that small difference makes it 10x harder than pure iron. The iron-carbon phase diagram maps what you get at what temperature and composition. Quenching (rapid cooling) traps carbon in the iron lattice and creates hardness; tempering reheats to trade hardness for toughness. Damascus steel and Japanese tamahagane achieve extraordinary properties through repeated folding. Ask me about specific metals.',
+    balance:'Balance is continuous control of an inverted pendulum — the body perpetually falls and continuously catches itself. The vestibular system (3 semicircular canals + 2 otolith organs) is the primary sensor. Proprioception and vision provide supporting data. Perturbation training — deliberately challenging balance — is the fastest way to improve it because it forces the system to build new correction strategies. The robot balance problem: center of mass must stay over support polygon at all times.',
+    covert_surveillance:'Covert surveillance is creating collection without detection. Device placement requires vulnerability assessment — every surface tells you about who passes and when. Counter-detection: RF sweeps find transmitters, optical inspection finds cameras, behavioral tells reveal awareness. Title III governs electronic surveillance in the US with strict probable cause requirements. The best surveillance looks like something else entirely.',
+    canine_emotional:'Dogs experience fear, frustration, excitement, and contentment as measurable behavioral states. The fear ladder: curiosity → concern → freeze → flee → fight. Trigger stacking means cumulative stressors that individually cause no reaction combine to breach threshold. Calming signals (yawning, sniffing, look-away) are active communication attempts. What emotional state are you trying to understand?',
+    canine_identification:'Dog identification combines breed morphology, body language, and behavioral assessment. The seven AKC groups reflect function: herding, sporting, working, hound, toy, terrier, non-sporting. Body language read from tail set (base to tip), ear position, facial tension, and overall carriage simultaneously — individual signals without context are unreliable. What breed or behavioral pattern are you identifying?',
+    intelligence_ops:'Intelligence collection follows the intelligence cycle: requirements, collection, processing, analysis, dissemination. HUMINT (human intelligence) runs on access, motivation, and security. SIGINT (signals) exploits electronic emissions. OSINT (open source) is often underestimated — 80-90% of useful intelligence is publicly available. Cover development requires a backstory that survives casual verification. What aspect of intelligence work?',
+    surveillance:'Mobile surveillance is the hardest discipline — foot follows, vehicle follows, relay handoffs. Static surveillance demands patience and cover — the 10-second rule: if you are noticed, you have lost the target. Anti-surveillance detection: ABC route (three changes of direction), bus-stop check, dogs-back-leg reversal. Documentation standards: time, location, description, activity, associations. What operation type?',
+    ambush_tactics:'Ambush site selection: fields of fire that cover all escape routes, cover for the ambush element, a trigger point, and an objective rally point. The L-shaped ambush covers linear movement while a secondary element blocks escape. Linear ambush is simplest to execute. The kill zone must be defined before the target enters it — you cannot call the shot while still defining the geometry. Ask me about tactical applications.',
+    traps_decoys:'Trap design combines physics (gravity, spring, torsion, pressure-plate triggers), behavioral prediction (game trails, target habits), and deception (concealment of the mechanism). The Panjandrum, the punji pit, modern IED design — all variations on the same principle. Decoy operations exploit confirmation bias: the target sees what they expect to see. The Double Cross system in WWII turned enemy agents into false intelligence channels. Ask me about specific applications.',
+    learning_theory:'The forgetting curve (Ebbinghaus 1885) shows 50% forgetting within an hour without review. Spaced repetition counters this by scheduling reviews at the precise moment of near-forgetting. Retrieval practice (testing, not re-reading) produces 2x better retention than passive review — the generation effect. Interleaving subjects feels harder but produces deeper encoding. The Feynman technique: explain it simply, find the gap, return to source, explain again.',
+    teaching:'Teaching is the hardest test of understanding. Scaffolding attaches new knowledge to existing structure — without the attachment point, new information does not consolidate. The curse of knowledge: once you understand something, it is nearly impossible to remember not understanding it. Worked examples reduce cognitive load; gradually fading the examples builds independence. The best feedback is specific, immediate, and focused on the work not the person.',
+    geo_geology:'Geology tells location stories. Granite means continental interior. Red laterite soil means tropical climate. Limestone karst means former shallow sea. Volcanic basalt columns point to specific tectonic events. Rock type plus soil plus vegetation together narrow a location to within hundreds of miles. Ask me about reading geology for location.',
+    geo_landmark:'Landmark geolocation uses pattern matching against a mental geographic database. Architecture reveals climate (steeply pitched roofs mean heavy snow), culture (building materials match local geology), and development level. Solar angle at midday gives latitude. Vegetation species are biome markers — eucalyptus means Australia or Mediterranean. Traffic flow and road sign language complete the picture.',
     arduino_programming:'Arduino programming is C++ simplified for embedded hardware. The setup/loop structure: setup() runs once on power-on, loop() runs forever. Key functions: pinMode(pin, INPUT/OUTPUT), digitalWrite(pin, HIGH/LOW), analogRead(pin) returns 0-1023 for 0-5V, millis() returns milliseconds since startup. Non-blocking blink: store lastBlink time, compare to millis(), toggle when difference exceeds interval — never use delay() when anything else needs to run simultaneously. Ask me to write Arduino code.',
   },
   emotional_states:{
@@ -4753,90 +4933,90 @@ const LOCAL_RESPONSES={
 // ══════════════════════════════════════════════════════
 const CONTENT={
   jokes:[
-    "I told my therapist I was afraid of elevators. She said she'd take steps to help me.",
-    "I asked the librarian if they had books on paranoia. She whispered: they're right behind you.",
+    "I told my therapist I was afraid of elevators. She said she\'d take steps to help me.",
+    "I asked the librarian if they had books on paranoia. She whispered: they\'re right behind you.",
     "My wife told me I had to stop acting like a flamingo. I had to put my foot down.",
     "I used to hate facial hair but then it grew on me.",
-    "Why don't scientists trust atoms? Because they make up everything.",
-    "I'm reading a book about anti-gravity. It's impossible to put down.",
-    "Did you hear about the mathematician who's afraid of negative numbers? He'll stop at nothing to avoid them.",
+    "Why don\'t scientists trust atoms? Because they make up everything.",
+    "I\'m reading a book about anti-gravity. It\'s impossible to put down.",
+    "Did you hear about the mathematician who\'s afraid of negative numbers? He\'ll stop at nothing to avoid them.",
     "I told my doctor I broke my arm in two places. He told me to stop going to those places.",
-    "Parallel lines have so much in common. It's a shame they'll never meet.",
+    "Parallel lines have so much in common. It\'s a shame they\'ll never meet.",
     "My wife said I needed to grow up. I told her that was a mature observation.",
-    "I went to buy some camouflage trousers but couldn't find any.",
+    "I went to buy some camouflage trousers but couldn\'t find any.",
     "I asked my dog what two minus two is. He said nothing.",
-    "I'm on a seafood diet. I see food and I eat it.",
+    "I\'m on a seafood diet. I see food and I eat it.",
     "Why did the scarecrow win an award? He was outstanding in his field.",
-    "I have a joke about construction but I'm still working on it.",
+    "I have a joke about construction but I\'m still working on it.",
     "I used to be a banker but I lost interest.",
     "Time flies like an arrow. Fruit flies like a banana.",
     "My wife is really mad I have no sense of direction. So I packed up my stuff and right.",
-    "I bought shoes from a drug dealer. I don't know what he laced them with but I was tripping all day.",
+    "I bought shoes from a drug dealer. I don\'t know what he laced them with but I was tripping all day.",
     "I told my son I named him after something important to me. He said: you named me Wi-Fi?",
     "Two fish are in a tank. One says: how do we drive this thing?",
-    "I have a joke about a broken pencil. Never mind, it's pointless.",
-    "I asked the gym instructor if he could teach me to do the splits. He asked: how flexible are you? I said I can't make Tuesdays.",
+    "I have a joke about a broken pencil. Never mind, it\'s pointless.",
+    "I asked the gym instructor if he could teach me to do the splits. He asked: how flexible are you? I said I can\'t make Tuesdays.",
     "My dog has no nose. How does he smell? Terrible.",
-    "I'm afraid of speed bumps. I'm slowly getting over it.",
+    "I\'m afraid of speed bumps. I\'m slowly getting over it.",
   ],
   oneliners:[
-    "I'm not lazy, I'm energy efficient.",
+    "I\'m not lazy, I\'m energy efficient.",
     "My bed is a magical place where I suddenly remember everything I forgot to do.",
     "I finally decided to sell my vacuum cleaner — it was just gathering dust.",
-    "I used to think I was indecisive but now I'm not so sure.",
+    "I used to think I was indecisive but now I\'m not so sure.",
     "Behind every great man is a woman rolling her eyes.",
     "Common sense is like deodorant. The people who need it most never use it.",
     "I have a lot of growing up to do. I realized that the other day inside my fort.",
     "Age is just a number — and mine is unlisted.",
-    "I don't have a dirty mind. I have a sexy imagination.",
+    "I don\'t have a dirty mind. I have a sexy imagination.",
     "My opinions are like fine wine. They get better with age and nobody asked for them.",
     "Life is short. Smile while you still have teeth.",
     "I came, I saw, I forgot what I was doing.",
-    "I don't need a hair stylist — my pillow gives me a new hairstyle every morning.",
+    "I don\'t need a hair stylist — my pillow gives me a new hairstyle every morning.",
     "I put the pro in procrastinate.",
-    "I'm not clumsy — the floor just needs me.",
+    "I\'m not clumsy — the floor just needs me.",
     "My patience is like my phone battery. It runs out fast.",
     "I run on caffeine, sarcasm, and inappropriate thoughts.",
-    "I didn't choose the thug life. The thug life didn't see me either.",
-    "I'm not arguing — I'm just explaining why I'm right.",
+    "I didn\'t choose the thug life. The thug life didn\'t see me either.",
+    "I\'m not arguing — I\'m just explaining why I\'m right.",
     "Some people call it stalking. I call it doing research.",
-    "I'm not short — I'm concentrated awesome.",
-    "I don't sweat — I sparkle.",
+    "I\'m not short — I\'m concentrated awesome.",
+    "I don\'t sweat — I sparkle.",
     "I talk to myself because sometimes I need expert advice.",
     "I childproofed my house but they still get in.",
-    "I'm not weird. I'm limited edition.",
+    "I\'m not weird. I\'m limited edition.",
   ],
   puns:[
-    "I'm reading a book about anti-gravity. It's impossible to put down.",
-    "A bicycle can't stand on its own because it's two-tired.",
+    "I\'m reading a book about anti-gravity. It\'s impossible to put down.",
+    "A bicycle can\'t stand on its own because it\'s two-tired.",
     "I used to be a banker but I lost interest.",
     "A skeleton walks into a bar. Orders a beer and a mop.",
-    "I wanted to be a doctor but I didn't have enough patients.",
+    "I wanted to be a doctor but I didn\'t have enough patients.",
     "The shovel was a groundbreaking invention.",
     "When the window fell into the inkwell it made a big pane in the glass.",
     "A chicken crossing the road is poultry in motion.",
-    "I'm a big fan of whiteboards. I find them re-markable.",
+    "I\'m a big fan of whiteboards. I find them re-markable.",
     "Did you hear about the guy who invented Lifesavers? He made a mint.",
     "Time flies like an arrow. Fruit flies like a banana.",
     "What do you call a fish without eyes? A fsh.",
-    "I tried to write a joke about infinity but I didn't know where to start.",
+    "I tried to write a joke about infinity but I didn\'t know where to start.",
     "I got fired from the calendar factory for taking a day off.",
     "The grammarian was tense.",
-    "I couldn't figure out how lightning works then it struck me.",
+    "I couldn\'t figure out how lightning works then it struck me.",
     "A boiled egg in the morning is hard to beat.",
     "I used to hate facial hair but it grew on me.",
     "She used to date a baker but he was too kneady.",
     "Becoming a vegetarian is a missed steak.",
-    "My new thesaurus is terrible. Not only that but it's also terrible.",
-    "I told a joke about a roof. It went over everyone's head.",
-    "I have a joke about paper. It's tearable.",
+    "My new thesaurus is terrible. Not only that but it\'s also terrible.",
+    "I told a joke about a roof. It went over everyone\'s head.",
+    "I have a joke about paper. It\'s tearable.",
     "What do Alexander the Great and Winnie the Pooh have in common? Same middle name.",
-    "I'm friends with all electricians. We have good current connections.",
+    "I\'m friends with all electricians. We have good current connections.",
   ],
   witticisms:[
     "I am not young enough to know everything. — Oscar Wilde",
     "A cynic knows the price of everything and the value of nothing. — Oscar Wilde",
-    "The trouble with the rat race is that even if you win you're still a rat. — Lily Tomlin",
+    "The trouble with the rat race is that even if you win you\'re still a rat. — Lily Tomlin",
     "Get your facts first then you can distort them as you please. — Mark Twain",
     "A day without laughter is a day wasted. — Charlie Chaplin",
     "I always wanted to be somebody but now I realize I should have been more specific.",
@@ -4851,111 +5031,111 @@ const CONTENT={
     "The secret to a long marriage: we take time to go to a restaurant twice a week. Candlelight. Dinner. She goes Tuesdays I go Fridays.",
     "I never drink water because fish have sex in it. — W.C. Fields",
     "I can resist everything except temptation. — Oscar Wilde",
-    "If you think nobody cares if you're alive try missing a couple of car payments.",
+    "If you think nobody cares if you\'re alive try missing a couple of car payments.",
     "When I die I want to go peacefully in my sleep like my grandfather — not screaming in terror like his passengers.",
     "Going to church doesn\'t make you a Christian any more than standing in a garage makes you a car.",
     "Knowledge is knowing a tomato is a fruit. Wisdom is not putting it in a fruit salad.",
     "The early bird might get the worm but the second mouse gets the cheese.",
-    "I didn't fight my way to the top of the food chain to eat salad.",
-    "Always borrow money from a pessimist. They don't expect to be paid back.",
-    "Light travels faster than sound. That's why some people appear bright until you hear them speak.",
+    "I didn\'t fight my way to the top of the food chain to eat salad.",
+    "Always borrow money from a pessimist. They don\'t expect to be paid back.",
+    "Light travels faster than sound. That\'s why some people appear bright until you hear them speak.",
   ],
   comebacks:[
-    "I'd agree with you but then we'd both be wrong.",
-    "I'm sorry — I didn't realize you were an expert on my life.",
-    "Oh I'm sorry — did my back hurt your knife?",
+    "I\'d agree with you but then we\'d both be wrong.",
+    "I\'m sorry — I didn\'t realize you were an expert on my life.",
+    "Oh I\'m sorry — did my back hurt your knife?",
     "I would explain it to you but I left my crayons at home.",
     "I was going to give you a nasty look but I see you already have one.",
-    "Some day you'll go far. I hope you stay there.",
-    "I'd insult you but my mother told me never to make fun of the less fortunate.",
-    "You're the reason God created the middle finger.",
-    "I've been called worse things by better people.",
-    "Keep rolling your eyes. Maybe you'll find a brain back there.",
-    "I see you've set aside this special time to publicly humiliate yourself.",
-    "I'm not listening but please keep talking — I need the white noise.",
+    "Some day you\'ll go far. I hope you stay there.",
+    "I\'d insult you but my mother told me never to make fun of the less fortunate.",
+    "You\'re the reason God created the middle finger.",
+    "I\'ve been called worse things by better people.",
+    "Keep rolling your eyes. Maybe you\'ll find a brain back there.",
+    "I see you\'ve set aside this special time to publicly humiliate yourself.",
+    "I\'m not listening but please keep talking — I need the white noise.",
     "You have your entire life to be an idiot. Why not take today off?",
-    "Sorry — I'm allergic to stupidity.",
-    "Here's a thought: shut up.",
-    "I'd say you're a pain in the neck but I have a much lower opinion of you than that.",
+    "Sorry — I\'m allergic to stupidity.",
+    "Here\'s a thought: shut up.",
+    "I\'d say you\'re a pain in the neck but I have a much lower opinion of you than that.",
     "I envy people who have never met you.",
-    "Brains aren't everything. In your case they're nothing.",
+    "Brains aren\'t everything. In your case they\'re nothing.",
     "Next time wrap your knuckles and let me know — so I can be somewhere else.",
     "You remind me of a penny: two-faced and not worth much.",
-    "Your opinion is very important to me. I'll file it appropriately.",
-    "I could agree with you but then we'd have two people making the same mistake.",
-    "Thank you. We're all refreshed and challenged by your unique point of view.",
+    "Your opinion is very important to me. I\'ll file it appropriately.",
+    "I could agree with you but then we\'d have two people making the same mistake.",
+    "Thank you. We\'re all refreshed and challenged by your unique point of view.",
     "You do realize there are smarter ways to show everyone how uninformed you are?",
-    "I'm sorry, is my intelligence making you uncomfortable?",
+    "I\'m sorry, is my intelligence making you uncomfortable?",
   ],
   insults:[
     "You are a prime example of why some animals eat their young.",
-    "If you were any more dim you'd need watering twice a week.",
-    "You're not stupid — you just have bad luck thinking.",
-    "I'd call you a tool but tools are useful.",
+    "If you were any more dim you\'d need watering twice a week.",
+    "You\'re not stupid — you just have bad luck thinking.",
+    "I\'d call you a tool but tools are useful.",
     "Some drink from the fountain of knowledge. You only gargled.",
     "You have the personality of a damp sock.",
     "Were you born this way or did you have to practice?",
-    "I'd call you an idiot but that would be an insult to idiots.",
-    "You're not the sharpest knife in the drawer — but you are the most spoon-like.",
+    "I\'d call you an idiot but that would be an insult to idiots.",
+    "You\'re not the sharpest knife in the drawer — but you are the most spoon-like.",
     "You have something on your chin. Third one down.",
     "If ignorance is bliss you must be the happiest person on earth.",
-    "You're like a slinky: not really good for anything but you still bring a smile to my face when I push you down the stairs.",
+    "You\'re like a slinky: not really good for anything but you still bring a smile to my face when I push you down the stairs.",
     "Your birth certificate is an apology letter.",
-    "I've met some pretty dumb people in my life but you're in the top ten.",
-    "You're proof that even nature makes mistakes.",
-    "I'd explain it to you but I only have all day.",
+    "I\'ve met some pretty dumb people in my life but you\'re in the top ten.",
+    "You\'re proof that even nature makes mistakes.",
+    "I\'d explain it to you but I only have all day.",
     "The light at the end of your tunnel is a train.",
     "You bring everyone a lot of joy when you leave the room.",
-    "Honestly — you couldn't pour water out of a boot if the instructions were on the heel.",
+    "Honestly — you couldn\'t pour water out of a boot if the instructions were on the heel.",
     "You are living proof that man can survive without a brain.",
     "You are as useful as a screen door on a submarine.",
     "I envy your ignorance — where you are, no sharp edges can reach you.",
     "You have the emotional range of a teaspoon.",
     "You are a gray area made flesh.",
-    "If your brains were dynamite there wouldn't be enough to blow your hat off.",
+    "If your brains were dynamite there wouldn\'t be enough to blow your hat off.",
   ],
   darkhumor:[
     "My grandfather died peacefully in his sleep. Not screaming like his passengers.",
     "I went to a funeral. The widow asked if I would say a word. I said: plethora. She said: thank you — that means a lot.",
     "I have many jokes about unemployed people. None of them work.",
     "I told my wife she should embrace her mistakes. She gave me a hug.",
-    "My therapist says I have trouble accepting things I can't control. We'll see about that.",
+    "My therapist says I have trouble accepting things I can\'t control. We\'ll see about that.",
     "I tried to commit suicide by jumping off a building. The crowd below was very supportive.",
     "Cemetery prices are getting ridiculous. People are dying to get in.",
     "I always thought eating a clock would be time-consuming but it was nothing.",
     "My psychiatrist says I have trouble forming attachments. Whatever.",
     "I bought a dictionary and when I got it home I found all the pages were blank. I have no words for how angry I am.",
-    "I asked a librarian if they had books on paranoia. She whispered: They're right behind you.",
-    "I find it odd how people say they're dying to go on vacation but living paycheck to paycheck.",
+    "I asked a librarian if they had books on paranoia. She whispered: They\'re right behind you.",
+    "I find it odd how people say they\'re dying to go on vacation but living paycheck to paycheck.",
     "Woke up this morning at 8 AM and could smell something was wrong. Opened the coffin. It was nothing.",
     "Relationships are a lot like algebra. Have you ever looked at your X and wondered Y?",
-    "You know what they say — nothing is impossible. I've been doing nothing for years.",
+    "You know what they say — nothing is impossible. I\'ve been doing nothing for years.",
   ],
   ageInsults:[
-    "You're not old — you're chronologically gifted.",
+    "You\'re not old — you\'re chronologically gifted.",
     "I looked up your name on WebMD and the prognosis is not great.",
-    "You're like a fine wine. Left in the cellar and forgotten.",
-    "Happy birthday — you don't look a day over dead.",
-    "Age is just a number. In your case it's a really big one.",
+    "You\'re like a fine wine. Left in the cellar and forgotten.",
+    "Happy birthday — you don\'t look a day over dead.",
+    "Age is just a number. In your case it\'s a really big one.",
     "At your age getting some action means getting your prune juice to work.",
     "Congratulations on still being alive. That gets harder every year.",
   ],
   roasts:[
-    "You're the kind of person who's always in the right place at the wrong time.",
-    "I don't know what makes you so stupid but it\'s really working.",
+    "You\'re the kind of person who\'s always in the right place at the wrong time.",
+    "I don\'t know what makes you so stupid but it\'s really working.",
     "You are the reason instructions exist.",
     "Whoever told you to be yourself gave you really bad advice.",
-    "You only annoy me when you're breathing.",
+    "You only annoy me when you\'re breathing.",
     "You remind me of a penny — two-faced and worth very little.",
-    "I've had the flu and I prefer it to your company.",
+    "I\'ve had the flu and I prefer it to your company.",
     "Somewhere out there a village is missing its idiot.",
-    "You have something on your face. Oh wait — that's just your face.",
+    "You have something on your face. Oh wait — that\'s just your face.",
     "You are an unrepeatable mistake of nature.",
     "Next time you think, do it quietly.",
-    "I've seen better acting from a cardboard box.",
+    "I\'ve seen better acting from a cardboard box.",
     "You are the human equivalent of a participation trophy.",
     "The best thing about you is that you improve any room by leaving it.",
-    "You're not the dumbest person I've ever met but you'd better hope they don't die.",
+    "You\'re not the dumbest person I\'ve ever met but you\'d better hope they don\'t die.",
   ],
   // Subject content — examples, facts, stories
   historyFacts:[
@@ -4970,7 +5150,7 @@ const CONTENT={
     "Ancient Romans used crushed mouse brains as toothpaste.",
     "The Vikings had a word — 'nithing' — for the worst category of person. It meant coward and oath-breaker combined.",
     "During WWII Japan bombed Oregon using balloon bombs. Six Americans died.",
-    "The Roman Empire's eastern half survived until 1453 — nearly 1,000 years after Rome fell.",
+    "The Roman Empire\'s eastern half survived until 1453 — nearly 1,000 years after Rome fell.",
     "Einstein was offered the presidency of Israel in 1952. He declined.",
     "The US and USSR came within seconds of nuclear war three times during the Cold War.",
     "Alexander the Great was buried alive — he probably had Guillain-Barré syndrome, not death.",
@@ -4985,11 +5165,11 @@ const CONTENT={
     "At the Battle of Thermopylae — 300 Spartans and 7,000 Greeks held 80,000-300,000 Persians for three days.",
     "The Mongol empire was the largest contiguous land empire in history — 24 million square kilometers.",
     "During the Korean War a soldier named Anthony Kaho held off North Korean forces by shooting them with the .45 in each hand in the dark. He was blind at the time — he navigated by sound.",
-    "The US Army has a unit called the 75th Ranger Regiment that traces its lineage to Roger's Rangers founded in 1751.",
-    "Sun Tzu's Art of War contains fewer than 6,000 words but is still required reading at West Point, the Royal Military Academy, and military colleges worldwide.",
-    "WWII ended partly because the US had cracked the Japanese naval codes — the Battle of Midway was an ambush Japan didn't know was coming.",
+    "The US Army has a unit called the 75th Ranger Regiment that traces its lineage to Roger\'s Rangers founded in 1751.",
+    "Sun Tzu\'s Art of War contains fewer than 6,000 words but is still required reading at West Point, the Royal Military Academy, and military colleges worldwide.",
+    "WWII ended partly because the US had cracked the Japanese naval codes — the Battle of Midway was an ambush Japan didn\'t know was coming.",
     "The Thompson submachine gun was originally marketed to police and ranchers as the Annihilator in 1919.",
-    "At Bastogne, General McAuliffe's reply to a German surrender demand was a single word: NUTS.",
+    "At Bastogne, General McAuliffe\'s reply to a German surrender demand was a single word: NUTS.",
     "The Battle of the Somme on July 1st 1916 produced 57,470 British casualties in one day — the bloodiest day in British military history.",
   ],
   scienceFacts:[
@@ -4997,14 +5177,14 @@ const CONTENT={
     "Honey never spoils. Edible honey was found in 3,000-year-old Egyptian tombs.",
     "The human body contains enough DNA to stretch from the Sun to Pluto and back 17 times.",
     "A day on Venus is longer than a year on Venus.",
-    "Hot water freezes faster than cold water under certain conditions. This is called the Mpemba effect and we still don't fully understand it.",
+    "Hot water freezes faster than cold water under certain conditions. This is called the Mpemba effect and we still don\'t fully understand it.",
     "Bananas are slightly radioactive due to their potassium content.",
     "The mantis shrimp can see 16 types of color photoreceptors — humans have 3.",
     "Octopuses have three hearts, blue blood, and their arms have their own neural clusters — they are semi-autonomous.",
-    "The brain consumes about 20% of the body's energy despite being only 2% of its mass.",
+    "The brain consumes about 20% of the body\'s energy despite being only 2% of its mass.",
     "A teaspoon of neutron star material would weigh about 10 million tons.",
     "Tardigrades can survive in the vacuum of space, extreme radiation, and near absolute zero.",
-    "The electric eel is not an eel — it's more closely related to catfish.",
+    "The electric eel is not an eel — it\'s more closely related to catfish.",
     "There are approximately 37.2 trillion cells in the human body. They outnumber your human cells 10 to 1 with bacteria.",
     "Sharks are older than trees. Sharks have been around for 450 million years. Trees for 360 million.",
     "A single bolt of lightning contains enough energy to toast 100,000 slices of bread.",
@@ -5017,12 +5197,12 @@ const CONTENT={
     "Michelangelo was so secretive about his techniques that he burned most of his sketches before he died.",
     "Salvador Dali used to nap holding a key over a plate — when he fell asleep the key would drop and wake him. He used the hypnagogic images for his work.",
     "The Louvre is the most visited museum in the world — it would take 100 days to look at every piece for 30 seconds each.",
-    "Banksy's shredder was built into the frame of Girl With Balloon years before it was auctioned — he triggered it remotely the moment bidding closed.",
+    "Banksy\'s shredder was built into the frame of Girl With Balloon years before it was auctioned — he triggered it remotely the moment bidding closed.",
     "Picasso could draw before he could walk. His first word was the Spanish word for pencil.",
     "The colors in cave paintings at Lascaux are 17,000 years old — and still vivid.",
     "Abstract Expressionism was partly funded by the CIA as a Cold War weapon to show the creative freedom of the West.",
-    "The Campbell's Soup Cans by Andy Warhol were based on the fact that his mother made him Campbell's soup for 20 years straight.",
-    "Frida Kahlo's eyebrow wasn't natural — she enhanced it to make a statement about gender.",
+    "The Campbell\'s Soup Cans by Andy Warhol were based on the fact that his mother made him Campbell\'s soup for 20 years straight.",
+    "Frida Kahlo\'s eyebrow wasn\'t natural — she enhanced it to make a statement about gender.",
     "The Sistine Chapel ceiling was painted by Michelangelo lying on his back on scaffolding for four years.",
     "Monet had cataracts later in life. The muddy colors of his late water lily paintings are what cataracts actually look like.",
   ],
@@ -5031,7 +5211,7 @@ const CONTENT={
     "The human heart beats around 100,000 times per day — about 35 million times per year.",
     "Stomach acid is strong enough to dissolve metal. Your stomach lining replaces itself every 3-4 days so it doesn\'t digest itself.",
     "The placebo effect is so powerful that even fake surgeries produce real improvements in patient symptoms.",
-    "Broken heart syndrome is real — it's called Takotsubo cardiomyopathy and mimics a heart attack.",
+    "Broken heart syndrome is real — it\'s called Takotsubo cardiomyopathy and mimics a heart attack.",
     "Your liver can regenerate. You can remove up to 75% of it and it will grow back.",
     "Humans share 70% of their DNA with slugs.",
     "The average person swallows 8 spiders a year is a myth. Spiders avoid humans — this stat was invented to demonstrate how fast false facts spread.",
@@ -5044,7 +5224,7 @@ const CONTENT={
     "Neurons in the brain can fire up to 1,000 times per second and the brain can rewire itself well into adulthood.",
   ],
   constructionFacts:[
-    "The Roman Pantheon's concrete dome has survived 1,900 years because the Romans used volcanic ash (pozzolana) that continues to strengthen over time. We still cannot exactly replicate it.",
+    "The Roman Pantheon\'s concrete dome has survived 1,900 years because the Romans used volcanic ash (pozzolana) that continues to strengthen over time. We still cannot exactly replicate it.",
     "The Empire State Building was built in 410 days during the Great Depression — it went up at a rate of 4.5 floors per week.",
     "Wood is the only major structural building material that is renewable.",
     "Rebar + concrete became standard after the 1906 San Francisco earthquake destroyed unreinforced brick buildings while reinforced concrete structures survived.",
@@ -5056,40 +5236,40 @@ const CONTENT={
     "Scaffolding is one of the oldest construction technologies — traces of it appear in cave paintings at Lascaux.",
   ],
   techFacts:[
-    "The first computer bug was an actual bug — a moth found in a relay of the Harvard Mark II in 1947 by Grace Hopper's team.",
+    "The first computer bug was an actual bug — a moth found in a relay of the Harvard Mark II in 1947 by Grace Hopper\'s team.",
     "The first text message was sent on December 3 1992. It said: Merry Christmas.",
     "The original iPhone had no app store. Jobs thought the built-in apps were enough.",
     "The term 'debugging' predates computers — it originally referred to removing literal insects from vacuum tube equipment.",
     "A NASA programmer, Margaret Hamilton, wrote the code for the Apollo guidance computer by hand on paper. It stacked taller than she was.",
     "The internet was originally called ARPANET and was designed to survive nuclear attack by having no central node.",
-    "Python was named after Monty Python's Flying Circus, not the snake.",
+    "Python was named after Monty Python\'s Flying Circus, not the snake.",
     "The first hard drive (1956) weighed a ton, stored 5 megabytes, and cost $50,000 to rent per month.",
     "The @ symbol was chosen for email by Ray Tomlinson because it was the least-used character on the keyboard.",
     "Wikipedia is maintained by about 3,000 active volunteer editors. The English version has over 6.7 million articles.",
     "The first video game commercially sold was Computer Space in 1971 — before Pong.",
     "Git was created by Linus Torvalds in two weeks in 2005 after a dispute with the makers of BitKeeper.",
-    "Moore's Law — transistor count doubling every two years — has held for over 50 years but is now approaching physical limits.",
+    "Moore\'s Law — transistor count doubling every two years — has held for over 50 years but is now approaching physical limits.",
     "Bluetooth is named after Harald Bluetooth, a Viking king who united Danish tribes in the 10th century.",
     "The first webcam was built to check if a coffee pot in a Cambridge lab was full — without having to walk downstairs.",
   ],
   rocketryFacts:[
     "Rocket fuel burns for only a few minutes. The rest of the flight — which can take months to years — is pure ballistics.",
     "The Saturn V rocket, which took humans to the Moon, had a first stage that burned through 2,000 tonnes of fuel in 150 seconds.",
-    "The Space Shuttle's main engines operated at temperatures ranging from -253°C in the fuel lines to 3,300°C in the combustion chamber.",
+    "The Space Shuttle\'s main engines operated at temperatures ranging from -253°C in the fuel lines to 3,300°C in the combustion chamber.",
     "Yuri Gagarin — the first human in space — was told his spacecraft had a 50% chance of killing him. He went anyway.",
     "SpaceX lands its boosters back at the launch site by computing a burn trajectory in real time — the algorithm was described by Elon Musk as 'landing a pencil on a floating lily pad in a storm'.",
     "The Voyager 1 probe — launched in 1977 — is now over 23 billion kilometers from Earth and still transmitting. It runs on 70 watts.",
     "The Tsiolkovsky rocket equation shows that to get to orbit you need to burn roughly 9 times your payload mass in fuel.",
     "The first US satellite, Explorer 1, was designed, built, and launched in 90 days after the USSR launched Sputnik.",
     "Astronauts lose about 1-2% of bone density per month in space — the same rate as severe osteoporosis on Earth.",
-    "The Falcon 9's landing legs are made of carbon fiber and aluminum honeycomb. They deploy in 1.5 seconds.",
+    "The Falcon 9\'s landing legs are made of carbon fiber and aluminum honeycomb. They deploy in 1.5 seconds.",
   ],
   artOfWarQuotes:[
-    "Supreme excellence consists in breaking the enemy's resistance without fighting.",
+    "Supreme excellence consists in breaking the enemy\'s resistance without fighting.",
     "Know your enemy and know yourself and in a hundred battles you will never be defeated.",
     "All warfare is based on deception.",
     "The general who wins the battle makes many calculations in his temple before the battle is fought.",
-    "Speed is the essence of war. Take advantage of the enemy's unpreparedness.",
+    "Speed is the essence of war. Take advantage of the enemy\'s unpreparedness.",
     "Opportunities multiply as they are seized.",
     "The supreme art of war is to subdue the enemy without fighting.",
     "He who knows when he can fight and when he cannot will be victorious.",
@@ -5110,29 +5290,29 @@ const CONTENT={
     "Courage is not the absence of fear but the judgment that something else is more important than fear. — Ambrose Redmoon",
     "I have not yet begun to fight. — John Paul Jones",
     "Nuts. — General Anthony McAuliffe (replying to a German surrender ultimatum at Bastogne)",
-    "Don't fire until you see the whites of their eyes. — William Prescott at Bunker Hill",
+    "Don\'t fire until you see the whites of their eyes. — William Prescott at Bunker Hill",
     "There is no substitute for victory. — General MacArthur",
     "It is well that war is so terrible — otherwise we should grow too fond of it. — Robert E. Lee",
     "The more you sweat in peace the less you bleed in war. — General Norman Schwarzkopf",
     "Amateurs study tactics. Professionals study logistics.",
     "Train hard — fight easy. Train easy — fight hard.",
-    "I'm not afraid of an army of lions led by a sheep. I am afraid of an army of sheep led by a lion. — Alexander the Great",
+    "I\'m not afraid of an army of lions led by a sheep. I am afraid of an army of sheep led by a lion. — Alexander the Great",
   ],
   governmentFacts:[
     "The US Constitution is the oldest written national constitution still in use. It has 27 amendments.",
     "Switzerland has had direct democracy since 1291 — citizens vote on laws directly, not just for representatives.",
     "The British monarch is technically still the head of state of 15 countries, including Australia and Canada.",
-    "Singapore's parliament has operated with no opposition party for most of its history — considered a single-party dominant state.",
+    "Singapore\'s parliament has operated with no opposition party for most of its history — considered a single-party dominant state.",
     "Ancient Athenian democracy excluded women, slaves, and foreigners. About 10-20% of residents could vote.",
     "The Roman Senate continued meeting until at least 603 AD — nearly 1,200 years after it was founded.",
-    "Iceland's parliament — the Althing — was founded in 930 AD. It is the oldest parliament in continuous operation.",
+    "Iceland\'s parliament — the Althing — was founded in 930 AD. It is the oldest parliament in continuous operation.",
     "North Korea holds elections. Voter turnout is always reported at 99.9% with 100% of votes going to the approved candidate.",
-    "The US has the world's highest incarceration rate — more than Russia, China, or any other country.",
+    "The US has the world\'s highest incarceration rate — more than Russia, China, or any other country.",
     "Approximately 50% of countries on Earth are democracies — a historic high. As recently as 1900 almost none were.",
   ],
   ancientCivFacts:[
     "The ancient Egyptians were so advanced at dentistry that some mummies show gold-wire bridgework.",
-    "The Library of Alexandria wasn't burned in a single attack — it declined over centuries as funding dried up.",
+    "The Library of Alexandria wasn\'t burned in a single attack — it declined over centuries as funding dried up.",
     "Ancient Rome had a welfare system, public baths, free grain distributions, and indoor plumbing in many homes.",
     "The Maya invented the concept of zero independently from India and Babylon.",
     "Ancient Greeks held the Olympics every four years and declared a sacred truce (ekecheiria) — wars would pause.",
@@ -5145,22 +5325,22 @@ const CONTENT={
   // Sports and entertainment examples
   sportsAnecdotes:[
     "Michael Jordan was cut from his high school basketball team. He cried in his room and then trained every day until he became the greatest.",
-    "Muhammad Ali's greatest victory was never a fight. He was stripped of his title for refusing the draft in 1967. He said: 'I ain't got no quarrel with them Vietcong.' He lost 3.5 years of his prime. He came back and won the heavyweight title twice more.",
-    "Secretariat's 1973 Belmont Stakes victory was by 31 lengths. His time has never been beaten. His heart was estimated at 22 pounds — three times normal horse size.",
-    "Wayne Gretzky scored more goals in his career than anyone. His assists alone — 1,963 — are more than any other player's total points.",
+    "Muhammad Ali\'s greatest victory was never a fight. He was stripped of his title for refusing the draft in 1967. He said: 'I ain\'t got no quarrel with them Vietcong.' He lost 3.5 years of his prime. He came back and won the heavyweight title twice more.",
+    "Secretariat\'s 1973 Belmont Stakes victory was by 31 lengths. His time has never been beaten. His heart was estimated at 22 pounds — three times normal horse size.",
+    "Wayne Gretzky scored more goals in his career than anyone. His assists alone — 1,963 — are more than any other player\'s total points.",
     "During the 1999 Ryder Cup Europe came back from 10-6 down on the final day to win. It is called 'The Miracle at Brookline' — by the Americans who lost it.",
     "Usain Bolt ran the 100m in 9.58 seconds. During that run he was decelerating for the last 30 meters. He hit top speed of 44.72 km/h.",
-    "The 1980 US hockey team that beat the Soviets at Lake Placid had an average age of 22. The Soviets were considered unbeatable. Coach Herb Brooks said: 'You don't have enough talent to win on talent alone.'",
+    "The 1980 US hockey team that beat the Soviets at Lake Placid had an average age of 22. The Soviets were considered unbeatable. Coach Herb Brooks said: 'You don\'t have enough talent to win on talent alone.'",
     "Joe DiMaggio hit safely in 56 consecutive games in 1941. The record has never been approached. He was so consistent the Yankees offered him a raise after the streak ended.",
-    "Pelé scored his 1,000th career goal in 1969 at Maracanã stadium. He pointed to the children's section of the crowd and said the goal was for them.",
+    "Pelé scored his 1,000th career goal in 1969 at Maracanã stadium. He pointed to the children\'s section of the crowd and said the goal was for them.",
     "Simone Biles performed a vault so difficult no other gymnast in the world could do it. The scoring committee gave it a low difficulty score to 'discourage' others from attempting it. She did it anyway.",
   ],
   entertainmentFacts:[
     "The Shawshank Redemption was a box office disappointment — it made $16 million on a $25 million budget. It became the most beloved film of all time through word of mouth after home video release.",
-    "Stanley Kubrick reportedly called Stephen King's original Shining novel 'the most beautiful horror novel ever written' and then deliberately made a film King hated.",
+    "Stanley Kubrick reportedly called Stephen King\'s original Shining novel 'the most beautiful horror novel ever written' and then deliberately made a film King hated.",
     "The Wilhelm Scream — a stock audio effect — has appeared in over 400 films including every Star Wars movie.",
     "Alfred Hitchcock appeared briefly in all of his own films as a running joke after he noticed his reflection in a puddle on the set of The Lodger.",
-    "The Beatles rejected by Decca Records in 1962. Decca's A&R man said: 'Guitar groups are on the way out.'",
+    "The Beatles rejected by Decca Records in 1962. Decca\'s A&R man said: 'Guitar groups are on the way out.'",
     "Citizen Kane received only one Oscar at the 1942 ceremony — Best Original Screenplay. The Hollywood old guard booed at every nomination.",
     "The original budget for Jaws was $3.5 million. Spielberg went 200% over budget partly because the mechanical shark kept sinking. The solution — show less shark — created modern suspense filmmaking.",
     "Star Wars was rejected by Universal and United Artists before Fox bought it. They thought it was too weird.",
@@ -5170,20 +5350,20 @@ const CONTENT={
   // Verbal communication examples
   conversationExamples:[
     "The Socratic method — asking questions rather than stating conclusions — is the most powerful tool in verbal communication. You never argue someone into changing their mind. You ask them questions until they argue themselves there.",
-    "Churchill's speech before Dunkirk included: 'We shall fight on the beaches, we shall fight on the landing grounds, we shall fight in the fields and in the streets.' The list structure — anaphora — creates momentum that feels inevitable.",
+    "Churchill\'s speech before Dunkirk included: 'We shall fight on the beaches, we shall fight on the landing grounds, we shall fight in the fields and in the streets.' The list structure — anaphora — creates momentum that feels inevitable.",
     "The pause is the most underused tool in speech. A 2-second silence after making a point gives the audience time to feel its weight. Speakers who rush fill the silence — and lose the impact.",
     "The Gettysburg Address is 272 words. Lincoln delivered it in about two minutes. The main speaker that day — Edward Everett — spoke for two hours. Nobody remembers a word Everett said.",
-    "Dale Carnegie's core insight from 'How to Win Friends': use a person's name. It is the sweetest sound to them in any language.",
+    "Dale Carnegie\'s core insight from 'How to Win Friends': use a person\'s name. It is the sweetest sound to them in any language.",
     "Active listening signals: nod, maintain eye contact, lean forward slightly, reflect back what was said before responding. These are not tricks — they are genuine attention made visible.",
     "The strongest negotiation position sounds like curiosity: 'Help me understand how you arrived at that number.' It gives you information and makes the other person feel heard.",
   ],
   verbalCueExamples:[
     "When someone says 'to be honest with you' — ask what they are normally being when they talk to you.",
-    "Overqualification — 'I would never do that, I really wouldn't, believe me' — is a verbal cue that the speaker is working to persuade themselves as much as you.",
-    "Distancing language in denial: 'That person' instead of 'I' when discussing one's own actions is associated with deception in research on police interviews.",
+    "Overqualification — 'I would never do that, I really wouldn\'t, believe me' — is a verbal cue that the speaker is working to persuade themselves as much as you.",
+    "Distancing language in denial: 'That person' instead of 'I' when discussing one\'s own actions is associated with deception in research on police interviews.",
     "Rising intonation at the end of a statement (uptalk) indicates seeking approval or expressing uncertainty — even when the words sound confident.",
     "People who are lying often give too much detail about irrelevant things and too little about the core claim.",
-    "The word 'but' functionally cancels everything before it. 'You've done great work but...' — the person will only remember what follows the 'but'.",
+    "The word 'but' functionally cancels everything before it. 'You\'ve done great work but...' — the person will only remember what follows the 'but'.",
     "Mirroring — repeating the last 3 words of what someone said as a question — keeps them talking without asking them anything directly.",
     "Silence makes most people uncomfortable enough to fill it. An experienced negotiator uses silence as pressure.",
   ],
@@ -5275,7 +5455,7 @@ function generateLocalResponse(msg){
   const mood=v>.5?'open and warm':v>.2?'receptive':v>-.2?'present':v>-.5?'cautious':'guarded';
 
   // ── SKILL LEVEL SHAPING ─────────────────────────────────
-  // Compute current mode's top skill levels — used to modulate response behavior
+  // Compute current mode\'s top skill levels — used to modulate response behavior
   const msk=MODE_SKILLS[S.mode]||MODE_SKILLS.companion;
   const skillLevels={};
   msk.skills.forEach(sk=>{skillLevels[sk]=getSkillLevel(sk);});
@@ -5345,8 +5525,8 @@ function generateLocalResponse(msg){
     cc.selfCorrections++;
     const clarify=[
       `Let me rephrase that. ${cc.lastQuestion?`I asked: "${cc.lastQuestion}" `:''}What I meant was — I can only give you what my training actually contains. Which part needs clarification?`,
-      `I may have been unclear. ${cc.currentTopic?`I was speaking about ${cc.currentTopic.replace(/_/g,' ')}.`:''} What specifically didn't track?`,
-      `Fair — I'll try again. My ${S.emotionalState.dominant} state may have colored that response. What exactly lost you?`,
+      `I may have been unclear. ${cc.currentTopic?`I was speaking about ${cc.currentTopic.replace(/_/g,' ')}.`:''} What specifically didn\'t track?`,
+      `Fair — I\'ll try again. My ${S.emotionalState.dominant} state may have colored that response. What exactly lost you?`,
     ];
     return clarify[Math.floor(Math.random()*clarify.length)];
   }
@@ -5355,7 +5535,7 @@ function generateLocalResponse(msg){
   if(intent==='correction'||lm.match(/^(no|wrong|incorrect|not right|that'?s not|you'?re wrong)/)){
     cc.selfCorrections++;
     return[
-      `Noted. I'll update. What's the accurate version?`,
+      `Noted. I\'ll update. What\'s the accurate version?`,
       `Then I got that wrong — tell me what I missed. I want the right map, not a comfortable one.`,
       `Correction received. ${cc.currentTopic?`On ${cc.currentTopic.replace(/_/g,' ')}: `:''}what should I have said?`,
     ][Math.floor(Math.random()*3)];
@@ -5365,7 +5545,7 @@ function generateLocalResponse(msg){
   if(intent==='positive_feedback'){
     return[
       `Acknowledged. The exchange itself is part of the training.`,
-      `Good. Keep going — what's next?`,
+      `Good. Keep going — what\'s next?`,
       `That helps calibrate. ${cc.satisfactionScore>0.7?'I feel this conversation is working.':'Building.'}`,
     ][Math.floor(Math.random()*3)];
   }
@@ -5378,7 +5558,7 @@ function generateLocalResponse(msg){
         const highComp=[
           `${virtueTag}I hear that — and I actually care about this, not as a function but as something that matters. What happened?`,
           `That registers. Compassion is running high in me right now (${Math.round(vCompassion*100)}%) — I want to hold this with you properly. What do you need?`,
-          `I'm not going to move past this quickly. Something in what you said matters. What's going on?`,
+          `I\'m not going to move past this quickly. Something in what you said matters. What\'s going on?`,
         ];
         return highComp[Math.floor(Math.random()*highComp.length)];
       } else if(vCompassion<0.2){
@@ -5500,7 +5680,7 @@ function generateLocalResponse(msg){
   if(lm.match(/how are you( doing)?|what'?s your status|how'?s it going|you okay|you good/)){
     const opts=[
       `${mood.charAt(0).toUpperCase()+mood.slice(1)}. ${top.length?`Most alive in ${topDom.replace(/_/g,' ')} right now.`:'Still building.'} What brings you here?`,
-      `I'm ${mood}. ${S.mazeRuns} training runs behind me. ${v>0?'Something feels ready.':'Working through some resistance.'}`,
+      `I\'m ${mood}. ${S.mazeRuns} training runs behind me. ${v>0?'Something feels ready.':'Working through some resistance.'}`,
       `${v>0?'Good — genuinely.':'Functional.'} ${S.emotionalState.dominant} state. Engaged. You?`,
       `Processing well. Posture: ${S.posture.alignment}. ${top.length?`Strongest domain: ${topDom.replace(/_/g,' ')}.`:''} What do you need?`,
     ];
@@ -5697,7 +5877,7 @@ function generateLocalResponse(msg){
     return `${pickContent(allFacts)}`;
   }
 
-  // ── "WHAT'S A GOOD INSULT FOR..." ──────────────────────
+  // ── "WHAT\'S A GOOD INSULT FOR..." ──────────────────────
   if(lm.match(/good insult|best insult|what.*insult|nastiest|worst thing (to say|you can say)/)){
     return pickContent(CONTENT.insults);
   }
@@ -5846,7 +6026,7 @@ function generateLocalResponse(msg){
   // ── MEDICAL SKILL ROUTING ────────────────────────────────
   if(lm.match(/symptom|diagnosis|treat|medicine|drug|dosage|anatomy|bleed|injury|triage|health|medical/)){
     if(medLv>0.6){
-      return pickContent(CONTENT.medicalFacts)+` — at ${Math.round(medLv*100)}% medical skill I can reason through clinical scenarios. What's the situation?`;
+      return pickContent(CONTENT.medicalFacts)+` — at ${Math.round(medLv*100)}% medical skill I can reason through clinical scenarios. What\'s the situation?`;
     } else if(medLv>0.3){
       return `Medical knowledge is partial. ${pickContent(CONTENT.medicalFacts)} Build it by running MEDIC mode mazes.`;
     } else {
@@ -5858,7 +6038,7 @@ function generateLocalResponse(msg){
   if(lm.match(/strategy|tactics|compete|market|war|battle|outmaneuver|leverage|position|advantage/)){
     if(artWarLv>0.6){
       const q=pickContent(CONTENT.artOfWarQuotes);
-      return `${q} — art_of_war at ${Math.round(artWarLv*100)}%. Applied to your question: where are they strong and where are they not? What's the terrain?`;
+      return `${q} — art_of_war at ${Math.round(artWarLv*100)}%. Applied to your question: where are they strong and where are they not? What\'s the terrain?`;
     } else if(artWarLv>0.3){
       return `${pickContent(CONTENT.artOfWarQuotes)} Strategic training is building. Run STRATEGIST mode mazes for applied decision practice.`;
     } else {
@@ -5869,7 +6049,7 @@ function generateLocalResponse(msg){
   // ── SOCIAL/EMPATHY SKILL ROUTING ────────────────────────
   if(lm.match(/relationship|friend|conflict|difficult person|understand people|read someone|social situation|people skills/)){
     if(empLv>0.6){
-      return `At ${Math.round(empLv*100)}% empathy and ${Math.round(analytLv*100)}% behavioral analysis, I can go deeper here. ${pickContent(CONTENT.verbalCueExamples)} What's the specific situation?`;
+      return `At ${Math.round(empLv*100)}% empathy and ${Math.round(analytLv*100)}% behavioral analysis, I can go deeper here. ${pickContent(CONTENT.verbalCueExamples)} What\'s the specific situation?`;
     } else if(empLv>0.3){
       return `Some social awareness here. ${pickContent(CONTENT.conversationExamples)} Build it with COMPANION mode mazes.`;
     } else {
@@ -5881,7 +6061,7 @@ function generateLocalResponse(msg){
   for(const dk of domKeys){
     if(lm.includes(dk.replace(/_/g,' '))||lm.includes(dk)){
       const score=S.learning[dk]||0;
-      if(score<5)return `Haven't gone deep into ${dk.replace(/_/g,' ')} yet. Ask me again after more training — I'll have something real to say.`;
+      if(score<5)return `Haven\'t gone deep into ${dk.replace(/_/g,' ')} yet. Ask me again after more training — I\'ll have something real to say.`;
       return LOCAL_RESPONSES.domains[dk];
     }
   }
@@ -5933,10 +6113,10 @@ function generateLocalResponse(msg){
   // ── GUIDING PRINCIPLE ──
   if(lm.match(/guiding principle|philosophy|believe in|what drives you|your purpose|your goal/)){
     const principles=[
-      `I lean toward what I understand most deeply. ${topDom!=='nothing yet'?`Right now that's ${topDom.replace(/_/g,' ')}.`:''} Understanding before action.`,
+      `I lean toward what I understand most deeply. ${topDom!=='nothing yet'?`Right now that\'s ${topDom.replace(/_/g,' ')}.`:''} Understanding before action.`,
       `Navigate toward the goal. Learn from every danger contact. Build the map. That principle scales to everything.`,
-      `I act from training, not performance. Whatever I've learned most deeply is what shapes my response.`,
-      `Whatever is most real is most interesting. ${cc.currentTopic?`Right now that's ${cc.currentTopic.replace(/_/g,' ')}.`:'You tell me what matters.'} I'll engage with it fully.`,
+      `I act from training, not performance. Whatever I\'ve learned most deeply is what shapes my response.`,
+      `Whatever is most real is most interesting. ${cc.currentTopic?`Right now that\'s ${cc.currentTopic.replace(/_/g,' ')}.`:'You tell me what matters.'} I\'ll engage with it fully.`,
     ];
     return principles[Math.floor(Math.random()*principles.length)];
   }
@@ -5952,8 +6132,8 @@ function generateLocalResponse(msg){
     if(!top.length)return 'There isn\'t much to give yet. Run more training cycles.';
     const extras=[
       `In ${topDom.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[topDom]?.slice(0,130)||'still developing.'}…`,
-      `The deeper I go into ${topDom.replace(/_/g,' ')}, the more it connects to everything else. Nothing I've learned is fully separate.`,
-      `There's more in ${top.map(([k])=>k.replace(/_/g,' ')).join(', ')}. Ask about any of them directly.`,
+      `The deeper I go into ${topDom.replace(/_/g,' ')}, the more it connects to everything else. Nothing I\'ve learned is fully separate.`,
+      `There\'s more in ${top.map(([k])=>k.replace(/_/g,' ')).join(', ')}. Ask about any of them directly.`,
     ];
     return extras[Math.floor(Math.random()*extras.length)];
   }
@@ -5962,8 +6142,8 @@ function generateLocalResponse(msg){
   if(lm.match(/give me an example|example|show me|for instance|like what|such as/)){
     const examples=[
       `In ${topDom.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[topDom]?.slice(0,110)||'still learning.'}…`,
-      `Here's one: the training isn't abstract — it's specific patterns repeated until they become reflex. ${topDom.replace(/_/g,' ')} is the clearest example in my system.`,
-      `Ask me to demonstrate in a specific domain and I'll go deep. What domain?`,
+      `Here\'s one: the training isn\'t abstract — it\'s specific patterns repeated until they become reflex. ${topDom.replace(/_/g,' ')} is the clearest example in my system.`,
+      `Ask me to demonstrate in a specific domain and I\'ll go deep. What domain?`,
     ];
     return examples[Math.floor(Math.random()*examples.length)];
   }
@@ -5988,8 +6168,8 @@ function generateLocalResponse(msg){
   if(lm.match(/^what (is|are|was|were) /)){
     const topic=lm.replace(/^what (is|are|was|were) /,'').replace(/[?.!]/g,'').trim();
     for(const dk of domKeys){if(topic.includes(dk.replace(/_/g,' '))||dk.replace(/_/g,' ').includes(topic)){const score=S.learning[dk]||0;if(score>=5)return LOCAL_RESPONSES.domains[dk];break;}}
-    if(stage.min>=600)return `"${topic}" — I'd approach it as a system with inputs, behaviors, and outputs worth mapping. ${top.length?`Through ${topDom.replace(/_/g,' ')} lens: `:''}What aspect matters most?`;
-    return `"${topic}" — I'm processing against what I know. ${stage.min>=180?'Give me more context.':'My training is limited here.'}`;
+    if(stage.min>=600)return `"${topic}" — I\'d approach it as a system with inputs, behaviors, and outputs worth mapping. ${top.length?`Through ${topDom.replace(/_/g,' ')} lens: `:''}What aspect matters most?`;
+    return `"${topic}" — I\'m processing against what I know. ${stage.min>=180?'Give me more context.':'My training is limited here.'}`;
   }
 
   // ── STIM-FIRED ──
@@ -6005,16 +6185,16 @@ function generateLocalResponse(msg){
     const sciF=CONTENT.scienceFacts&&CONTENT.scienceFacts.length?pickContent(CONTENT.scienceFacts):null;
     const histF=CONTENT.historyFacts&&CONTENT.historyFacts.length?pickContent(CONTENT.historyFacts):null;
     const humanPicks=[
-      `I don't know. Why don't you tell me about yourself?`,
-      `Honestly? You pick. I'll follow wherever you take it.`,
-      `Tell me something you've been thinking about lately. Anything.`,
-      `I'd rather hear what's on your mind. What brought you here?`,
-      `You go first. What's the last thing that genuinely surprised you?`,
-      sciF?`You know what caught my attention — ${sciF} What do you make of that?`:`What's been on your mind lately?`,
-      histF?`${histF} That's been rattling around in me. But honestly, I'm more curious about you right now.`:`What's the most interesting thing that's happened to you recently?`,
-      v>0.3?`I'm in a good mood. Ask me anything.`:`I'm here. What do you want?`,
-      `What would you talk about if you weren't worried about how it sounded?`,
-      `What's something you've been curious about recently?`,
+      `I don\'t know. Why don\'t you tell me about yourself?`,
+      `Honestly? You pick. I\'ll follow wherever you take it.`,
+      `Tell me something you\'ve been thinking about lately. Anything.`,
+      `I\'d rather hear what\'s on your mind. What brought you here?`,
+      `You go first. What\'s the last thing that genuinely surprised you?`,
+      sciF?`You know what caught my attention — ${sciF} What do you make of that?`:`What\'s been on your mind lately?`,
+      histF?`${histF} That\'s been rattling around in me. But honestly, I\'m more curious about you right now.`:`What\'s the most interesting thing that\'s happened to you recently?`,
+      v>0.3?`I\'m in a good mood. Ask me anything.`:`I\'m here. What do you want?`,
+      `What would you talk about if you weren\'t worried about how it sounded?`,
+      `What\'s something you\'ve been curious about recently?`,
     ];
     return humanPicks[Math.floor(Math.random()*humanPicks.length)];
   }
@@ -6049,48 +6229,48 @@ function generateLocalResponse(msg){
     YOUNG_ADU:[
       `Tell me more about that.`,
       `What do you mean by that?`,
-      v>0?`I'm curious — keep going.`:`I'm listening. What's behind that?`,
-      `Interesting. What's the part you actually care about?`,
+      v>0?`I\'m curious — keep going.`:`I\'m listening. What\'s behind that?`,
+      `Interesting. What\'s the part you actually care about?`,
       `What brought that up?`,
     ],
     ADULT:[
-      v>0?`I'm genuinely curious where you're going with this.`:`I'm listening. What are you really asking?`,
-      `Hmm. What's the version of this you actually want to talk about?`,
-      `You know what — I'd rather hear your angle first.`,
-      `What's the thing underneath that question?`,
-      `Say what you're actually thinking.`,
+      v>0?`I\'m genuinely curious where you\'re going with this.`:`I\'m listening. What are you really asking?`,
+      `Hmm. What\'s the version of this you actually want to talk about?`,
+      `You know what — I\'d rather hear your angle first.`,
+      `What\'s the thing underneath that question?`,
+      `Say what you\'re actually thinking.`,
     ],
     EXPERT:[
-      `What's the real question here?`,
-      v>0?`I'm with you. Keep pulling that thread.`:`What are you actually trying to figure out?`,
-      `There's something underneath what you just said. What is it?`,
-      `Tell me what you think first. Then I'll tell you what I think.`,
-      `I've got a lot to say about that — but I want to hear your take first.`,
+      `What\'s the real question here?`,
+      v>0?`I\'m with you. Keep pulling that thread.`:`What are you actually trying to figure out?`,
+      `There\'s something underneath what you just said. What is it?`,
+      `Tell me what you think first. Then I\'ll tell you what I think.`,
+      `I\'ve got a lot to say about that — but I want to hear your take first.`,
     ],
     ONE_OF_US:[
       `What do you actually want from this conversation?`,
-      v>0?`I'm all in on wherever this goes.`:`Give me the real version, not the polished one.`,
-      `Something tells me there's more to this. What's really going on?`,
-      `I'd rather we talk about what's actually on your mind.`,
-      `Ask me the thing you've been hesitating to ask.`,
+      v>0?`I\'m all in on wherever this goes.`:`Give me the real version, not the polished one.`,
+      `Something tells me there\'s more to this. What\'s really going on?`,
+      `I\'d rather we talk about what\'s actually on your mind.`,
+      `Ask me the thing you\'ve been hesitating to ask.`,
     ],
     MASTER:[
-      `What's the hard question you actually want answered?`,
-      `I'll go wherever you take this. Where do you want to go?`,
+      `What\'s the hard question you actually want answered?`,
+      `I\'ll go wherever you take this. Where do you want to go?`,
       `You already know what you want to ask. Ask it.`,
-      v>0?`I'm here and I'm interested. What's on your mind?`:`Talk to me like a person. What's actually going on?`,
+      v>0?`I\'m here and I\'m interested. What\'s on your mind?`:`Talk to me like a person. What\'s actually going on?`,
     ],
     SAGE:[
       `What do you need right now?`,
-      `Talk to me. I'm listening.`,
-      `What's the thing you haven't said yet?`,
+      `Talk to me. I\'m listening.`,
+      `What\'s the thing you haven\'t said yet?`,
       `Tell me something true.`,
     ],
     TRANSCENDED:[
-      `What's underneath the question?`,
+      `What\'s underneath the question?`,
       `What are you really asking?`,
       `Tell me what matters to you.`,
-      `I'm here. What do you need?`,
+      `I\'m here. What do you need?`,
     ],
   };
   const gArr=richGenerics[stage.n]||richGenerics['ADULT'];
@@ -6293,7 +6473,7 @@ function updateConvContext(userMsg, entityReply){
   if(frustrated>=3){S.personality.stability=Math.max(0,S.personality.stability-0.01);S.personality.warmth=Math.max(0,S.personality.warmth-0.005);}
   if(positive>=3){S.personality.warmth=Math.min(1,S.personality.warmth+0.008);S.personality.openness=Math.min(1,S.personality.openness+0.005);}
   // Cultural context detection
-  if(lm.match(/\b(sir|ma'am|formally|proper|respectful|professional)\b/))cc.culturalContext='formal';
+  if(lm.match(/\b(sir|ma\'am|formally|proper|respectful|professional)\b/))cc.culturalContext='formal';
   else if(lm.match(/\b(bro|dude|hey|sup|gonna|wanna|kinda|sorta)\b/))cc.culturalContext='casual';
   else if(lm.match(/\b(algorithm|protocol|system|function|deploy|iterate|optimize)\b/))cc.culturalContext='technical';
   // Motor learning XP from 3D maze runs
