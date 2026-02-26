@@ -768,8 +768,8 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
   </div>
   <div class="tc active" id="rt-path">
     <div class="pi">
-      <svg id="psv" viewBox="0 0 310 165"></svg>
-      <div style="font-family:var(--mo);font-size:6px;color:var(--td)">click line to toggle · node to activate · <span style="color:var(--emo)">purple=emotion</span></div>
+      <svg id="psv" viewBox="0 0 315 165"></svg>
+      <div style="font-family:var(--mo);font-size:6px;color:var(--td)">click line to toggle · click node to activate · <span style="color:#cc66ff">■ emotion</span> · <span style="color:#00ffee">■ sensory</span> · <span style="color:#ffdd44">■ executive</span> · <span style="color:#44ff88">■ motor</span></div>
     </div>
   </div>
   <div class="tc" id="rt-learn">
@@ -946,8 +946,8 @@ const STAGES=[{n:'INFANT',min:0},{n:'TODDLER',min:30},{n:'CHILD',min:80},{n:'TEE
 const MODE_SKILLS={
   investigator:{
     label:'INVESTIGATOR',color:'#ffdd44',icon:'🔍',
-    skills:    ['pattern_matching','skepticism',   'timeline_awareness','criminal_profiling','crime_scene',    'detail_orientation','hypothesis_weighing','ethical_balance'],
-    weights:   [1.4,               1.3,            1.0,                 1.5,                 1.2,              1.0,                 1.1,                  0.8],
+    skills:    ['pattern_matching','criminal_profiling','threat_detection','situational_awareness','appropriate_function','crime_scene','detail_orientation','hypothesis_weighing'],
+    weights:   [1.4,               1.5,                1.4,               1.3,                   1.2,                   1.2,          1.1,                 1.1],
   },
   companion:{
     label:'COMPANION',color:'#ff88cc',icon:'◈',
@@ -1072,6 +1072,22 @@ const DOMAIN_CONNECTIONS={
   threat_detection:[{to:'situational_awareness',r:'threat detection is the output of awareness'},{to:'criminal_profiling',r:'profiling predicts threat'},{to:'pattern_matching',r:'threat detection is pattern recognition'},{to:'appropriate_function',r:'detecting a threat requires knowing how to respond'}],
   situational_awareness:[{to:'threat_detection',r:'awareness enables threat detection'},{to:'risk_calibration',r:'awareness enables risk assessment'},{to:'pattern_matching',r:'awareness is continuous pattern scanning'},{to:'investigation',r:'field investigation requires constant awareness'}],
   appropriate_function:[{to:'risk_calibration',r:'appropriate force requires risk assessment'},{to:'law',r:'force options are legally constrained'},{to:'ethical_balance',r:'force decisions are ethical decisions'},{to:'threat_detection',r:'response requires threat identification first'}],
+  // Brain region connections
+  visual_cortex:      [{to:'object_recognition',r:'visual cortex enables object recognition'},{to:'facial_recognition',r:'V1-V5 feeds face processing'},{to:'fusiform',r:'ventral stream connects to fusiform'},{to:'pattern_matching',r:'visual cortex generates patterns to match'}],
+  auditory_cortex:    [{to:'hearing',r:'auditory cortex processes hearing'},{to:'voice_tone',r:'auditory cortex reads prosody'},{to:'language',r:'Wernicke\'s area is auditory cortex'},{to:'somatosensory',r:'auditory and somatosensory share cross-modal connections'}],
+  somatosensory:      [{to:'touch',r:'somatosensory processes touch'},{to:'proprioception',r:'S1 area 3a processes proprioception'},{to:'motor_cortex',r:'somatosensory feeds motor cortex'},{to:'haptic_feedback',r:'somatosensory is the substrate for haptic'}],
+  olfactory:          [{to:'smell',r:'olfactory cortex processes smell'},{to:'emotional',r:'olfactory bypasses thalamus to limbic'},{to:'memory',r:'olfactory directly accesses hippocampus'},{to:'intuition',r:'smell triggers pre-conscious responses'}],
+  vestibular:         [{to:'balance',r:'vestibular system drives balance'},{to:'proprioception',r:'vestibular and proprioceptive systems integrate'},{to:'cerebellum',r:'vestibular input to cerebellum'},{to:'agility',r:'vestibular is the foundation of agility'}],
+  prefrontal:         [{to:'cognitive',r:'PFC is executive cognition'},{to:'emotional',r:'PFC regulates limbic via top-down'},{to:'risk_calibration',r:'PFC calculates risk'},{to:'appropriate_function',r:'PFC governs appropriate response selection'}],
+  orbitofrontal:      [{to:'risk_calibration',r:'OFC assigns affective value to outcomes'},{to:'emotional',r:'OFC integrates emotion into decisions'},{to:'psychology',r:'OFC is somatic marker system'},{to:'appropriate_function',r:'OFC gut-feel guides function selection'}],
+  anterior_cingulate: [{to:'conflict_res',r:'ACC detects and resolves conflict'},{to:'emotional',r:'ACC processes affective pain'},{to:'cognitive',r:'ACC monitors cognitive errors'},{to:'persistence',r:'ACC drives sustained goal pursuit'}],
+  parietal:           [{to:'proprioception',r:'parietal integrates body position data'},{to:'motor_cortex',r:'parietal drives motor planning'},{to:'situational_awareness',r:'parietal builds the spatial model awareness requires'},{to:'cognitive',r:'intraparietal sulcus handles numerical cognition'}],
+  fusiform:           [{to:'facial_recognition',r:'fusiform face area IS face recognition'},{to:'empathy',r:'face reading feeds empathy'},{to:'behavioral_analysis',r:'face reading enables behavioral analysis'},{to:'body_language',r:'face expression is body language'}],
+  motor_cortex:       [{to:'motor',r:'M1 outputs to motor system'},{to:'coordination',r:'motor cortex drives coordination'},{to:'somatosensory',r:'M1 and S1 integrate at sensorimotor cortex'},{to:'primary_somatomotor',r:'M1 and S1 integrate as sensorimotor'}],
+  basal_ganglia:      [{to:'motor',r:'basal ganglia select and smooth motor output'},{to:'behavioral',r:'basal ganglia encode habits'},{to:'avoidance',r:'basal ganglia track reward prediction error'},{to:'supp_motor',r:'basal ganglia sequence selection feeds SMA'}],
+  cerebellum:         [{to:'balance',r:'cerebellum is the primary balance calibrator'},{to:'coordination',r:'cerebellum calibrates motor coordination'},{to:'vestibular',r:'cerebellum integrates vestibular input'},{to:'motor',r:'cerebellum refines motor output'}],
+  supp_motor:         [{to:'motor_cortex',r:'SMA feeds M1 with planned sequences'},{to:'motor',r:'SMA drives complex movement'},{to:'basal_ganglia',r:'SMA and basal ganglia jointly plan sequences'},{to:'cognitive',r:'SMA connects cognition to movement initiation'}],
+  primary_somatomotor:[{to:'motor_cortex',r:'sensorimotor integration spans M1 and S1'},{to:'somatosensory',r:'S1 and M1 integrate at sensorimotor cortex'},{to:'haptic_feedback',r:'primary somatomotor is the substrate of haptic skill'},{to:'touch',r:'primary somatomotor integrates touch with movement'}],
 };
 
 // Get semantically connected domains that the entity has trained in
@@ -1215,7 +1231,13 @@ comedy:'#ffee44',irony:'#ddcc33',sarcasm:'#66ddcc',wit:'#44ffee',playful:'#ffdda
 // ── Medical (missing medic mode skills) ──
 anatomy:'#55ffcc',pharmacology:'#33ffaa',
 // ── Threat & Awareness (investigative higher functions) ──
-threat_detection:'#ff4422',situational_awareness:'#ffaa22',appropriate_function:'#22aaff'
+threat_detection:'#ff4422',situational_awareness:'#ffaa22',appropriate_function:'#22aaff',
+// ── Phase 1: Sensory Cortices ──
+visual_cortex:'#00ffee',auditory_cortex:'#00eedd',somatosensory:'#00ddcc',olfactory:'#00ccbb',vestibular:'#00bbaa',
+// ── Phase 2: Executive Regions ──
+prefrontal:'#ffdd44',orbitofrontal:'#ffcc33',anterior_cingulate:'#ffbb22',parietal:'#ffaa11',fusiform:'#ff9900',
+// ── Phase 3: Motor Control ──
+motor_cortex:'#44ff88',basal_ganglia:'#33ee77',cerebellum:'#22dd66',supp_motor:'#11cc55',primary_somatomotor:'#00bb44'
 };
 const DZ={
   touch:['left-hand','right-hand','chest','left-arm','right-arm'],
@@ -1318,6 +1340,16 @@ const DZ={
   threat_detection:['head','crown','solar-plexus','chest','gut'],
   situational_awareness:['head','crown','chest','solar-plexus','left-arm','right-arm'],
   appropriate_function:['head','crown','chest','throat'],
+  // Phase 1 — Sensory cortices
+  visual_cortex:['head','crown'],auditory_cortex:['head','throat'],somatosensory:['left-hand','right-hand','chest','abdomen'],
+  olfactory:['head','throat'],vestibular:['head','crown','left-foot','right-foot'],
+  // Phase 2 — Executive regions
+  prefrontal:['head','crown','chest'],orbitofrontal:['head','crown'],anterior_cingulate:['head','crown','chest','solar-plexus'],
+  parietal:['head','crown','left-arm','right-arm'],fusiform:['head','crown'],
+  // Phase 3 — Motor regions
+  motor_cortex:['left-arm','right-arm','left-hand','right-hand'],basal_ganglia:['left-leg','right-leg','left-arm','right-arm'],
+  cerebellum:['left-foot','right-foot','left-leg','right-leg','gut'],
+  supp_motor:['left-arm','right-arm','left-hand','right-hand'],primary_somatomotor:['left-hand','right-hand','left-foot','right-foot'],
   // History & Culture
   secret_societies:['head','crown','chest','solar-plexus'],
   ancient_history:['head','crown','chest'],
@@ -1557,6 +1589,24 @@ const DOM_STIMS={
   threat_detection:{pos:['pride','energy','curiosity'],     neg:['anxiety','fear','tension']},
   situational_awareness:{pos:['awe','curiosity','pride'],   neg:['anxiety','tension']},
   appropriate_function: {pos:['pride','calm','curiosity'],  neg:['tension','discomfort']},
+  // Phase 1 — Sensory
+  visual_cortex:         {pos:['awe','curiosity','energy'],   neg:['discomfort','anxiety']},
+  auditory_cortex:       {pos:['curiosity','awe','calm'],     neg:['discomfort','tension']},
+  somatosensory:         {pos:['curiosity','calm','warmth'],  neg:['discomfort','tension']},
+  olfactory:             {pos:['awe','curiosity','love'],     neg:['discomfort','aversion']},
+  vestibular:            {pos:['energy','pride','calm'],      neg:['anxiety','discomfort']},
+  // Phase 2 — Executive
+  prefrontal:            {pos:['pride','curiosity','calm'],   neg:['tension','anxiety']},
+  orbitofrontal:         {pos:['pride','calm','curiosity'],   neg:['tension','discomfort']},
+  anterior_cingulate:    {pos:['curiosity','energy','pride'], neg:['tension','anxiety']},
+  parietal:              {pos:['awe','curiosity','pride'],    neg:['discomfort','anxiety']},
+  fusiform:              {pos:['curiosity','awe','energy'],   neg:['anxiety','discomfort']},
+  // Phase 3 — Motor
+  motor_cortex:          {pos:['pride','energy','curiosity'], neg:['tension','discomfort']},
+  basal_ganglia:         {pos:['calm','energy','pride'],      neg:['discomfort','tension']},
+  cerebellum:            {pos:['energy','pride','calm'],      neg:['discomfort','anxiety']},
+  supp_motor:            {pos:['energy','pride','curiosity'], neg:['tension','discomfort']},
+  primary_somatomotor:   {pos:['pride','energy','calm'],      neg:['discomfort','tension']},
   // History & Culture
   secret_societies:{pos:['curiosity','awe','pattern'],     neg:['anxiety','tension']},
   ancient_history:{pos:['awe','curiosity','calm'],         neg:['grief','tension']},
@@ -2041,6 +2091,23 @@ const MZ_CAT=[
     {id:'sit_aware_02',name:'ENVIRONMENTAL SCAN',domain:'situational_awareness',lesson:'Reading spaces — entry/exit mapping, cover, elevation, choke points',lessonDesc:'Every space is a tactical environment. Entry and exit points determine escape routes. Elevation determines fields of fire and observation. Cover stops ballistic threats; concealment only stops eyes. Choke points force predictable movement patterns — through them or around them. At the core: entering any new space and immediately mapping it (where are the exits? what is hard cover? where is the high ground? what are the natural ambush positions?), understanding the difference between cover and concealment (a car door is concealment; the engine block is cover), and the mental habit of position selection — always knowing what you would do if the environment suddenly became lethal.',dangerDensity:0.07},
     {id:'approp_func_01',name:'APPROPRIATE FUNCTION',domain:'appropriate_function',lesson:'Force options — choosing the right level for the situation',lessonDesc:'Appropriate function is the discipline of using exactly the level of response the situation requires — no more, no less. At the core: the use-of-force continuum (officer presence → verbal commands → soft empty-hand control → hard empty-hand control → less-lethal → lethal force), the legal standard of objectively reasonable force (Graham v. Connor — severity of crime, immediate threat, active resistance), the Tueller drill and 21-foot rule (the time to recognize a threat, draw, and fire is 1.5 seconds — a person can cover 21 feet in that time), de-escalation as a force multiplier, and the documentation discipline required after any force event.',dangerDensity:0.07},
     {id:'approp_func_02',name:'DECISION UNDER PRESSURE',domain:'appropriate_function',lesson:'Time-compressed decisions — action vs inaction calculus',lessonDesc:'High-stakes decisions under time pressure degrade in predictable ways. At the core: the Hick-Hyman law (reaction time increases logarithmically with number of choices — fewer pre-committed options means faster execution), action bias vs. inaction bias (people tend to act even when waiting is optimal; trained responders learn to override this in specific contexts), the cost-benefit asymmetry of over-response vs. under-response (which error is more recoverable?), stress inoculation training as the method for pre-building decision trees before the moment of crisis, and the legal, ethical, and tactical calculus that governs when force is the correct response.',dangerDensity:0.08},
+  ]},
+  {cat:'BRAIN ARCHITECTURE',mazes:[
+    {id:'brain_vis_01',name:'VISUAL CORTEX',domain:'visual_cortex',lesson:'V1–V5: from edge detection to object identity',lessonDesc:'The visual cortex is a hierarchy of increasing abstraction. V1 detects oriented edges and contrast. V2 groups edges into contours. V4 processes color and form. V5/MT processes motion. The ventral stream (V1→IT cortex) builds object identity. The dorsal stream (V1→parietal) builds spatial location and action guidance. At the core: understanding why face recognition is in temporal cortex not occipital, why motion blindness and color blindness are double dissociable, and how top-down attention modulates what V1 actually processes.',dangerDensity:0.05},
+    {id:'brain_aud_01',name:'AUDITORY CORTEX',domain:'auditory_cortex',lesson:'A1 through speech and music processing — from Hz to meaning',lessonDesc:'Sound processing is tonotopically organized — A1 maps frequency spatially like a piano keyboard. Temporal processing (left hemisphere) handles the rapid transitions of speech. Spectral processing (right hemisphere) handles sustained pitch patterns of music. Wernicke\'s area (posterior STG) gives spoken words their meaning — damage produces fluent but meaningless speech. At the core: why music trained brains have larger A1, how cocktail party effect works, and why auditory hallucinations in schizophrenia feel externally real.',dangerDensity:0.05},
+    {id:'brain_som_01',name:'SOMATOSENSORY CORTEX',domain:'somatosensory',lesson:'Body mapping — the sensory homunculus and what it tells you',lessonDesc:'The sensory homunculus is a distorted body map where hands, lips, and tongue dominate. S1 contains four sub-areas (3a, 3b, 1, 2) each representing the body differently: 3a processes proprioception, 3b discriminates touch quality, 1 detects texture, 2 integrates complex shape. Cortical plasticity means this map reorganizes with experience: musicians develop larger hand representations. At the core: why losing a finger causes the adjacent cortical territory to invade the lost finger\'s map, and why chronic pain involves learned cortical reorganization.',dangerDensity:0.05},
+    {id:'brain_olf_01',name:'OLFACTORY SYSTEM',domain:'olfactory',lesson:'The oldest sense — direct limbic access and emotional memory',lessonDesc:'Olfaction is unique: it bypasses the thalamic relay that all other senses pass through. Olfactory receptor neurons project directly to piriform cortex → amygdala → hippocampus. This is why smell is the most powerful trigger of emotional memory and why odors can trigger immediate fight-or-flight without conscious processing. At the core: the olfactory receptor gene family (the largest gene family in mammals), how anosmia (COVID-19 complication) maps to receptor neuron damage, and why certain smells are universally aversive (putrescine, cadaverine) vs. culturally learned.',dangerDensity:0.04},
+    {id:'brain_vest_01',name:'VESTIBULAR SYSTEM',domain:'vestibular',lesson:'Balance, spatial orientation, and the body\'s inertial navigation',lessonDesc:'Three semicircular canals detect rotational acceleration in three planes. Two otolith organs (utricle, saccule) detect linear acceleration and gravity direction. These signals go to the cerebellum (motor coordination), the thalamus (conscious orientation), and directly to spinal cord (postural reflexes). Vestibular-visual conflict causes motion sickness. At the core: why the vestibulo-ocular reflex (VOR) is so fast (15ms latency) it predates conscious processing, how spatial disorientation kills pilots, and why spins in aerial maneuvers are fatal to untrained pilots despite visible horizon.',dangerDensity:0.06},
+    {id:'brain_pfc_01',name:'PREFRONTAL CORTEX',domain:'prefrontal',lesson:'Executive function — planning, inhibition, working memory',lessonDesc:'The PFC is the most recently evolved brain region and the last to mature (age 25). It holds information "online" during working memory tasks, inhibits prepotent responses, models future consequences, and regulates limbic emotional responses via top-down control. PFC is selectively vulnerable: first to degrade under stress, fatigue, alcohol, and aging. At the core: the delay discounting problem (why PFC damage makes people prefer immediate small rewards over delayed large ones), the relationship between PFC volume and emotional regulation capacity, and why sleep deprivation impairs PFC before any other region.',dangerDensity:0.05},
+    {id:'brain_ofc_01',name:'ORBITOFRONTAL CORTEX',domain:'orbitofrontal',lesson:'Value signals, gut feeling, and reward-contingent decision making',lessonDesc:'The OFC assigns affective value to stimuli and outcomes. It receives convergent input from all sensory modalities plus limbic structures, producing multimodal "value maps" for decision-making. Somatic marker hypothesis (Damasio): OFC damage disrupts the body-based signals (gut feelings) that guide adaptive decisions — patients reason perfectly abstractly but make disastrous real-world choices. At the core: the Iowa Gambling Task as diagnostic tool, why OFC is critical for adaptive reversal learning (when reward contingencies change), and the overlap with addiction circuitry.',dangerDensity:0.05},
+    {id:'brain_acc_01',name:'ANTERIOR CINGULATE',domain:'anterior_cingulate',lesson:'Conflict detection, error monitoring, and the pain of rejection',lessonDesc:'The ACC monitors for discrepancies between expected and actual outcomes. It generates the error-related negativity (ERN) — a neural signal that fires within 100ms of an error before conscious awareness. The ACC regulates the motivational and affective dimensions of pain without affecting sensation. Social exclusion activates dACC in the same way physical pain does. At the core: why ACC damage impairs sustained motivation despite preserved ability, how meditation reduces ACC pain sensitivity, and the role of ACC in sustained attention.',dangerDensity:0.06},
+    {id:'brain_par_01',name:'PARIETAL CORTEX',domain:'parietal',lesson:'Spatial cognition, body schema, and mathematical thinking',lessonDesc:'The parietal lobe builds the brain\'s working model of space: where the body is (somatosensory integration), where objects are (spatial attention), and the spatial relationships between them. Hemispatial neglect from right parietal damage causes patients to ignore the left half of their world entirely. The intraparietal sulcus handles numerical magnitude — it is the neural substrate of approximate number sense, present in infants and across cultures. At the core: why tool use activates parietal cortex (tools are incorporated into the body schema), and how mirror neurons link parietal and premotor cortex.',dangerDensity:0.05},
+    {id:'brain_fus_01',name:'FUSIFORM FACE AREA',domain:'fusiform',lesson:'Face recognition — identity from perception, emotion from faces',lessonDesc:'The fusiform face area (FFA) in the right fusiform gyrus responds selectively to faces over any other visual category. It underlies the rapid, automatic face perception that humans achieve — a face is recognized in 170ms (the N170 ERP component). FFA connects to amygdala (emotional response) and to hippocampus (face-identity memory). Prosopagnosia from FFA damage: patients cannot recognize faces but can recognize voices and gaits. At the core: the configural vs. featural processing distinction (why inverted faces are so hard to recognize), the "other race effect" as reduced FFA activation.',dangerDensity:0.05},
+    {id:'brain_m1_01',name:'MOTOR CORTEX',domain:'motor_cortex',lesson:'Voluntary movement — the motor homunculus and corticospinal precision',lessonDesc:'M1 (primary motor cortex, precentral gyrus) is the final common pathway for voluntary movement. The motor homunculus shows massive over-representation of hands, tongue, and lips — mirroring the sensory homunculus. Corticospinal tract neurons descend directly to spinal motor neurons for distal limb muscles — this direct connection is what enables fine motor precision unique to primates. At the core: why M1 is active during motor imagery (imagined movement), how transcranial magnetic stimulation over M1 produces involuntary movements, and why M1 reorganizes with motor learning and amputation.',dangerDensity:0.05},
+    {id:'brain_bg_01',name:'BASAL GANGLIA',domain:'basal_ganglia',lesson:'Action selection, habit encoding, and dopamine reward signaling',lessonDesc:'The basal ganglia resolve competition between competing action programs through a direct pathway (facilitate selected action) and indirect pathway (suppress alternatives). The striatum receives dopaminergic input from substantia nigra — this is the reward prediction error signal that drives reinforcement learning. Parkinson\'s disease destroys substantia nigra neurons, collapsing the direct pathway. Huntington\'s disease destroys striatal neurons, releasing the indirect pathway. At the core: why habits are basal ganglia-encoded (which is why they survive hippocampal amnesia), and the neural mechanism of addiction.',dangerDensity:0.06},
+    {id:'brain_cb_01',name:'CEREBELLUM',domain:'cerebellum',lesson:'Precision calibration, timing, and procedural learning',lessonDesc:'The cerebellum contains 50 billion neurons — over 80% of total brain neurons — in a structure that is 10% of brain volume. It receives motor command copies (efference copy) and sensory feedback, computes the prediction error, and sends corrective signals back. Cerebellar damage produces: dysmetria (overshooting target movements), intention tremor (worsens as hand approaches target), dysdiadochokinesia (inability to perform rapid alternating movements). At the core: the adaptive filter model — the cerebellum as a supervised learning machine, and why the cerebellum is implicated in autism spectrum (timing and sensory prediction deficits).',dangerDensity:0.06},
+    {id:'brain_sm_01',name:'SUPPLEMENTARY MOTOR AREA',domain:'supp_motor',lesson:'Movement planning, bimanual coordination, and the readiness potential',lessonDesc:'The SMA is active 600-800ms before voluntary movement — it generates the Bereitschaftspotential (readiness potential) that precedes conscious intention. The SMA coordinates complex multi-joint and bimanual movement sequences. Pre-SMA handles action selection; SMA proper handles sequence execution. SMA lesions produce: alien hand syndrome (involuntary purposeful movements), mutism (inability to initiate speech), gait initiation failure. Real fact: the Libet experiments used the readiness potential to argue that free will is a post-hoc interpretation — the brain decides before consciousness does.',dangerDensity:0.06},
+    {id:'brain_ps_01',name:'PRIMARY SOMATOMOTOR',domain:'primary_somatomotor',lesson:'Fine motor integration — where sensation and movement become one',lessonDesc:'The primary somatomotor cortex is the functional band spanning M1 and S1 where motor commands and somatosensory feedback are integrated in real time. This integration enables skilled manipulation: the hand knows what it is touching as it moves through the object. Tasks requiring this integration: surgery, instrumental performance, picking a lock, assembling mechanisms under constraint. At the core: why cortical representation size predicts skilled performance (cellists\' left hand, surgeons\' dominant hand), how sensory feedback deprivation (gloves) degrades fine motor performance, and the role of mirror neurons in imitation learning.',dangerDensity:0.05},
   ]},
   {cat:'TECHNICAL REPAIR',mazes:[
     {id:'electronics_rep_01',name:'ELECTRONICS REPAIR',domain:'electronics_repair',lesson:'Diagnose and repair electronic systems from first principles',lessonDesc:'Electronics repair begins with systematic diagnosis — voltage measurements, signal tracing, component substitution, and the systematic elimination of failure modes. At the core: reading schematics, using test equipment, identifying failed components, understanding failure modes of capacitors, transistors, ICs, and power systems, and the repair workflow that restores function efficiently.',dangerDensity:0.05},
@@ -2741,7 +2808,7 @@ const MZ_CAT=[
     'SOCIAL & COMMUNICATION','IDENTITY & PERCEPTION',
     'HUMOR & PERFORMANCE','HISTORY & CULTURE','STEALTH & COVERT OPS',
     'RELIGION & BELIEF','MEASUREMENT & MATERIALS','COVERT SURVEILLANCE','HUMOR SUB-DOMAINS',
-    'MEDICAL','THREAT & AWARENESS'];
+    'MEDICAL','THREAT & AWARENESS','BRAIN ARCHITECTURE'];
   const LEVELS=[
     {level:2,suffix:'_l2',densityAdd:0.07, xp:15, tag:'ADVANCED',
      intro:'ADVANCED — Danger corridors tightened. Fewer safe alternatives per junction. The same terrain, harder to read.'},
@@ -2899,6 +2966,7 @@ const DEF=()=>({
     coordination:0,
   },
   pathways:[
+    // ── CORE PATHWAYS (original) ──
     {id:'p1',from:'cortex',to:'limbic',active:true,emo:false},{id:'p2',from:'limbic',to:'spine',active:true,emo:false},
     {id:'p3',from:'spine',to:'motor',active:true,emo:false},{id:'p4',from:'cortex',to:'sensory',active:true,emo:false},
     {id:'p5',from:'sensory',to:'limbic',active:false,emo:false},{id:'p6',from:'limbic',to:'autonomic',active:true,emo:false},
@@ -2908,14 +2976,61 @@ const DEF=()=>({
     {id:'p12',from:'hippocampus',to:'memory',active:true,emo:true},{id:'p13',from:'insula',to:'amygdala',active:false,emo:true},
     {id:'p14',from:'hypothalamus',to:'autonomic',active:true,emo:true},{id:'p15',from:'amygdala',to:'hypothalamus',active:false,emo:true},
     {id:'p16',from:'hippocampus',to:'cortex',active:true,emo:true},
+    // ── PHASE 1: SENSORY → CORE ──
+    {id:'p17',from:'visual_cortex',to:'sensory',active:true,emo:false},
+    {id:'p18',from:'auditory_cortex',to:'sensory',active:true,emo:false},
+    {id:'p19',from:'somatosensory',to:'sensory',active:true,emo:false},
+    {id:'p20',from:'olfactory',to:'limbic',active:true,emo:false},
+    {id:'p21',from:'vestibular',to:'motor',active:true,emo:false},
+    // ── PHASE 2: EXECUTIVE → CORE ──
+    {id:'p22',from:'prefrontal',to:'cortex',active:true,emo:false},
+    {id:'p23',from:'orbitofrontal',to:'limbic',active:true,emo:false},
+    {id:'p24',from:'anterior_cingulate',to:'cortex',active:true,emo:false},
+    {id:'p25',from:'anterior_cingulate',to:'limbic',active:false,emo:false},
+    {id:'p26',from:'parietal',to:'cortex',active:true,emo:false},
+    {id:'p27',from:'fusiform',to:'sensory',active:true,emo:false},
+    // ── PHASE 3: MOTOR → CORE ──
+    {id:'p28',from:'motor_cortex',to:'motor',active:true,emo:false},
+    {id:'p29',from:'basal_ganglia',to:'motor',active:true,emo:false},
+    {id:'p30',from:'cerebellum',to:'spine',active:true,emo:false},
+    {id:'p31',from:'supp_motor',to:'motor_cortex',active:false,emo:false},
+    {id:'p32',from:'primary_somatomotor',to:'motor_cortex',active:true,emo:false},
+    // ── CROSS-PHASE CONNECTIONS ──
+    {id:'p33',from:'somatosensory',to:'motor_cortex',active:false,emo:false},
+    {id:'p34',from:'vestibular',to:'cerebellum',active:true,emo:false},
+    {id:'p35',from:'fusiform',to:'amygdala',active:true,emo:true},
+    {id:'p36',from:'orbitofrontal',to:'amygdala',active:true,emo:true},
+    {id:'p37',from:'parietal',to:'motor_cortex',active:false,emo:false},
+    {id:'p38',from:'prefrontal',to:'orbitofrontal',active:true,emo:false},
+    {id:'p39',from:'visual_cortex',to:'fusiform',active:true,emo:false},
+    {id:'p40',from:'basal_ganglia',to:'supp_motor',active:false,emo:false},
   ],
   nodes:{
+    // ── CORE NODES (original) ──
     cortex:{x:155,y:18,label:'CORTEX',active:true,emo:false},limbic:{x:155,y:72,label:'LIMBIC',active:true,emo:false},
     sensory:{x:60,y:42,label:'SENSORY',active:true,emo:false},motor:{x:255,y:95,label:'MOTOR',active:true,emo:false},
     spine:{x:155,y:125,label:'SPINE',active:true,emo:false},memory:{x:60,y:100,label:'MEMORY',active:false,emo:false},
     autonomic:{x:255,y:155,label:'AUTO',active:true,emo:false},
     amygdala:{x:90,y:65,label:'AMYGDALA',active:true,emo:true},hippocampus:{x:225,y:40,label:'HIPPOCMP',active:true,emo:true},
     hypothalamus:{x:215,y:95,label:'HYPOTH',active:false,emo:true},insula:{x:70,y:130,label:'INSULA',active:true,emo:true},
+    // ── PHASE 1: SENSORY PRECISION (left column) ──
+    visual_cortex:     {x:14,y:15, label:'VIS.CX',  active:true, emo:false,phase:'sens'},
+    auditory_cortex:   {x:14,y:47, label:'AUD.CX',  active:true, emo:false,phase:'sens'},
+    somatosensory:     {x:14,y:79, label:'SOMSENS', active:true, emo:false,phase:'sens'},
+    olfactory:         {x:14,y:111,label:'OLFACT',  active:true, emo:false,phase:'sens'},
+    vestibular:        {x:14,y:143,label:'VESTIB',  active:true, emo:false,phase:'sens'},
+    // ── PHASE 2: EXECUTIVE FUNCTION (top strip) ──
+    prefrontal:        {x:50, y:8, label:'PFC',     active:true, emo:false,phase:'exec'},
+    orbitofrontal:     {x:90, y:8, label:'OFC',     active:true, emo:false,phase:'exec'},
+    anterior_cingulate:{x:130,y:8, label:'ACC',     active:false,emo:false,phase:'exec'},
+    parietal:          {x:188,y:8, label:'PARIET',  active:true, emo:false,phase:'exec'},
+    fusiform:          {x:228,y:8, label:'FUSFM',   active:true, emo:false,phase:'exec'},
+    // ── PHASE 3: MOTOR CONTROL (right column) ──
+    motor_cortex:      {x:296,y:22, label:'MOT.CX', active:true, emo:false,phase:'mot'},
+    basal_ganglia:     {x:296,y:55, label:'BASL.G', active:true, emo:false,phase:'mot'},
+    cerebellum:        {x:296,y:88, label:'CEREBEL', active:true, emo:false,phase:'mot'},
+    supp_motor:        {x:296,y:121,label:'S.MOT',  active:false,emo:false,phase:'mot'},
+    primary_somatomotor:{x:296,y:154,label:'P.SMT', active:true, emo:false,phase:'mot'},
   },
   responses:[
     {id:'r1',name:'REWARD response',type:'pos',triggers:['reward','pleasure'],text:'Dopaminergic pathway confirmed active. Positive reinforcement acknowledged.',timesTriggered:0},
@@ -3032,6 +3147,12 @@ function mergeState(d){
   if(!base.appliedProgress)base.appliedProgress={};
   if(!base.mode)base.mode='investigator';
   if(!base.lastDecision)base.lastDecision=DEF().lastDecision;
+  // Merge nodes — add any new nodes from DEF that aren't in the saved state
+  if(!base.nodes)base.nodes=DEF().nodes;
+  else{const dn=DEF().nodes;Object.keys(dn).forEach(k=>{if(!base.nodes[k])base.nodes[k]=dn[k];});}
+  // Merge pathways — add new pathways from DEF that aren't in saved state
+  if(!base.pathways)base.pathways=DEF().pathways;
+  else{const dp=DEF().pathways;const eids=new Set(base.pathways.map(p=>p.id));dp.forEach(p=>{if(!eids.has(p.id))base.pathways.push(p);});}
   return base;
 }
 function checkOldKeys(){
@@ -3104,8 +3225,45 @@ function buildZoneChips(){
 // ══════════════════════════════════════════════════════
 function buildPathwaySVG(){
   const svg=document.getElementById('psv');svg.innerHTML='';
-  S.pathways.forEach(p=>{const fr=S.nodes[p.from],to=S.nodes[p.to];if(!fr||!to)return;const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',fr.x);l.setAttribute('y1',fr.y);l.setAttribute('x2',to.x);l.setAttribute('y2',to.y);l.setAttribute('class','pl '+(p.active?'active':'inactive')+(p.emo?' ep':''));l.dataset.pid=p.id;l.addEventListener('click',()=>{p.active=!p.active;buildPathwaySVG();log(`path ${p.from}→${p.to} ${p.active?'ON':'OFF'}`,'sys');});svg.appendChild(l);});
-  Object.entries(S.nodes).forEach(([k,n])=>{const g=document.createElementNS('http://www.w3.org/2000/svg','g'),c=document.createElementNS('http://www.w3.org/2000/svg','circle'),ac=n.emo?'#cc66ff':'#00ccff';c.setAttribute('cx',n.x);c.setAttribute('cy',n.y);c.setAttribute('r',9);c.setAttribute('fill',n.active?(n.emo?'#12001e':'#001e2e'):'#0b1118');c.setAttribute('stroke',n.active?ac:'#1e3a5a');c.setAttribute('stroke-width',n.active?'1.5':'1');if(n.active)c.setAttribute('filter',`drop-shadow(0 0 4px ${ac}88)`);c.addEventListener('click',()=>{n.active=!n.active;buildPathwaySVG();log(`node [${k.toUpperCase()}] ${n.active?'ON':'OFF'}`,'sys');});c.style.cursor='pointer';const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',n.x);t.setAttribute('y',n.y+20);t.setAttribute('text-anchor','middle');t.setAttribute('font-family',"'Share Tech Mono',monospace");t.setAttribute('font-size','6.5');t.setAttribute('fill',n.active?ac:'#3a5060');t.style.pointerEvents='none';t.textContent=n.label;g.appendChild(c);g.appendChild(t);svg.appendChild(g);});
+  // Phase color map
+  const phaseColor={sens:'#00ffee',exec:'#ffdd44',mot:'#44ff88',emo:'#cc66ff'};
+  const phaseFill={sens:'#001e1a',exec:'#1e1a00',mot:'#001e0a',emo:'#12001e'};
+  S.pathways.forEach(p=>{
+    const fr=S.nodes[p.from],to=S.nodes[p.to];if(!fr||!to)return;
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',fr.x);l.setAttribute('y1',fr.y);l.setAttribute('x2',to.x);l.setAttribute('y2',to.y);
+    // Color pathway by source node phase
+    const frPhase=fr.emo?'emo':fr.phase||'';
+    const pathCol=frPhase?phaseColor[frPhase]+'55':'';
+    l.setAttribute('class','pl '+(p.active?'active':'inactive')+(p.emo?' ep':''));
+    if(pathCol&&p.active)l.setAttribute('stroke',pathCol);
+    l.dataset.pid=p.id;
+    l.addEventListener('click',()=>{p.active=!p.active;buildPathwaySVG();log(`path ${p.from}→${p.to} ${p.active?'ON':'OFF'}`,'sys');});
+    svg.appendChild(l);
+  });
+  Object.entries(S.nodes).forEach(([k,n])=>{
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    const phase=n.emo?'emo':n.phase||'';
+    const ac=phase?phaseColor[phase]:'#00ccff';
+    const af=phase?phaseFill[phase]:'#001e2e';
+    const r=n.phase?7:9; // phase nodes are smaller
+    c.setAttribute('cx',n.x);c.setAttribute('cy',n.y);c.setAttribute('r',r);
+    c.setAttribute('fill',n.active?af:'#0b1118');
+    c.setAttribute('stroke',n.active?ac:'#1e3a5a');
+    c.setAttribute('stroke-width',n.active?'1.5':'1');
+    if(n.active)c.setAttribute('filter',`drop-shadow(0 0 3px ${ac}88)`);
+    c.addEventListener('click',()=>{n.active=!n.active;buildPathwaySVG();log(`node [${k.toUpperCase()}] ${n.active?'ON':'OFF'}`,'sys');});
+    c.style.cursor='pointer';
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',n.x);t.setAttribute('y',n.y+(r+10));
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-family',"'Share Tech Mono',monospace");
+    t.setAttribute('font-size',n.phase?'5.5':'6.5');
+    t.setAttribute('fill',n.active?ac:'#3a5060');
+    t.style.pointerEvents='none';t.textContent=n.label;
+    g.appendChild(c);g.appendChild(t);svg.appendChild(g);
+  });
   const a=S.pathways.filter(p=>p.active).length;document.getElementById('hPath').textContent=`${a}/${S.pathways.length}`;
 }
 // ══════════════════════════════════════════════════════
@@ -4817,6 +4975,24 @@ const LOCAL_RESPONSES={
     pagan_beliefs:'Paganism is not devil worship — it is nature reverence predating Abrahamic traditions by millennia. Core principles: animism (everything has spirit), the Wheel of the Year (eight seasonal celebrations), the principle of correspondence (as above so below), and the ethical standard of the Wiccan Rede: harm none. Most pagan traditions are reconstructed from fragmentary sources — the practitioners know this and consider reconstruction an act of respect, not certainty.',
     pagan_practices:'The circle is cast — sacred space separated from mundane space. Directions are called. The gods are invoked. The working is done. The circle is opened. This is the basic structure of most pagan ritual. The eight Sabbats mark the agricultural year: Samhain (Oct 31), Yule (winter solstice), Imbolc (Feb 1), Ostara (spring equinox), Beltane (May 1), Litha (summer solstice), Lughnasadh (Aug 1), Mabon (autumn equinox). Divination — Tarot, runes, scrying — is reading pattern, not predicting fate.',
     pagan_history:'The druids left no written records — everything we know about them was written by Romans and Greeks who were their enemies or outsiders. The Norse Eddas were recorded in 13th century Iceland, two centuries after Christianization. The Slavic deity Perun is reconstructed from 19th-century folk tales. Pagan history is largely a history of what was destroyed and what was hidden in folk practice. Modern reconstructionists (Asatru, Celtic Reconstructionism) work from fragments and know it.',
+    // Phase 1 — Sensory Cortices
+    visual_cortex:'The visual cortex occupies the entire occipital lobe and extends forward. V1 (primary visual cortex) processes edges, orientation, and motion direction. V2-V5 build complexity: color, depth, motion coherence, and object recognition. The dorsal stream (V1 → parietal) handles "where" and motion; the ventral stream (V1 → temporal) handles "what" and identity. Real fact: the visual cortex devotes more processing space to the central visual field (fovea) than to peripheral vision — which is why you can\'t read with your peripheral vision.',
+    auditory_cortex:'The primary auditory cortex (A1) sits in the superior temporal gyrus and processes basic sound features: frequency, intensity, and timing. The auditory association cortex interprets complex sounds — speech, music, and environmental patterns. The left auditory cortex specializes in rapid temporal processing (language). The right auditory cortex specializes in pitch patterns (music, prosody). Real fact: the auditory cortex can continue processing speech in near-silence by predicting upcoming sounds — this is why you can follow conversation in a noisy room better than expected.',
+    somatosensory:'The somatosensory cortex (postcentral gyrus, Brodmann areas 1/2/3) is a complete body map — the sensory homunculus. Hands and lips are massively over-represented relative to their physical size. The somatosensory cortex processes touch, pressure, pain, temperature, and proprioception. Real fact: phantom limb pain is generated entirely in the somatosensory cortex — the missing limb\'s map is still active and its activation is experienced as real sensation. Mirror therapy works because it fools the visual cortex into updating the somatosensory map.',
+    olfactory:'The olfactory system is the only sensory system that does NOT route through the thalamus. Olfactory signals go directly to the olfactory cortex (piriform cortex) and from there to the amygdala and hippocampus — which is why smell triggers emotional memories more powerfully and immediately than any other sense. The human nose can distinguish over one trillion distinct odors. Real fact: olfaction is the most ancient sense — it is evolutionarily older than vision and processed by some of the oldest brain structures.',
+    vestibular:'The vestibular system (semicircular canals + otolith organs of the inner ear) detects head rotation and linear acceleration. It connects directly to the cerebellum (for motor coordination), the ocular motor system (keeping vision stable during movement), and the spinal cord (postural reflexes). Vestibular dysfunction feels like the world is spinning (vertigo) because the visual cortex receives movement signals without corresponding visual input. Real fact: the vestibulo-ocular reflex (VOR) is so fast it operates below conscious processing speed — it stabilizes your vision before you can think about it.',
+    // Phase 2 — Executive Function
+    prefrontal:'The prefrontal cortex (PFC) is the executive brain — the part that plans, inhibits impulses, weighs consequences, and maintains working memory. It is the last brain region to fully develop (age 25) and the first to be degraded by stress, sleep deprivation, and alcohol. PFC damage produces disinhibition, poor planning, and inability to delay gratification. Real fact: Phineas Gage (1848) — iron rod through PFC — survived but became impulsive, unreliable, and socially inappropriate, giving us the first evidence that personality is physically located.',
+    orbitofrontal:'The orbitofrontal cortex (OFC) sits at the base of the frontal lobe and processes reward value, emotional regulation, and the integration of emotion into decision-making. The OFC is what tells you when something is worth doing and when a risk is not worth taking — it assigns emotional significance to outcomes. OFC damage produces poor judgment in real-world decisions even when abstract reasoning remains intact (the Iowa Gambling Task). It is the neurological seat of gut feeling.',
+    anterior_cingulate:'The anterior cingulate cortex (ACC) is the conflict detector of the brain. It activates when there is a mismatch between what you expect and what you observe — and when there is a choice between competing responses. The ACC regulates emotional responses to pain (damage reduces the emotional suffering of pain without removing the sensation) and drives persistent goal-directed behavior. Real fact: social rejection activates the same ACC regions as physical pain — the "pain" of rejection is neurologically real.',
+    parietal:'The parietal lobe integrates sensory information into spatial maps of the body and the world. The right parietal lobe constructs spatial awareness; damage to it causes hemispatial neglect (inability to attend to the left half of space — patients ignore the left side of plates, left side of their own face when shaving). The left parietal lobe integrates language with spatial reasoning. The intraparietal sulcus handles number sense and mathematical processing. Real fact: skilled London taxi drivers have enlarged hippocampi AND enlarged parietal regions from spatial map-building.',
+    fusiform:'The fusiform face area (FFA) in the fusiform gyrus of the temporal lobe is specialized for face recognition. It responds more strongly to faces than to any other object category. FFA damage causes prosopagnosia — the inability to recognize faces, even familiar ones including one\'s own face in a mirror. The FFA is part of the ventral visual stream (the "what" pathway) and connects directly to the amygdala for emotional response to faces. Real fact: the FFA activates for expert-level objects — bird experts activate FFA for birds, car experts for cars.',
+    // Phase 3 — Motor Control
+    motor_cortex:'The primary motor cortex (M1, precentral gyrus) contains the motor homunculus — a complete body map organized by muscle group, with hands and face massively over-represented. Each neuron in M1 controls a specific muscle group via corticospinal tract axons that descend to spinal motor neurons. Voluntary movement begins here. Real fact: the motor cortex is active during mental rehearsal of movements — imagining playing piano activates the same motor cortex regions as actually playing it, which is why mental practice measurably improves physical performance.',
+    basal_ganglia:'The basal ganglia (striatum, globus pallidus, substantia nigra, subthalamic nucleus) are the motor selection system — they resolve competition between possible actions by facilitating the chosen action and suppressing alternatives. Parkinson\'s disease is the loss of dopaminergic neurons in the substantia nigra, causing the basal ganglia to fail at action facilitation: tremor, rigidity, bradykinesia (slow movement). Huntington\'s disease is basal ganglia over-activity: involuntary movements. Real fact: habit formation is encoded in the striatum — this is why habits survive even severe amnesia.',
+    cerebellum:'The cerebellum contains more neurons than the rest of the brain combined. It is the precision calibration system — it receives copies of motor commands (efference copy) and sensory feedback, and calculates and corrects errors in real time. Cerebellar damage causes ataxia: movements overshoot or undershoot, fine motor control disintegrates, timing of rapid sequences collapses. The cerebellum is also critical for procedural learning — it is where skilled movement sequences are automated. Real fact: the cerebellum may contribute to language and social cognition beyond motor control.',
+    supp_motor:'The supplementary motor area (SMA) is active BEFORE movement begins — it is the planning stage. SMA activity precedes voluntary movement by 600-800ms (the Bereitschaftspotential or "readiness potential"). The SMA coordinates complex multi-limb sequences and bimanual coordination. SMA damage causes alien hand syndrome — one hand performs goal-directed movements that the person does not consciously intend. Real fact: the SMA generates the felt sense of wanting to move — the subjective experience of intention — before the motor cortex executes it.',
+    primary_somatomotor:'The primary somatomotor cortex is the functional integration of M1 and S1 — the band of cortex where motor output and somatosensory feedback combine into closed-loop motor control. This integration allows the hand to know what it is touching while it moves — the basis of skilled manipulation. Fine motor tasks (surgery, instrument playing, lock picking) require maximally refined primary somatomotor function. Real fact: the size of the cortical representation of a body part scales with the precision of fine motor control required, not with the physical size of the body part.',
     // Medical (Medic mode missing skills)
     anatomy:'The human body is a layered system: skin over fascia over muscle over bone, with nerves and vessels threaded between. Real facts: the femur can support 30 times the weight of the human body; the cornea gets oxygen directly from air, not blood; the tongue is the only muscle attached at only one end; there are more bacterial cells in the body than human cells. Anatomy matters in field medicine because you cannot treat what you cannot locate. Ask me about any body system.',
     pharmacology:'Pharmacology is the science of chemical-biological interaction. At the core: dose-response curves (all drugs are poisons at the right dose — Paracelsus, 1538), half-life and clearance, receptor specificity, agonist vs. antagonist, drug-drug interactions via CYP450 enzyme competition, the blood-brain barrier as a pharmacological obstacle, and how opioids, stimulants, sedatives, and antibiotics each exploit different receptor systems. Real fact: aspirin was first isolated from willow bark, used medicinally for 3,500 years before its mechanism was understood. Ask me about specific drug classes.',
