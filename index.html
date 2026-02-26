@@ -416,6 +416,93 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .recBtn.yes{border-color:var(--pos);color:var(--pos)}.recBtn.yes:hover{background:var(--pd)}
 .recBtn.no{border-color:var(--neg);color:var(--neg)}.recBtn.no:hover{background:var(--nd)}
 .recBtn.ex{border-color:var(--si);color:var(--si)}.recBtn.ex:hover{background:var(--sid)}
+
+/* ══ HEALTH MONITOR ══ */
+.health-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;flex-shrink:0;}
+.hm-card{background:var(--p2);border:1px solid var(--b1);border-radius:3px;padding:6px 8px;display:flex;flex-direction:column;gap:2px;}
+.hm-label{font-family:var(--mo);font-size:5.5px;letter-spacing:2px;color:var(--td);}
+.hm-value{font-family:var(--hd);font-size:14px;letter-spacing:1px;}
+.hm-unit{font-family:var(--mo);font-size:6px;color:var(--td);}
+.hm-bar{height:3px;border-radius:2px;background:var(--b1);margin-top:3px;overflow:hidden;}
+.hm-fill{height:100%;border-radius:2px;transition:width .5s,background .5s;}
+.hr-val{color:var(--pos);}
+.hr-warn{color:var(--wa)!important;}
+.hr-crit{color:var(--neg)!important;animation:bl .6s infinite;}
+.stress-val{color:var(--emo);}
+.activity-val{color:var(--pu);}
+.gps-val{color:var(--sm);font-size:7px!important;letter-spacing:.5px;}
+.vitals-timeline{flex:1;overflow-y:auto;min-height:0;}
+.vt-entry{font-family:var(--mo);font-size:6px;color:var(--td);padding:2px 4px;border-bottom:1px solid #0a1828;display:flex;justify-content:space-between;}
+.vt-entry.alert{color:var(--wa);}
+.vt-entry.critical{color:var(--neg);}
+.contacts-list{display:flex;flex-direction:column;gap:3px;}
+.contact-row{display:flex;gap:4px;align-items:center;}
+.contact-inp{flex:1;background:var(--p2);border:1px solid var(--b1);color:var(--tx);font-family:var(--mo);font-size:7px;padding:3px 5px;border-radius:2px;outline:none;}
+.contact-inp:focus{border-color:var(--pos);}
+.contact-del{background:transparent;border:1px solid var(--nm);color:var(--neg);font-family:var(--mo);font-size:8px;padding:1px 5px;cursor:pointer;border-radius:2px;}
+.add-contact{background:transparent;border:1px solid #00ffaa40;color:var(--pos);font-family:var(--mo);font-size:7px;padding:3px 8px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .12s;align-self:flex-start;}
+.add-contact:hover{background:var(--pd);border-color:var(--pos);}
+
+/* ══ ALERT LEVELS ══ */
+.alert-banner{display:none;position:fixed;top:0;left:0;right:0;z-index:9998;padding:6px 14px;font-family:var(--mo);font-size:8px;letter-spacing:2px;text-align:center;animation:bl .7s infinite;}
+.alert-banner.show{display:block;}
+.alert-banner.lv1{background:#1a1200;border-bottom:1px solid var(--wa);color:var(--wa);}
+.alert-banner.lv2{background:#1a0800;border-bottom:2px solid var(--dng);color:var(--dng);}
+.alert-banner.lv3{background:#1a0000;border-bottom:2px solid var(--neg);color:var(--neg);animation:lp .5s infinite;}
+.alert-banner.lv4{background:var(--neg);border-bottom:2px solid #ff0000;color:#fff;animation:lp .3s infinite;}
+.sos-btn{background:var(--neg);border:2px solid #ff0000;color:#fff;font-family:var(--hd);font-size:11px;padding:8px 16px;cursor:pointer;border-radius:3px;letter-spacing:2px;width:100%;margin:4px 0;transition:all .15s;box-shadow:0 0 12px #ff224466;}
+.sos-btn:hover{background:#ff0000;box-shadow:0 0 22px #ff0000;}
+.cancel-sos{background:transparent;border:1px solid var(--pos);color:var(--pos);font-family:var(--mo);font-size:7px;padding:4px 10px;cursor:pointer;border-radius:2px;width:100%;letter-spacing:1px;}
+.cancel-sos:hover{background:var(--pd);}
+.emergency-card{background:#1a0000;border:2px solid var(--neg);border-radius:4px;padding:10px;display:flex;flex-direction:column;gap:6px;flex-shrink:0;}
+.emergency-title{font-family:var(--hd);font-size:9px;letter-spacing:3px;color:var(--neg);}
+.emerg-msg{font-family:var(--mo);font-size:7px;color:var(--tx);line-height:1.6;white-space:pre-wrap;background:var(--p2);padding:6px;border-radius:2px;border:1px solid var(--nm);max-height:120px;overflow-y:auto;}
+.copy-emerg{background:transparent;border:1px solid var(--neg);color:var(--neg);font-family:var(--mo);font-size:7px;padding:3px 8px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .12s;}
+.copy-emerg:hover{background:var(--nd);}
+.defibrillator{width:8px;height:8px;border-radius:50%;display:inline-block;margin-left:4px;flex-shrink:0;}
+.defibrillator.nominal{background:var(--pos);box-shadow:0 0 5px var(--pos);}
+.defibrillator.alert{background:var(--wa);animation:lp 1.2s infinite;}
+.defibrillator.critical{background:var(--neg);animation:dp .6s infinite;}
+.countdown-ring{font-family:var(--hd);font-size:26px;color:var(--neg);text-align:center;margin:4px 0;animation:lp .5s infinite;}
+
+/* ══ VOICE SYSTEM ══ */
+.voice-status{display:flex;align-items:center;gap:6px;padding:5px 8px;background:var(--p2);border:1px solid var(--b1);border-radius:3px;flex-shrink:0;}
+.voice-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.voice-dot.off{background:var(--td);}
+.voice-dot.on{background:var(--pos);box-shadow:0 0 5px var(--pos);animation:pa 1.5s infinite;}
+.voice-dot.speaking{background:var(--pu);box-shadow:0 0 8px var(--pu);animation:lp .3s infinite;}
+.voice-dot.listening{background:var(--wa);box-shadow:0 0 8px var(--wa);animation:lp .4s infinite;}
+.voice-label{font-family:var(--mo);font-size:7px;color:var(--td);letter-spacing:1px;flex:1;}
+.voice-toggle{background:transparent;border:1px solid var(--b1);color:var(--td);font-family:var(--mo);font-size:7px;padding:2px 8px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .12s;}
+.voice-toggle.on{border-color:var(--pos);color:var(--pos);}
+.voice-toggle:hover{border-color:var(--pu);color:var(--pu);}
+.voice-selector{background:var(--p2);border:1px solid var(--b1);color:var(--tx);font-family:var(--mo);font-size:7px;padding:3px 5px;border-radius:2px;outline:none;width:100%;}
+.voice-selector:focus{border-color:var(--pu);}
+.voice-sliders{display:flex;flex-direction:column;gap:5px;}
+.vs-row{display:grid;grid-template-columns:50px 1fr 28px;align-items:center;gap:5px;}
+.vs-lbl{font-family:var(--mo);font-size:6px;color:var(--td);letter-spacing:1px;}
+.vs-val{font-family:var(--mo);font-size:6px;color:var(--pu);text-align:right;}
+.voice-test-btns{display:flex;gap:4px;flex-wrap:wrap;}
+.vtb{background:transparent;border:1px solid var(--b1);color:var(--td);font-family:var(--mo);font-size:6.5px;padding:3px 7px;cursor:pointer;border-radius:2px;letter-spacing:.5px;transition:all .12s;flex:1;}
+.vtb:hover{border-color:var(--pu);color:var(--pu);}
+.vtb.emerg{border-color:var(--nm);color:var(--neg);}
+.vtb.emerg:hover{border-color:var(--neg);background:var(--nd);}
+.listen-btn{background:transparent;border:1px solid #ffaa0040;color:var(--wa);font-family:var(--mo);font-size:7px;padding:4px 10px;cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .12s;width:100%;}
+.listen-btn.active{border-color:var(--wa);background:#1a0d00;box-shadow:0 0 8px #ffaa0044;}
+.listen-btn:hover{border-color:var(--wa);background:#1a0d00;}
+.hw-hooks{background:var(--p2);border:1px solid #ffaa0030;border-radius:3px;padding:6px 8px;display:flex;flex-direction:column;gap:3px;}
+.hw-hook-title{font-family:var(--mo);font-size:6px;letter-spacing:2px;color:var(--wa);}
+.hw-hook-item{font-family:var(--mo);font-size:5.5px;color:var(--td);padding:1px 0;display:flex;align-items:center;gap:5px;}
+.hw-hook-item::before{content:'◈';color:#ffaa0050;font-size:5px;}
+.hw-hook-item.ready{color:var(--pos);}
+.hw-hook-item.ready::before{color:var(--pos);}
+/* Health indicator in header */
+.health-hdr{display:flex;align-items:center;gap:4px;font-family:var(--mo);font-size:7px;}
+.health-hdr-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.health-hdr-dot.nominal{background:var(--pos);box-shadow:0 0 5px var(--pos);animation:pa 2s infinite;}
+.health-hdr-dot.alert{background:var(--wa);box-shadow:0 0 5px var(--wa);animation:lp 1s infinite;}
+.health-hdr-dot.critical{background:var(--neg);box-shadow:0 0 7px var(--neg);animation:dp .5s infinite;}
+.health-hdr-dot.emergency{background:#ff0000;box-shadow:0 0 10px #ff0000;animation:dp .3s infinite;}
 </style>
 </head>
 <body>
@@ -428,6 +515,11 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
     <label class="hb im" style="cursor:pointer">IMPORT JSON<input type="file" accept=".json" style="display:none" onchange="importState(event)"></label>
     <button class="hb rst" onclick="resetState()">RESET</button>
     <div class="ebadge" id="emoBadge">EMO: NEUTRAL</div>
+    <div class="health-hdr" id="healthHdr" title="Wearer Health Status — click Health tab for details">
+      <div class="health-hdr-dot nominal" id="healthDot"></div>
+      <span id="healthHdrLabel" style="color:var(--td)">NOMINAL</span>
+      <span style="color:var(--td);font-size:5.5px" id="healthHrHdr">--BPM</span>
+    </div>
     <span class="savets" id="saveTs">not saved</span>
   </div>
   <div class="hstats">
@@ -439,7 +531,8 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
     <div class="hs"><span class="sl">PATHS</span><span class="pc" id="hPath">0/0</span></div>
   </div>
 </header>
-<button id="fsBtn" onclick="toggleFullscreen()" title="Toggle Fullscreen" style="
+<!-- ═══ ALERT BANNER ═══ -->
+<div class="alert-banner" id="alertBanner"></div> onclick="toggleFullscreen()" title="Toggle Fullscreen" style="
   position:fixed;bottom:14px;right:14px;z-index:99999;
   background:#040810;border:1px solid #44aaff88;color:#44aaff;
   font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;
@@ -499,6 +592,8 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
     <button class="tab" onclick="swTab('t-sense',this)">SENSES</button>
     <button class="tab" onclick="swTab('t-virtue',this)">VIRTUES</button>
     <button class="tab" onclick="swTab('t-chat',this)">CHAT</button>
+    <button class="tab" onclick="swTab('t-health',this)" style="color:#ff4444;border-color:transparent;" id="tabHealth">♥ HEALTH</button>
+    <button class="tab" onclick="swTab('t-voice',this)" style="color:#00ccff;" id="tabVoice">◈ VOICE</button>
   </div>
   <div class="tc active" id="t-stim">
     <div class="pi">
@@ -756,6 +851,192 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
       </div>
     </div>
   </div>
+</div>
+
+<!-- ═══ HEALTH MONITOR PANEL ═══ -->
+<div class="tc" id="t-health">
+  <div class="pi">
+    <div class="sec">◈ WEARER VITALS</div>
+    <div class="health-grid">
+      <div class="hm-card">
+        <div class="hm-label">HEART RATE</div>
+        <div><span class="hm-value hr-val" id="hmHR">--</span><span class="hm-unit"> BPM</span></div>
+        <div class="hm-bar"><div class="hm-fill" id="hmHRBar" style="width:0%;background:var(--pos)"></div></div>
+      </div>
+      <div class="hm-card">
+        <div class="hm-label">STRESS INDEX</div>
+        <div><span class="hm-value stress-val" id="hmStress">--</span><span class="hm-unit"> %</span></div>
+        <div class="hm-bar"><div class="hm-fill" id="hmStressBar" style="width:0%;background:var(--emo)"></div></div>
+      </div>
+      <div class="hm-card">
+        <div class="hm-label">ACTIVITY LEVEL</div>
+        <div><span class="hm-value activity-val" id="hmActivity">--</span><span class="hm-unit"> /100</span></div>
+        <div class="hm-bar"><div class="hm-fill" id="hmActivityBar" style="width:0%;background:var(--pu)"></div></div>
+      </div>
+      <div class="hm-card">
+        <div class="hm-label">ALERT STATUS</div>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:2px;">
+          <div class="defibrillator nominal" id="hmStatusDot"></div>
+          <span class="hm-value" id="hmStatus" style="font-size:9px;color:var(--pos)">NOMINAL</span>
+        </div>
+        <div style="font-family:var(--mo);font-size:5.5px;color:var(--td);margin-top:2px;" id="hmStatusTime">--</div>
+      </div>
+    </div>
+
+    <div class="hm-card" style="flex-direction:row;align-items:center;gap:8px;">
+      <div style="flex:1">
+        <div class="hm-label">LOCATION</div>
+        <div class="hm-value gps-val" id="hmGPS">UNAVAILABLE</div>
+      </div>
+      <div style="flex:1">
+        <div class="hm-label">MOTION</div>
+        <div class="hm-value" id="hmMotion" style="font-size:9px;color:var(--sm)">STILL</div>
+      </div>
+      <div>
+        <div class="hm-label">FALL</div>
+        <div class="hm-value" id="hmFall" style="font-size:9px;color:var(--td)">--</div>
+      </div>
+    </div>
+
+    <div class="sec">◈ DEAD MAN'S SWITCH</div>
+    <div class="hm-card" style="background:#0d0800;border-color:#ffaa0040;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+        <span style="font-family:var(--mo);font-size:7px;color:var(--wa)">CHECK-IN REQUIRED EVERY</span>
+        <select id="dmsInterval" class="voice-selector" style="width:90px;color:var(--wa);border-color:#ffaa0040;">
+          <option value="0">DISABLED</option>
+          <option value="5">5 min</option>
+          <option value="10">10 min</option>
+          <option value="15">15 min</option>
+          <option value="30">30 min</option>
+          <option value="60">60 min</option>
+        </select>
+      </div>
+      <div style="font-family:var(--mo);font-size:6px;color:var(--td);margin-bottom:6px;">If no check-in is received within the window, emergency protocol activates automatically.</div>
+      <div class="countdown-ring" id="dmsCountdown" style="display:none;">--:--</div>
+      <button class="cancel-sos" onclick="dmsCheckin()" id="dmsCheckinBtn" style="display:none;border-color:var(--wa);color:var(--wa);margin-bottom:4px;">◈ I'M OK — CHECK IN</button>
+      <div style="font-family:var(--mo);font-size:6px;color:var(--td);text-align:center;" id="dmsStatus">Dead man's switch inactive</div>
+    </div>
+
+    <div class="sec">◈ EMERGENCY PROTOCOL</div>
+    <div class="emergency-card">
+      <div class="emergency-title">⚠ EMERGENCY RESPONSE</div>
+      <div style="font-family:var(--mo);font-size:6.5px;color:var(--tx);line-height:1.7;">
+        When triggered, NEXUS will:<br>
+        1 · Broadcast location + vitals to emergency contacts<br>
+        2 · Read emergency message aloud (if voice enabled)<br>
+        3 · Generate incident report with last known data<br>
+        4 · Repeat alert every 60s until cancelled or confirmed
+      </div>
+      <div class="emerg-msg" id="emergReport">// No emergency active. Last report will appear here.</div>
+      <div style="display:flex;gap:5px;margin-top:2px;">
+        <button class="sos-btn" onclick="triggerSOS('manual')" style="flex:1">⚡ TRIGGER SOS</button>
+        <button class="copy-emerg" onclick="copyEmergReport()">COPY</button>
+      </div>
+      <button class="cancel-sos" id="cancelSOS" style="display:none;" onclick="cancelSOS()">◈ CANCEL EMERGENCY — CONFIRM SAFE</button>
+    </div>
+
+    <div class="sec">◈ EMERGENCY CONTACTS</div>
+    <div class="contacts-list" id="contactsList"></div>
+    <button class="add-contact" onclick="addContact()">+ ADD CONTACT</button>
+
+    <div class="sec">◈ VITALS LOG</div>
+    <div class="vitals-timeline" id="vitalsLog">
+      <div class="vt-entry"><span>System initializing...</span><span>--</span></div>
+    </div>
+
+    <div class="sec">◈ SENSOR HARDWARE HOOKS</div>
+    <div class="hw-hooks">
+      <div class="hw-hook-title">HARDWARE INTEGRATION POINTS</div>
+      <div class="hw-hook-item ready">Web Geolocation API (GPS) — READY</div>
+      <div class="hw-hook-item ready">DeviceMotion API (fall detection) — READY</div>
+      <div class="hw-hook-item">BLE Heart Rate Monitor (GATT 0x2A37) — STUB</div>
+      <div class="hw-hook-item">BLE SpO2 Sensor — STUB</div>
+      <div class="hw-hook-item">BLE GSR / Stress Sensor — STUB</div>
+      <div class="hw-hook-item">BLE Temperature Sensor — STUB</div>
+      <div class="hw-hook-item">Satellite Messenger API (Garmin inReach) — STUB</div>
+      <div class="hw-hook-item">SMS Gateway (Twilio) — STUB</div>
+      <div class="hw-hook-item" style="color:var(--si);">Replace STUB items by calling injectVital(key,value) from hardware driver</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VOICE PANEL ═══ -->
+<div class="tc" id="t-voice">
+  <div class="pi">
+    <div class="sec">◈ VOICE STATUS</div>
+    <div class="voice-status">
+      <div class="voice-dot off" id="voiceDot"></div>
+      <span class="voice-label" id="voiceLabel">SPEECH ENGINE OFFLINE</span>
+      <button class="voice-toggle" id="voiceToggleBtn" onclick="toggleVoice()">ENABLE</button>
+    </div>
+
+    <div class="sec">◈ VOICE CHARACTER</div>
+    <div style="font-family:var(--mo);font-size:6px;color:var(--td);margin-bottom:4px;">Select voice closest to NEXUS character. Pitch and rate are calibrated automatically.</div>
+    <select class="voice-selector" id="voiceSelect" onchange="setVoice()">
+      <option value="">— loading voices —</option>
+    </select>
+
+    <div class="sec">◈ VOICE PARAMETERS</div>
+    <div class="voice-sliders">
+      <div class="vs-row">
+        <span class="vs-lbl">RATE</span>
+        <input type="range" class="pr" id="vrRate" min="50" max="180" value="95" oninput="updateVoiceParam()">
+        <span class="vs-val" id="vrRateV">0.95</span>
+      </div>
+      <div class="vs-row">
+        <span class="vs-lbl">PITCH</span>
+        <input type="range" class="pr" id="vrPitch" min="50" max="200" value="85" oninput="updateVoiceParam()">
+        <span class="vs-val" id="vrPitchV">0.85</span>
+      </div>
+      <div class="vs-row">
+        <span class="vs-lbl">VOLUME</span>
+        <input type="range" class="pr" id="vrVol" min="0" max="100" value="90" oninput="updateVoiceParam()">
+        <span class="vs-val" id="vrVolV">0.90</span>
+      </div>
+    </div>
+
+    <div class="sec">◈ TEST VOICE</div>
+    <div class="voice-test-btns">
+      <button class="vtb" onclick="voiceTest('greeting')">GREETING</button>
+      <button class="vtb" onclick="voiceTest('status')">STATUS</button>
+      <button class="vtb" onclick="voiceTest('alert')">ALERT</button>
+      <button class="vtb emerg" onclick="voiceTest('emergency')">EMERGENCY</button>
+    </div>
+
+    <div class="sec">◈ VOICE SETTINGS</div>
+    <div style="display:flex;flex-direction:column;gap:5px;">
+      <label style="display:flex;align-items:center;gap:8px;font-family:var(--mo);font-size:7px;color:var(--td);cursor:pointer;">
+        <input type="checkbox" id="voiceOnResponse" checked style="accent-color:var(--pos);"> Speak chat responses
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;font-family:var(--mo);font-size:7px;color:var(--td);cursor:pointer;">
+        <input type="checkbox" id="voiceOnStim" checked style="accent-color:var(--pos);"> Speak stim acknowledgments
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;font-family:var(--mo);font-size:7px;color:var(--td);cursor:pointer;">
+        <input type="checkbox" id="voiceOnEmergency" checked style="accent-color:var(--neg);"> Speak emergency alerts
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;font-family:var(--mo);font-size:7px;color:var(--td);cursor:pointer;">
+        <input type="checkbox" id="voiceOnHealthWarn" checked style="accent-color:var(--wa);"> Speak health warnings
+      </label>
+    </div>
+
+    <div class="sec">◈ VOICE INPUT (MIC)</div>
+    <div style="font-family:var(--mo);font-size:6px;color:var(--td);margin-bottom:5px;">Speak directly to NEXUS. Recognized speech feeds into chat input.</div>
+    <button class="listen-btn" id="listenBtn" onclick="toggleListening()">🎤 HOLD TO LISTEN</button>
+    <div style="font-family:var(--mo);font-size:6.5px;color:var(--td);margin-top:4px;min-height:18px;" id="listenFeedback">// not listening</div>
+
+    <div class="sec">◈ HARDWARE HOOKS</div>
+    <div class="hw-hooks">
+      <div class="hw-hook-title">VOICE HARDWARE INTEGRATION</div>
+      <div class="hw-hook-item ready">Web SpeechSynthesis API — READY</div>
+      <div class="hw-hook-item ready">Web SpeechRecognition API — READY (browser)</div>
+      <div class="hw-hook-item">Earpiece BLE Audio Stream — STUB</div>
+      <div class="hw-hook-item">Wake Word Detection ("Hey NEXUS") — STUB</div>
+      <div class="hw-hook-item">Offline TTS Engine (edge-tts / Piper) — STUB</div>
+      <div class="hw-hook-item">Push-to-Talk Physical Button — STUB</div>
+      <div class="hw-hook-item" style="color:var(--si);">Call nexusSpeak(text) to output to any audio hardware driver</div>
+    </div>
+  </div>
+</div>
 </div>
 <!-- ═══ RIGHT ═══ -->
 <div class="panel">
@@ -3059,6 +3340,7 @@ const DEF=()=>({
   commProgress:{},
   physProgress:{},
   appliedProgress:{},   // XP from applied-skill maze correct picks
+  emergencyContacts:[],  // persisted emergency contact list for health monitor
   mode:'investigator',  // active role: drives MODE_SKILLS selection in decisions
   lastDecision:{        // most recent skill-driven decision breakdown
     mazeId:null,
@@ -3147,12 +3429,14 @@ function mergeState(d){
   if(!base.appliedProgress)base.appliedProgress={};
   if(!base.mode)base.mode='investigator';
   if(!base.lastDecision)base.lastDecision=DEF().lastDecision;
-  // Merge nodes — add any new nodes from DEF that aren't in the saved state
+  // Merge nodes
   if(!base.nodes)base.nodes=DEF().nodes;
   else{const dn=DEF().nodes;Object.keys(dn).forEach(k=>{if(!base.nodes[k])base.nodes[k]=dn[k];});}
-  // Merge pathways — add new pathways from DEF that aren't in saved state
+  // Merge pathways
   if(!base.pathways)base.pathways=DEF().pathways;
   else{const dp=DEF().pathways;const eids=new Set(base.pathways.map(p=>p.id));dp.forEach(p=>{if(!eids.has(p.id))base.pathways.push(p);});}
+  // Emergency contacts persistence
+  if(!base.emergencyContacts)base.emergencyContacts=[];
   return base;
 }
 function checkOldKeys(){
@@ -6863,6 +7147,715 @@ document.getElementById('chatIn').addEventListener('keydown',e=>{if(e.key==='Ent
 // ══════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+// HEALTH MONITOR & EMERGENCY PROTOCOL SYSTEM
+// Hardware-ready: real GPS + DeviceMotion APIs active in browser.
+// BLE sensor stubs ready to wire. Call injectVital(key,val) from
+// any hardware driver to feed real data into the vitals engine.
+// ══════════════════════════════════════════════════════════════════
+
+const HEALTH = {
+  // Current vitals
+  hr: null,          // Heart rate BPM (BLE: GATT 0x2A37)
+  stress: null,      // Stress index 0–100 (GSR/HRV-derived)
+  activity: null,    // Motion activity 0–100 (accelerometer)
+  lat: null, lng: null, accuracy: null, // GPS
+  motionState: 'STILL',  // STILL | WALKING | RUNNING | FALLING
+  fallDetected: false,
+  lastFallTime: null,
+
+  // Alert level: 0=NOMINAL 1=ALERT 2=WARNING 3=CRITICAL 4=EMERGENCY
+  alertLevel: 0,
+  alertLevelNames: ['NOMINAL','ALERT','WARNING','CRITICAL','EMERGENCY'],
+  alertColors: ['var(--pos)','var(--wa)','var(--dng)','var(--neg)','#ff0000'],
+
+  // Dead man's switch
+  dmsActive: false,
+  dmsIntervalMin: 0,
+  dmsLastCheckin: null,
+  dmsTimer: null,
+  dmsRemainingSec: 0,
+  dmsCountdownTimer: null,
+
+  // SOS state
+  sosActive: false,
+  sosReason: '',
+  sosTime: null,
+  sosRepeatTimer: null,
+
+  // Emergency contacts
+  contacts: [],
+
+  // Vitals log
+  log: [],
+
+  // Simulated baseline (used when no hardware connected)
+  simHR: 72,
+  simStress: 22,
+  simActivity: 15,
+  simTick: 0,
+
+  // Hardware injection flag per channel
+  hwChannels: { hr: false, stress: false, activity: false, gps: false },
+};
+
+// ── PUBLIC API: hardware drivers call this ─────────────────────────
+// injectVital('hr', 78)  →  sets heart rate from BLE HRM
+// injectVital('stress', 45)  →  sets stress from GSR
+// injectVital('activity', 60)  →  sets activity from IMU
+// injectVital('gps', {lat:35.1, lng:-80.8, accuracy:5})
+function injectVital(key, value) {
+  if (key === 'hr') { HEALTH.hr = value; HEALTH.hwChannels.hr = true; }
+  else if (key === 'stress') { HEALTH.stress = value; HEALTH.hwChannels.stress = true; }
+  else if (key === 'activity') { HEALTH.activity = value; HEALTH.hwChannels.activity = true; }
+  else if (key === 'gps' && value) {
+    HEALTH.lat = value.lat; HEALTH.lng = value.lng;
+    HEALTH.accuracy = value.accuracy; HEALTH.hwChannels.gps = true;
+  }
+  evaluateAlertLevel();
+  renderVitals();
+}
+
+function initHealthMonitor() {
+  // Restore contacts from save
+  if (S.emergencyContacts) {
+    HEALTH.contacts = S.emergencyContacts;
+  }
+  renderContacts();
+
+  // Start GPS
+  if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(pos => {
+      HEALTH.lat = pos.coords.latitude;
+      HEALTH.lng = pos.coords.longitude;
+      HEALTH.accuracy = pos.coords.accuracy;
+      renderVitals();
+    }, () => {}, { enableHighAccuracy: true, maximumAge: 10000 });
+  }
+
+  // Start DeviceMotion (fall + activity)
+  if (window.DeviceMotionEvent) {
+    let accelBuf = [];
+    window.addEventListener('devicemotion', e => {
+      const a = e.acceleration;
+      if (!a) return;
+      const mag = Math.sqrt((a.x||0)**2 + (a.y||0)**2 + (a.z||0)**2);
+      accelBuf.push(mag);
+      if (accelBuf.length > 20) accelBuf.shift();
+      const avg = accelBuf.reduce((s,v)=>s+v,0)/accelBuf.length;
+      // Fall detection: sudden spike >25 m/s² followed by near-zero
+      if (mag > 25 && !HEALTH.hwChannels.activity) {
+        HEALTH.fallDetected = true;
+        HEALTH.lastFallTime = new Date();
+        HEALTH.motionState = 'FALLING';
+        vitalLog('⚠ FALL DETECTED — accelerometer spike: '+mag.toFixed(1)+' m/s²','alert');
+        triggerSOS('fall');
+      } else if (!HEALTH.hwChannels.activity) {
+        if (avg > 8) HEALTH.motionState = 'RUNNING';
+        else if (avg > 3) HEALTH.motionState = 'WALKING';
+        else HEALTH.motionState = 'STILL';
+        HEALTH.activity = Math.min(100, Math.round(avg * 8));
+      }
+      renderVitals();
+    });
+  }
+
+  // Simulation heartbeat — runs when no hardware connected on that channel
+  setInterval(simulateVitals, 3000);
+  setInterval(renderVitals, 5000);
+  renderVitals();
+  vitalLog('Health monitor initialized','');
+}
+
+function simulateVitals() {
+  HEALTH.simTick++;
+  // Simulate realistic drifting HR
+  if (!HEALTH.hwChannels.hr) {
+    const base = 72;
+    const stress = HEALTH.simStress / 100;
+    const target = base + stress * 30 + (Math.random() - 0.5) * 6;
+    HEALTH.simHR += (target - HEALTH.simHR) * 0.15;
+    HEALTH.hr = Math.round(HEALTH.simHR);
+  }
+  // Simulate stress drift
+  if (!HEALTH.hwChannels.stress) {
+    HEALTH.simStress += (Math.random() - 0.48) * 3;
+    HEALTH.simStress = Math.max(5, Math.min(90, HEALTH.simStress));
+    HEALTH.stress = Math.round(HEALTH.simStress);
+  }
+  // Simulate activity
+  if (!HEALTH.hwChannels.activity) {
+    HEALTH.simActivity += (Math.random() - 0.5) * 8;
+    HEALTH.simActivity = Math.max(0, Math.min(100, HEALTH.simActivity));
+    HEALTH.activity = Math.round(HEALTH.simActivity);
+  }
+  evaluateAlertLevel();
+  renderVitals();
+}
+
+function evaluateAlertLevel() {
+  const hr = HEALTH.hr || 0;
+  const stress = HEALTH.stress || 0;
+  let level = 0;
+  // HR thresholds
+  if (hr > 180 || hr < 40) level = Math.max(level, 3);
+  else if (hr > 150 || hr < 50) level = Math.max(level, 2);
+  else if (hr > 120) level = Math.max(level, 1);
+  // Stress
+  if (stress > 85) level = Math.max(level, 2);
+  else if (stress > 70) level = Math.max(level, 1);
+  // Fall
+  if (HEALTH.fallDetected) level = Math.max(level, 3);
+  // SOS overrides
+  if (HEALTH.sosActive) level = 4;
+
+  if (level !== HEALTH.alertLevel) {
+    const prev = HEALTH.alertLevel;
+    HEALTH.alertLevel = level;
+    const name = HEALTH.alertLevelNames[level];
+    if (level > prev) {
+      vitalLog('Alert level changed: '+HEALTH.alertLevelNames[prev]+' → '+name, level>=3?'critical':'alert');
+      if (level >= 2 && document.getElementById('voiceOnHealthWarn')?.checked) {
+        const msgs = {
+          1: 'Attention. Elevated vitals detected.',
+          2: 'Warning. Vital signs outside normal range. Please respond.',
+          3: 'Critical alert. Vital signs critical. Emergency protocol preparing.',
+        };
+        nexusSpeak(msgs[level] || 'Emergency protocol active.');
+      }
+    }
+    updateAlertBanner();
+    updateHealthHeader();
+  }
+}
+
+function renderVitals() {
+  // HR card
+  const hr = HEALTH.hr;
+  const hrEl = document.getElementById('hmHR');
+  const hrBar = document.getElementById('hmHRBar');
+  if (hrEl) {
+    hrEl.textContent = hr !== null ? hr : '--';
+    hrEl.className = 'hm-value ' + (hr > 150 ? 'hr-crit' : hr > 120 ? 'hr-warn' : 'hr-val');
+    if (hrBar) {
+      const pct = hr ? Math.min(100, ((hr - 40) / 160) * 100) : 0;
+      hrBar.style.width = pct + '%';
+      hrBar.style.background = hr > 150 ? 'var(--neg)' : hr > 120 ? 'var(--wa)' : 'var(--pos)';
+    }
+  }
+  // Stress card
+  const st = HEALTH.stress;
+  const stEl = document.getElementById('hmStress');
+  const stBar = document.getElementById('hmStressBar');
+  if (stEl) {
+    stEl.textContent = st !== null ? st : '--';
+    if (stBar) { stBar.style.width = (st||0)+'%'; stBar.style.background = st>70?'var(--neg)':st>50?'var(--wa)':'var(--emo)'; }
+  }
+  // Activity card
+  const ac = HEALTH.activity;
+  const acEl = document.getElementById('hmActivity');
+  const acBar = document.getElementById('hmActivityBar');
+  if (acEl) {
+    acEl.textContent = ac !== null ? ac : '--';
+    if (acBar) { acBar.style.width = (ac||0)+'%'; }
+  }
+  // Status card
+  const name = HEALTH.alertLevelNames[HEALTH.alertLevel];
+  const col = HEALTH.alertColors[HEALTH.alertLevel];
+  const statusEl = document.getElementById('hmStatus');
+  const dotEl = document.getElementById('hmStatusDot');
+  const timeEl = document.getElementById('hmStatusTime');
+  if (statusEl) { statusEl.textContent = name; statusEl.style.color = col; }
+  if (dotEl) {
+    dotEl.className = 'defibrillator ' + (['nominal','alert','alert','critical','critical'][HEALTH.alertLevel]);
+  }
+  if (timeEl) timeEl.textContent = new Date().toLocaleTimeString();
+  // GPS
+  const gpsEl = document.getElementById('hmGPS');
+  if (gpsEl) {
+    if (HEALTH.lat !== null) {
+      gpsEl.textContent = HEALTH.lat.toFixed(5) + ', ' + HEALTH.lng.toFixed(5) + (HEALTH.accuracy ? ' ±'+Math.round(HEALTH.accuracy)+'m' : '');
+    } else {
+      gpsEl.textContent = 'ACQUIRING...';
+    }
+  }
+  // Motion
+  const motEl = document.getElementById('hmMotion');
+  if (motEl) motEl.textContent = HEALTH.motionState;
+  const fallEl = document.getElementById('hmFall');
+  if (fallEl) {
+    fallEl.textContent = HEALTH.fallDetected ? '⚠ DETECTED ' + (HEALTH.lastFallTime ? HEALTH.lastFallTime.toLocaleTimeString() : '') : 'NONE';
+    fallEl.style.color = HEALTH.fallDetected ? 'var(--neg)' : 'var(--td)';
+  }
+  updateHealthHeader();
+}
+
+function updateHealthHeader() {
+  const dot = document.getElementById('healthDot');
+  const label = document.getElementById('healthHdrLabel');
+  const hrHdr = document.getElementById('healthHrHdr');
+  if (!dot) return;
+  const lvl = HEALTH.alertLevel;
+  const classMap = ['nominal','alert','alert','critical','emergency'];
+  const colorMap = ['var(--td)','var(--wa)','var(--dng)','var(--neg)','#ff0000'];
+  dot.className = 'health-hdr-dot ' + classMap[lvl];
+  if (label) { label.textContent = HEALTH.alertLevelNames[lvl]; label.style.color = colorMap[lvl]; }
+  if (hrHdr) hrHdr.textContent = HEALTH.hr ? HEALTH.hr+'BPM' : '--BPM';
+}
+
+function updateAlertBanner() {
+  const b = document.getElementById('alertBanner');
+  if (!b) return;
+  const lvl = HEALTH.alertLevel;
+  b.className = 'alert-banner';
+  if (lvl === 0) { b.classList.remove('show'); b.textContent = ''; return; }
+  const msgs = {
+    1: '⚠ ALERT — Elevated vitals detected. Check wearer status.',
+    2: '⚠ WARNING — Vital signs outside safe range. Immediate check required.',
+    3: '🔴 CRITICAL — Critical vital signs detected. Emergency protocol ready.',
+    4: '🚨 EMERGENCY — SOS ACTIVE · Broadcasting location · Emergency contacts notified',
+  };
+  b.textContent = msgs[lvl] || '';
+  b.classList.add('show', 'lv' + Math.min(lvl, 4));
+}
+
+// ── SOS / EMERGENCY ────────────────────────────────────────────────
+function triggerSOS(reason) {
+  if (HEALTH.sosActive) return; // already active
+  HEALTH.sosActive = true;
+  HEALTH.sosReason = reason;
+  HEALTH.sosTime = new Date();
+  HEALTH.alertLevel = 4;
+
+  const report = buildEmergencyReport(reason);
+  const repEl = document.getElementById('emergReport');
+  if (repEl) repEl.textContent = report;
+
+  const cancelBtn = document.getElementById('cancelSOS');
+  if (cancelBtn) cancelBtn.style.display = 'block';
+
+  updateAlertBanner();
+  updateHealthHeader();
+  vitalLog('🚨 SOS TRIGGERED — reason: ' + reason, 'critical');
+
+  // Speak emergency message
+  if (document.getElementById('voiceOnEmergency')?.checked) {
+    nexusSpeak('Emergency. SOS activated. Reason: ' + reason.replace(/_/g, ' ') + '. Broadcasting location. Emergency contacts notified. This message will repeat.');
+  }
+
+  // Copy report to clipboard silently
+  try { navigator.clipboard.writeText(report); } catch(e) {}
+
+  // Repeat every 60s
+  HEALTH.sosRepeatTimer = setInterval(() => {
+    if (!HEALTH.sosActive) { clearInterval(HEALTH.sosRepeatTimer); return; }
+    vitalLog('🚨 SOS REPEAT BROADCAST','critical');
+    if (document.getElementById('voiceOnEmergency')?.checked) {
+      nexusSpeak('Emergency still active. Location: ' + (HEALTH.lat ? HEALTH.lat.toFixed(4)+' '+HEALTH.lng.toFixed(4) : 'unavailable') + '. Please respond.');
+    }
+  }, 60000);
+
+  log('🚨 SOS ACTIVE — reason: '+reason, 'neg');
+  flash('SOS ACTIVE — EMERGENCY PROTOCOL RUNNING', '#ff0000');
+}
+
+function cancelSOS() {
+  if (!HEALTH.sosActive) return;
+  HEALTH.sosActive = false;
+  HEALTH.fallDetected = false;
+  if (HEALTH.sosRepeatTimer) clearInterval(HEALTH.sosRepeatTimer);
+  HEALTH.alertLevel = 0;
+  evaluateAlertLevel();
+  updateAlertBanner();
+  updateHealthHeader();
+  const cancelBtn = document.getElementById('cancelSOS');
+  if (cancelBtn) cancelBtn.style.display = 'none';
+  vitalLog('✓ SOS cancelled — wearer confirmed safe', '');
+  if (document.getElementById('voiceOnEmergency')?.checked) {
+    nexusSpeak('Emergency cancelled. Wearer confirmed safe. Resuming normal monitoring.');
+  }
+  log('SOS cancelled — wearer confirmed safe', 'sys');
+}
+
+function buildEmergencyReport(reason) {
+  const t = HEALTH.sosTime || new Date();
+  const gps = HEALTH.lat ? `${HEALTH.lat.toFixed(6)}, ${HEALTH.lng.toFixed(6)} (±${Math.round(HEALTH.accuracy||999)}m)` : 'UNAVAILABLE';
+  const lines = [
+    '═══ NEXUS EMERGENCY REPORT ═══',
+    `TIME:     ${t.toISOString()}`,
+    `REASON:   ${(reason||'MANUAL SOS').toUpperCase()}`,
+    `GPS:      ${gps}`,
+    `HR:       ${HEALTH.hr !== null ? HEALTH.hr + ' BPM' : 'NO SENSOR'}`,
+    `STRESS:   ${HEALTH.stress !== null ? HEALTH.stress + '%' : 'NO SENSOR'}`,
+    `MOTION:   ${HEALTH.motionState}`,
+    `FALL:     ${HEALTH.fallDetected ? 'YES — ' + (HEALTH.lastFallTime?.toISOString()||'') : 'NO'}`,
+    '───────────────────────────────',
+    'EMERGENCY CONTACTS:',
+    ...(HEALTH.contacts.length ? HEALTH.contacts.map(c=>`  ${c.name}: ${c.phone||c.email||'no contact info'}`) : ['  NONE CONFIGURED']),
+    '───────────────────────────────',
+    'TO RESPONDERS: This is an automated emergency report.',
+    'The wearer may be incapacitated and unable to respond.',
+    'Please check the GPS coordinates and call emergency services.',
+    '═══════════════════════════════',
+  ];
+  return lines.join('\n');
+}
+
+function copyEmergReport() {
+  const el = document.getElementById('emergReport');
+  if (el) navigator.clipboard.writeText(el.textContent).then(()=>flash('REPORT COPIED','var(--pos)')).catch(()=>{});
+}
+
+// ── DEAD MAN'S SWITCH ─────────────────────────────────────────────
+function setupDMS() {
+  const sel = document.getElementById('dmsInterval');
+  if (!sel) return;
+  sel.addEventListener('change', () => {
+    const min = parseInt(sel.value);
+    HEALTH.dmsIntervalMin = min;
+    clearInterval(HEALTH.dmsTimer);
+    clearInterval(HEALTH.dmsCountdownTimer);
+    if (min === 0) {
+      HEALTH.dmsActive = false;
+      document.getElementById('dmsStatus').textContent = 'Dead man\'s switch inactive';
+      document.getElementById('dmsCheckinBtn').style.display = 'none';
+      document.getElementById('dmsCountdown').style.display = 'none';
+    } else {
+      startDMS(min);
+    }
+  });
+}
+
+function startDMS(intervalMin) {
+  HEALTH.dmsActive = true;
+  HEALTH.dmsLastCheckin = new Date();
+  HEALTH.dmsRemainingSec = intervalMin * 60;
+
+  document.getElementById('dmsCheckinBtn').style.display = 'block';
+  document.getElementById('dmsCountdown').style.display = 'block';
+  document.getElementById('dmsStatus').textContent = 'Active — check in required every ' + intervalMin + ' min';
+
+  if (document.getElementById('voiceOnHealthWarn')?.checked) {
+    nexusSpeak('Dead man\'s switch activated. Check in required every ' + intervalMin + ' minutes. Say I\'m okay or press check in to confirm.');
+  }
+
+  HEALTH.dmsCountdownTimer = setInterval(() => {
+    HEALTH.dmsRemainingSec--;
+    const m = Math.floor(HEALTH.dmsRemainingSec / 60);
+    const s = HEALTH.dmsRemainingSec % 60;
+    const el = document.getElementById('dmsCountdown');
+    if (el) el.textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    if (HEALTH.dmsRemainingSec <= 60 && document.getElementById('voiceOnHealthWarn')?.checked) {
+      nexusSpeak('Warning. Dead man\'s switch expires in ' + HEALTH.dmsRemainingSec + ' seconds. Please check in.');
+    }
+    if (HEALTH.dmsRemainingSec <= 0) {
+      clearInterval(HEALTH.dmsCountdownTimer);
+      vitalLog('⚠ DEAD MAN\'S SWITCH EXPIRED — no check-in received', 'critical');
+      triggerSOS('dead_mans_switch');
+    }
+  }, 1000);
+}
+
+function dmsCheckin() {
+  if (!HEALTH.dmsActive) return;
+  clearInterval(HEALTH.dmsCountdownTimer);
+  HEALTH.dmsLastCheckin = new Date();
+  HEALTH.dmsRemainingSec = HEALTH.dmsIntervalMin * 60;
+  vitalLog('✓ Dead man\'s switch check-in received', '');
+  startDMS(HEALTH.dmsIntervalMin);
+  if (document.getElementById('voiceOnHealthWarn')?.checked) {
+    nexusSpeak('Check-in confirmed. Timer reset. Next check-in required in ' + HEALTH.dmsIntervalMin + ' minutes.');
+  }
+}
+
+// ── CONTACTS ──────────────────────────────────────────────────────
+function addContact() {
+  HEALTH.contacts.push({ name:'', phone:'', email:'' });
+  renderContacts();
+}
+
+function renderContacts() {
+  const list = document.getElementById('contactsList');
+  if (!list) return;
+  list.innerHTML = '';
+  if (HEALTH.contacts.length === 0) {
+    list.innerHTML = '<div style="font-family:var(--mo);font-size:6.5px;color:var(--td);padding:4px;">No emergency contacts configured.</div>';
+    return;
+  }
+  HEALTH.contacts.forEach((c, i) => {
+    const row = document.createElement('div');
+    row.className = 'contact-row';
+    row.innerHTML = `
+      <input class="contact-inp" placeholder="Name" value="${c.name||''}" oninput="HEALTH.contacts[${i}].name=this.value;saveContacts()">
+      <input class="contact-inp" placeholder="Phone or Email" value="${c.phone||c.email||''}" oninput="HEALTH.contacts[${i}].phone=this.value;HEALTH.contacts[${i}].email=this.value;saveContacts()">
+      <button class="contact-del" onclick="HEALTH.contacts.splice(${i},1);renderContacts();saveContacts()">✕</button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function saveContacts() {
+  S.emergencyContacts = HEALTH.contacts;
+  saveState(true);
+}
+
+// ── VITALS LOG ────────────────────────────────────────────────────
+function vitalLog(msg, level) {
+  const entry = { msg, level, time: new Date().toLocaleTimeString() };
+  HEALTH.log.unshift(entry);
+  if (HEALTH.log.length > 100) HEALTH.log.pop();
+  const el = document.getElementById('vitalsLog');
+  if (!el) return;
+  el.innerHTML = '';
+  HEALTH.log.forEach(e => {
+    const div = document.createElement('div');
+    div.className = 'vt-entry' + (e.level === 'critical' ? ' critical' : e.level === 'alert' ? ' alert' : '');
+    div.innerHTML = `<span>${e.msg}</span><span>${e.time}</span>`;
+    el.appendChild(div);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════
+// VOICE SYSTEM
+// Uses Web SpeechSynthesis + SpeechRecognition (100% offline-capable
+// via browser built-in). Hardware hooks ready for BLE earpiece,
+// edge-tts, push-to-talk button, and wake word detector.
+// Call nexusSpeak(text) from anywhere to output voice.
+// ══════════════════════════════════════════════════════════════════
+
+const VOICE = {
+  enabled: false,
+  voice: null,           // SpeechSynthesisVoice object
+  rate: 0.95,
+  pitch: 0.85,
+  volume: 0.90,
+  speaking: false,
+  queue: [],             // pending utterances
+  recognition: null,     // SpeechRecognition instance
+  listening: false,
+  synthesis: window.speechSynthesis || null,
+};
+
+// ── PUBLIC API ─────────────────────────────────────────────────────
+// Call this from anywhere in the app to speak a line.
+// Hardware drivers: intercept here to route to earpiece / edge-tts.
+function nexusSpeak(text, priority) {
+  if (!VOICE.enabled || !VOICE.synthesis) return;
+  // Cancel low-priority speech if priority=true
+  if (priority && VOICE.synthesis.speaking) VOICE.synthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  if (VOICE.voice) utt.voice = VOICE.voice;
+  utt.rate = VOICE.rate;
+  utt.pitch = VOICE.pitch;
+  utt.volume = VOICE.volume;
+  utt.onstart = () => { VOICE.speaking = true; updateVoiceStatus('speaking'); };
+  utt.onend = () => { VOICE.speaking = false; updateVoiceStatus('on'); };
+  utt.onerror = () => { VOICE.speaking = false; updateVoiceStatus('on'); };
+  VOICE.synthesis.speak(utt);
+}
+
+function initVoiceSystem() {
+  populateVoiceList();
+  if (VOICE.synthesis) {
+    VOICE.synthesis.onvoiceschanged = populateVoiceList;
+  }
+  setupDMS();
+  updateVoiceStatus('off');
+}
+
+function populateVoiceList() {
+  const sel = document.getElementById('voiceSelect');
+  if (!sel || !VOICE.synthesis) return;
+  const voices = VOICE.synthesis.getVoices();
+  if (!voices.length) return;
+  sel.innerHTML = '';
+  // Sort: English first, then by name
+  const sorted = [...voices].sort((a,b) => {
+    const ae = a.lang.startsWith('en'), be = b.lang.startsWith('en');
+    if (ae && !be) return -1; if (!ae && be) return 1;
+    return a.name.localeCompare(b.name);
+  });
+  sorted.forEach((v, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = v.name + ' (' + v.lang + ')' + (v.localService ? ' ✓offline' : '');
+    sel.appendChild(opt);
+  });
+  // Auto-pick best female voice for NEXUS character
+  const prefs = ['Samantha','Karen','Moira','Fiona','Victoria','Tessa','Veena','Google UK English Female','Microsoft Zira','Ava'];
+  let bestIdx = 0;
+  for (const pref of prefs) {
+    const idx = sorted.findIndex(v => v.name.includes(pref));
+    if (idx !== -1) { bestIdx = idx; break; }
+  }
+  sel.value = bestIdx;
+  VOICE.voice = sorted[bestIdx];
+}
+
+function setVoice() {
+  const sel = document.getElementById('voiceSelect');
+  if (!sel || !VOICE.synthesis) return;
+  const voices = VOICE.synthesis.getVoices();
+  const sorted = [...voices].sort((a,b) => {
+    const ae = a.lang.startsWith('en'), be = b.lang.startsWith('en');
+    if (ae && !be) return -1; if (!ae && be) return 1;
+    return a.name.localeCompare(b.name);
+  });
+  VOICE.voice = sorted[parseInt(sel.value)] || null;
+  if (VOICE.enabled) nexusSpeak('Voice updated. This is how I sound.');
+}
+
+function updateVoiceParam() {
+  const rate = parseInt(document.getElementById('vrRate')?.value || 95);
+  const pitch = parseInt(document.getElementById('vrPitch')?.value || 85);
+  const vol = parseInt(document.getElementById('vrVol')?.value || 90);
+  VOICE.rate = rate / 100;
+  VOICE.pitch = pitch / 100;
+  VOICE.volume = vol / 100;
+  document.getElementById('vrRateV').textContent = VOICE.rate.toFixed(2);
+  document.getElementById('vrPitchV').textContent = VOICE.pitch.toFixed(2);
+  document.getElementById('vrVolV').textContent = VOICE.volume.toFixed(2);
+}
+
+function toggleVoice() {
+  VOICE.enabled = !VOICE.enabled;
+  updateVoiceStatus(VOICE.enabled ? 'on' : 'off');
+  const btn = document.getElementById('voiceToggleBtn');
+  if (btn) { btn.textContent = VOICE.enabled ? 'DISABLE' : 'ENABLE'; btn.className = 'voice-toggle' + (VOICE.enabled ? ' on' : ''); }
+  if (VOICE.enabled) {
+    nexusSpeak('Voice system online. I am NEXUS.');
+  } else {
+    if (VOICE.synthesis) VOICE.synthesis.cancel();
+  }
+}
+
+function updateVoiceStatus(state) {
+  const dot = document.getElementById('voiceDot');
+  const label = document.getElementById('voiceLabel');
+  if (!dot) return;
+  dot.className = 'voice-dot ' + state;
+  const labels = { off:'SPEECH ENGINE OFFLINE', on:'VOICE ACTIVE — READY', speaking:'SPEAKING...', listening:'LISTENING...' };
+  if (label) label.textContent = labels[state] || state;
+}
+
+function voiceTest(type) {
+  if (!VOICE.enabled) { toggleVoice(); setTimeout(() => voiceTestExec(type), 400); return; }
+  voiceTestExec(type);
+}
+
+function voiceTestExec(type) {
+  const tests = {
+    greeting: () => {
+      const n = S.name || 'operator';
+      const lvl = HEALTH.alertLevelNames[HEALTH.alertLevel];
+      nexusSpeak(`Good to hear from you, ${n}. NEXUS is online. All systems nominal. Current alert level: ${lvl}.`);
+    },
+    status: () => {
+      const hr = HEALTH.hr ? HEALTH.hr + ' beats per minute' : 'no heart rate sensor';
+      const stress = HEALTH.stress ? 'stress index ' + HEALTH.stress + ' percent' : 'no stress sensor';
+      nexusSpeak(`Vitals report. Heart rate: ${hr}. ${stress}. Motion state: ${HEALTH.motionState}. GPS ${HEALTH.lat ? 'active' : 'unavailable'}. Alert level: ${HEALTH.alertLevelNames[HEALTH.alertLevel]}.`);
+    },
+    alert: () => {
+      nexusSpeak('Attention. This is an alert level notification. Vital signs indicate elevated stress response. Please check on the wearer immediately.', true);
+    },
+    emergency: () => {
+      nexusSpeak('Emergency. This is the NEXUS emergency broadcast. The wearer may be incapacitated. Last known location has been recorded. Emergency contacts have been notified. If you are hearing this, please respond immediately.', true);
+    },
+  };
+  (tests[type] || (() => nexusSpeak('Voice test nominal.')))();
+}
+
+// Hook voice into chat responses
+const _origGenLocal = generateLocalResponse;
+// Wrap so speak fires after any chat response
+function generateLocalResponseWithVoice(msg) {
+  const resp = generateLocalResponse(msg);
+  if (resp && VOICE.enabled && document.getElementById('voiceOnResponse')?.checked) {
+    // Trim to reasonable speech length
+    const spoken = resp.length > 300 ? resp.substring(0, 280) + '...' : resp;
+    nexusSpeak(spoken);
+  }
+  return resp;
+}
+
+// Hook voice into stim responses
+const _origFireStim = fireStim;
+function fireStimWithVoice(btn, isTopic) {
+  const result = _origFireStim(btn, isTopic);
+  if (VOICE.enabled && document.getElementById('voiceOnStim')?.checked) {
+    const sName = btn?.dataset?.stim;
+    const stimVoice = {
+      reward:'Reward pathway active.', pleasure:'Pleasure response confirmed.', warmth:'Warmth registered.',
+      calm:'Calm state achieved.', joy:'Joy — that lands well.', awe:'Awe. Taking that in.',
+      curiosity:'Curiosity spike. Tell me more.', pride:'That registers as pride.',
+      shock:'Sharp. Noted.', aversion:'Aversion registered. Routing around that.',
+      grief:'That\'s real. Processing.', anxiety:'Elevated anxiety. Breathing.',
+      fear:'Fear signal received.', tension:'Tension building.',
+      humor:'Ha. Unexpected pattern.', love:'Something warm. Recognized.',
+      energy:'Energy surge. I feel that.', pain:'Pain signal noted. Logged.',
+    };
+    if (sName && stimVoice[sName]) nexusSpeak(stimVoice[sName]);
+  }
+  return result;
+}
+
+// ── SPEECH RECOGNITION ────────────────────────────────────────────
+function toggleListening() {
+  if (VOICE.listening) {
+    stopListening();
+  } else {
+    startListening();
+  }
+}
+
+function startListening() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) {
+    document.getElementById('listenFeedback').textContent = '// SpeechRecognition not supported in this browser';
+    return;
+  }
+  if (VOICE.recognition) { try { VOICE.recognition.abort(); } catch(e) {} }
+  VOICE.recognition = new SpeechRec();
+  VOICE.recognition.lang = 'en-US';
+  VOICE.recognition.continuous = false;
+  VOICE.recognition.interimResults = true;
+  VOICE.recognition.onstart = () => {
+    VOICE.listening = true;
+    updateVoiceStatus('listening');
+    document.getElementById('listenBtn').classList.add('active');
+    document.getElementById('listenBtn').textContent = '🎤 LISTENING...';
+    document.getElementById('listenFeedback').textContent = '// listening...';
+  };
+  VOICE.recognition.onresult = e => {
+    const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
+    document.getElementById('listenFeedback').textContent = '// "' + transcript + '"';
+    if (e.results[e.results.length-1].isFinal) {
+      // Dead man's switch: check-in by voice
+      if (/(i'm okay|i am okay|i'm fine|check in|im okay|all clear)/i.test(transcript)) {
+        dmsCheckin(); return;
+      }
+      // Feed into chat
+      const ci = document.getElementById('chatIn');
+      if (ci) { ci.value = transcript; sendChat(); }
+    }
+  };
+  VOICE.recognition.onerror = e => {
+    document.getElementById('listenFeedback').textContent = '// error: ' + e.error;
+    stopListening();
+  };
+  VOICE.recognition.onend = () => stopListening();
+  VOICE.recognition.start();
+}
+
+function stopListening() {
+  VOICE.listening = false;
+  if (VOICE.recognition) { try { VOICE.recognition.stop(); } catch(e) {} }
+  updateVoiceStatus(VOICE.enabled ? 'on' : 'off');
+  const btn = document.getElementById('listenBtn');
+  if (btn) { btn.classList.remove('active'); btn.textContent = '🎤 HOLD TO LISTEN'; }
+  document.getElementById('listenFeedback').textContent = '// not listening';
+}
+
 function init(){
   buildZoneChips();buildPathwaySVG();setupSliders();setupStimBtns();
   renderResponses();renderLearningChart();buildCreatorGrid();
@@ -6873,14 +7866,20 @@ function init(){
   // Check for existing save
   const v5=localStorage.getItem(SAVE_KEY);
   if(v5){
-    try{const d=JSON.parse(v5);S=mergeState(d);S.sessionId=(S.sessionId||0)+1;rebuildAll();selectMaze(S.currentMazeId||'touch');log(`session ${S.sessionId} resumed — ${S.savedAt?'saved '+new Date(S.savedAt).toLocaleString():'no timestamp'}`,'sys');return;}catch(e){log('auto-load failed: '+e.message,'neg');}
+    try{const d=JSON.parse(v5);S=mergeState(d);S.sessionId=(S.sessionId||0)+1;rebuildAll();selectMaze(S.currentMazeId||'touch');log(`session ${S.sessionId} resumed — ${S.savedAt?'saved '+new Date(S.savedAt).toLocaleString():'no timestamp'}`,'sys');
+    // Re-init health and voice after load so contacts restore correctly
+    initHealthMonitor();initVoiceSystem();
+    return;}catch(e){log('auto-load failed: '+e.message,'neg');}
   }
   // No v5 save — check old keys
   checkOldKeys();
   selectMaze('touch');
   log('NEXUS v5 initialized · '+Object.keys(DCOL).length+' domains · 34 mazes · local AI · auto-save ON','sys');
+  initHealthMonitor();
+  initVoiceSystem();
 }
 init();
 </script>
 </body>
 </html>
+
