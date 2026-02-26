@@ -1010,16 +1010,16 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
     <div class="sec">◈ VOICE SETTINGS</div>
     <div style="display:flex;flex-direction:column;gap:5px;">
       <label style="display:flex;align-items:center;gap:8px;font-family:var(--mo);font-size:7px;color:var(--td);cursor:pointer;">
-        <input type="checkbox" id="voiceOnResponse" checked style="accent-color:var(--pos);"> Speak chat responses
+        <input type="checkbox" id="voiceOnResponse" checked style="accent-color:var(--pos);" onchange="persistVoiceToState()"> Speak chat responses
       </label>
       <label style="display:flex;align-items:center;gap:8px;font-family:var(--mo);font-size:7px;color:var(--td);cursor:pointer;">
-        <input type="checkbox" id="voiceOnStim" checked style="accent-color:var(--pos);"> Speak stim acknowledgments
+        <input type="checkbox" id="voiceOnStim" checked style="accent-color:var(--pos);" onchange="persistVoiceToState()"> Speak stim acknowledgments
       </label>
       <label style="display:flex;align-items:center;gap:8px;font-family:var(--mo);font-size:7px;color:var(--td);cursor:pointer;">
-        <input type="checkbox" id="voiceOnEmergency" checked style="accent-color:var(--neg);"> Speak emergency alerts
+        <input type="checkbox" id="voiceOnEmergency" checked style="accent-color:var(--neg);" onchange="persistVoiceToState()"> Speak emergency alerts
       </label>
       <label style="display:flex;align-items:center;gap:8px;font-family:var(--mo);font-size:7px;color:var(--td);cursor:pointer;">
-        <input type="checkbox" id="voiceOnHealthWarn" checked style="accent-color:var(--wa);"> Speak health warnings
+        <input type="checkbox" id="voiceOnHealthWarn" checked style="accent-color:var(--wa);" onchange="persistVoiceToState()"> Speak health warnings
       </label>
     </div>
 
@@ -3381,6 +3381,21 @@ const DEF=()=>({
   physProgress:{},
   appliedProgress:{},   // XP from applied-skill maze correct picks
   emergencyContacts:[],  // persisted emergency contact list for health monitor
+  voiceSettings:{        // all voice system settings — follow Juliette into any load/import
+    enabled:false,
+    voiceName:'',        // SpeechSynthesisVoice.name — matched on restore
+    rate:0.95,
+    pitch:0.85,
+    volume:0.90,
+    onResponse:true,     // speak chat responses
+    onStim:true,         // speak stim acknowledgments
+    onEmergency:true,    // speak emergency alerts
+    onHealthWarn:true,   // speak health warnings
+  },
+  healthSettings:{       // health monitor preferences — follow Juliette across devices
+    dmsIntervalMin:0,    // dead man's switch interval (0 = disabled)
+    alertContacts:[],    // same as emergencyContacts but namespaced under health
+  },
   mode:'investigator',  // active role: drives MODE_SKILLS selection in decisions
   lastDecision:{        // most recent skill-driven decision breakdown
     mazeId:null,
@@ -3477,6 +3492,12 @@ function mergeState(d){
   else{const dp=DEF().pathways;const eids=new Set(base.pathways.map(p=>p.id));dp.forEach(p=>{if(!eids.has(p.id))base.pathways.push(p);});}
   // Emergency contacts persistence
   if(!base.emergencyContacts)base.emergencyContacts=[];
+  // Voice settings — full backward compat merge
+  if(!base.voiceSettings)base.voiceSettings=DEF().voiceSettings;
+  else{const dv=DEF().voiceSettings;Object.keys(dv).forEach(k=>{if(base.voiceSettings[k]===undefined)base.voiceSettings[k]=dv[k];});}
+  // Health settings — full backward compat merge
+  if(!base.healthSettings)base.healthSettings=DEF().healthSettings;
+  else{const dh=DEF().healthSettings;Object.keys(dh).forEach(k=>{if(base.healthSettings[k]===undefined)base.healthSettings[k]=dh[k];});}
   return base;
 }
 function checkOldKeys(){
@@ -3500,12 +3521,16 @@ function showRecovery(key,data){
   modal.classList.add('show');
 }
 function exportState(){
+  // Snapshot voice and health into S immediately before export
+  persistVoiceToState();
+  persistHealthToState();
   S.savedAt=new Date().toISOString();
   const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);const a=document.createElement('a');
   a.href=url;a.download=`nexus_${S.entityName.replace(/[^a-zA-Z0-9]/g,'_')}_${Date.now()}.json`;
   a.click();URL.revokeObjectURL(url);
-  log('state exported to JSON file','sys');flash('EXPORTED','var(--si)');
+  log('state exported — includes voice settings, health settings, emergency contacts','sys');
+  flash('EXPORTED','var(--si)');
 }
 function importState(ev){
   const f=ev.target.files[0];if(!f)return;
@@ -3523,6 +3548,115 @@ function rebuildAll(){
   document.getElementById('acBtn').className='tgl ac'+(S.autoCycle?' on':'');document.getElementById('acBtn').textContent='AUTO-CYCLE: '+(S.autoCycle?'ON':'OFF');
   document.getElementById('asBtn').className='tgl as'+(S.autoStim?' on':'');document.getElementById('asBtn').textContent='AUTO-STIM: '+(S.autoStim?'ON':'OFF');
   if(S.savedAt)document.getElementById('saveTs').textContent='saved '+new Date(S.savedAt).toLocaleTimeString();
+  // Restore Juliette's voice and health settings from S
+  restoreVoiceFromState();
+  restoreHealthFromState();
+}
+
+// ── Restore voice settings from S into UI + VOICE object ──────────
+function restoreVoiceFromState() {
+  const vs = S.voiceSettings;
+  if (!vs) return;
+
+  // Restore numeric params first
+  VOICE.rate = vs.rate;
+  VOICE.pitch = vs.pitch;
+  VOICE.volume = vs.volume;
+
+  // Sync sliders
+  const rEl = document.getElementById('vrRate');
+  const pEl = document.getElementById('vrPitch');
+  const vEl = document.getElementById('vrVol');
+  if (rEl) rEl.value = Math.round(vs.rate * 100);
+  if (pEl) pEl.value = Math.round(vs.pitch * 100);
+  if (vEl) vEl.value = Math.round(vs.volume * 100);
+  document.getElementById('vrRateV') && (document.getElementById('vrRateV').textContent = vs.rate.toFixed(2));
+  document.getElementById('vrPitchV') && (document.getElementById('vrPitchV').textContent = vs.pitch.toFixed(2));
+  document.getElementById('vrVolV') && (document.getElementById('vrVolV').textContent = vs.volume.toFixed(2));
+
+  // Restore checkboxes
+  const setChk = (id, val) => { const el = document.getElementById(id); if (el) el.checked = val; };
+  setChk('voiceOnResponse', vs.onResponse);
+  setChk('voiceOnStim', vs.onStim);
+  setChk('voiceOnEmergency', vs.onEmergency);
+  setChk('voiceOnHealthWarn', vs.onHealthWarn);
+
+  // Restore enabled state
+  if (vs.enabled && !VOICE.enabled) {
+    VOICE.enabled = true;
+    updateVoiceStatus('on');
+    const btn = document.getElementById('voiceToggleBtn');
+    if (btn) { btn.textContent = 'DISABLE'; btn.className = 'voice-toggle on'; }
+  }
+
+  // Restore voice selection by name — run after voices list is populated
+  if (vs.voiceName && VOICE.synthesis) {
+    const tryRestore = () => {
+      const voices = VOICE.synthesis.getVoices();
+      if (!voices.length) return;
+      const match = voices.find(v => v.name === vs.voiceName);
+      if (match) {
+        VOICE.voice = match;
+        // Sync the select dropdown
+        const sel = document.getElementById('voiceSelect');
+        if (sel) {
+          const sorted = [...voices].sort((a,b)=>{
+            const ae=a.lang.startsWith('en'),be=b.lang.startsWith('en');
+            if(ae&&!be)return -1;if(!ae&&be)return 1;return a.name.localeCompare(b.name);
+          });
+          const idx = sorted.findIndex(v => v.name === vs.voiceName);
+          if (idx >= 0) sel.value = idx;
+        }
+      }
+    };
+    // Voices may not be loaded yet on first run
+    if (VOICE.synthesis.getVoices().length) tryRestore();
+    else VOICE.synthesis.onvoiceschanged = () => { tryRestore(); populateVoiceList(); };
+  }
+}
+
+// ── Restore health settings from S into UI + HEALTH object ────────
+function restoreHealthFromState() {
+  const hs = S.healthSettings;
+  if (!hs) return;
+
+  // Restore emergency contacts (prefer healthSettings.alertContacts, fall back to emergencyContacts)
+  HEALTH.contacts = (hs.alertContacts && hs.alertContacts.length) ? hs.alertContacts : (S.emergencyContacts || []);
+  renderContacts();
+
+  // Restore DMS interval
+  if (hs.dmsIntervalMin > 0) {
+    HEALTH.dmsIntervalMin = hs.dmsIntervalMin;
+    const sel = document.getElementById('dmsInterval');
+    if (sel) sel.value = hs.dmsIntervalMin;
+    // Don't auto-start DMS on load — user must re-enable manually for safety
+    const status = document.getElementById('dmsStatus');
+    if (status) status.textContent = `Last session: ${hs.dmsIntervalMin} min interval · Click to re-enable`;
+  }
+}
+
+// ── Snapshot voice settings into S (call whenever voice changes) ──
+function persistVoiceToState() {
+  if (!S.voiceSettings) S.voiceSettings = DEF().voiceSettings;
+  S.voiceSettings.enabled = VOICE.enabled;
+  S.voiceSettings.voiceName = VOICE.voice ? VOICE.voice.name : '';
+  S.voiceSettings.rate = VOICE.rate;
+  S.voiceSettings.pitch = VOICE.pitch;
+  S.voiceSettings.volume = VOICE.volume;
+  S.voiceSettings.onResponse = document.getElementById('voiceOnResponse')?.checked ?? true;
+  S.voiceSettings.onStim = document.getElementById('voiceOnStim')?.checked ?? true;
+  S.voiceSettings.onEmergency = document.getElementById('voiceOnEmergency')?.checked ?? true;
+  S.voiceSettings.onHealthWarn = document.getElementById('voiceOnHealthWarn')?.checked ?? true;
+  saveState(true);
+}
+
+// ── Snapshot health settings into S ───────────────────────────────
+function persistHealthToState() {
+  if (!S.healthSettings) S.healthSettings = DEF().healthSettings;
+  S.healthSettings.dmsIntervalMin = HEALTH.dmsIntervalMin;
+  S.healthSettings.alertContacts = HEALTH.contacts;
+  S.emergencyContacts = HEALTH.contacts; // keep legacy field in sync
+  saveState(true);
 }
 // ══════════════════════════════════════════════════════
 // TABS
@@ -7329,11 +7463,8 @@ function injectVital(key, value) {
 }
 
 function initHealthMonitor() {
-  // Restore contacts from save
-  if (S.emergencyContacts) {
-    HEALTH.contacts = S.emergencyContacts;
-  }
-  renderContacts();
+  // Restore contacts and health prefs from S (populated from JSON)
+  restoreHealthFromState();
 
   // Start GPS
   if (navigator.geolocation) {
@@ -7660,6 +7791,7 @@ function setupDMS() {
     } else {
       startDMS(min);
     }
+    persistHealthToState();
   });
 }
 
@@ -7733,7 +7865,7 @@ function renderContacts() {
 
 function saveContacts() {
   S.emergencyContacts = HEALTH.contacts;
-  saveState(true);
+  persistHealthToState();
 }
 
 // ── VITALS LOG ────────────────────────────────────────────────────
@@ -7794,10 +7926,15 @@ function nexusSpeak(text, priority) {
 function initVoiceSystem() {
   populateVoiceList();
   if (VOICE.synthesis) {
-    VOICE.synthesis.onvoiceschanged = populateVoiceList;
+    VOICE.synthesis.onvoiceschanged = () => {
+      populateVoiceList();
+      restoreVoiceFromState(); // re-run restore once voices are available
+    };
   }
   setupDMS();
-  updateVoiceStatus('off');
+  // Restore settings from S (may have been loaded from JSON)
+  restoreVoiceFromState();
+  if (!VOICE.enabled) updateVoiceStatus('off');
 }
 
 function populateVoiceList() {
@@ -7839,6 +7976,7 @@ function setVoice() {
     return a.name.localeCompare(b.name);
   });
   VOICE.voice = sorted[parseInt(sel.value)] || null;
+  persistVoiceToState();
   if (VOICE.enabled) nexusSpeak('Voice updated. This is how I sound.');
 }
 
@@ -7852,6 +7990,7 @@ function updateVoiceParam() {
   document.getElementById('vrRateV').textContent = VOICE.rate.toFixed(2);
   document.getElementById('vrPitchV').textContent = VOICE.pitch.toFixed(2);
   document.getElementById('vrVolV').textContent = VOICE.volume.toFixed(2);
+  persistVoiceToState();
 }
 
 function toggleVoice() {
@@ -7864,6 +8003,7 @@ function toggleVoice() {
   } else {
     if (VOICE.synthesis) VOICE.synthesis.cancel();
   }
+  persistVoiceToState();
 }
 
 function updateVoiceStatus(state) {
