@@ -4683,14 +4683,19 @@ function nextCycleMaze(){
   let idx=(mzListIdx+1)%all.length;
   while(attempts<all.length){
     const candidate=all[idx];
-    const xp=S.learning[candidate.domain]||0;
-    if(xp<threshold) return candidate; // below threshold — use it
-    // Above threshold — skip
-    log(`↷ skip "${candidate.name}" (${candidate.domain} at ${Math.round(xp).toLocaleString()} XP ≥ ${threshold.toLocaleString()})`, 'sys');
+    const dom=candidate.domain;
+    // Sum XP across ALL stores — grid mazes use S.learning, conv mazes use
+    // S.commProgress / S.appliedProgress, 3D mazes use S.physProgress
+    const xp=(S.learning[dom]||0)
+            +(S.commProgress?.[dom]||0)
+            +(S.appliedProgress?.[dom]||0)
+            +(S.physProgress?.[dom]||0);
+    if(xp<threshold) return candidate;
+    log(`↷ skip "${candidate.name}" (${dom} at ${Math.round(xp).toLocaleString()} XP ≥ ${threshold.toLocaleString()})`,'sys');
     idx=(idx+1)%all.length;
     attempts++;
   }
-  // All mazes above threshold — just return the raw next to avoid infinite pause
+  // All mazes above threshold — just advance one step so cycle doesn't stall
   return all[(mzListIdx+1)%all.length];
 }
 function toggleAutoStim(){S.autoStim=!S.autoStim;const b=document.getElementById('asBtn');b.className='tgl as'+(S.autoStim?' on':'');b.textContent='AUTO-STIM: '+(S.autoStim?'ON':'OFF');log(`auto-stim: ${S.autoStim?'ON':'OFF'}`,'sys');}
