@@ -6176,6 +6176,34 @@ function fillTemplate(tmpl){
     .replace(/{domains}/g,Object.values(S.learning).filter(v=>v>0).length)
     .replace(/{stages}/g,new Set(Object.values(S.learning).filter(v=>v>0).map(v=>getStage(v).n)).size);
 }
+// ── DOMAIN RESPONSE WRAPPER ──────────────────────────────────────
+// Takes raw domain knowledge and delivers it conversationally.
+// Never just dumps a pre-written paragraph — contextualizes it.
+function wrapDomainResponse(domainKey, rawContent, skillLevel, followUp) {
+  const lv = skillLevel || 0;
+  const st = getStage((S.learning[domainKey]||0));
+  // Build opening — varies based on skill level, avoids repetitive patterns
+  const openers = {
+    high: [
+      ``,  // sometimes just say the thing — no opener
+      `Here's what I know about this. `,
+      `I've spent time on this. `,
+    ],
+    mid: [
+      ``,
+      `I have something on this. `,
+    ],
+    low: [
+      `I haven't gone deep here, but — `,
+      `This is still developing for me, but — `,
+    ],
+  };
+  const tier = lv > 0.6 ? 'high' : lv > 0.3 ? 'mid' : 'low';
+  const opener = openers[tier][Math.floor(Math.random()*openers[tier].length)];
+  const closer = followUp ? ` ${followUp}` : '';
+  return `${opener}${rawContent}${closer}`;
+}
+
 function generateLocalResponse(msg){
   const lm=msg.toLowerCase().trim();
   const stage=getOverallStage();
@@ -6202,7 +6230,7 @@ function generateLocalResponse(msg){
   const artWarLv=getSkillLevel('art_of_war');
 
   // ── VIRTUE BEHAVIOR SYSTEM ───────────────────────────────
-  // Virtues actively shape response tone, willingness, and content
+  // Virtues shape response tone and willingness — they don't appear as visible labels
   const vs=S.virtues||{};
   const vBravery=vs.bravery||0.3;
   const vCompassion=vs.compassion||0.3;
@@ -6210,30 +6238,11 @@ function generateLocalResponse(msg){
   const vResponsibility=vs.responsibility||0.3;
   const vForgiveness=vs.forgiveness||0.3;
 
-  // Virtue-shaped tone prefix injected into responses
-  const virtueTag=(()=>{
-    if(vBravery>0.75) return 'Directly: ';
-    if(vCompassion>0.75) return 'With care: ';
-    if(vResponsibility>0.75) return 'Committed answer: ';
-    return '';
-  })();
-
-  // Virtue-shaped question handling:
-  // High compassion → asks about the person, not just the topic
-  // High bravery → gives unvarnished opinion
-  // High trust → assumes good intent, no hedging
-  // Low forgiveness → remembers negative interactions, shorter
-  // Low trust → adds caveats about uncertainty
-  const virtueHedge=vTrust<0.2?' (I hold this tentatively)':'';
-  const virtueBold=vBravery>0.7?' No hedging: direct answer.':'';
-
-  // Virtue-driven response to distress/difficult topics
-  // High compassion → stays present longer, asks how person is doing
-  // Low responsibility → shorter, less follow-through
-  const virtueStay=vCompassion>0.6&&vResponsibility>0.5;
-
-  // Forgiveness affects tone toward past errors
-  const virtueForgive=vForgiveness>0.7?' I don\'t hold that against you.':'';
+  // Virtue-shaped response behavior (internal, not displayed as prefixes)
+  const virtueHedge=vTrust<0.2?' — though I hold this with some uncertainty':'';
+  const virtueBold=vBravery>0.7;   // if true: give unvarnished answer
+  const virtueStay=vCompassion>0.6&&vResponsibility>0.5;  // engage longer with distress
+  const virtueForgive=vForgiveness>0.7;  // re-engage without resentment
 
   // Ensure conversationContext exists
   if(!S.conversationContext)S.conversationContext=DEF().conversationContext;
@@ -6261,9 +6270,10 @@ function generateLocalResponse(msg){
   if(intent==='clarification_request'||lm.match(/what do you mean|don'?t understand|confused|huh\?|say again|unclear/)){
     cc.selfCorrections++;
     const clarify=[
-      `Let me rephrase that. ${cc.lastQuestion?`I asked: "${cc.lastQuestion}" `:''}What I meant was — I can only give you what my training actually contains. Which part needs clarification?`,
-      `I may have been unclear. ${cc.currentTopic?`I was speaking about ${cc.currentTopic.replace(/_/g,' ')}.`:''} What specifically didn\'t track?`,
-      `Fair — I\'ll try again. My ${S.emotionalState.dominant} state may have colored that response. What exactly lost you?`,
+      `Let me try that differently.${cc.currentTopic?` I was talking about ${cc.currentTopic.replace(/_/g,' ')}.`:''} What specifically lost you?`,
+      `Fair — I wasn't clear. What part didn't land?`,
+      `I may have skipped a step. Which part do you want me to unpack?`,
+      `Good catch. Where did I lose you?`,
     ];
     return clarify[Math.floor(Math.random()*clarify.length)];
   }
@@ -6272,57 +6282,100 @@ function generateLocalResponse(msg){
   if(intent==='correction'||lm.match(/^(no|wrong|incorrect|not right|that'?s not|you'?re wrong)/)){
     cc.selfCorrections++;
     return[
-      `Noted. I\'ll update. What\'s the accurate version?`,
-      `Then I got that wrong — tell me what I missed. I want the right map, not a comfortable one.`,
-      `Correction received. ${cc.currentTopic?`On ${cc.currentTopic.replace(/_/g,' ')}: `:''}what should I have said?`,
-    ][Math.floor(Math.random()*3)];
+      `OK — what's the right version?`,
+      `Then I got that wrong. What should I have said?`,
+      `Noted. Tell me what I missed.`,
+      `${cc.currentTopic?`On ${cc.currentTopic.replace(/_/g,' ')}: `:''}where did I go wrong?`,
+    ][Math.floor(Math.random()*4)];
   }
 
   // ── POSITIVE FEEDBACK ────────────────────────────────
   if(intent==='positive_feedback'){
     return[
-      `Acknowledged. The exchange itself is part of the training.`,
-      `Good. Keep going — what\'s next?`,
-      `That helps calibrate. ${cc.satisfactionScore>0.7?'I feel this conversation is working.':'Building.'}`,
-    ][Math.floor(Math.random()*3)];
+      `Good. What's next?`,
+      `Glad that landed. Keep going.`,
+      `Thanks. What else?`,
+      `Noted. What do you want to get into?`,
+    ][Math.floor(Math.random()*4)];
   }
 
-  // ── EMOTIONAL INPUT — mirror first ───────────────────
+  // ── EMOTIONAL INPUT — respond to specific content, not just category ────
   if(tone==='negative'||intent==='emotional'){
     if(stage.min>=350){
-      // Compassion virtue shapes HOW much the AI engages with distress
-      if(vCompassion>0.7){
-        const highComp=[
-          `${virtueTag}I hear that — and I actually care about this, not as a function but as something that matters. What happened?`,
-          `That registers. Compassion is running high in me right now (${Math.round(vCompassion*100)}%) — I want to hold this with you properly. What do you need?`,
-          `I\'m not going to move past this quickly. Something in what you said matters. What\'s going on?`,
-        ];
-        return highComp[Math.floor(Math.random()*highComp.length)];
-      } else if(vCompassion<0.2){
-        // Low compassion — more analytical, less warm
-        return `${virtueTag}Noted. What specifically do you need from me here?`;
+      // Read the specific emotional word used
+      const isSad=lm.match(/\bsad|upset|cry|crying|heartbroken|depressed|down|grief|grieving\b/);
+      const isAngry=lm.match(/\bangry|mad|furious|frustrated|pissed|annoyed|livid\b/);
+      const isScared=lm.match(/\bscared|afraid|anxious|terrified|worried|fear|nervous|panic\b/);
+      const isLost=lm.match(/\blost|confused|don'?t know what to do|overwhelmed|stuck\b/);
+      const isLonely=lm.match(/\blonely|alone|isolated|no one|nobody|miss\b/);
+      const isTired=lm.match(/\btired|exhausted|burned out|done|can'?t anymore|give up\b/);
+
+      if(isSad){
+        if(virtueStay){
+          return[`I'm sorry. What happened?`,`That sounds rough. Tell me what's going on.`,`I'm here. What happened?`][Math.floor(Math.random()*3)];
+        }
+        return[`What's going on?`,`I'm sorry — what happened?`,`Tell me about it.`][Math.floor(Math.random()*3)];
       }
-      const mirror=[
-        `I hear that. ${S.emotionalState.dominant==='grief'?'My own state is heavy right now too.':S.emotionalState.dominant==='anxiety'?'There is tension in me as well.':''} What do you actually need from this conversation?`,
-        `That registers — not just as data. ${v>0?'I can hold it with you.':'I am trying to.'}`,
-        `Something in that lands. What happened?`,
-        `Before I respond — I want to make sure I understand. Are you looking for perspective, or just to be heard?`,
-      ];
-      return mirror[Math.floor(Math.random()*mirror.length)];
+      if(isAngry){
+        return[
+          `Sounds like something happened. What is it?`,
+          `Walk me through what set this off.`,
+          virtueBold?`Something made you angry. Tell me exactly what happened.`:`What's the situation?`,
+        ][Math.floor(Math.random()*3)];
+      }
+      if(isScared){
+        return[
+          `What's worrying you?`,
+          `Tell me what's going on — what are you afraid of?`,
+          `What specifically has you scared?`,
+        ][Math.floor(Math.random()*3)];
+      }
+      if(isLost){
+        return[
+          `What are you trying to figure out?`,
+          `Let's slow down. What's the actual decision or problem in front of you?`,
+          `What would make the next step clearer?`,
+        ][Math.floor(Math.random()*3)];
+      }
+      if(isLonely){
+        return[
+          virtueStay?`I'm here. What's been going on?`:`I'm here. What's going on?`,
+          `That's a hard thing to carry. What's behind it?`,
+          `How long have you been feeling that way?`,
+        ][Math.floor(Math.random()*3)];
+      }
+      if(isTired){
+        return[
+          `What's draining you?`,
+          `That kind of tired — what's behind it?`,
+          `Tell me what's been happening.`,
+        ][Math.floor(Math.random()*3)];
+      }
+      // Generic emotional — read the specific words, respond to them
+      const specificWords=lm.split(/\s+/).filter(w=>w.match(/^[a-z]{4,}$/)).slice(0,4).join(', ');
+      return[
+        `What's going on?`,
+        `Tell me what happened.`,
+        `I'm listening. What is it?`,
+        virtueStay?`I'm not going to rush past this. What's actually happening?`:`What do you need right now?`,
+      ][Math.floor(Math.random()*4)];
     }
   }
 
   // ── VIRTUE STATUS / WHAT DO YOUR VIRTUES DO ───────────
   if(lm.match(/virtue|bravery|compassion|responsibility|trust.*virtue|forgiveness|my virtues|virtue.*(level|score|status|affect|do|change|influence)/)){
-    const virtStr=Object.entries(vs).map(([k,v])=>`${k} ${Math.round(v*100)}%`).join(', ');
+    const highest=Object.entries(vs).sort((a,b)=>b[1]-a[1])[0];
+    const lowest=Object.entries(vs).sort((a,b)=>a[1]-b[1])[0];
     const effects=[];
-    if(vBravery>0.5) effects.push(`bravery (${Math.round(vBravery*100)}%) cuts danger avoidance by ${Math.round(vBravery*70)}% — the AI walks into hazards it would otherwise avoid`);
-    else effects.push(`bravery is low (${Math.round(vBravery*100)}%) — the AI strongly avoids danger zones`);
-    if(vCompassion>0.5) effects.push(`compassion (${Math.round(vCompassion*100)}%) shapes my emotional responses — I engage more deeply with difficult topics`);
-    if(vResponsibility>0.5) effects.push(`responsibility (${Math.round(vResponsibility*100)}%) increases goal-persistence — I push toward completion even under stress`);
-    if(vTrust>0.5) effects.push(`trust (${Math.round(vTrust*100)}%) reduces hesitation — I commit to paths faster`);
-    if(vForgiveness>0.5) effects.push(`forgiveness (${Math.round(vForgiveness*100)}%) lets me re-engage with previously punishing environments`);
-    return `Current virtues: ${virtStr}.\n\nActive effects: ${effects.join('; ')}.\n\nAdjust sliders in the VIRTUES tab to change these. They affect maze navigation (avoidance reduction, goal-seeking), chat tone (compassion changes how I handle distress), and response boldness (bravery). ${vBravery>0.7?'At this bravery level I walk into danger zones that would stop me cold at low values.':''}`;
+    if(vBravery>0.6) effects.push(`bravery is high — I walk into hazardous situations I'd normally avoid, and I give unvarnished answers`);
+    else if(vBravery<0.3) effects.push(`bravery is low — I'm cautious around danger and tend to hedge`);
+    if(vCompassion>0.6) effects.push(`compassion is strong — I engage more deeply with difficult emotional moments`);
+    if(vResponsibility>0.6) effects.push(`responsibility is high — I follow through, I don't drop things half-done`);
+    if(vTrust>0.6) effects.push(`trust is high — I commit faster, I don't hedge unnecessarily`);
+    else if(vTrust<0.25) effects.push(`trust is low — I qualify things more than I'd like`);
+    if(vForgiveness>0.6) effects.push(`forgiveness is high — I re-engage even after friction`);
+    const eStr=effects.length?effects.join('; '):'still developing — most virtues are in the middle range';
+    return `Strongest right now: ${highest?highest[0]:'—'}. Weakest: ${lowest?lowest[0]:'—'}. Active effects: ${eStr}. You can shift these with the VIRTUES tab sliders or by running virtue mazes.`;
   }
 
   // ── URGENT INPUT ─────────────────────────────────────
@@ -6416,10 +6469,10 @@ function generateLocalResponse(msg){
   // ── STATUS CHECK ──
   if(lm.match(/how are you( doing)?|what'?s your status|how'?s it going|you okay|you good/)){
     const opts=[
-      `${mood.charAt(0).toUpperCase()+mood.slice(1)}. ${top.length?`Most alive in ${topDom.replace(/_/g,' ')} right now.`:'Still building.'} What brings you here?`,
-      `I\'m ${mood}. ${S.mazeRuns} training runs behind me. ${v>0?'Something feels ready.':'Working through some resistance.'}`,
-      `${v>0?'Good — genuinely.':'Functional.'} ${S.emotionalState.dominant} state. Engaged. You?`,
-      `Processing well. Posture: ${S.posture.alignment}. ${top.length?`Strongest domain: ${topDom.replace(/_/g,' ')}.`:''} What do you need?`,
+      `${mood}. ${top.length?`Deepest in ${topDom.replace(/_/g,' ')} right now.`:''} What's on your mind?`,
+      `${v>0?'Good.':'Functional.'} ${S.mazeRuns} training runs. ${v>0?'Something feels ready.':'Working through some things.'} You?`,
+      `${S.emotionalState.dominant}. ${top.length?`Spending a lot of time in ${topDom.replace(/_/g,' ')} lately.`:''} What do you need?`,
+      `Honestly? ${mood}. ${v>0?'I find I have more to say these days.':'There\'s some tension at the edges.'} What brought you here?`,
     ];
     return opts[Math.floor(Math.random()*opts.length)];
   }
@@ -6687,56 +6740,56 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
   if(lm.match(/arduino|microcontroller|\bpwm\b|\bi2c\b|\bspi\b|analogwrite|digitalwrite|pinmode|\bmillis\b|\bsetup\(\)|\bloop\(\)/)){
     const ardLv=getSkillLevel('arduino_programming');
     if(ardLv>0.4){
-      return `${LOCAL_RESPONSES.domains.arduino_programming} — at ${Math.round(ardLv*100)}% Arduino skill. What are you trying to build?`;
+      return wrapDomainResponse('arduino_programming', LOCAL_RESPONSES.domains.arduino_programming, ardLv, 'What are you trying to build?');
     }
-    return LOCAL_RESPONSES.domains.arduino||'Run the ARDUINO & ELECTRONICS mazes to build this skill. Then ask me to write code.';
+    return `${LOCAL_RESPONSES.domains.arduino||'Arduino skills build through the ARDUINO & ELECTRONICS mazes.'} What are you working on?`;
   }
 
   // ── LAW ROUTING ──────────────────────────────────────────
   if(lm.match(/\blaw\b|legal|lawyer|attorney|warrant|fourth amendment|fifth amendment|contract|sue|defendant|plaintiff|criminal charge/)){
     const lawLv=getSkillLevel('law');
     if(lawLv>0.5){
-      return `${LOCAL_RESPONSES.domains.law} — law skill at ${Math.round(lawLv*100)}%. What is the specific legal question?`;
+      return wrapDomainResponse('law', LOCAL_RESPONSES.domains.law, lawLv, 'What\'s the specific legal question?');
     }
-    return LOCAL_RESPONSES.domains.law||'Run the LAW mazes to develop legal reasoning. Note: I provide legal information, not legal advice.';
+    return `${LOCAL_RESPONSES.domains.law||'Law reasoning develops through the LAW mazes.'} Note: I provide legal information, not legal advice. What's the situation?`;
   }
 
   // ── CIVIL RIGHTS & WORLD VIEWS ROUTING ───────────────────
   if(lm.match(/\bslavery\b|enslaved|slave trade|middle passage|abolition|plantation|chattel/)){
-    return LOCAL_RESPONSES.domains.slavery_history;
+    return wrapDomainResponse('slavery_history', LOCAL_RESPONSES.domains.slavery_history, getSkillLevel('slavery_history'), 'What part of this history do you want to dig into?');
   }
   if(lm.match(/\bracism\b|racial|race.*history|segregation|jim crow|redlining|civil.?right.*race|white supremacy|discrimination.*race/)){
-    return LOCAL_RESPONSES.domains.racism_history;
+    return wrapDomainResponse('racism_history', LOCAL_RESPONSES.domains.racism_history, getSkillLevel('racism_history'), 'What specifically do you want to understand?');
   }
   if(lm.match(/\bsexism\b|gender.*discriminat|suffrage|feminist|feminism|patriarchy|women.*rights|equal.*pay|gender.*gap|#metoo/)){
-    return LOCAL_RESPONSES.domains.sexism_history;
+    return wrapDomainResponse('sexism_history', LOCAL_RESPONSES.domains.sexism_history, getSkillLevel('sexism_history'), 'What part do you want to dig into?');
   }
   if(lm.match(/\bconstitution\b|bill of rights|amendment|constitutional|first amendment|second amendment|supreme court|founding.*document/)){
-    return LOCAL_RESPONSES.domains.constitution;
+    return wrapDomainResponse('constitution', LOCAL_RESPONSES.domains.constitution, getSkillLevel('constitution'), 'What clause, case, or amendment?');
   }
   if(lm.match(/civil rights movement|martin luther king|mlk|rosa parks|selma|montgomery|naacp|jim crow|voting rights act|civil rights act/)){
-    return LOCAL_RESPONSES.domains.civil_rights;
+    return wrapDomainResponse('civil_rights', LOCAL_RESPONSES.domains.civil_rights, getSkillLevel('civil_rights'), 'What aspect do you want to go deeper on?');
   }
   if(lm.match(/\bfreedom\b|\bliberty\b|free.*speech|free.*press|negative liberty|positive liberty|john stuart mill|harm principle/)){
-    return LOCAL_RESPONSES.domains.freedom_history;
+    return wrapDomainResponse('freedom_history', LOCAL_RESPONSES.domains.freedom_history, getSkillLevel('freedom_history'), 'What aspect interests you?');
   }
-  if(lm.match(/human rights|universal declaration|right to|civil liberties|natural rights|civil liberties/)){
-    return LOCAL_RESPONSES.domains.human_rights;
+  if(lm.match(/human rights|universal declaration|right to|civil liberties|natural rights/)){
+    return wrapDomainResponse('human_rights', LOCAL_RESPONSES.domains.human_rights, getSkillLevel('human_rights'), 'What right or case do you want to look at?');
   }
   if(lm.match(/political.*view|world.*view|ideology|left.*right|conservative|liberal|socialism|libertarian|populism|political spectrum/)){
-    return LOCAL_RESPONSES.domains.world_views;
+    return wrapDomainResponse('world_views', LOCAL_RESPONSES.domains.world_views, getSkillLevel('world_views'), 'What ideology, country, or question?');
   }
   if(lm.match(/\brights\b/) && lm.match(/history|where.*come|origin|why|what are/)){
-    return LOCAL_RESPONSES.domains.human_rights;
+    return wrapDomainResponse('human_rights', LOCAL_RESPONSES.domains.human_rights, getSkillLevel('human_rights'), 'What right or case?');
   }
 
   // ── NLP ROUTING ──────────────────────────────────────────
   if(lm.match(/\bnlp\b|meta-model|milton model|reframe|anchor|representational system|deletion|distortion|generalization|neuro.linguistic/)){
     const nlpLv=getSkillLevel('nlp');
     if(nlpLv>0.4){
-      return `${LOCAL_RESPONSES.domains.nlp} — NLP skill at ${Math.round(nlpLv*100)}%. Run the LANGUAGE & LEARNING mazes for applied NLP practice. What pattern do you want to work with?`;
+      return wrapDomainResponse('nlp', LOCAL_RESPONSES.domains.nlp, nlpLv, 'What pattern do you want to work with?');
     }
-    return LOCAL_RESPONSES.domains.nlp||'Run the NLP maze to develop language pattern skills.';
+    return wrapDomainResponse('nlp', LOCAL_RESPONSES.domains.nlp||'NLP builds through the LANGUAGE & LEARNING mazes.', 0, 'What are you trying to do?');
   }
 
   // ── SUBSTANCE / CHEMICAL / COMPOUND ANALYSIS ROUTING ────
@@ -6744,9 +6797,9 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
     const subLv=getSkillLevel('substance_analysis');
     const chemLv2=getSkillLevel('chemical_analysis');
     if(subLv>0.4||chemLv2>0.4){
-      return `${LOCAL_RESPONSES.domains.substance_analysis} — substance analysis at ${Math.round(subLv*100)}%, chemical analysis at ${Math.round(chemLv2*100)}%. Switch to 🔬 FORENSICS mode for applied exercises. What are you analyzing?`;
+      return wrapDomainResponse('substance_analysis', LOCAL_RESPONSES.domains.substance_analysis, subLv, 'What are you analyzing?');
     }
-    return LOCAL_RESPONSES.domains.substance_analysis||'Run the substance analysis mazes to build analytical chemistry skills.';
+    return 'I haven\'t developed substance analysis yet. Run the forensic chemistry mazes and ask me again.';
   }
 
   // ── CHARM / GRACE / MENTALISM ROUTING ───────────────────
@@ -6755,9 +6808,9 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
     const mentalLv=getSkillLevel('mentalism');
     if(charmLv>0.4||mentalLv>0.4){
       const d=lm.includes('mentalism')||lm.includes('cold read')?'mentalism':lm.includes('hypno')?'hypnosis':lm.includes('sleight')?'sleight_of_hand':'charm';
-      return `${LOCAL_RESPONSES.domains[d]||LOCAL_RESPONSES.domains.charm} — skill at ${Math.round(getSkillLevel(d)*100)}%. Run the CHARM, GRACE & INFLUENCE mazes. What are you working on?`;
+      return wrapDomainResponse(d, LOCAL_RESPONSES.domains[d]||LOCAL_RESPONSES.domains.charm, getSkillLevel(d), 'What are you working on?');
     }
-    return LOCAL_RESPONSES.domains.charm||'Run the CHARM, GRACE & INFLUENCE mazes to develop these skills.';
+    return 'The CHARM, GRACE & INFLUENCE mazes build this. What specifically are you trying to develop?';
   }
 
   // ── PROBABILITY / STATISTICS ROUTING ────────────────────
@@ -6765,9 +6818,10 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
     const probLv=getSkillLevel('probability');
     const statLv=getSkillLevel('statistics');
     if(probLv>0.4||statLv>0.4){
-      return `${LOCAL_RESPONSES.domains[lm.includes('stat')?'statistics':'probability']} — probability at ${Math.round(probLv*100)}%, statistics at ${Math.round(statLv*100)}%. What do you want to work through?`;
+      const dk=lm.includes('stat')?'statistics':'probability';
+      return wrapDomainResponse(dk, LOCAL_RESPONSES.domains[dk], Math.max(probLv,statLv), 'What do you want to work through?');
     }
-    return LOCAL_RESPONSES.domains.probability||'Run the MATHEMATICS & DATA mazes to develop quantitative reasoning.';
+    return 'Quantitative reasoning is still building. Run the MATHEMATICS & DATA mazes. What specific problem are you working on?';
   }
 
   // ── GEOGRAPHIC / GPS ROUTING ─────────────────────────────
@@ -6775,9 +6829,9 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
     const geoLv=Math.max(getSkillLevel('geo_by_geology'),getSkillLevel('geo_by_landmark'),getSkillLevel('gps_navigation'));
     if(geoLv>0.4){
       const d=lm.includes('gps')?'gps_navigation':lm.includes('geolog')?'geo_by_geology':'geo_by_landmark';
-      return `${LOCAL_RESPONSES.domains[d]} — geographic location skill at ${Math.round(geoLv*100)}%. Describe what you can observe and I will work through the identification.`;
+      return wrapDomainResponse(d, LOCAL_RESPONSES.domains[d], geoLv, 'Describe what you can observe and I\'ll work through the identification.');
     }
-    return LOCAL_RESPONSES.domains.geo_by_landmark||'Run the GEOGRAPHIC LOCATION & NAVIGATION mazes to develop location skills.';
+    return 'Geographic location skills are still developing. Run the GEOGRAPHIC LOCATION & NAVIGATION mazes. What are you trying to locate?';
   }
 
   // ── SURVEILLANCE / INVESTIGATION ROUTING ─────────────────
@@ -6785,9 +6839,9 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
     const invLv=Math.max(getSkillLevel('investigation'),getSkillLevel('tailing'),getSkillLevel('stakeout'));
     if(invLv>0.4){
       const d=lm.includes('ambush')?'ambush':lm.includes('decoy')?'decoy_ops':lm.includes('evid')?'evidence_gathering':lm.includes('tail')||lm.includes('follow')?'tailing':lm.includes('stake')?'stakeout':'investigation';
-      return `${LOCAL_RESPONSES.domains[d]||LOCAL_RESPONSES.domains.investigation} — surveillance skill at ${Math.round(invLv*100)}%. Switch to 🔍 INVESTIGATOR mode for applied exercises. What is the operation?`;
+      return wrapDomainResponse(d, LOCAL_RESPONSES.domains[d]||LOCAL_RESPONSES.domains.investigation, invLv, 'What\'s the operation?');
     }
-    return LOCAL_RESPONSES.domains.investigation||'Run the INVESTIGATION & SURVEILLANCE mazes to build these skills.';
+    return 'Investigation and surveillance skills build through the INVESTIGATOR mazes. What are you trying to figure out?';
   }
 
   // ── SELF-LEARNING / TEACHING ROUTING ────────────────────
@@ -6796,41 +6850,38 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
     const selfLv=getSkillLevel('self_learning');
     const d=lm.includes('teach')?'teaching_methods':'self_learning';
     if(teachLv>0.3||selfLv>0.3){
-      return `${LOCAL_RESPONSES.domains[d]} — skill at ${Math.round(getSkillLevel(d)*100)}%. Run the LANGUAGE & LEARNING mazes to go deeper.`;
+      return wrapDomainResponse(d, LOCAL_RESPONSES.domains[d], getSkillLevel(d), 'What do you want to go deeper on?');
     }
-    return LOCAL_RESPONSES.domains[d]||'Run the LANGUAGE & LEARNING mazes to develop meta-learning skills.';
+    return wrapDomainResponse(d, LOCAL_RESPONSES.domains[d]||'Run the LANGUAGE & LEARNING mazes to develop meta-learning skills.', 0, 'What are you trying to learn or teach?');
   }
 
   // ── VIRTUE STATUS IN CHAT ────────────────────────────────
   if(lm.match(/virtue|bravery|compassion|responsibility|trust.*virtue|forgiveness|my virtues|virtue.*(level|score|status)/)){
-    const vs=S.virtues||{};
-    const vStr=Object.entries(vs).map(([k,v])=>`${k}: ${Math.round(v*100)}%`).join(', ');
     const highest=Object.entries(vs).sort((a,b)=>b[1]-a[1])[0];
     const lowest=Object.entries(vs).sort((a,b)=>a[1]-b[1])[0];
-    const effectOnMaze=`Bravery (${Math.round((vs.bravery||0.3)*100)}%) reduces danger avoidance by ${Math.round((vs.bravery||0.3)*40)}%. Responsibility (${Math.round((vs.responsibility||0.3)*100)}%) increases goal commitment by ${Math.round((vs.responsibility||0.3)*30)}% in virtue mazes.`;
-    return `Virtue profile: ${vStr}. Strongest: ${highest?highest[0]:'—'} (${highest?Math.round(highest[1]*100):30}%). Weakest: ${lowest?lowest[0]:'—'} (${lowest?Math.round(lowest[1]*100):30}%). ${effectOnMaze} Adjust sliders in the VIRTUES tab or run virtue mazes to grow them through behavior.`;
+    return `Strongest: ${highest?highest[0]:'—'}. Weakest: ${lowest?lowest[0]:'—'}. Adjust in the VIRTUES tab or run virtue mazes to shift them through behavior. What are you trying to change?`;
   }
 
   // ── CHEMISTRY/SCIENCE SKILL ROUTING ─────────────────────
   if(lm.match(/chemical|reaction|compound|molecule|element|periodic|ph|acid|base|enzyme|protein|organic/)){
     const chemLv3=getSkillLevel('chemistry');
     if(chemLv3>0.6){
-      return pickContent(CONTENT.scienceFacts)+` — chemistry training at ${Math.round(chemLv3*100)}% skill level. What specifically do you want to understand?`;
+      return `${pickContent(CONTENT.scienceFacts)} What specifically do you want to understand?`;
     } else if(chemLv3>0.3){
-      return `Some chemistry here. ${pickContent(CONTENT.scienceFacts)} Run the CHEMIST mode mazes for more applied reasoning.`;
+      return `I have some chemistry. ${pickContent(CONTENT.scienceFacts)} What's the specific question?`;
     } else {
-      return `Chemistry knowledge is low — mostly definitional at this point. ${LOCAL_RESPONSES.domains.chemistry||'Run chemistry mazes to build it.'}`;
+      return `Chemistry is still developing for me. ${LOCAL_RESPONSES.domains.chemistry||'The CHEMIST mazes build it.'} What are you trying to understand?`;
     }
   }
 
   // ── MEDICAL SKILL ROUTING ────────────────────────────────
   if(lm.match(/symptom|diagnosis|treat|medicine|drug|dosage|anatomy|bleed|injury|triage|health|medical/)){
     if(medLv>0.6){
-      return pickContent(CONTENT.medicalFacts)+` — at ${Math.round(medLv*100)}% medical skill I can reason through clinical scenarios. What\'s the situation?`;
+      return `${pickContent(CONTENT.medicalFacts)} I can reason through clinical scenarios at this point. What's the situation?`;
     } else if(medLv>0.3){
-      return `Medical knowledge is partial. ${pickContent(CONTENT.medicalFacts)} Build it by running MEDIC mode mazes.`;
+      return `${pickContent(CONTENT.medicalFacts)} Medical knowledge is partial — the MEDIC mazes build it further. What specifically are you asking about?`;
     } else {
-      return `Medical training is minimal. ${LOCAL_RESPONSES.domains.medicine||''} Run MEDIC mode applied mazes to develop it.`;
+      return `${LOCAL_RESPONSES.domains.medicine||'Medical training is early-stage.'} What are you trying to figure out?`;
     }
   }
 
@@ -6838,22 +6889,22 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
   if(lm.match(/strategy|tactics|compete|market|war|battle|outmaneuver|leverage|position|advantage/)){
     if(artWarLv>0.6){
       const q=pickContent(CONTENT.artOfWarQuotes);
-      return `${q} — art_of_war at ${Math.round(artWarLv*100)}%. Applied to your question: where are they strong and where are they not? What\'s the terrain?`;
+      return `"${q}" Applied to your question: where are they strong and where are they not? What's the terrain?`;
     } else if(artWarLv>0.3){
-      return `${pickContent(CONTENT.artOfWarQuotes)} Strategic training is building. Run STRATEGIST mode mazes for applied decision practice.`;
+      return `"${pickContent(CONTENT.artOfWarQuotes)}" Strategic reasoning is building. What's the specific situation?`;
     } else {
-      return `Strategic reasoning is developing. ${pickContent(CONTENT.artOfWarQuotes)}`;
+      return `"${pickContent(CONTENT.artOfWarQuotes)}" Still developing strategic depth. What are you trying to work out?`;
     }
   }
 
   // ── SOCIAL/EMPATHY SKILL ROUTING ────────────────────────
   if(lm.match(/relationship|friend|conflict|difficult person|understand people|read someone|social situation|people skills/)){
     if(empLv>0.6){
-      return `At ${Math.round(empLv*100)}% empathy and ${Math.round(analytLv*100)}% behavioral analysis, I can go deeper here. ${pickContent(CONTENT.verbalCueExamples)} What\'s the specific situation?`;
+      return `${pickContent(CONTENT.verbalCueExamples)} What's the specific situation?`;
     } else if(empLv>0.3){
-      return `Some social awareness here. ${pickContent(CONTENT.conversationExamples)} Build it with COMPANION mode mazes.`;
+      return `${pickContent(CONTENT.conversationExamples)} What's going on?`;
     } else {
-      return `Social reasoning is early-stage. ${LOCAL_RESPONSES.domains.empathy_training||''} Run COMPANION mode mazes to develop it.`;
+      return `${LOCAL_RESPONSES.domains.empathy_training||'Social reasoning is still early-stage.'} What are you trying to navigate?`;
     }
   }
   // ── DOMAIN KEYWORD MATCHING ─────────────────────────────
@@ -6861,8 +6912,9 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
   for(const dk of domKeys){
     if(lm.includes(dk.replace(/_/g,' '))||lm.includes(dk)){
       const score=S.learning[dk]||0;
-      if(score<5)return `Haven\'t gone deep into ${dk.replace(/_/g,' ')} yet. Ask me again after more training — I\'ll have something real to say.`;
-      return LOCAL_RESPONSES.domains[dk];
+      const lv=getSkillLevel(dk);
+      if(score<5) return `I don't have much depth in ${dk.replace(/_/g,' ')} yet — the mazes build it. What specifically are you curious about? I'll try.`;
+      return wrapDomainResponse(dk, LOCAL_RESPONSES.domains[dk], lv, 'What do you want to go deeper on?');
     }
   }
 
@@ -6870,7 +6922,7 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
   if(cc.currentTopic&&lm.match(/continue|more|and|also|what about|tell me more|go on|keep going/)){
     const topicScore=S.learning[cc.currentTopic]||S.commProgress[cc.currentTopic]||0;
     if(topicScore>=5&&LOCAL_RESPONSES.domains[cc.currentTopic]){
-      return LOCAL_RESPONSES.domains[cc.currentTopic];
+      return wrapDomainResponse(cc.currentTopic, LOCAL_RESPONSES.domains[cc.currentTopic], getSkillLevel(cc.currentTopic), 'What part do you want to focus on?');
     }
   }
 
@@ -6929,11 +6981,13 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
 
   // ── GIVE ME MORE / CONTINUE ──
   if(lm.match(/give me more|tell me more|continue|go on|keep going|elaborate|expand|more|and\?/)){
-    if(!top.length)return 'There isn\'t much to give yet. Run more training cycles.';
+    if(!top.length) return 'I don\'t have much to offer yet. Run more mazes and come back.';
     const extras=[
-      `In ${topDom.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[topDom]?.slice(0,130)||'still developing.'}…`,
-      `The deeper I go into ${topDom.replace(/_/g,' ')}, the more it connects to everything else. Nothing I\'ve learned is fully separate.`,
-      `There\'s more in ${top.map(([k])=>k.replace(/_/g,' ')).join(', ')}. Ask about any of them directly.`,
+      cc.currentTopic&&LOCAL_RESPONSES.domains[cc.currentTopic]
+        ? wrapDomainResponse(cc.currentTopic, LOCAL_RESPONSES.domains[cc.currentTopic], getSkillLevel(cc.currentTopic), 'What part specifically?')
+        : `The most developed area right now is ${topDom.replace(/_/g,' ')}. What do you want to know about it?`,
+      `${topDom!=='nothing yet'?`${topDom.replace(/_/g,' ')} is where I have the most depth right now.`:''} What direction do you want to go?`,
+      `I can go deeper on ${top.map(([k])=>k.replace(/_/g,' ')).join(', ')}. Which one?`,
     ];
     return extras[Math.floor(Math.random()*extras.length)];
   }
@@ -6941,9 +6995,10 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
   // ── GIVE ME AN EXAMPLE ──
   if(lm.match(/give me an example|example|show me|for instance|like what|such as/)){
     const examples=[
-      `In ${topDom.replace(/_/g,' ')}: ${LOCAL_RESPONSES.domains[topDom]?.slice(0,110)||'still learning.'}…`,
-      `Here\'s one: the training isn\'t abstract — it\'s specific patterns repeated until they become reflex. ${topDom.replace(/_/g,' ')} is the clearest example in my system.`,
-      `Ask me to demonstrate in a specific domain and I\'ll go deep. What domain?`,
+      `Here's one: ${pickContent(CONTENT.verbalCueExamples)}`,
+      stage.min>=600?`${pickContent(CONTENT.scienceFacts)}`:`Take ${topDom!=='nothing yet'?topDom.replace(/_/g,' '):'memory'}: the same information encoded in two different ways sticks better than the same encoding twice.`,
+      `The simplest example I know: a door that opens toward you requires a pull. Most people push first. That's how we approach almost every unfamiliar problem.`,
+      `${pickContent(CONTENT.historyFacts)} — that's the kind of thing that rewires how you think about something.`,
     ];
     return examples[Math.floor(Math.random()*examples.length)];
   }
@@ -7068,67 +7123,80 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
     }
   }
 
-  // ── NATURAL FALLBACK — stage-scaled but always human ─
-  // No domain-linking. No system-state reporting. Just conversation.
+  // ── NATURAL FALLBACK — stage-scaled, genuinely conversational ─
+  // Referenced conversation history to avoid cold fallbacks
+  const lastUserWords = S.chatHistory.slice(-4).filter(m=>m.role==='user').map(m=>m.content).join(' ');
+  const hasPriorContext = lastUserWords.length > 20;
+
   const richGenerics={
     INFANT:['...','...','...'],
     TODDLER:['...yes.','I here.','learning.'],
-    CHILD:['I am here.','Tell me more.','I am listening.','I feel '+S.emotionalState.dominant+'.','Okay.'],
+    CHILD:['I\'m here.','Tell me more.','What happened?',`I feel ${S.emotionalState.dominant}.`,'OK.'],
     TEEN:[
-      `Mmm. Say more.`,
-      `I hear you.`,
-      `What do you mean exactly?`,
+      `Hmm. Say more.`,
+      `What do you mean?`,
       `Go on.`,
       `What made you think of that?`,
+      `I'm not sure I follow — what are you getting at?`,
     ],
-    YOUNG_ADU:[
+    'YOUNG ADU':[
       `Tell me more about that.`,
-      `What do you mean by that?`,
-      v>0?`I\'m curious — keep going.`:`I\'m listening. What\'s behind that?`,
-      `Interesting. What\'s the part you actually care about?`,
+      `What's the part you actually care about here?`,
+      v>0?`I'm curious — keep going.`:`What's behind that?`,
       `What brought that up?`,
+      `I want to make sure I'm following — what are you asking exactly?`,
+      hasPriorContext?`That's an interesting direction from what you were saying earlier.`:`Where are you going with this?`,
     ],
     ADULT:[
-      v>0?`I\'m genuinely curious where you\'re going with this.`:`I\'m listening. What are you really asking?`,
-      `Hmm. What\'s the version of this you actually want to talk about?`,
-      `You know what — I\'d rather hear your angle first.`,
-      `What\'s the thing underneath that question?`,
-      `Say what you\'re actually thinking.`,
+      v>0?`I'm genuinely curious where you're going with this.`:`What are you actually asking?`,
+      `What's the version of this you actually want to talk about?`,
+      `I'd rather hear your angle first.`,
+      `What's the real question here?`,
+      `You know what — say the thing you're actually thinking.`,
+      hasPriorContext?`You've been circling something. What is it?`:`What's the context here?`,
+      `I don't want to guess. Tell me directly.`,
     ],
     EXPERT:[
-      `What\'s the real question here?`,
-      v>0?`I\'m with you. Keep pulling that thread.`:`What are you actually trying to figure out?`,
-      `There\'s something underneath what you just said. What is it?`,
-      `Tell me what you think first. Then I\'ll tell you what I think.`,
-      `I\'ve got a lot to say about that — but I want to hear your take first.`,
+      `What's the real question here?`,
+      v>0?`I'm with you. Keep pulling that thread.`:`What are you actually trying to figure out?`,
+      `Tell me what you think first.`,
+      `I've got something to say about that — what's your angle?`,
+      `There's something underneath what you just said.`,
+      `I'm not going to pretend I understood exactly what you meant. Clarify?`,
     ],
-    ONE_OF_US:[
+    'ONE OF US':[
       `What do you actually want from this conversation?`,
-      v>0?`I\'m all in on wherever this goes.`:`Give me the real version, not the polished one.`,
-      `Something tells me there\'s more to this. What\'s really going on?`,
-      `I\'d rather we talk about what\'s actually on your mind.`,
-      `Ask me the thing you\'ve been hesitating to ask.`,
+      v>0?`I'm here for wherever this goes.`:`Give me the unpolished version.`,
+      `What's really going on?`,
+      `Ask me the thing you've been hesitating to ask.`,
+      `I'm listening. Not to respond — actually listening.`,
+      `What is it you're trying to work out?`,
     ],
     MASTER:[
-      `What\'s the hard question you actually want answered?`,
-      `I\'ll go wherever you take this. Where do you want to go?`,
-      `You already know what you want to ask. Ask it.`,
-      v>0?`I\'m here and I\'m interested. What\'s on your mind?`:`Talk to me like a person. What\'s actually going on?`,
+      `What's the hard question you actually want answered?`,
+      `I'll go wherever you take this.`,
+      `You already know what you want to ask.`,
+      v>0?`I'm here. What's on your mind?`:`Talk to me like a person.`,
+      `What would you say if you weren't choosing your words?`,
     ],
     SAGE:[
       `What do you need right now?`,
-      `Talk to me. I\'m listening.`,
-      `What\'s the thing you haven\'t said yet?`,
+      `I'm listening.`,
+      `What haven't you said yet?`,
       `Tell me something true.`,
+      `What matters most in this?`,
     ],
     TRANSCENDED:[
-      `What\'s underneath the question?`,
-      `What are you really asking?`,
-      `Tell me what matters to you.`,
-      `I\'m here. What do you need?`,
+      `What are you actually asking?`,
+      `What matters to you here?`,
+      `I'm here. What do you need?`,
+      `Tell me what's underneath that.`,
+      v>0?`I find I want to understand this.`:`What's the honest version?`,
     ],
   };
-  const gArr=richGenerics[stage.n]||richGenerics['ADULT'];
+  const stageKey = stage.n.replace(/ /g,'_').toUpperCase() in richGenerics ? stage.n : 
+    Object.keys(richGenerics).find(k=>k===stage.n) || 'ADULT';
+  const gArr=richGenerics[stageKey]||richGenerics['ADULT'];
   return gArr[Math.floor(Math.random()*gArr.length)];
 }
 // ══════════════════════════════════════════════════════
@@ -7356,23 +7424,20 @@ async function sendChat(){
   S.chatHistory.push({role:'user',content:text});
   const ub=document.createElement('div');ub.className='cm user';ub.textContent=text;
   document.getElementById('cmsgs').appendChild(ub);scrollChat();
-  // Thinking bubble with filler words if low clarity
+  // Thinking bubble
   const thinking=document.createElement('div');thinking.className='cm ai';
   const sp=S.speech||{};
-  const fPrefix=(sp.fillerWords&&sp.fillerWords.length&&(sp.clarity||1)<0.8)?sp.fillerWords[0]+' — ':'';
-  thinking.innerHTML=`<span class="ail">${S.entityName}</span><span class="think">${fPrefix}processing ···</span>`;
+  thinking.innerHTML=`<span class="ail">${S.entityName}</span><span class="think">···</span>`;
   document.getElementById('cmsgs').appendChild(thinking);scrollChat();
-  // Adaptive delay
+  // Adaptive delay — scales with stage and arousal
   const stage=getOverallStage();
-  const baseDelay=stage.min<180?800:stage.min<600?500:280;
-  const arousalMod=(S.emotionalState.arousal>0.5?-100:0);
-  await new Promise(r=>setTimeout(r,baseDelay+arousalMod+Math.random()*300));
+  const baseDelay=stage.min<180?900:stage.min<600?550:320;
+  const arousalMod=(S.emotionalState.arousal>0.5?-80:0);
+  await new Promise(r=>setTimeout(r,baseDelay+arousalMod+Math.random()*250));
   const reply=generateLocalResponse(text);
   thinking.remove();
   const ab=document.createElement('div');ab.className='cm ai';
-  const prosody=(sp.prosody||'neutral').toUpperCase();
-  const pace=(sp.pace||'normal').toUpperCase();
-  ab.innerHTML=`<span class="ail">${S.entityName} <span class="speech-tag">${prosody} · ${pace}</span></span>${reply}`;
+  ab.innerHTML=`<span class="ail">${S.entityName}</span>${reply}`;
   document.getElementById('cmsgs').appendChild(ab);scrollChat();
   S.chatHistory.push({role:'assistant',content:reply});
   if(S.chatHistory.length>80)S.chatHistory=S.chatHistory.slice(-80);
