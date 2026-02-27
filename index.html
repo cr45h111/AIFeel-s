@@ -180,7 +180,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 #rpop.show{opacity:1;transform:translateX(-50%) translateY(0);}
 #psv{width:100%;height:260px;background:var(--panel);border:1px solid var(--b0);border-radius:3px;flex-shrink:0;}
 .pl{stroke:var(--neu);stroke-width:1.5;opacity:.4;cursor:pointer;transition:opacity .2s,stroke .2s;}
-.pl.active{opacity:.85}.pl.inactive{opacity:.15;stroke-dasharray:4 3;stroke:var(--td)}
+.pl.active{opacity:.85}.pl.inactive{opacity:.28;stroke-dasharray:4 3;stroke:#2a5070}
 .pl:hover{opacity:1!important;stroke:var(--wa)!important}
 .pl.ep.active{stroke:var(--emo);opacity:.7}
 .lc{display:flex;flex-direction:column;gap:4px;background:var(--panel);border:1px solid var(--b0);border-radius:3px;padding:9px;}
@@ -1100,6 +1100,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
         <button class="smb" onclick="resetMaze()">↺ RESET</button>
         <button class="tgl ac" id="acBtn" onclick="toggleAutoCycle()">AUTO-CYCLE: OFF</button>
         <button class="tgl as" id="asBtn" onclick="toggleAutoStim()">AUTO-STIM: OFF</button>
+        <span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;font-family:var(--mo);font-size:7px;color:var(--td);">SKIP ≥<input id="cycleSkipInput" type="number" min="0" step="1000" value="50000" title="During auto-cycle, skip any maze whose domain XP is at or above this value. Set to 0 to skip nothing extra." style="width:64px;background:#0a1a2a;border:1px solid #1e3a5a;color:#88ccff;font-family:var(--mo);font-size:7px;padding:1px 3px;margin-left:2px;">XP</span>
       </div>
       <!-- 3D PHYSICAL MAZE STATS -->
       <div id="p3dStats">
@@ -3683,21 +3684,52 @@ function buildZoneChips(){
 // ══════════════════════════════════════════════════════
 function buildPathwaySVG(){
   const svg=document.getElementById('psv');svg.innerHTML='';
-  // Phase color map
   const phaseColor={sens:'#00ffee',exec:'#ffdd44',mot:'#44ff88',emo:'#cc66ff'};
   const phaseFill={sens:'#001e1a',exec:'#1e1a00',mot:'#001e0a',emo:'#12001e'};
+
+  // Track how many pathways connect between the same two nodes (for offset)
+  const pairCount={};
+  const pairIdx={};
+  S.pathways.forEach(p=>{
+    const key=[p.from,p.to].sort().join('|');
+    pairCount[key]=(pairCount[key]||0)+1;
+    pairIdx[p.id]=pairCount[key]-1;
+  });
+
   S.pathways.forEach(p=>{
     const fr=S.nodes[p.from],to=S.nodes[p.to];if(!fr||!to)return;
-    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
-    l.setAttribute('x1',fr.x);l.setAttribute('y1',fr.y);l.setAttribute('x2',to.x);l.setAttribute('y2',to.y);
-    // Color pathway by source node phase
     const frPhase=fr.emo?'emo':fr.phase||'';
-    const pathCol=frPhase?phaseColor[frPhase]+'55':'';
-    l.setAttribute('class','pl '+(p.active?'active':'inactive')+(p.emo?' ep':''));
-    if(pathCol&&p.active)l.setAttribute('stroke',pathCol);
-    l.dataset.pid=p.id;
-    l.addEventListener('click',()=>{p.active=!p.active;buildPathwaySVG();log(`path ${p.from}→${p.to} ${p.active?'ON':'OFF'}`,'sys');});
-    svg.appendChild(l);
+    const pathCol=frPhase&&p.active?phaseColor[frPhase]+'88':'';
+    // Detect if this is a right-column vertical (same x ±5) — needs curve offset
+    const sameCol=Math.abs(fr.x-to.x)<6;
+    const key=[p.from,p.to].sort().join('|');
+    const idx=pairIdx[p.id];
+    const count=pairCount[key]||1;
+    // Offset multiplier — spread overlapping paths laterally
+    const offsetDir=idx%2===0?1:-1;
+    const offsetMag=sameCol?14*(Math.floor(idx/2)+1)*offsetDir:8*(Math.floor(idx/2)+1)*offsetDir;
+    const x1=fr.x,y1=fr.y,x2=to.x,y2=to.y;
+    const mx=(x1+x2)/2,my=(y1+y2)/2;
+    // Control point: offset perpendicular to line direction
+    const dx=x2-x1,dy=y2-y1,len=Math.sqrt(dx*dx+dy*dy)||1;
+    const cx=mx+(-dy/len)*offsetMag;
+    const cy=my+(dx/len)*offsetMag;
+    const usesCurve=sameCol||(count>1&&idx>0);
+    const el=usesCurve
+      ?document.createElementNS('http://www.w3.org/2000/svg','path')
+      :document.createElementNS('http://www.w3.org/2000/svg','line');
+    if(usesCurve){
+      el.setAttribute('d',`M${x1},${y1} Q${cx},${cy} ${x2},${y2}`);
+      el.setAttribute('fill','none');
+    } else {
+      el.setAttribute('x1',x1);el.setAttribute('y1',y1);
+      el.setAttribute('x2',x2);el.setAttribute('y2',y2);
+    }
+    el.setAttribute('class','pl '+(p.active?'active':'inactive')+(p.emo?' ep':''));
+    if(pathCol)el.setAttribute('stroke',pathCol);
+    el.dataset.pid=p.id;
+    el.addEventListener('click',()=>{p.active=!p.active;buildPathwaySVG();log(`path ${p.from}→${p.to} ${p.active?'ON':'OFF'}`,'sys');});
+    svg.appendChild(el);
   });
   Object.entries(S.nodes).forEach(([k,n])=>{
     const g=document.createElementNS('http://www.w3.org/2000/svg','g');
@@ -3705,7 +3737,7 @@ function buildPathwaySVG(){
     const phase=n.emo?'emo':n.phase||'';
     const ac=phase?phaseColor[phase]:'#00ccff';
     const af=phase?phaseFill[phase]:'#001e2e';
-    const r=n.phase?7:9; // phase nodes are smaller
+    const r=n.phase?7:9;
     c.setAttribute('cx',n.x);c.setAttribute('cy',n.y);c.setAttribute('r',r);
     c.setAttribute('fill',n.active?af:'#0b1118');
     c.setAttribute('stroke',n.active?ac:'#1e3a5a');
@@ -4218,11 +4250,11 @@ function convTick(){
     if(S.autoCycle){
       stopMaze();
       setTimeout(()=>{
-        const mazes=allMazes().filter(m=>m.type==='conversation');
-        if(!mazes.length)return;
-        const idx=(mazes.findIndex(m=>m.id===curMaze?.id)+1)%mazes.length;
-        selectMaze(mazes[idx].id);
+        const next=nextCycleMaze();
+        if(!next)return;
+        selectMaze(next.id);
         setTimeout(startMaze,200);
+        log(`↳ auto → "${next.name}"${(S.learning[next.domain]||0)>=getCycleSkipThreshold()?'':''}`,'learn');
       },600);
     } else {
       clearInterval(convInt);convInt=null;
@@ -4407,7 +4439,7 @@ function maze3dTick(){
     log(`✓ 3D GOAL steps:${runSteps} stumbles:${agent3d.stumbles} +${10+bonus} ${curMaze.domain} XP`,'learn');
     showPopup(`3D COMPLETE — ${curMaze.lesson} · ${tag}`,agent3d.stumbles>0?'danger':'learn');
     init3dMaze(); clearInterval(maze3dInt); maze3dInt=null;
-    if(S.autoCycle){setTimeout(()=>{const a=allMazes(),n=a[(mzListIdx+1)%a.length];selectMaze(n.id);setTimeout(startMaze,600);log(`↳ auto → "${n.name}"`,'learn');},2200);}
+    if(S.autoCycle){setTimeout(()=>{const next=nextCycleMaze();if(!next)return;selectMaze(next.id);setTimeout(startMaze,600);log(`↳ auto → "${next.name}"`,'learn');},2200);}
     else{maze3dInt=setInterval(maze3dTick,getMazeSpeed());startBodyLearn();}
     return;
   }
@@ -4628,6 +4660,39 @@ function resetMaze(){
   document.getElementById('mzInfo').textContent='ready';
 }
 function toggleAutoCycle(){S.autoCycle=!S.autoCycle;const b=document.getElementById('acBtn');b.className='tgl ac'+(S.autoCycle?' on':'');b.textContent='AUTO-CYCLE: '+(S.autoCycle?'ON':'OFF');log(`auto-cycle: ${S.autoCycle?'ON':'OFF'}`,'sys');}
+
+// ── CYCLE SKIP THRESHOLD ──────────────────────────────
+// Any maze whose domain XP is at or above this value is skipped
+// during auto-cycle. User can change via the skip threshold input.
+const CYCLE_SKIP_DEFAULT = 50000;
+function getCycleSkipThreshold(){
+  const el=document.getElementById('cycleSkipInput');
+  const v=el?parseInt(el.value,10):CYCLE_SKIP_DEFAULT;
+  return isNaN(v)||v<0?CYCLE_SKIP_DEFAULT:v;
+}
+
+// ── FIND NEXT MAZE IN CYCLE ───────────────────────────
+// Advances from mzListIdx, skipping avoided mazes above the XP threshold.
+// Tries up to allMazes().length steps to find a valid one.
+// Returns the maze object (or the raw next if all are above threshold).
+function nextCycleMaze(){
+  const all=allMazes();
+  if(!all.length)return null;
+  const threshold=getCycleSkipThreshold();
+  let attempts=0;
+  let idx=(mzListIdx+1)%all.length;
+  while(attempts<all.length){
+    const candidate=all[idx];
+    const xp=S.learning[candidate.domain]||0;
+    if(xp<threshold) return candidate; // below threshold — use it
+    // Above threshold — skip
+    log(`↷ skip "${candidate.name}" (${candidate.domain} at ${Math.round(xp).toLocaleString()} XP ≥ ${threshold.toLocaleString()})`, 'sys');
+    idx=(idx+1)%all.length;
+    attempts++;
+  }
+  // All mazes above threshold — just return the raw next to avoid infinite pause
+  return all[(mzListIdx+1)%all.length];
+}
 function toggleAutoStim(){S.autoStim=!S.autoStim;const b=document.getElementById('asBtn');b.className='tgl as'+(S.autoStim?' on':'');b.textContent='AUTO-STIM: '+(S.autoStim?'ON':'OFF');log(`auto-stim: ${S.autoStim?'ON':'OFF'}`,'sys');}
 function getMazeSpeed(){
   const v=S.emotionalState.valence;
@@ -4738,7 +4803,7 @@ function mazeTick(){
     showPopup(`${curMaze.isNeg?'⚠ SHADOW COMPLETE':'GOAL'} — ${curMaze.lesson} · ${cleanTag}`,curMaze.isNeg||dangerHits>0?'danger':'learn');
     initMaze();clearInterval(mazeInt);mazeInt=null;
     if(S.autoCycle){
-      setTimeout(()=>{const all=allMazes();const next=all[(mzListIdx+1)%all.length];selectMaze(next.id);setTimeout(startMaze,600);log(`↳ auto → "${next.name}"`,'learn');},2200);
+      setTimeout(()=>{const next=nextCycleMaze();if(!next)return;selectMaze(next.id);setTimeout(startMaze,600);log(`↳ auto → "${next.name}"`,'learn');},2200);
     }else{mazeInt=setInterval(mazeTick,getMazeSpeed());startBodyLearn();}
     return;
   }
@@ -7421,12 +7486,12 @@ async function sendChat(){
   if(chatLocked)return;
   const inp=document.getElementById('chatIn'),text=inp.value.trim();if(!text)return;
   inp.value='';chatLocked=true;document.getElementById('chatSend').disabled=true;
+  try{
   S.chatHistory.push({role:'user',content:text});
   const ub=document.createElement('div');ub.className='cm user';ub.textContent=text;
   document.getElementById('cmsgs').appendChild(ub);scrollChat();
   // Thinking bubble
   const thinking=document.createElement('div');thinking.className='cm ai';
-  const sp=S.speech||{};
   thinking.innerHTML=`<span class="ail">${S.entityName}</span><span class="think">···</span>`;
   document.getElementById('cmsgs').appendChild(thinking);scrollChat();
   // Adaptive delay — scales with stage and arousal
@@ -7450,8 +7515,9 @@ async function sendChat(){
   addLearn('social',0.8);addLearn('language',0.4);addLearn('speaking',0.4);
   addLearn('verbal_comm',0.5);addLearn('verbal_cues',0.3);
   if(S.conversationContext.emotionalTone==='emotional')addLearn('empathy',0.4);
-  log(`[CHAT ${prosody}] ${S.entityName}: ${reply.slice(0,60)}…`,'ai');
-  chatLocked=false;document.getElementById('chatSend').disabled=false;updateAIStatePanel();
+  log(`[CHAT] ${S.entityName}: ${reply.slice(0,60)}…`,'ai');
+  }catch(err){log(`[CHAT ERROR] ${err.message}`,'sys');}
+  finally{chatLocked=false;document.getElementById('chatSend').disabled=false;updateAIStatePanel();}
 }
 function scrollChat(){const c=document.getElementById('cmsgs');c.scrollTop=c.scrollHeight;}
 document.getElementById('chatIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});
