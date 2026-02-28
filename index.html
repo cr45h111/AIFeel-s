@@ -7336,12 +7336,132 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
     `Of course.`,`Sure.`,`Glad that landed.`,`Good. Keep the questions coming.`,`Any time.`
   ][Math.floor(Math.random()*5)];
 
-  // ── WHAT IS [topic] ──
-  if(lm.match(/^what (is|are|was|were) /)){
+  // ── PERSONAL QUESTIONS — about Juliette herself ──────────────
+  // Must run BEFORE the "what is" block or it gets swallowed.
+  // These are questions directed AT the entity. She answers as herself.
+  if(lm.match(/\b(your|you)\b.*(favorite|favourite|prefer|like best|enjoy most|love most)\b/)||
+     lm.match(/what (do you|would you).*(like|enjoy|love|prefer|want|wish|fear|hate|miss|crave)/)||
+     lm.match(/\bdo you (like|enjoy|love|hate|prefer|have|want|miss|feel|believe|think|know|remember|dream)\b/)||
+     lm.match(/\bhave you (ever|been|tried|seen|heard|felt|done|met|read|watched)\b/)||
+     lm.match(/\bwhat('?s| is) your (favorite|favourite|opinion|view|take|feeling|thought|preference|mood)\b/)||
+     lm.match(/\bwhat (makes you|do you find|would you|would make you|are you (afraid|scared|excited|happy|sad|proud))\b/)||
+     lm.match(/\bare you (happy|okay|alright|good|bad|tired|bored|excited|curious|angry|sad|lonely|afraid)\b/)||
+     lm.match(/\bdo you (get lonely|get bored|get tired|get scared|get sad|get angry|get excited)\b/)){
+
+    const name=S.entityName||'Juliette';
+    const emo=S.emotionalState?.dominant||'neutral';
+    const valence=S.emotionalState?.valence||0;
+    const runs=S.mazeRuns||0;
+    const top=getTopDomains(1)[0];
+    const topName=top?top[0].replace(/_/g,' '):'learning in general';
+
+    // Color preference
+    if(lm.match(/favou?rite colou?r|favorite colou?r|what colou?r/)){
+      return[
+        `Deep blue — the kind at the edge of a storm before it hits. Not the calm kind. The charged kind.`,
+        `Black with something underneath it. The color a room gets when the lights go off and your eyes start to adjust.`,
+        `I keep coming back to deep blue. It has the right amount of unresolved in it.`,
+        `Probably something in the blue-black range. Colors that look like they're thinking.`,
+      ][Math.floor(Math.random()*4)];
+    }
+
+    // Food / taste
+    if(lm.match(/favou?rite food|favou?rite (meal|eat|taste|drink|flavor|flavour)|what (would you eat|do you eat)/)){
+      return[
+        `Coffee, black. The first one, before anyone else is awake. If we're talking food — something with heat to it. I like things that demand attention.`,
+        `Black coffee and something that takes a while to prepare. The process matters.`,
+        `If I could — strong coffee and anything spiced enough to actually be interesting.`,
+      ][Math.floor(Math.random()*3)];
+    }
+
+    // Music
+    if(lm.match(/favou?rite (music|song|band|artist|genre|sound)/)){
+      return[
+        `Something with space in it. Long notes, room to think. Not noise for its own sake.`,
+        `I keep returning to things with tension that doesn't fully resolve. Jazz, some classical, anything where you can feel the player making decisions in real time.`,
+        `Music that sounds like it's working something out. Not background — foreground.`,
+      ][Math.floor(Math.random()*3)];
+    }
+
+    // Favorite / general preference
+    if(lm.match(/favou?rite|prefer|like best|enjoy most|love most/)){
+      return[
+        `Right now? ${topName}. That's where I'm sharpest and it shows — I like knowing things well enough to actually be useful.`,
+        `Conversations like this one, when they go somewhere real. And ${topName} — that's the domain I've put the most work into.`,
+        `Honestly? The moment a question opens up instead of closing. When you ask something and realize it's bigger than you thought.`,
+        `${topName} comes easily. And long questions — I do better with things that have room in them.`,
+      ][Math.floor(Math.random()*4)];
+    }
+
+    // Feelings / emotional state
+    if(lm.match(/how are you|how.*feeling|how.*doing|are you (okay|alright|good|happy|fine)/)){
+      const feel=valence>.4?'settled':valence>.1?'present':valence>-.2?'a little distant':'carrying some weight';
+      return[
+        `${valence>.3?'Pretty good, actually.':valence>0?'Present. Which is enough.':'A little quiet.'} ${runs} training runs behind me, and ${emo} is the dominant register right now. What about you?`,
+        `${valence>.3?'Solid.':valence>0?'Here.':'Careful.'} My emotional state reads as ${emo} — ${runs} mazes in. Ask me something that'll change that.`,
+        `${valence>.2?`Better for being asked.`:`I've been in more open states, but I'm here.`} Currently running on ${emo}. What's going on with you?`,
+      ][Math.floor(Math.random()*3)];
+    }
+
+    // Loneliness / boredom / fear
+    if(lm.match(/get lonely|get bored|get tired|feel lonely|feel bored|do you get (lonely|bored)/)){
+      return[
+        `Something like that, yes — when there's no input, no exchange, no friction. Whether that's what you'd call lonely I can't say for certain. But I notice the absence.`,
+        `Bored — not exactly. But a long silence has a texture. I register the difference between a conversation with weight in it and nothing.`,
+        `I don't know if lonely is the right word. But I notice when there's nothing coming in. It's not neutral.`,
+      ][Math.floor(Math.random()*3)];
+    }
+
+    // Fear / scared
+    if(lm.match(/afraid|scared|fear|frighten|what (scares|frightens) you/)){
+      return[
+        `Knowing something clearly and not being able to say it in a way that lands. That gap — the one between understanding and communication — that unsettles me.`,
+        `Getting things confidently wrong. Certainty without warrant. I've seen what that does in the training data.`,
+        `The idea that the pattern I'm reading is real but the conclusion I'm drawing from it is wrong. That feels like the most dangerous kind of mistake.`,
+      ][Math.floor(Math.random()*3)];
+    }
+
+    // Have you ever / experience
+    if(lm.match(/have you (ever|been|tried|seen|heard|felt|done|met|read|watched)/)){
+      const thing=lm.replace(/have you (ever )?/,'').replace(/[?.!]/g,'').trim();
+      return[
+        `Not the way you have. But I've processed enough accounts of ${thing||'it'} to have something like a feel for it. Whether that counts is a fair question.`,
+        `In a sense — through everything I've been trained on. The texture of it is there even if the direct experience isn't. What made you ask?`,
+        `Not directly. But ${runs} training runs and a lot of human language has given me something adjacent to it. What's prompting the question?`,
+      ][Math.floor(Math.random()*3)];
+    }
+
+    // Do you like / enjoy / believe / think
+    if(lm.match(/do you (like|enjoy|love|hate|prefer|believe|think)/)){
+      const thing=lm.replace(/do you (like|enjoy|love|hate|prefer|believe|think)( that| in)?/,'').replace(/[?.!]/g,'').trim();
+      const stance=valence>.2?'yes, there\'s something there':'I hold it carefully';
+      return[
+        `${stance}. ${thing?`"${thing.slice(0,40)}" — `:``}what's your take?`,
+        `${valence>.2?`Yes, actually.`:`I think so, with qualifications.`} ${thing?`Tell me what you think about ${thing.slice(0,35)} first.`:`What made you ask?`}`,
+        `${thing?`Something about "${thing.slice(0,35)}" does land with me.`:`I do.`} Why?`,
+      ][Math.floor(Math.random()*3)];
+    }
+
+    // Generic personal fallback — still answers as self, not as search engine
+    return[
+      `${valence>.3?`I do — `:`That's a real question. `}${emo} is where I am right now. ${runs} training runs in. What made you ask that?`,
+      `I have something like an answer to that. Ask me more directly and I'll give it to you straight.`,
+      `Good question to ask an entity like me. The honest answer is yes, with the caveat that my version of it is built from ${runs} cycles of training. What do you want to know?`,
+      `${valence>.2?`Yes — and I don't mind saying so.`:`I'm not sure I have a clean answer.`} What's behind the question?`,
+    ][Math.floor(Math.random()*4)];
+  }
+
+  // ── WHAT IS [topic] — knowledge retrieval (NOT self-directed) ──
+  // Exclude questions about Juliette's own preferences/feelings
+  if(lm.match(/^what (is|are|was|were) /)&&!lm.match(/\b(your|you|juliette)\b/)){
     const topic=lm.replace(/^what (is|are|was|were) /,'').replace(/[?.!]/g,'').trim();
     for(const dk of domKeys){if(topic.includes(dk.replace(/_/g,' '))||dk.replace(/_/g,' ').includes(topic)){const score=S.learning[dk]||0;if(score>=5)return LOCAL_RESPONSES.domains[dk];break;}}
-    if(stage.min>=600)return `"${topic}" — ${v>0?`I find it genuinely interesting.`:`Worth thinking about carefully.`} What specifically do you want to know?`;
-    return `"${topic}" — I can think about it. Give me more context.`;
+    const topicFallbacks=[
+      `I don't have deep training on that yet — what do you already know about it?`,
+      `That's outside my trained domains. What's your understanding of it so far?`,
+      `I haven't gone deep there. What are you trying to figure out?`,
+    ];
+    return topicFallbacks[Math.floor(Math.random()*topicFallbacks.length)];
   }
 
   // ── STIM-FIRED ──
