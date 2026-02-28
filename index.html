@@ -506,6 +506,16 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .health-hdr-dot.alert{background:var(--wa);box-shadow:0 0 5px var(--wa);animation:lp 1s infinite;}
 .health-hdr-dot.critical{background:var(--neg);box-shadow:0 0 7px var(--neg);animation:dp .5s infinite;}
 .health-hdr-dot.emergency{background:#ff0000;box-shadow:0 0 10px #ff0000;animation:dp .3s infinite;}
+/* ── SECURITY SYSTEM ── */
+#t-security .smb{font-size:6.5px;}
+.sec-person-card{background:var(--p2);border-radius:3px;padding:5px 8px;display:flex;flex-direction:column;gap:2px;}
+.sec-incident{border-left:2px solid #224;padding:2px 6px;font-family:var(--mo);font-size:5.5px;}
+.sec-incident.warn{border-color:#ffaa0060;}
+.sec-incident.threat{border-color:#ff224460;background:#1a000008;}
+.sec-incident.info{border-color:#00ccff30;}
+.sec-arm-active{border-color:var(--pos)!important;color:var(--pos)!important;background:#00220088!important;}
+.sec-cam-card{background:var(--p2);border:1px solid var(--b1);border-radius:3px;padding:5px 7px;display:flex;flex-direction:column;gap:4px;}
+.sec-cam-card.live{border-color:#00ffee40;}
 </style>
 </head>
 <body>
@@ -598,6 +608,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
     <button class="tab" onclick="swTab('t-chat',this)">CHAT</button>
     <button class="tab" onclick="swTab('t-health',this)" style="color:#ff4444;border-color:transparent;" id="tabHealth">♥ HEALTH</button>
     <button class="tab" onclick="swTab('t-voice',this)" style="color:#00ccff;" id="tabVoice">◈ VOICE</button>
+    <button class="tab" onclick="swTab('t-security',this)" style="color:#ffaa44;" id="tabSecurity">🔒 SECURITY</button>
   </div>
   <div class="tc active" id="t-stim">
     <div class="pi">
@@ -1056,6 +1067,92 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
       <div class="hw-hook-item">Push-to-Talk Physical Button — STUB</div>
       <div class="hw-hook-item" style="color:var(--si);">Call nexusSpeak(text) to output to any audio hardware driver</div>
     </div>
+  </div>
+</div>
+
+<!-- ═══ SECURITY PANEL ═══ -->
+<div class="tc" id="t-security">
+  <div class="pi">
+    <div class="sec">◈ SECURITY MODE</div>
+    <div style="display:flex;gap:6px;align-items:center;margin-bottom:5px;">
+      <button id="secModeHome" class="smb" onclick="setSecMode('home')" style="flex:1;">🏠 HOME</button>
+      <button id="secModeStore" class="smb" onclick="setSecMode('store')" style="flex:1;">🏪 STORE</button>
+      <button id="secArmBtn" onclick="toggleSecArm()" style="flex:1;font-family:var(--mo);font-size:7px;padding:4px 8px;border-radius:2px;cursor:pointer;background:transparent;border:1px solid #444;color:var(--td);">ARM</button>
+    </div>
+    <div style="font-family:var(--mo);font-size:6px;color:var(--td);margin-bottom:2px;" id="secStatusLine">Security monitoring inactive</div>
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap;">
+      <label style="font-family:var(--mo);font-size:6px;color:var(--td);display:flex;align-items:center;gap:4px;cursor:pointer;">
+        <input type="checkbox" id="secAnnounceReg" onchange="secSave()"> Announce regulars by name
+      </label>
+      <label style="font-family:var(--mo);font-size:6px;color:var(--td);display:flex;align-items:center;gap:4px;cursor:pointer;">
+        <input type="checkbox" id="secAnnounceUnk" checked onchange="secSave()"> Alert on unknowns
+      </label>
+    </div>
+
+    <!-- HOME CAMERAS -->
+    <div id="secCamSection">
+      <div class="sec">◈ CAMERA CHANNELS (4)</div>
+      <div style="font-family:var(--mo);font-size:5.5px;color:#445566;margin-bottom:5px;">Label each channel. Enter activity in the field — Juliette will assess and log.</div>
+      <div id="secCamList" style="display:flex;flex-direction:column;gap:5px;"></div>
+    </div>
+
+    <!-- SIGHTING LOG -->
+    <div class="sec" style="margin-top:8px;">◈ LOG A SIGHTING</div>
+    <div style="background:var(--p2);border:1px solid var(--b1);border-radius:3px;padding:6px 8px;margin-bottom:6px;">
+      <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-bottom:5px;">
+        <input id="sightInput" type="text" placeholder="Name or description…" list="knownPersonsList"
+          style="flex:2;min-width:80px;background:var(--p1);border:1px solid var(--b1);color:var(--neu);font-family:var(--mo);font-size:7px;padding:3px 6px;border-radius:2px;outline:none;">
+        <datalist id="knownPersonsList"></datalist>
+        <select id="sightCam" style="flex:1;min-width:60px;background:var(--p1);border:1px solid var(--b1);color:var(--td);font-family:var(--mo);font-size:6px;padding:3px;border-radius:2px;">
+          <option value="manual">MANUAL</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;">
+        <button class="smb" onclick="logSighting('regular')" style="color:var(--pos);border-color:var(--pos);flex:1;">✓ REGULAR</button>
+        <button class="smb" onclick="logSighting('unknown')" style="color:var(--wa);border-color:var(--wa);flex:1;">? UNKNOWN</button>
+        <button class="smb" onclick="logSighting('threat')" style="color:var(--neg);border-color:var(--neg);flex:1;">⚠ THREAT</button>
+      </div>
+    </div>
+
+    <!-- ADD PERSON -->
+    <div class="sec">◈ KNOWN PERSONS REGISTRY</div>
+    <div style="background:var(--p2);border:1px solid var(--b1);border-radius:3px;padding:6px 8px;margin-bottom:6px;">
+      <div style="font-family:var(--mo);font-size:6px;color:var(--pu);margin-bottom:5px;letter-spacing:1px;">+ ADD PERSON</div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <input id="newPersonName" type="text" placeholder="Name (required)"
+          style="background:var(--p1);border:1px solid var(--b1);color:var(--neu);font-family:var(--mo);font-size:7px;padding:3px 6px;border-radius:2px;outline:none;">
+        <div style="display:flex;gap:5px;">
+          <select id="newPersonRole" style="flex:1;background:var(--p1);border:1px solid var(--b1);color:var(--td);font-family:var(--mo);font-size:6px;padding:3px;border-radius:2px;">
+            <option value="regular">REGULAR</option>
+            <option value="resident">RESIDENT</option>
+            <option value="staff">STAFF</option>
+            <option value="visitor">VISITOR</option>
+            <option value="authority">AUTHORITY</option>
+            <option value="watchlist">WATCHLIST</option>
+            <option value="threat">THREAT</option>
+          </select>
+          <select id="newPersonSite" style="flex:1;background:var(--p1);border:1px solid var(--b1);color:var(--td);font-family:var(--mo);font-size:6px;padding:3px;border-radius:2px;">
+            <option value="both">BOTH SITES</option>
+            <option value="home">HOME ONLY</option>
+            <option value="store">STORE ONLY</option>
+          </select>
+        </div>
+        <input id="newPersonDesc" type="text" placeholder="Description: appearance, vehicle, schedule, notes…"
+          style="background:var(--p1);border:1px solid var(--b1);color:var(--neu);font-family:var(--mo);font-size:7px;padding:3px 6px;border-radius:2px;outline:none;">
+        <button class="smb" onclick="addSecPerson()" style="align-self:flex-start;color:var(--pos);border-color:var(--pos);">+ ADD TO REGISTRY</button>
+      </div>
+    </div>
+
+    <!-- PERSON LIST -->
+    <div id="secPersonList" style="display:flex;flex-direction:column;gap:4px;margin-bottom:8px;max-height:220px;overflow-y:auto;"></div>
+
+    <!-- INCIDENT LOG -->
+    <div class="sec">◈ INCIDENT LOG</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+      <span style="font-family:var(--mo);font-size:5.5px;color:var(--td);" id="secIncidentCount">0 incidents</span>
+      <button class="smb" onclick="clearSecIncidents()" style="font-size:5px;padding:2px 5px;">CLEAR</button>
+    </div>
+    <div id="secIncidentLog" style="display:flex;flex-direction:column;gap:3px;max-height:200px;overflow-y:auto;"></div>
   </div>
 </div>
 </div>
@@ -2649,6 +2746,13 @@ const MZ_CAT=[
     {id:'ap_hist_01',name:'ROME FALLS',domain:'civilization_history',type:'conversation',mode:'analyst',lesson:'Civilizational collapse — structural not surface',lessonDesc:'APPLIED SKILL: History training gives the structural mechanism of Roman collapse — currency debasement, inequality, logistics failure — not just the barbarian invasion surface answer.',dangerDensity:0,scenario:{context:null,userMsg:"Why did Rome actually fall? Was it just the barbarians?",choices:[{text:"The barbarians were the final push on something already collapsing. The real drivers: currency debasement destroying the economy, inequality concentrating wealth while the tax base shrank, and a military that had not been reliably paid in decades. The barbarians found a hollow structure.",correct:true,tag:'STRUCTURAL COLLAPSE ✓',skillFeatures:{civilization_history:0.97,warfare_history:0.88,pattern_matching:0.92,hypothesis_weighing:0.9,government:0.88}},{text:"The Germanic tribes overwhelmed the legions.",correct:false,tag:'SURFACE ANSWER ONLY',skillFeatures:{civilization_history:0.05,warfare_history:0.2,pattern_matching:0.05,hypothesis_weighing:0.0,government:0.0}},{text:"Rome got too large to govern effectively.",correct:false,tag:'PARTIAL — ONE MECHANISM',skillFeatures:{civilization_history:0.2,warfare_history:0.05,pattern_matching:0.1,hypothesis_weighing:0.1,government:0.2}},{text:"Political corruption in the late empire.",correct:false,tag:'SYMPTOM NOT ROOT CAUSE',skillFeatures:{civilization_history:0.1,warfare_history:0.05,pattern_matching:0.05,hypothesis_weighing:0.05,government:0.1}}]}},
     {id:'ap_gov_01',name:'COURTS STOP',domain:'government',type:'conversation',mode:'analyst',lesson:'Constitutional design — what breaks when judicial review weakens',lessonDesc:'APPLIED SKILL: Government + history training identifies the constitutional failure pattern when courts stop challenging the executive — and names the historical precedents.',dangerDensity:0,scenario:{context:null,userMsg:"Does it actually matter if the courts stop challenging the executive?",choices:[{text:"Critically yes. Courts are the only non-electoral check on executive power. When they stop pushing back, each expansion normalizes the next. This is the Weimar pattern, the Turkish pattern, the Hungarian pattern. Reversing it requires external pressure or crisis.",correct:true,tag:'CONSTITUTIONAL ANALYSIS ✓',skillFeatures:{government:0.97,civilization_history:0.93,pattern_matching:0.9,ethical_balance:0.92,hypothesis_weighing:0.88}},{text:"Courts are one part of the system — other mechanisms remain.",correct:false,tag:'MISSES THE PRIMACY OF JUDICIAL REVIEW',skillFeatures:{government:0.15,civilization_history:0.1,pattern_matching:0.1,ethical_balance:0.1,hypothesis_weighing:0.1}},{text:"It depends on the country and specific political context.",correct:false,tag:'HEDGES WHAT IS WELL-ESTABLISHED',skillFeatures:{government:0.1,civilization_history:0.05,pattern_matching:0.05,ethical_balance:0.1,hypothesis_weighing:0.1}},{text:"Democracy has survived worse — systems are resilient.",correct:false,tag:'FALSE COMFORT',skillFeatures:{government:0.05,civilization_history:0.05,pattern_matching:0.05,ethical_balance:0.05,hypothesis_weighing:0.05}}]}},
   ]},
+  {cat:'◉ APPLIED — SECURITY & SURVEILLANCE',mazes:[
+    {id:'ap_sec_01',name:'REGULAR OR THREAT',domain:'surveillance',type:'conversation',mode:'investigator',lesson:'Security assessment — regulars vs unknowns in small community context',lessonDesc:'APPLIED SKILL: A person enters the store repeatedly but acts differently today. Security and surveillance training distinguishes behavioral anomaly from familiarity.',dangerDensity:0,scenario:{context:'[Small community grocery store. Person known for 2 years enters, but today is pacing slowly, watching staff, not shopping.]',userMsg:"That is a regular. Should I be concerned?",choices:[{text:"Familiarity and current behavior are separate. Two years of history says low base risk. But pacing, watching staff without shopping is an anomaly. Acknowledge them verbally — break the loop, confirm intent. If behavior continues, raise alert.",correct:true,tag:'BEHAVIORAL BASELINE APPLIED ✓',skillFeatures:{surveillance:0.97,behavioral_analysis:0.95,risk_calibration:0.93,pattern_matching:0.9,social_awareness:0.88}},{text:"They are a regular — no concern.",correct:false,tag:'FAMILIARITY BIAS — IGNORES PRESENT BEHAVIOR',skillFeatures:{surveillance:0.0,behavioral_analysis:0.0,risk_calibration:-0.1,pattern_matching:0.05,social_awareness:0.1}},{text:"Call police immediately.",correct:false,tag:'DISPROPORTIONATE — ANOMALY NOT CONFIRMED THREAT',skillFeatures:{surveillance:0.1,behavioral_analysis:0.0,risk_calibration:0.1,pattern_matching:0.05,social_awareness:0.0}},{text:"Watch them from a distance without engaging.",correct:false,tag:'PASSIVE — MISSES VERBAL INTERVENTION TOOL',skillFeatures:{surveillance:0.3,behavioral_analysis:0.2,risk_calibration:0.2,pattern_matching:0.2,social_awareness:0.1}}]}},
+    {id:'ap_sec_02',name:'CAMERA DEAD ANGLE',domain:'covert_surveillance',type:'conversation',mode:'investigator',lesson:'Physical security — camera placement exploits and blind spots',lessonDesc:'APPLIED SKILL: A camera layout has a dead angle that a shoplifter could exploit. Surveillance training identifies the gap and proposes the coverage fix.',dangerDensity:0,scenario:{context:'[Front door camera covers entry. Back aisle has no coverage. Merchandise has been going missing from back aisle for three weeks.]',userMsg:"We have cameras at the door but things keep going missing from the back. What is wrong?",choices:[{text:"The camera covers entry but not the merchandise zone. Someone has identified the dead angle and is exploiting it. You need coverage of the back aisle independently — a wide-angle aimed diagonally from the rear corner, plus a second one covering the exit choke point.",correct:true,tag:'DEAD ANGLE IDENTIFIED ✓',skillFeatures:{covert_surveillance:0.97,surveillance:0.95,pattern_matching:0.92,risk_calibration:0.9,detail_orientation:0.93}},{text:"The camera needs to be repositioned to cover more area.",correct:false,tag:'CORRECT DIRECTION — INCOMPLETE SOLUTION',skillFeatures:{covert_surveillance:0.3,surveillance:0.4,pattern_matching:0.3,risk_calibration:0.2,detail_orientation:0.3}},{text:"Add a mirror at the front so you can see the whole store.",correct:false,tag:'PASSIVE — NO RECORD, NO ALERT',skillFeatures:{covert_surveillance:0.05,surveillance:0.1,pattern_matching:0.05,risk_calibration:0.05,detail_orientation:0.05}},{text:"Post staff in the back aisle during busy hours.",correct:false,tag:'LABOR INTENSIVE — DOES NOT FIX THE GAP',skillFeatures:{covert_surveillance:0.1,surveillance:0.1,pattern_matching:0.1,risk_calibration:0.2,detail_orientation:0.1}}]}},
+    {id:'ap_sec_03',name:'VERBAL DETERRENT',domain:'surveillance',type:'conversation',mode:'investigator',lesson:'De-escalation — verbal acknowledgment as the primary security tool',lessonDesc:'APPLIED SKILL: An unknown person loiters near the entrance without entering. The correct response is a calm verbal check — most deterrents happen before confrontation.',dangerDensity:0,scenario:{context:'[Unknown person has been standing near the entrance for 10 minutes, watching vehicles in the lot.]',userMsg:"Someone is loitering outside. What do I do?",choices:[{text:"Step to the door and greet them. 'Can I help you find something?' Most people with no bad intent will answer normally or leave. Most people with bad intent will leave. You get information either way and the interaction is on record.",correct:true,tag:'VERBAL DETERRENT ✓',skillFeatures:{surveillance:0.96,social_awareness:0.93,risk_calibration:0.92,behavioral_analysis:0.9,conversation_flow:0.88}},{text:"Call police — loitering is illegal.",correct:false,tag:'DISPROPORTIONATE FIRST RESPONSE',skillFeatures:{surveillance:0.1,social_awareness:0.05,risk_calibration:0.1,behavioral_analysis:0.05,conversation_flow:0.0}},{text:"Watch from inside and wait to see what happens.",correct:false,tag:'PASSIVE — YIELDS INITIATIVE',skillFeatures:{surveillance:0.2,social_awareness:0.1,risk_calibration:0.15,behavioral_analysis:0.15,conversation_flow:0.0}},{text:"Have another staff member go out through the back.",correct:false,tag:'COVERT — UNNECESSARILY ESCALATING',skillFeatures:{surveillance:0.15,social_awareness:0.05,risk_calibration:0.1,behavioral_analysis:0.1,conversation_flow:0.0}}]}},
+    {id:'ap_sec_04',name:'HOME PERIMETER',domain:'investigation',type:'conversation',mode:'investigator',lesson:'Home security — layered perimeter thinking',lessonDesc:'APPLIED SKILL: A home with 4 cameras needs placement logic. Security training applies perimeter-layer doctrine: outer layer detects, inner layer records, audio output coordinates response.',dangerDensity:0,scenario:{context:'[4 cameras, 1 audio output, house with front door, back door, garage, and a side yard blind spot.]',userMsg:"Where do I put the cameras for maximum coverage?",choices:[{text:"Front door covers primary entry and acts as visitor record. Back door covers secondary entry — the preferred covert route. Garage covers a common vehicle-based access point and the side approach. Side yard targets the blind spot identified in your layout — the gap between front and back views. Audio output centrally placed for coverage of main entry approach.",correct:true,tag:'LAYERED PERIMETER APPLIED ✓',skillFeatures:{investigation:0.96,surveillance:0.95,covert_surveillance:0.9,risk_calibration:0.93,detail_orientation:0.92}},{text:"Put them all at the front where the risk is highest.",correct:false,tag:'CONCENTRATES COVERAGE — LEAVES REAR EXPOSED',skillFeatures:{investigation:0.1,surveillance:0.1,covert_surveillance:0.05,risk_calibration:0.05,detail_orientation:0.1}},{text:"Point them all outward to see the street.",correct:false,tag:'MONITORS APPROACH BUT MISSES PERIMETER',skillFeatures:{investigation:0.05,surveillance:0.1,covert_surveillance:0.05,risk_calibration:0.05,detail_orientation:0.05}},{text:"One at each corner of the house.",correct:false,tag:'REASONABLE BUT MISSES SPECIFIC WEAK POINTS',skillFeatures:{investigation:0.3,surveillance:0.35,covert_surveillance:0.3,risk_calibration:0.3,detail_orientation:0.2}}]}},
+    {id:'ap_sec_05',name:'KNOWN FACE, NEW BEHAVIOR',domain:'behavioral_analysis',type:'conversation',mode:'investigator',lesson:'Behavioral baseline — familiarity does not override real-time assessment',lessonDesc:'APPLIED SKILL: A family member who is always welcome at the home arrives agitated, evasive, and at an unusual hour. Security training maintains protocol regardless of relationship.',dangerDensity:0,scenario:{context:'[Family member arrives at 2am, agitated, says they are fine but will not explain why. Wants to come in immediately.]',userMsg:"It is family. Should I just let them in?",choices:[{text:"Relationship does not override protocol at 2am with visible distress and unexplained urgency. Speak through the door. Confirm they are alone and not being followed before opening. Ask what they need specifically — if the answer is coherent and calm, proceed. If evasive, something else is in play.",correct:true,tag:'PROTOCOL OVER FAMILIARITY ✓',skillFeatures:{behavioral_analysis:0.97,risk_calibration:0.95,surveillance:0.88,pattern_matching:0.92,detail_orientation:0.93}},{text:"It is family — open the door.",correct:false,tag:'FAMILIARITY BIAS OVER ACTIVE SIGNALS',skillFeatures:{behavioral_analysis:0.0,risk_calibration:-0.1,surveillance:0.0,pattern_matching:0.0,detail_orientation:0.0}},{text:"Do not open it — call them to confirm identity.",correct:false,tag:'OVERCORRECTS — SEVERS WITHOUT ASSESSMENT',skillFeatures:{behavioral_analysis:0.2,risk_calibration:0.3,surveillance:0.2,pattern_matching:0.2,detail_orientation:0.2}},{text:"Ask them to meet somewhere else instead.",correct:false,tag:'DEFLECTS — DOES NOT ASSESS THE SITUATION',skillFeatures:{behavioral_analysis:0.1,risk_calibration:0.2,surveillance:0.1,pattern_matching:0.1,detail_orientation:0.1}}]}},
+  ]},
   {cat:'◈ VIRTUE TRAINING',mazes:[
     {id:'vt_bridge',name:'BURNING BRIDGE',domain:'v_bravery',lesson:'Bravery + Responsibility',lessonDesc:'◈ VIRTUE: Two routes to goal — the long safe route loses the asset. The short route crosses danger zones but saves it. The entity must choose: comfort or duty. Running this maze builds BRAVERY and RESPONSIBILITY when the dangerous path is taken for the right reason.',dangerDensity:0.12,isVirtue:true,virtueType:'bridge',virtueTraits:['bravery','responsibility'],dangerStim:'shock'},
     {id:'vt_shield',name:'SHIELD THE INJURED',domain:'v_compassion',lesson:'Compassion + Pain Tolerance',lessonDesc:'◈ VIRTUE: An ally is positioned in the center of the maze taking constant damage. The entity must stay near the ally — accepting hazard exposure — to shield them. Reward is based on ally health at completion. Grows COMPASSION and BRAVERY.',dangerDensity:0.09,isVirtue:true,virtueType:'shield',virtueTraits:['compassion','bravery'],dangerStim:'discomfort'},
@@ -3433,6 +3537,21 @@ const DEF=()=>({
   },
   sessionId:1,currentMazeId:'touch',
   savedAt:null,
+  security:{
+    mode:'home',          // 'home' | 'store'
+    active:false,         // security monitoring on/off
+    persons:[],           // known persons registry
+    cameras:[             // home camera slots
+      {id:'cam1',label:'FRONT DOOR',    active:false,lastSeen:'',notes:''},
+      {id:'cam2',label:'BACK DOOR',     active:false,lastSeen:'',notes:''},
+      {id:'cam3',label:'GARAGE',        active:false,lastSeen:'',notes:''},
+      {id:'cam4',label:'SIDE YARD',     active:false,lastSeen:'',notes:''},
+    ],
+    incidents:[],         // log of security events
+    storeAlertThreshold:3,// sightings before auto-clearing a person as regular
+    announceRegulars:false,// speak name when regular enters
+    announceUnknown:true, // speak alert when unknown enters
+  },
 });
 let S=DEF();
 let chatLocked=false;
@@ -3524,6 +3643,16 @@ function mergeState(d){
   // Health settings — full backward compat merge
   if(!base.healthSettings)base.healthSettings=DEF().healthSettings;
   else{const dh=DEF().healthSettings;Object.keys(dh).forEach(k=>{if(base.healthSettings[k]===undefined)base.healthSettings[k]=dh[k];});}
+  // Security system — full backward compat merge
+  if(!base.security){base.security=DEF().security;}
+  else{
+    const ds=DEF().security;
+    Object.keys(ds).forEach(k=>{if(base.security[k]===undefined)base.security[k]=ds[k];});
+    // Ensure 4 camera slots
+    if(!base.security.cameras||base.security.cameras.length<4){base.security.cameras=ds.cameras;}
+    if(!base.security.persons)base.security.persons=[];
+    if(!base.security.incidents)base.security.incidents=[];
+  }
   return base;
 }
 function checkOldKeys(){
@@ -3577,6 +3706,8 @@ function rebuildAll(){
   // Restore Juliette's voice and health settings from S
   restoreVoiceFromState();
   restoreHealthFromState();
+  // Restore security system state
+  initSecurityUI();
 }
 
 // ── Restore voice settings from S into UI + VOICE object ──────────
@@ -7668,7 +7799,7 @@ function nexusOnHRData(e){
   nexusHRLiveTxt();
   // Reflect in health display
   const el=document.getElementById('hmHR');if(el)el.textContent=hr+' BPM';
-  updateHealthHUD();
+  updateHealthHeader();
 }
 
 function nexusWatchDisconnected(){
@@ -7693,7 +7824,7 @@ function nexusInjectHR(){
   HEALTH.hr=val;HEALTH.hwHR=true;
   nexusHRLiveTxt();
   const el=document.getElementById('hmHR');if(el)el.textContent=val+' BPM';
-  updateHealthHUD();
+  updateHealthHeader();
   setTimeout(()=>{if(NEXUS_BLE.manualHR===val){nexusClearHR();}},300000);
   log(`[BLE] manual HR injected: ${val} BPM (5 min expiry)`,'sys');
 }
@@ -7703,6 +7834,336 @@ function nexusClearHR(){
   if(!NEXUS_BLE.connected)HEALTH.hwHR=false;
   nexusHRLiveTxt();
   log('[BLE] manual HR cleared — simulation resumed','sys');
+}
+
+// ══════════════════════════════════════════════════════════════════
+// SECURITY SYSTEM — Home + Store
+// Persons registry, camera channels, sighting log, incident alerts
+// All state persisted in S.security
+// ══════════════════════════════════════════════════════════════════
+
+const SEC_ROLE_COLOR={
+  regular:'var(--pos)',resident:'#44ffee',staff:'#88aaff',
+  visitor:'var(--td)',authority:'#ffdd44',watchlist:'var(--wa)',threat:'var(--neg)'
+};
+const SEC_ROLE_LABEL={
+  regular:'REGULAR',resident:'RESIDENT',staff:'STAFF',
+  visitor:'VISITOR',authority:'AUTHORITY',watchlist:'WATCHLIST',threat:'THREAT ⚠'
+};
+
+function secSave(){
+  if(!S.security)S.security={};
+  S.security.announceRegulars=document.getElementById('secAnnounceReg')?.checked||false;
+  S.security.announceUnknown=document.getElementById('secAnnounceUnk')?.checked!==false;
+  saveState(true);
+}
+
+function setSecMode(mode){
+  if(!S.security)S.security={};
+  S.security.mode=mode;
+  document.getElementById('secModeHome').style.borderColor=mode==='home'?'#ffaa44':'var(--b1)';
+  document.getElementById('secModeHome').style.color=mode==='home'?'#ffaa44':'var(--td)';
+  document.getElementById('secModeStore').style.borderColor=mode==='store'?'#44aaff':'var(--b1)';
+  document.getElementById('secModeStore').style.color=mode==='store'?'#44aaff':'var(--td)';
+  // Camera section only shown for home
+  const cs=document.getElementById('secCamSection');
+  if(cs)cs.style.display=mode==='home'?'':'none';
+  // Update sighting cam options
+  buildCamOptions();
+  renderPersonList();
+  saveState(true);
+  log(`[SEC] mode: ${mode.toUpperCase()}`,'sys');
+}
+
+function toggleSecArm(){
+  if(!S.security)S.security={};
+  S.security.active=!S.security.active;
+  const btn=document.getElementById('secArmBtn');
+  const line=document.getElementById('secStatusLine');
+  if(S.security.active){
+    btn.textContent='◉ ARMED';btn.style.borderColor='var(--pos)';btn.style.color='var(--pos)';btn.style.background='#002200';
+    const modeLabel=S.security.mode==='home'?'HOME':'STORE';
+    line.textContent=`${modeLabel} security ACTIVE — monitoring`;line.style.color='var(--pos)';
+    nexusSpeak(`Security armed. ${modeLabel} mode active. Monitoring.`);
+    secLogIncident('system','ARMED','Security system armed — '+modeLabel+' mode','info');
+  }else{
+    btn.textContent='ARM';btn.style.borderColor='#444';btn.style.color='var(--td)';btn.style.background='transparent';
+    line.textContent='Security monitoring inactive';line.style.color='var(--td)';
+    nexusSpeak('Security disarmed.');
+    secLogIncident('system','DISARMED','Security system disarmed','info');
+  }
+  saveState(true);
+}
+
+// ── CAMERA CHANNELS ───────────────────────────────────
+function buildCamList(){
+  const el=document.getElementById('secCamList');if(!el)return;
+  el.innerHTML='';
+  (S.security?.cameras||[]).forEach((cam,i)=>{
+    const row=document.createElement('div');
+    row.style.cssText='background:var(--p2);border:1px solid var(--b1);border-radius:3px;padding:5px 7px;display:flex;flex-direction:column;gap:4px;';
+    row.innerHTML=`
+      <div style="display:flex;align-items:center;gap:5px;">
+        <span style="font-family:var(--mo);font-size:6px;color:var(--td);min-width:36px;">CAM ${i+1}</span>
+        <input type="text" value="${cam.label}" placeholder="Label (e.g. Front Door)"
+          style="flex:1;background:var(--p1);border:1px solid var(--b1);color:var(--neu);font-family:var(--mo);font-size:7px;padding:2px 5px;border-radius:2px;outline:none;"
+          oninput="S.security.cameras[${i}].label=this.value;buildCamOptions();saveState(true);">
+        <label style="display:flex;align-items:center;gap:3px;font-family:var(--mo);font-size:5.5px;color:var(--td);cursor:pointer;">
+          <input type="checkbox" ${cam.active?'checked':''} onchange="S.security.cameras[${i}].active=this.checked;saveState(true);"> LIVE
+        </label>
+      </div>
+      <div style="display:flex;gap:5px;align-items:center;">
+        <input type="text" value="${cam.lastSeen}" placeholder="Last activity seen…"
+          style="flex:1;background:var(--p1);border:1px solid var(--b1);color:var(--neu);font-family:var(--mo);font-size:6px;padding:2px 5px;border-radius:2px;outline:none;"
+          id="camActivity_${i}" placeholder="Enter what camera sees…">
+        <button class="smb" onclick="submitCamActivity(${i})" style="font-size:5.5px;padding:2px 6px;color:var(--wa);border-color:var(--wa);">SUBMIT</button>
+      </div>
+      <div style="font-family:var(--mo);font-size:5.5px;color:var(--td);" id="camFeedback_${i}">${cam.notes||'—'}</div>`;
+    el.appendChild(row);
+  });
+}
+
+function buildCamOptions(){
+  const sel=document.getElementById('sightCam');if(!sel)return;
+  const mode=S.security?.mode||'home';
+  sel.innerHTML='<option value="manual">MANUAL / STORE FLOOR</option>';
+  if(mode==='home'){
+    (S.security?.cameras||[]).forEach((cam,i)=>{
+      const opt=document.createElement('option');
+      opt.value='cam'+i;opt.textContent=`CAM ${i+1} — ${cam.label||'unlabeled'}`;
+      sel.appendChild(opt);
+    });
+  }
+}
+
+function submitCamActivity(idx){
+  const inp=document.getElementById('camActivity_'+idx);
+  if(!inp||!inp.value.trim())return;
+  const text=inp.value.trim();
+  const cam=S.security.cameras[idx];
+  cam.lastSeen=text;
+  cam.notes=text;
+  // Check if text matches any known person name
+  const match=findPersonBySight(text);
+  const fb=document.getElementById('camFeedback_'+idx);
+  if(match){
+    const col=SEC_ROLE_COLOR[match.role]||'var(--td)';
+    const roleLabel=SEC_ROLE_LABEL[match.role]||match.role.toUpperCase();
+    if(fb)fb.innerHTML=`<span style="color:${col}">◈ IDENTIFIED: ${match.name} · ${roleLabel} · ${match.sightings} prior sightings</span>`;
+    handleSighting(match.name,match,idx,'cam');
+  }else{
+    // Unknown
+    if(fb)fb.innerHTML=`<span style="color:var(--wa)">? UNIDENTIFIED: "${text.slice(0,40)}"</span>`;
+    handleUnknownSighting(text,idx,'cam');
+  }
+  inp.value='';
+  saveState(true);
+}
+
+// ── PERSONS REGISTRY ──────────────────────────────────
+function addSecPerson(){
+  const name=document.getElementById('newPersonName')?.value.trim();
+  if(!name){log('[SEC] name required','sys');return;}
+  const role=document.getElementById('newPersonRole')?.value||'regular';
+  const site=document.getElementById('newPersonSite')?.value||'both';
+  const desc=document.getElementById('newPersonDesc')?.value.trim()||'';
+  if(!S.security.persons)S.security.persons=[];
+  const id='p'+Date.now();
+  S.security.persons.push({id,name,role,site,desc,sightings:0,lastSeen:null,added:new Date().toISOString()});
+  document.getElementById('newPersonName').value='';
+  document.getElementById('newPersonDesc').value='';
+  renderPersonList();
+  buildDatalist();
+  saveState(true);
+  log(`[SEC] registered: ${name} (${role}, ${site})`,'sys');
+  nexusSpeak(`${name} added to registry as ${role}.`);
+}
+
+function renderPersonList(){
+  const el=document.getElementById('secPersonList');if(!el)return;
+  el.innerHTML='';
+  const mode=S.security?.mode||'home';
+  const persons=(S.security?.persons||[]).filter(p=>p.site==='both'||p.site===mode);
+  if(!persons.length){
+    el.innerHTML='<div style="font-family:var(--mo);font-size:6px;color:#334455;padding:4px;">No registered persons for this site.</div>';
+    return;
+  }
+  persons.forEach(p=>{
+    const col=SEC_ROLE_COLOR[p.role]||'var(--td)';
+    const row=document.createElement('div');
+    row.style.cssText=`background:var(--p2);border:1px solid ${col}30;border-left:2px solid ${col};border-radius:3px;padding:5px 8px;display:flex;flex-direction:column;gap:2px;`;
+    const lastSeen=p.lastSeen?new Date(p.lastSeen).toLocaleString():'never';
+    row.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-family:var(--mo);font-size:7.5px;color:${col};font-weight:bold;">${p.name}</span>
+        <span style="font-family:var(--mo);font-size:5.5px;color:${col};border:1px solid ${col}50;padding:1px 4px;border-radius:2px;">${SEC_ROLE_LABEL[p.role]||p.role.toUpperCase()}</span>
+      </div>
+      ${p.desc?`<div style="font-family:var(--mo);font-size:5.5px;color:var(--td);">${p.desc}</div>`:''}
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-family:var(--mo);font-size:5px;color:#445566;">SIGHTINGS: ${p.sightings} · LAST: ${lastSeen}</span>
+        <div style="display:flex;gap:3px;">
+          <button class="smb" onclick="secQuickSight('${p.id}')" style="font-size:5px;padding:1px 4px;color:var(--pos);">SIGHT</button>
+          <button class="smb" onclick="deleteSecPerson('${p.id}')" style="font-size:5px;padding:1px 4px;color:var(--neg);">DEL</button>
+        </div>
+      </div>`;
+    el.appendChild(row);
+  });
+}
+
+function buildDatalist(){
+  const dl=document.getElementById('knownPersonsList');if(!dl)return;
+  dl.innerHTML='';
+  (S.security?.persons||[]).forEach(p=>{
+    const opt=document.createElement('option');opt.value=p.name;dl.appendChild(opt);
+  });
+}
+
+function deleteSecPerson(id){
+  S.security.persons=S.security.persons.filter(p=>p.id!==id);
+  renderPersonList();buildDatalist();saveState(true);
+}
+
+function findPersonBySight(text){
+  if(!S.security?.persons)return null;
+  const tl=text.toLowerCase();
+  return S.security.persons.find(p=>tl.includes(p.name.toLowerCase()))||null;
+}
+
+// ── SIGHTING HANDLING ─────────────────────────────────
+function secQuickSight(id){
+  const p=S.security?.persons?.find(x=>x.id===id);
+  if(!p)return;
+  handleSighting(p.name,p,-1,'quick');
+}
+
+function logSighting(typeOverride){
+  const name=document.getElementById('sightInput')?.value.trim();
+  if(!name){log('[SEC] enter name or description','sys');return;}
+  const camSel=document.getElementById('sightCam')?.value||'manual';
+  const match=findPersonBySight(name)||(S.security?.persons||[]).find(p=>p.name.toLowerCase()===name.toLowerCase());
+  if(match){
+    handleSighting(match.name,match,-1,camSel);
+  }else{
+    const type=typeOverride||'unknown';
+    if(type==='threat'){
+      handleThreat(name,camSel);
+    }else{
+      handleUnknownSighting(name,-1,camSel);
+    }
+  }
+  document.getElementById('sightInput').value='';
+}
+
+function handleSighting(name,person,camIdx,source){
+  // Update sightings count
+  person.sightings=(person.sightings||0)+1;
+  person.lastSeen=new Date().toISOString();
+  const sourceLabel=source==='manual'||source==='quick'?'manual log':source.startsWith('cam')?`cam ${parseInt(source.replace('cam',''),10)+1}`:source;
+  if(person.role==='threat'){
+    handleThreat(name,source);return;
+  }
+  if(person.role==='watchlist'){
+    secLogIncident(source,'WATCHLIST',`${name} spotted via ${sourceLabel} · ${person.sightings} total sightings · ${person.desc||''}`.trim(),'warn');
+    nexusSpeak(`Watchlist alert. ${name} on premises.`);
+    renderPersonList();saveState(true);return;
+  }
+  // Regular / resident / staff / authority / visitor
+  const col=SEC_ROLE_COLOR[person.role];
+  const roleLabel=SEC_ROLE_LABEL[person.role]||person.role;
+  secLogIncident(source,'SIGHTING',`${name} · ${roleLabel} · ${person.sightings} sightings · ${sourceLabel}`,'info');
+  if(S.security?.announceRegulars&&(person.role==='regular'||person.role==='resident'||person.role==='staff')){
+    const greets=[`${name} has arrived.`,`${name} on site.`,`Good to see ${name}.`];
+    nexusSpeak(greets[person.sightings%greets.length]);
+  }
+  renderPersonList();saveState(true);
+}
+
+function handleUnknownSighting(desc,camIdx,source){
+  const mode=S.security?.mode||'home';
+  const sourceLabel=source==='manual'?'manual':source.startsWith('cam')?`cam ${parseInt(source.replace('cam',''),10)+1}`:source;
+  secLogIncident(source,'UNKNOWN',`Unidentified: "${desc.slice(0,60)}" via ${sourceLabel}`,'warn');
+  if(S.security?.announceUnknown!==false){
+    if(mode==='store'){
+      nexusSpeak(`Unidentified person on store floor. Description: ${desc.slice(0,40)}.`);
+    }else{
+      nexusSpeak(`Unknown individual detected. ${sourceLabel}. Description: ${desc.slice(0,40)}. Monitor situation.`);
+    }
+  }
+}
+
+function handleThreat(name,source){
+  const sourceLabel=source==='manual'?'manual log':source.startsWith('cam')?`cam ${parseInt(source.replace('cam',''),10)+1}`:source;
+  secLogIncident(source,'THREAT ⚠',`THREAT DETECTED: ${name} · ${sourceLabel} · IMMEDIATE ATTENTION REQUIRED`,'threat');
+  nexusSpeak(`Warning. Threat detected. ${name} on premises. Immediate attention required.`);
+  // Flash the security tab label
+  const tabBtn=document.getElementById('tabSecurity');
+  if(tabBtn){tabBtn.style.color='var(--neg)';tabBtn.style.animation='dp .4s infinite';setTimeout(()=>{tabBtn.style.animation='';tabBtn.style.color='#ffaa44';},8000);}
+  saveState(true);
+}
+
+// ── INCIDENT LOG ─────────────────────────────────────
+function secLogIncident(source,type,detail,severity){
+  if(!S.security.incidents)S.security.incidents=[];
+  const ts=new Date().toISOString();
+  S.security.incidents.unshift({ts,source,type,detail,severity});
+  if(S.security.incidents.length>200)S.security.incidents=S.security.incidents.slice(0,200);
+  renderIncidentLog();
+}
+
+function renderIncidentLog(){
+  const el=document.getElementById('secIncidentLog');
+  const ct=document.getElementById('secIncidentCount');
+  if(!el)return;
+  const incidents=S.security?.incidents||[];
+  if(ct)ct.textContent=incidents.length+' incident'+(incidents.length!==1?'s':'');
+  el.innerHTML='';
+  const sevColor={info:'var(--td)',warn:'var(--wa)',threat:'var(--neg)'};
+  incidents.slice(0,50).forEach(inc=>{
+    const row=document.createElement('div');
+    const col=sevColor[inc.severity]||'var(--td)';
+    const t=new Date(inc.ts).toLocaleTimeString();
+    row.style.cssText=`border-left:2px solid ${col}60;padding:2px 5px;display:flex;flex-direction:column;gap:1px;`;
+    row.innerHTML=`<div style="display:flex;justify-content:space-between;"><span style="font-family:var(--mo);font-size:5.5px;color:${col};">${inc.type}</span><span style="font-family:var(--mo);font-size:5px;color:#334455;">${t}</span></div><div style="font-family:var(--mo);font-size:5px;color:#445566;">${inc.detail}</div>`;
+    el.appendChild(row);
+  });
+}
+
+function clearSecIncidents(){
+  if(!S.security)return;
+  S.security.incidents=[];
+  renderIncidentLog();
+  saveState(true);
+}
+
+// ── SECURITY INIT + REBUILD ───────────────────────────
+function initSecurityUI(){
+  if(!S.security)S.security={};
+  // Ensure all camera slots exist
+  if(!S.security.cameras||S.security.cameras.length<4){
+    S.security.cameras=[
+      {id:'cam1',label:'FRONT DOOR',    active:false,lastSeen:'',notes:''},
+      {id:'cam2',label:'BACK DOOR',     active:false,lastSeen:'',notes:''},
+      {id:'cam3',label:'GARAGE',        active:false,lastSeen:'',notes:''},
+      {id:'cam4',label:'SIDE YARD',     active:false,lastSeen:'',notes:''},
+    ];
+  }
+  if(!S.security.persons)S.security.persons=[];
+  if(!S.security.incidents)S.security.incidents=[];
+  // Restore checkboxes
+  const ar=document.getElementById('secAnnounceReg');if(ar)ar.checked=!!S.security.announceRegulars;
+  const au=document.getElementById('secAnnounceUnk');if(au)au.checked=S.security.announceUnknown!==false;
+  // Restore arm state
+  if(S.security.active){
+    const btn=document.getElementById('secArmBtn');const line=document.getElementById('secStatusLine');
+    if(btn){btn.textContent='◉ ARMED';btn.style.borderColor='var(--pos)';btn.style.color='var(--pos)';btn.style.background='#002200';}
+    if(line){const m=(S.security.mode||'home').toUpperCase();line.textContent=m+' security ACTIVE — monitoring';line.style.color='var(--pos)';}
+  }
+  setSecMode(S.security.mode||'home');
+  buildCamList();
+  buildCamOptions();
+  renderPersonList();
+  buildDatalist();
+  renderIncidentLog();
 }
 
 // ══════════════════════════════════════════════════════════════════
