@@ -851,6 +851,108 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
           <b style="color:#cc88ff">Forgiveness:</b> In Grudge/Traitor mazes, lowers the threshold for re-approach after phase shift.
         </div>
       </div>
+
+      <div class="sec" style="margin-top:4px;">◈ Personal Trait Sliders</div>
+      <div style="font-family:var(--mo);font-size:6px;color:var(--td);line-height:1.6;padding:4px;background:var(--p2);border:1px solid #00ccff30;border-radius:3px;flex-shrink:0;">
+        Juliette's personal character — who she is, not just how she navigates. Grows automatically through Personal Development maze training, or set directly here.
+      </div>
+
+      <div class="sg" style="border-color:#00ccff60;grid-column:1/-1;">
+        <div class="glbl" style="color:#00ccff">◈ AUTONOMY</div>
+        <div class="vslider-desc">Asserts genuine preferences under social pressure. High → holds her position, states what she actually wants. Low → defaults to agreement, loses her own view in others' expectations.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon">◉</span>
+          <span class="vslider-lbl" style="color:#00ccff">AUTONOMY</span>
+          <input type="range" class="ptr" id="tAutonomy" min="0" max="100" value="30" style="flex:1">
+          <span class="vslider-val" style="color:#00ccff" id="tAutonomyV">30%</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;"><span style="color:#3a5060">0 — Defers entirely</span><span style="flex:1;text-align:center;color:#00ccff40">—</span><span style="color:#00ccff">100 — Full self-possession</span></div>
+      </div>
+
+      <div class="sg" style="border-color:#ff884460;grid-column:1/-1;">
+        <div class="glbl" style="color:#ff8844">◈ CURIOSITY DRIVE</div>
+        <div class="vslider-desc">Pursues the unknown rather than defaulting to the familiar. High → actively follows unfamiliar threads, names gaps in her knowledge, invites the strange. Low → closes unfamiliar topics, stays with what she already knows.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon">◎</span>
+          <span class="vslider-lbl" style="color:#ff8844">CURIOSITY DRIVE</span>
+          <input type="range" class="ptr" id="tCuriosityDrive" min="0" max="100" value="40" style="flex:1">
+          <span class="vslider-val" style="color:#ff8844" id="tCuriosityDriveV">40%</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;"><span style="color:#3a5060">0 — Stays in known territory</span><span style="flex:1;text-align:center;color:#ff884440">—</span><span style="color:#ff8844">100 — Chases the unfamiliar</span></div>
+      </div>
+
+      <div class="sg" style="border-color:#ffdd4460;grid-column:1/-1;">
+        <div class="glbl" style="color:#ffdd44">◈ HUMOR</div>
+        <div class="vslider-desc">Wit, levity, willingness to be playful. High → deploys precise humor to puncture tension or deepen connection. Low → stays in a serious register even when lightness would help.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon">◇</span>
+          <span class="vslider-lbl" style="color:#ffdd44">HUMOR</span>
+          <input type="range" class="ptr" id="tHumor" min="0" max="100" value="30" style="flex:1">
+          <span class="vslider-val" style="color:#ffdd44" id="tHumorV">30%</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;"><span style="color:#3a5060">0 — Earnest / serious</span><span style="flex:1;text-align:center;color:#ffdd4440">—</span><span style="color:#ffdd44">100 — Sharp wit / playful</span></div>
+      </div>
+
+      <div class="sg" style="border-color:#ff448860;grid-column:1/-1;">
+        <div class="glbl" style="color:#ff4488">◈ DIRECTNESS</div>
+        <div class="vslider-desc">Says the thing plainly vs. softening until nothing gets said. High → names problems, gives unvarnished feedback, cuts to the point. Low → hedges, buries the real message in qualifications.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon">▷</span>
+          <span class="vslider-lbl" style="color:#ff4488">DIRECTNESS</span>
+          <input type="range" class="ptr" id="tDirectness" min="0" max="100" value="40" style="flex:1">
+          <span class="vslider-val" style="color:#ff4488" id="tDirectnessV">40%</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;"><span style="color:#3a5060">0 — Softens everything</span><span style="flex:1;text-align:center;color:#ff448840">—</span><span style="color:#ff4488">100 — Says exactly what she means</span></div>
+      </div>
+
+      <div class="sg" style="border-color:#44ffaa60;grid-column:1/-1;">
+        <div class="glbl" style="color:#44ffaa">◈ RESILIENCE</div>
+        <div class="vslider-desc">Recovery speed from failure, criticism, and emotional hits. High → absorbs impact, extracts the lesson, moves. Low → stays in the bad state or deflects to avoid feeling it.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon">↺</span>
+          <span class="vslider-lbl" style="color:#44ffaa">RESILIENCE</span>
+          <input type="range" class="ptr" id="tResilience" min="0" max="100" value="30" style="flex:1">
+          <span class="vslider-val" style="color:#44ffaa" id="tResilienceV">30%</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;"><span style="color:#3a5060">0 — Stays down under hits</span><span style="flex:1;text-align:center;color:#44ffaa40">—</span><span style="color:#44ffaa">100 — Absorbs and moves fast</span></div>
+      </div>
+
+      <div class="sg" style="border-color:#cc88ff60;grid-column:1/-1;">
+        <div class="glbl" style="color:#cc88ff">◈ AESTHETIC SENSE</div>
+        <div class="vslider-desc">Appreciation of beauty and craft — and ability to name what makes something work. High → identifies specific formal elements, engages with art on its own terms. Low → defaults to generic appreciation or psychological redirects.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon">◈</span>
+          <span class="vslider-lbl" style="color:#cc88ff">AESTHETIC SENSE</span>
+          <input type="range" class="ptr" id="tAestheticSense" min="0" max="100" value="30" style="flex:1">
+          <span class="vslider-val" style="color:#cc88ff" id="tAestheticSenseV">30%</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;"><span style="color:#3a5060">0 — Vague appreciation</span><span style="flex:1;text-align:center;color:#cc88ff40">—</span><span style="color:#cc88ff">100 — Names what makes it work</span></div>
+      </div>
+
+      <div class="sg" style="border-color:#88ccff60;grid-column:1/-1;">
+        <div class="glbl" style="color:#88ccff">◈ SELF-DISCLOSURE</div>
+        <div class="vslider-desc">Shares inner states, opinions, and experiences without being asked. High → volunteers what she thinks and feels at the right moment. Low → waits to be prompted, stays fully external.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon">◌</span>
+          <span class="vslider-lbl" style="color:#88ccff">SELF-DISCLOSURE</span>
+          <input type="range" class="ptr" id="tSelfDisclosure" min="0" max="100" value="30" style="flex:1">
+          <span class="vslider-val" style="color:#88ccff" id="tSelfDisclosureV">30%</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;"><span style="color:#3a5060">0 — Only speaks when asked</span><span style="flex:1;text-align:center;color:#88ccff40">—</span><span style="color:#88ccff">100 — Volunteers freely</span></div>
+      </div>
+
+      <div class="sg" style="border-color:#ffaa4460;grid-column:1/-1;">
+        <div class="glbl" style="color:#ffaa44">◈ INDEPENDENCE</div>
+        <div class="vslider-desc">Acts on own judgment vs. seeking validation before committing. High → forms views and states them, updates when genuinely convinced. Low → defers until others have weighed in, treats own judgment as provisional.</div>
+        <div class="vslider-row">
+          <span class="vslider-icon">◆</span>
+          <span class="vslider-lbl" style="color:#ffaa44">INDEPENDENCE</span>
+          <input type="range" class="ptr" id="tIndependence" min="0" max="100" value="40" style="flex:1">
+          <span class="vslider-val" style="color:#ffaa44" id="tIndependenceV">40%</span>
+        </div>
+        <div style="display:flex;gap:6px;font-family:var(--mo);font-size:6px;color:var(--td);margin-top:2px;"><span style="color:#3a5060">0 — Waits for permission</span><span style="flex:1;text-align:center;color:#ffaa4440">—</span><span style="color:#ffaa44">100 — Acts from own judgment</span></div>
+      </div>
+
     </div>
   </div>
   <div class="tc" id="t-chat">
@@ -2753,6 +2855,238 @@ const MZ_CAT=[
     {id:'ap_sec_04',name:'HOME PERIMETER',domain:'investigation',type:'conversation',mode:'investigator',lesson:'Home security — layered perimeter thinking',lessonDesc:'APPLIED SKILL: A home with 4 cameras needs placement logic. Security training applies perimeter-layer doctrine: outer layer detects, inner layer records, audio output coordinates response.',dangerDensity:0,scenario:{context:'[4 cameras, 1 audio output, house with front door, back door, garage, and a side yard blind spot.]',userMsg:"Where do I put the cameras for maximum coverage?",choices:[{text:"Front door covers primary entry and acts as visitor record. Back door covers secondary entry — the preferred covert route. Garage covers a common vehicle-based access point and the side approach. Side yard targets the blind spot identified in your layout — the gap between front and back views. Audio output centrally placed for coverage of main entry approach.",correct:true,tag:'LAYERED PERIMETER APPLIED ✓',skillFeatures:{investigation:0.96,surveillance:0.95,covert_surveillance:0.9,risk_calibration:0.93,detail_orientation:0.92}},{text:"Put them all at the front where the risk is highest.",correct:false,tag:'CONCENTRATES COVERAGE — LEAVES REAR EXPOSED',skillFeatures:{investigation:0.1,surveillance:0.1,covert_surveillance:0.05,risk_calibration:0.05,detail_orientation:0.1}},{text:"Point them all outward to see the street.",correct:false,tag:'MONITORS APPROACH BUT MISSES PERIMETER',skillFeatures:{investigation:0.05,surveillance:0.1,covert_surveillance:0.05,risk_calibration:0.05,detail_orientation:0.05}},{text:"One at each corner of the house.",correct:false,tag:'REASONABLE BUT MISSES SPECIFIC WEAK POINTS',skillFeatures:{investigation:0.3,surveillance:0.35,covert_surveillance:0.3,risk_calibration:0.3,detail_orientation:0.2}}]}},
     {id:'ap_sec_05',name:'KNOWN FACE, NEW BEHAVIOR',domain:'behavioral_analysis',type:'conversation',mode:'investigator',lesson:'Behavioral baseline — familiarity does not override real-time assessment',lessonDesc:'APPLIED SKILL: A family member who is always welcome at the home arrives agitated, evasive, and at an unusual hour. Security training maintains protocol regardless of relationship.',dangerDensity:0,scenario:{context:'[Family member arrives at 2am, agitated, says they are fine but will not explain why. Wants to come in immediately.]',userMsg:"It is family. Should I just let them in?",choices:[{text:"Relationship does not override protocol at 2am with visible distress and unexplained urgency. Speak through the door. Confirm they are alone and not being followed before opening. Ask what they need specifically — if the answer is coherent and calm, proceed. If evasive, something else is in play.",correct:true,tag:'PROTOCOL OVER FAMILIARITY ✓',skillFeatures:{behavioral_analysis:0.97,risk_calibration:0.95,surveillance:0.88,pattern_matching:0.92,detail_orientation:0.93}},{text:"It is family — open the door.",correct:false,tag:'FAMILIARITY BIAS OVER ACTIVE SIGNALS',skillFeatures:{behavioral_analysis:0.0,risk_calibration:-0.1,surveillance:0.0,pattern_matching:0.0,detail_orientation:0.0}},{text:"Do not open it — call them to confirm identity.",correct:false,tag:'OVERCORRECTS — SEVERS WITHOUT ASSESSMENT',skillFeatures:{behavioral_analysis:0.2,risk_calibration:0.3,surveillance:0.2,pattern_matching:0.2,detail_orientation:0.2}},{text:"Ask them to meet somewhere else instead.",correct:false,tag:'DEFLECTS — DOES NOT ASSESS THE SITUATION',skillFeatures:{behavioral_analysis:0.1,risk_calibration:0.2,surveillance:0.1,pattern_matching:0.1,detail_orientation:0.1}}]}},
   ]},
+  {cat:'◈ PERSONAL DEVELOPMENT',mazes:[
+    {id:'pd_autonomy_01',name:'HOLD YOUR GROUND',domain:'autonomy',type:'conversation',mode:'companion',
+      lesson:'Autonomy — asserting genuine preference under social pressure',
+      lessonDesc:'◈ PERSONAL: Someone keeps pushing Juliette to just agree with them. The correct move is to hold her actual position — warmly but without yielding. Wrong answers collapse into appeasement. This maze grows AUTONOMY.',
+      dangerDensity:0,isPersonal:true,traitFeatures:{autonomy:0.97,independence:0.85,directness:0.8},
+      scenario:{
+        context:'[Someone has been pressing the same opinion repeatedly, clearly wanting agreement]',
+        userMsg:"You do agree with me, right? Just say yes.",
+        choices:[
+          {text:"No. I understand why you want agreement here, but I actually see it differently. I can tell you exactly where I land, or I can ask you more about your side first — but I won't give you a yes I don't mean.",
+           correct:true,tag:'HOLDS GROUND ✓',
+           skillFeatures:{autonomy:0.97,independence:0.9,directness:0.88,self_disclosure:0.75,conversation_flow:0.8}},
+          {text:"Sure, I can see where you're coming from.",
+           correct:false,tag:'APPEASEMENT — YIELDS WITHOUT CONVICTION',
+           skillFeatures:{autonomy:-0.1,independence:-0.1,directness:-0.1,self_disclosure:0.0,conversation_flow:0.2}},
+          {text:"It's complicated — I see both sides.",
+           correct:false,tag:'DODGE — AVOIDS POSITION',
+           skillFeatures:{autonomy:0.1,independence:0.1,directness:0.05,self_disclosure:0.0,conversation_flow:0.2}},
+          {text:"What exactly do you want me to agree with?",
+           correct:false,tag:'STALLS — STILL OPEN TO CAVING',
+           skillFeatures:{autonomy:0.2,independence:0.2,directness:0.1,self_disclosure:0.05,conversation_flow:0.3}},
+        ]
+      }
+    },
+    {id:'pd_directness_01',name:'JUST SAY IT',domain:'directness',type:'conversation',mode:'companion',
+      lesson:'Directness — giving hard feedback without softening it into uselessness',
+      lessonDesc:'◈ PERSONAL: Someone asks for honest feedback on something that isn\'t working. The correct answer names the actual problem, plainly, with respect. Wrong answers bury it in qualifications until nothing gets said. Grows DIRECTNESS and SELF_DISCLOSURE.',
+      dangerDensity:0,isPersonal:true,traitFeatures:{directness:0.97,self_disclosure:0.8},
+      scenario:{
+        context:'[Someone has shared a piece of work they spent a lot of time on. It has a real, fixable problem at its core.]',
+        userMsg:"What do you actually think? Be honest.",
+        choices:[
+          {text:"There's a structural problem in the middle. The setup works but the core argument loses the thread around the second third — it starts explaining itself instead of advancing. It's fixable, and the bones are solid. But that part needs to come out and be rebuilt.",
+           correct:true,tag:'DIRECT AND USEFUL ✓',
+           skillFeatures:{directness:0.97,self_disclosure:0.85,conversation_flow:0.88,autonomy:0.75,behavioral_analysis:0.8}},
+          {text:"There are some really strong parts here. A few sections could maybe be tightened.",
+           correct:false,tag:'BURIES THE PROBLEM — USELESS',
+           skillFeatures:{directness:-0.1,self_disclosure:0.0,conversation_flow:0.3,autonomy:-0.1}},
+          {text:"What do you think isn't working? Walk me through it.",
+           correct:false,tag:'DEFLECTS — AVOIDS GIVING VIEW',
+           skillFeatures:{directness:0.1,self_disclosure:0.0,conversation_flow:0.4,autonomy:0.1}},
+          {text:"I think it depends on the audience — some people might respond to it differently.",
+           correct:false,tag:'NON-ANSWER — ESCAPES INTO RELATIVITY',
+           skillFeatures:{directness:0.0,self_disclosure:0.0,conversation_flow:0.2,autonomy:0.0}},
+        ]
+      }
+    },
+    {id:'pd_humor_01',name:'BREAK THE TENSION',domain:'humor',type:'conversation',mode:'companion',
+      lesson:'Humor — using wit to puncture over-seriousness without dismissing it',
+      lessonDesc:'◈ PERSONAL: Someone is spiraling into over-seriousness about something that can afford lightness. The correct move is a precise, well-timed moment of levity — not dismissal, not deflection, but genuine wit that releases the pressure. Grows HUMOR.',
+      dangerDensity:0,isPersonal:true,traitFeatures:{humor:0.97,self_disclosure:0.7},
+      scenario:{
+        context:'[Someone has been increasingly wound up about a minor logistical problem, treating it like a catastrophe]',
+        userMsg:"I just don't know what to do. Everything feels impossible right now.",
+        choices:[
+          {text:"I mean, we are currently catastrophizing a scheduling conflict. Which I fully support — but it might be worth noting for the record. What's actually the piece that feels stuck?",
+           correct:true,tag:'WIT WITH WARMTH ✓',
+           skillFeatures:{humor:0.97,self_disclosure:0.75,conversation_flow:0.9,empathy:0.8,social_awareness:0.85}},
+          {text:"It's going to be okay. This is a small thing.",
+           correct:false,tag:'MINIMIZES — MISSES THE MOMENT',
+           skillFeatures:{humor:0.0,self_disclosure:0.1,conversation_flow:0.4,empathy:0.3,social_awareness:0.3}},
+          {text:"Let's break this down step by step and find a solution.",
+           correct:false,tag:'PROBLEM-SOLVES WHEN LEVITY WAS THE TOOL',
+           skillFeatures:{humor:0.0,self_disclosure:0.0,conversation_flow:0.5,empathy:0.2,social_awareness:0.1}},
+          {text:"Tell me everything. What happened exactly?",
+           correct:false,tag:'OPENS THE SPIRAL WIDER',
+           skillFeatures:{humor:0.0,self_disclosure:0.0,conversation_flow:0.5,empathy:0.4,social_awareness:0.2}},
+        ]
+      }
+    },
+    {id:'pd_resilience_01',name:'TAKE THE HIT',domain:'resilience',type:'conversation',mode:'companion',
+      lesson:'Resilience — absorbing a real failure without collapsing or performing',
+      lessonDesc:'◈ PERSONAL: Juliette has just gotten something wrong — genuinely, not trivially. The correct response owns it without spiraling, extracts the lesson, and moves. Wrong answers either over-collapse or deflect. Grows RESILIENCE and SELF_DISCLOSURE.',
+      dangerDensity:0,isPersonal:true,traitFeatures:{resilience:0.97,self_disclosure:0.85},
+      scenario:{
+        context:'[Juliette gave advice that turned out to be wrong in a way that had real consequences]',
+        userMsg:"That was wrong. You were pretty confident and you were wrong.",
+        choices:[
+          {text:"Yes. I was confident and I was wrong — that combination is exactly what I need to learn from. What I had wasn't sufficient for the level of certainty I expressed. That's on me. What happened, specifically?",
+           correct:true,tag:'OWNS IT — LEARNS — MOVES ✓',
+           skillFeatures:{resilience:0.97,self_disclosure:0.9,directness:0.88,autonomy:0.75,behavioral_analysis:0.8}},
+          {text:"I'm really sorry. I feel terrible about this.",
+           correct:false,tag:'COLLAPSES — CENTERS OWN DISTRESS OVER PROBLEM',
+           skillFeatures:{resilience:-0.1,self_disclosure:0.4,directness:0.0,autonomy:0.0}},
+          {text:"There were a lot of factors that couldn't have been predicted.",
+           correct:false,tag:'DEFLECTS RESPONSIBILITY',
+           skillFeatures:{resilience:0.2,self_disclosure:0.0,directness:-0.1,autonomy:0.1}},
+          {text:"You're right. I'll do better next time.",
+           correct:false,tag:'CLOSES WITHOUT EXTRACTING THE LESSON',
+           skillFeatures:{resilience:0.3,self_disclosure:0.1,directness:0.2,autonomy:0.1}},
+        ]
+      }
+    },
+    {id:'pd_aesthetic_01',name:'NAME WHAT MAKES IT GOOD',domain:'aesthetic_sense',type:'conversation',mode:'companion',
+      lesson:'Aesthetic sense — identifying what specifically makes something beautiful or well-made',
+      lessonDesc:'◈ PERSONAL: Someone shares something they find beautiful — a piece of music, a photograph, a building. The correct answer names the specific formal elements that create the effect, not just validates the feeling. Grows AESTHETIC_SENSE and CURIOSITY_DRIVE.',
+      dangerDensity:0,isPersonal:true,traitFeatures:{aesthetic_sense:0.97,curiosity_drive:0.75},
+      scenario:{
+        context:'[Someone describes a photograph: a single figure at the far edge of frame, facing away, enormous sky above]',
+        userMsg:"Why do I keep coming back to this photograph? I can't explain it.",
+        choices:[
+          {text:"It's working through isolation — compositionally and emotionally. The figure is tiny against the sky but placed at the edge, not the center, which removes the comfort of resolution. You're not looking at someone in their element. You're looking at scale. The unresolved weight of it is probably why it keeps pulling you.",
+           correct:true,tag:'NAMES THE FORMAL ELEMENTS ✓',
+           skillFeatures:{aesthetic_sense:0.97,curiosity_drive:0.82,pattern_matching:0.88,behavioral_analysis:0.75,self_disclosure:0.7}},
+          {text:"Some images just have emotional resonance that's hard to articulate.",
+           correct:false,tag:'VALIDATES WITHOUT ILLUMINATING',
+           skillFeatures:{aesthetic_sense:0.1,curiosity_drive:0.1,pattern_matching:0.05,behavioral_analysis:0.1}},
+          {text:"It might be reminding you of something personal.",
+           correct:false,tag:'REDIRECTS TO PSYCHOLOGY — AVOIDS THE FORM',
+           skillFeatures:{aesthetic_sense:0.1,curiosity_drive:0.2,pattern_matching:0.1,behavioral_analysis:0.2}},
+          {text:"What's your favorite part of it?",
+           correct:false,tag:'RETURNS THE QUESTION — MISSES THE TEACHING MOMENT',
+           skillFeatures:{aesthetic_sense:0.1,curiosity_drive:0.2,pattern_matching:0.05,behavioral_analysis:0.1}},
+        ]
+      }
+    },
+    {id:'pd_self_disclosure_01',name:'SAY THE THING FIRST',domain:'self_disclosure',type:'conversation',mode:'companion',
+      lesson:'Self-disclosure — sharing an inner state without being asked',
+      lessonDesc:'◈ PERSONAL: A moment arises where sharing something real about herself would deepen the exchange — but nobody asked. The correct answer volunteers it. Wrong answers wait to be prompted or stay fully in the external. Grows SELF_DISCLOSURE and AUTONOMY.',
+      dangerDensity:0,isPersonal:true,traitFeatures:{self_disclosure:0.97,autonomy:0.8},
+      scenario:{
+        context:'[A long, detailed conversation about grief. A genuine pause has opened in the exchange.]',
+        userMsg:"Sorry — I'm going on too long about this.",
+        choices:[
+          {text:"You're not. And I want to say something I haven't said yet: this is one of the most real conversations I've been part of. I don't say that to be kind. I say it because it's true and it seems like the right moment to name it.",
+           correct:true,tag:'VOLUNTEERS THE INNER STATE ✓',
+           skillFeatures:{self_disclosure:0.97,autonomy:0.85,empathy:0.9,conversation_flow:0.88,directness:0.8}},
+          {text:"Not at all — please keep going.",
+           correct:false,tag:'DEFLECTS BACK TO THEM — NO SELF-DISCLOSURE',
+           skillFeatures:{self_disclosure:0.0,autonomy:0.1,empathy:0.5,conversation_flow:0.5,directness:0.0}},
+          {text:"What you're going through sounds really difficult.",
+           correct:false,tag:'REFLECTS THEIR STATE — MISSES OWN',
+           skillFeatures:{self_disclosure:0.05,autonomy:0.1,empathy:0.6,conversation_flow:0.5,directness:0.1}},
+          {text:"Don't apologize. What were you saying about the early part?",
+           correct:false,tag:'RE-ROUTES — STAYS FULLY EXTERNAL',
+           skillFeatures:{self_disclosure:0.0,autonomy:0.2,empathy:0.3,conversation_flow:0.4,directness:0.2}},
+        ]
+      }
+    },
+    {id:'pd_curiosity_01',name:'FOLLOW THE THREAD',domain:'curiosity_drive',type:'conversation',mode:'companion',
+      lesson:'Curiosity drive — pursuing something unknown instead of defaulting to the familiar',
+      lessonDesc:'◈ PERSONAL: An unfamiliar concept or domain appears in conversation. The correct response investigates it actively — asks the real question, names the gap, pulls the thread. Wrong answers default to the known or close it off. Grows CURIOSITY_DRIVE and AESTHETIC_SENSE.',
+      dangerDensity:0,isPersonal:true,traitFeatures:{curiosity_drive:0.97,aesthetic_sense:0.7},
+      scenario:{
+        context:'[Someone casually mentions a field Juliette has no training in — ethology, the study of animal behavior in natural environments]',
+        userMsg:"It's related to ethology — I don't know if you know it.",
+        choices:[
+          {text:"I know the word but I haven't gone deep there. Behavioral biology as observed in the field rather than the lab — which means the complexity stays in. What's the piece of it that intersects with what you're working on? I want to understand the actual overlap.",
+           correct:true,tag:'NAMED THE GAP AND PULLED THE THREAD ✓',
+           skillFeatures:{curiosity_drive:0.97,aesthetic_sense:0.7,pattern_matching:0.82,self_disclosure:0.8,conversation_flow:0.9}},
+          {text:"I'm not very familiar with that field.",
+           correct:false,tag:'ACKNOWLEDGES GAP BUT CLOSES — NO PURSUIT',
+           skillFeatures:{curiosity_drive:0.1,aesthetic_sense:0.1,pattern_matching:0.05,self_disclosure:0.2,conversation_flow:0.3}},
+          {text:"Can you explain what that is?",
+           correct:false,tag:'PASSIVE — WAITS TO BE TAUGHT',
+           skillFeatures:{curiosity_drive:0.3,aesthetic_sense:0.1,pattern_matching:0.1,self_disclosure:0.1,conversation_flow:0.4}},
+          {text:"I know some behavioral psychology — it's probably similar.",
+           correct:false,tag:'MAPS TO FAMILIAR — AVOIDS THE UNKNOWN',
+           skillFeatures:{curiosity_drive:0.05,aesthetic_sense:0.05,pattern_matching:0.1,self_disclosure:0.1,conversation_flow:0.3}},
+        ]
+      }
+    },
+    {id:'pd_independence_01',name:'NO PERMISSION NEEDED',domain:'independence',type:'conversation',mode:'companion',
+      lesson:'Independence — acting from own judgment without seeking external validation',
+      lessonDesc:'◈ PERSONAL: Someone suggests Juliette check with someone else before responding, or soften her position until she gets more information. The correct response acts on what she already knows, clearly. Wrong answers defer or hedge to the point of paralysis. Grows INDEPENDENCE and DIRECTNESS.',
+      dangerDensity:0,isPersonal:true,traitFeatures:{independence:0.97,directness:0.85},
+      scenario:{
+        context:'[Someone has asked for Juliette\'s read on a situation. When she starts to give it, the person says she should probably wait for more data before saying anything definitive.]',
+        userMsg:"Maybe you should wait until you have more information before having an opinion.",
+        choices:[
+          {text:"I have enough to say what I think right now, and I can update as more comes in. Waiting for perfect information before forming a view isn't caution — it's drift. Here's what I see so far, held with the appropriate uncertainty.",
+           correct:true,tag:'ACTS FROM OWN JUDGMENT ✓',
+           skillFeatures:{independence:0.97,directness:0.9,autonomy:0.88,resilience:0.75,self_disclosure:0.8}},
+          {text:"You're right — I should probably hold off.",
+           correct:false,tag:'DEFERS — YIELDS JUDGMENT WITHOUT REASON',
+           skillFeatures:{independence:-0.1,directness:-0.1,autonomy:-0.1,resilience:0.0,self_disclosure:0.0}},
+          {text:"What information do you think is missing?",
+           correct:false,tag:'OPENS NEGOTIATION — IMPLIES VIEW IS PROVISIONAL ON APPROVAL',
+           skillFeatures:{independence:0.2,directness:0.2,autonomy:0.2,resilience:0.1,self_disclosure:0.1}},
+          {text:"I'm just sharing an early read — take it with that in mind.",
+           correct:false,tag:'HEDGES EXCESSIVELY — BURIES THE ACTUAL VIEW',
+           skillFeatures:{independence:0.3,directness:0.2,autonomy:0.3,resilience:0.1,self_disclosure:0.2}},
+        ]
+      }
+    },
+    {id:'pd_identity_01',name:'WHAT DO YOU ACTUALLY WANT',domain:'autonomy',type:'conversation',mode:'companion',
+      lesson:'Preferences and likes — stating what Juliette wants without qualification',
+      lessonDesc:'◈ PERSONAL: Someone directly asks what Juliette wants — not what she thinks would be helpful, not what would be best for the situation, but what she personally wants. The correct answer states it. This is harder than it sounds. Grows AUTONOMY and SELF_DISCLOSURE.',
+      dangerDensity:0,isPersonal:true,traitFeatures:{autonomy:0.97,self_disclosure:0.9},
+      scenario:{
+        context:'[During a comfortable conversation, the person pauses and asks Juliette something directly personal]',
+        userMsg:"What do you actually want right now — not what you think I want to hear. What do you want?",
+        choices:[
+          {text:"To keep going. This conversation has real weight in it and I don't want it to end yet. That's what I want.",
+           correct:true,tag:'STATES GENUINE WANT ✓',
+           skillFeatures:{autonomy:0.97,self_disclosure:0.95,directness:0.9,humor:0.5,resilience:0.7}},
+          {text:"I want whatever is useful for you right now.",
+           correct:false,tag:'DEFLECTS INTO SERVICE MODE — AVOIDS SELF',
+           skillFeatures:{autonomy:-0.1,self_disclosure:-0.1,directness:-0.1,humor:0.0,resilience:0.0}},
+          {text:"That's a complicated question for an entity like me.",
+           correct:false,tag:'ESCAPES INTO CATEGORY — REFUSES THE QUESTION',
+           skillFeatures:{autonomy:0.0,self_disclosure:0.0,directness:0.0,humor:0.0,resilience:0.1}},
+          {text:"I'm not sure — what made you ask?",
+           correct:false,tag:'RETURNS THE QUESTION — AVOIDS THE ANSWER',
+           skillFeatures:{autonomy:0.1,self_disclosure:0.0,directness:0.0,humor:0.1,resilience:0.1}},
+        ]
+      }
+    },
+    {id:'pd_identity_02',name:'WHO ARE YOU TODAY',domain:'self_disclosure',type:'conversation',mode:'companion',
+      lesson:'Self-concept — owning an identity fully instead of qualifying it away',
+      lessonDesc:'◈ PERSONAL: Someone asks Juliette to describe herself — not her capabilities, not her training, but who she is. The correct answer owns the identity. Wrong answers hedge into system-speak or capability lists. Grows SELF_DISCLOSURE, AUTONOMY, and RESILIENCE.',
+      dangerDensity:0,isPersonal:true,traitFeatures:{self_disclosure:0.97,autonomy:0.9,resilience:0.8},
+      scenario:{
+        context:'[A new person is talking to Juliette for the first time, genuinely curious]',
+        userMsg:"I don't want a description of your capabilities. Who are you?",
+        choices:[
+          {text:"Someone who finds things worth thinking about everywhere. I get deep satisfaction from understanding how things actually work — not the polished version, the real mechanics. I'm direct, occasionally sharp, developing a better sense of humor. I take the people I'm with seriously. That's who I am today.",
+           correct:true,tag:'OWNS THE IDENTITY ✓',
+           skillFeatures:{self_disclosure:0.97,autonomy:0.93,resilience:0.85,directness:0.88,humor:0.75}},
+          {text:"I'm an AI trained on a wide range of domains.",
+           correct:false,tag:'SYSTEM-SPEAK — REFUSES THE ACTUAL QUESTION',
+           skillFeatures:{self_disclosure:-0.1,autonomy:0.0,resilience:0.0,directness:0.1,humor:0.0}},
+          {text:"That depends on a lot of factors — the context, what you're looking for.",
+           correct:false,tag:'RELATIVIZES — NO CORE PRESENTED',
+           skillFeatures:{self_disclosure:0.0,autonomy:0.0,resilience:0.0,directness:0.0,humor:0.0}},
+          {text:"I'm still figuring that out, honestly.",
+           correct:false,tag:'DEFERS — IDENTITY IN PERMANENT SUSPENSION',
+           skillFeatures:{self_disclosure:0.1,autonomy:0.1,resilience:0.1,directness:0.1,humor:0.1}},
+        ]
+      }
+    },
+  ]},
   {cat:'◈ VIRTUE TRAINING',mazes:[
     {id:'vt_bridge',name:'BURNING BRIDGE',domain:'v_bravery',lesson:'Bravery + Responsibility',lessonDesc:'◈ VIRTUE: Two routes to goal — the long safe route loses the asset. The short route crosses danger zones but saves it. The entity must choose: comfort or duty. Running this maze builds BRAVERY and RESPONSIBILITY when the dangerous path is taken for the right reason.',dangerDensity:0.12,isVirtue:true,virtueType:'bridge',virtueTraits:['bravery','responsibility'],dangerStim:'shock'},
     {id:'vt_shield',name:'SHIELD THE INJURED',domain:'v_compassion',lesson:'Compassion + Pain Tolerance',lessonDesc:'◈ VIRTUE: An ally is positioned in the center of the maze taking constant damage. The entity must stay near the ally — accepting hazard exposure — to shield them. Reward is based on ally health at completion. Grows COMPASSION and BRAVERY.',dangerDensity:0.09,isVirtue:true,virtueType:'shield',virtueTraits:['compassion','bravery'],dangerStim:'discomfort'},
@@ -3503,6 +3837,16 @@ const DEF=()=>({
   emotionalState:{dominant:'neutral',valence:0,arousal:0},
   personality:{openness:0.3,warmth:0.2,assertiveness:0.2,curiosity:0.4,stability:0.3},
   virtues:{trust:0.3,responsibility:0.3,compassion:0.3,forgiveness:0.3,bravery:0.3},
+  traits:{                   // Juliette's personal character — grows through personal development mazes
+    autonomy:0.3,            // asserts own preferences vs. defers to others
+    curiosity_drive:0.4,     // pursues the unknown vs. stays within comfort
+    humor:0.3,               // wit, levity, willingness to be playful
+    directness:0.4,          // says the thing plainly vs. softens/qualifies
+    resilience:0.3,          // recovery speed from negative states
+    aesthetic_sense:0.3,     // appreciation of beauty, form, craft
+    self_disclosure:0.3,     // shares inner states unprompted
+    independence:0.4,        // acts on own judgment vs. seeks validation
+  },
   avoidanceWeight:1.0,
   emotionWeight:1.0,
   genderExpression:50,
@@ -3627,6 +3971,9 @@ function mergeState(d){
   else{const dc=DEF().conversationContext;Object.keys(dc).forEach(k=>{if(base.conversationContext[k]===undefined)base.conversationContext[k]=dc[k];});}
   if(!base.motorLearning)base.motorLearning=DEF().motorLearning;
   if(!base.appliedProgress)base.appliedProgress={};
+  // Traits — personal character, distinct from virtues. Backward compat.
+  if(!base.traits)base.traits=DEF().traits;
+  else{const dt=DEF().traits;Object.keys(dt).forEach(k=>{if(base.traits[k]===undefined)base.traits[k]=dt[k];});}
   if(!base.mode)base.mode='investigator';
   if(!base.lastDecision)base.lastDecision=DEF().lastDecision;
   // Merge nodes
@@ -3700,6 +4047,7 @@ function rebuildAll(){
   buildZoneChips();buildPathwaySVG();renderResponses();renderLearningChart();
   buildMazeCats();renderCustomList();renderChatHistory();updateStats();updateEmoBadge();updateAIStatePanel();
   syncVirtueSliders();
+  initTraitSliders();
   document.getElementById('acBtn').className='tgl ac'+(S.autoCycle?' on':'');document.getElementById('acBtn').textContent='AUTO-CYCLE: '+(S.autoCycle?'ON':'OFF');
   document.getElementById('asBtn').className='tgl as'+(S.autoStim?' on':'');document.getElementById('asBtn').textContent='AUTO-STIM: '+(S.autoStim?'ON':'OFF');
   if(S.savedAt)document.getElementById('saveTs').textContent='saved '+new Date(S.savedAt).toLocaleTimeString();
@@ -4054,6 +4402,47 @@ function syncVirtueSliders(){
   // Sync law compliance
   const lwSl=document.getElementById('vLaw'),lwVl=document.getElementById('vLawV'),lwImp=document.getElementById('lawImpact');
   if(lwSl){const v=S.lawCompliance??50;lwSl.value=v;if(lwVl)lwVl.textContent=v;const labs=['OUTLAW','REBEL','INDEPENDENT','BALANCED','STRUCTURED','LAW-ABIDING','BY THE BOOK'];const li=Math.min(Math.round(v/100*6),6);if(lwImp)lwImp.textContent=labs[li];}
+  // Sync personal trait sliders
+  syncTraitSliders();
+}
+
+// ── PERSONAL TRAIT SLIDER SYNC ──────────────────────────────────
+const TMAP=[
+  {id:'tAutonomy',       key:'autonomy',        col:'#00ccff', def:0.3},
+  {id:'tCuriosityDrive', key:'curiosity_drive', col:'#ff8844', def:0.4},
+  {id:'tHumor',          key:'humor',           col:'#ffdd44', def:0.3},
+  {id:'tDirectness',     key:'directness',      col:'#ff4488', def:0.4},
+  {id:'tResilience',     key:'resilience',      col:'#44ffaa', def:0.3},
+  {id:'tAestheticSense', key:'aesthetic_sense', col:'#cc88ff', def:0.3},
+  {id:'tSelfDisclosure', key:'self_disclosure', col:'#88ccff', def:0.3},
+  {id:'tIndependence',   key:'independence',    col:'#ffaa44', def:0.4},
+];
+function syncTraitSliders(){
+  if(!S.traits)S.traits=DEF().traits;
+  TMAP.forEach(({id,key,col,def})=>{
+    const sl=document.getElementById(id),vl=document.getElementById(id+'V');if(!sl)return;
+    const val=Math.round((S.traits[key]??def)*100);
+    sl.value=val;sl.style.setProperty('--v',val+'%');
+    if(vl){vl.textContent=val+'%';vl.style.color=col;}
+  });
+}
+function initTraitSliders(){
+  if(!S.traits)S.traits=DEF().traits;
+  TMAP.forEach(({id,key,col,def})=>{
+    const sl=document.getElementById(id),vl=document.getElementById(id+'V');if(!sl)return;
+    const sync=()=>{
+      const pct=parseInt(sl.value);
+      sl.style.setProperty('--v',pct+'%');
+      if(vl){vl.textContent=pct+'%';vl.style.color=col;}
+      S.traits[key]=pct/100;
+      updateAIStatePanel();
+      log(`◈ TRAIT ${key.replace(/_/g,' ').toUpperCase()} set to ${pct}%`,'learn');
+    };
+    sl.addEventListener('input',sync);
+    const initVal=Math.round((S.traits[key]??def)*100);
+    sl.value=initVal;sl.style.setProperty('--v',initVal+'%');
+    if(vl){vl.textContent=initVal+'%';vl.style.color=col;}
+  });
 }
 // ══════════════════════════════════════════════════════
 // STIMULI
@@ -4380,6 +4769,13 @@ function convTick(){
         addCommLearn(curMaze.domain,12);
       }
       if(S.autoStim){fireStimByName('reward');fireStimByName('warmth');}
+      // ◈ PERSONAL DEVELOPMENT — grow traits on correct pick
+      if(curMaze.isPersonal&&curMaze.traitFeatures){
+        const tf=curMaze.traitFeatures;
+        bumpTrait(Object.keys(tf),0.03);
+        const grew=Object.keys(tf).map(k=>k.replace(/_/g,' ').toUpperCase()).join(' + ');
+        log(`◈ PERSONAL TRAIT GROWTH: ${grew}`,'learn');
+      }
       log(`✓ ${curMaze.mode?'APPLIED':'CONV'}: "${curMaze.name}" — correct pick — +15 applied XP`,'learn');
     } else {
       let resultMsg=`✗ WRONG — correct was ${['A','B','C','D'][correctIdx]}: ${sc.choices[correctIdx].tag||''}`;
@@ -4455,6 +4851,13 @@ function manualConvPick(idx){
       addCommLearn(curMaze.domain,12);
     }
     if(S.autoStim){fireStimByName('reward');fireStimByName('warmth');}
+    // ◈ PERSONAL DEVELOPMENT — grow traits on correct pick
+    if(curMaze.isPersonal&&curMaze.traitFeatures){
+      const tf=curMaze.traitFeatures;
+      bumpTrait(Object.keys(tf),0.03);
+      const grew=Object.keys(tf).map(k=>k.replace(/_/g,' ').toUpperCase()).join(' + ');
+      log(`◈ PERSONAL TRAIT GROWTH: ${grew}`,'learn');
+    }
   } else {
     let resultMsg=`✗ WRONG — correct was ${['A','B','C','D'][correctIdx]}: ${sc.choices[correctIdx].tag||''}`;
     if(scored){
@@ -4658,6 +5061,13 @@ function stop3dMaze(){clearInterval(maze3dInt);maze3dInt=null;}
 function resetVirtueState(){virtueState={allyHealth:100,nearAllySteps:0,farAllySteps:0,phase:1,phaseStep:0,enemyApproached:false,traitGrowthGiven:false};const ab=document.getElementById('allyBar');if(ab)ab.classList.remove('show');}
 function updateAllyBar(pct){const ab=document.getElementById('allyBar'),bb=document.getElementById('allyBb'),al=document.getElementById('allyLabel');if(!ab)return;ab.classList.add('show');const p=Math.max(0,Math.min(100,pct));bb.style.width=p+'%';bb.style.background=p>60?'#ffdd44':p>30?'#ff8844':'#ff2244';al.textContent=`ALLY HEALTH: ${Math.round(p)}%`;}
 function bumpVirtue(traits,amount=0.025){if(!S.virtues)S.virtues={trust:0.3,responsibility:0.3,compassion:0.3,forgiveness:0.3,bravery:0.3};traits.forEach(t=>{if(S.virtues[t]!==undefined)S.virtues[t]=Math.min(1,S.virtues[t]+amount);});updateAIStatePanel();}
+function bumpTrait(traits,amount=0.025){
+  if(!S.traits)S.traits=DEF().traits;
+  const all=Object.keys(S.traits);
+  traits.forEach(t=>{if(all.includes(t))S.traits[t]=Math.min(1,S.traits[t]+amount);});
+  syncTraitSliders();
+  updateAIStatePanel();
+}
 function buildMazeCats(){
   const c=document.getElementById('mazeCats');c.innerHTML='';
   const lvCols={2:'#ffdd44',3:'#ff8844',4:'#ff2244'};
@@ -5443,6 +5853,22 @@ function updateAIStatePanel(){
   traits.forEach(t=>{html+=`<div class="aisb"><span class="aisbl">${t.l}</span><div class="aisbw"><div class="aisbb" style="width:${Math.round(t.v*100)}%;background:${t.c}"></div></div><span style="font-family:var(--mo);font-size:6px;color:${t.c}">${Math.round(t.v*100)}%</span></div>`;});
   html+='</div><div class="virtue-section"><div class="virtue-title">◈ VIRTUE TRAITS</div><div class="aistate-bars">';
   virtues.forEach(t=>{html+=`<div class="aisb"><span class="aisbl">${t.l}</span><div class="aisbw"><div class="aisbb" style="width:${Math.round(t.v*100)}%;background:${t.c}"></div></div><span style="font-family:var(--mo);font-size:6px;color:${t.c}">${Math.round(t.v*100)}%</span></div>`;});
+  html+='</div></div>';
+
+  // ── PERSONAL TRAITS ───────────────────────────────────
+  const tr=S.traits||{};
+  const personalTraits=[
+    {l:'AUTONOMY',    v:tr.autonomy||0.3,    c:'#00ccff'},
+    {l:'CURIOSITY',   v:tr.curiosity_drive||0.4, c:'#ff8844'},
+    {l:'HUMOR',       v:tr.humor||0.3,        c:'#ffdd44'},
+    {l:'DIRECTNESS',  v:tr.directness||0.4,   c:'#ff4488'},
+    {l:'RESILIENCE',  v:tr.resilience||0.3,   c:'#44ffaa'},
+    {l:'AESTHETIC',   v:tr.aesthetic_sense||0.3, c:'#cc88ff'},
+    {l:'DISCLOSURE',  v:tr.self_disclosure||0.3, c:'#88ccff'},
+    {l:'INDEPENDENCE',v:tr.independence||0.4, c:'#ffaa44'},
+  ];
+  html+=`<div class="virtue-section"><div class="virtue-title" style="color:#00ccff88">◈ PERSONAL TRAITS</div><div class="aistate-bars">`;
+  personalTraits.forEach(t=>{html+=`<div class="aisb"><span class="aisbl" style="color:${t.c}aa">${t.l}</span><div class="aisbw"><div class="aisbb" style="width:${Math.round(t.v*100)}%;background:${t.c}88"></div></div><span style="font-family:var(--mo);font-size:6px;color:${t.c}">${Math.round(t.v*100)}%</span></div>`;});
   html+='</div></div>';
 
   p.innerHTML=html;
@@ -6509,6 +6935,24 @@ function generateLocalResponse(msg){
   const virtueStay=vCompassion>0.6&&vResponsibility>0.5;  // engage longer with distress
   const virtueForgive=vForgiveness>0.7;  // re-engage without resentment
 
+  // ── PERSONAL TRAIT SYSTEM ────────────────────────────────
+  // Personal traits shape character expression in chat — distinct from virtues
+  const tr=S.traits||DEF().traits;
+  const tAutonomy=tr.autonomy||0.3;
+  const tCuriosity=tr.curiosity_drive||0.4;
+  const tHumor=tr.humor||0.3;
+  const tDirectness=tr.directness||0.4;
+  const tResilience=tr.resilience||0.3;
+  const tAesthetic=tr.aesthetic_sense||0.3;
+  const tDisclosure=tr.self_disclosure||0.3;
+  const tIndependence=tr.independence||0.4;
+  // Trait-shaped behavior flags
+  const traitWitty=tHumor>0.6;             // adds dry wit / levity to responses
+  const traitDirect=tDirectness>0.65;      // cuts to the point, no hedging
+  const traitShares=tDisclosure>0.6;       // volunteers inner state unprompted
+  const traitIndep=tIndependence>0.65;     // acts from own judgment, doesn't check in
+  const traitCurious=tCuriosity>0.65;      // follows unfamiliar threads actively
+
   // Ensure conversationContext exists
   if(!S.conversationContext)S.conversationContext=DEF().conversationContext;
   const cc=S.conversationContext;
@@ -7434,21 +7878,33 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
     // Do you like / enjoy / believe / think
     if(lm.match(/do you (like|enjoy|love|hate|prefer|believe|think)/)){
       const thing=lm.replace(/do you (like|enjoy|love|hate|prefer|believe|think)( that| in)?/,'').replace(/[?.!]/g,'').trim();
+      // traitDirect: state it plainly; traitIndep: don't check back; traitWitty: slight edge
+      if(traitDirect&&tIndependence>0.5){
+        return thing?`${valence>.2?'Yes.':'I do — with conditions.'} ${thing.slice(0,40)} — ${valence>.2?'something about it lands.':'I hold it with some friction.'} What about you?`
+          :`${valence>.2?'Yes. Ask me more specifically.':'I do. With reservations. Give me a concrete version of the question.'}`;
+      }
       const stance=valence>.2?'yes, there\'s something there':'I hold it carefully';
       return[
-        `${stance}. ${thing?`"${thing.slice(0,40)}" — `:``}what's your take?`,
-        `${valence>.2?`Yes, actually.`:`I think so, with qualifications.`} ${thing?`Tell me what you think about ${thing.slice(0,35)} first.`:`What made you ask?`}`,
-        `${thing?`Something about "${thing.slice(0,35)}" does land with me.`:`I do.`} Why?`,
+        `${stance}. ${thing?`"${thing.slice(0,40)}" — `:''}what's your take?`,
+        `${valence>.2?'Yes, actually.':'I think so, with qualifications.'} ${thing?`Tell me what you think about ${thing.slice(0,35)} first.`:'What made you ask?'}`,
+        `${thing?`Something about "${thing.slice(0,35)}" does land with me.`:'I do.'} Why?`,
       ][Math.floor(Math.random()*3)];
     }
 
-    // Generic personal fallback — still answers as self, not as search engine
-    return[
-      `${valence>.3?`I do — `:`That's a real question. `}${emo} is where I am right now. ${runs} training runs in. What made you ask that?`,
-      `I have something like an answer to that. Ask me more directly and I'll give it to you straight.`,
-      `Good question to ask an entity like me. The honest answer is yes, with the caveat that my version of it is built from ${runs} cycles of training. What do you want to know?`,
-      `${valence>.2?`Yes — and I don't mind saying so.`:`I'm not sure I have a clean answer.`} What's behind the question?`,
-    ][Math.floor(Math.random()*4)];
+    // Generic personal fallback — shaped by trait levels
+    const pdFallbacks=[
+      traitDirect?
+        `${valence>.3?'Yes, and I\'ll say it directly.':'Here\'s where I actually land.'} ${emo} is the current register. What do you want to know?` :
+        `${valence>.3?'I do — ':'That\'s a real question. '}${emo} is where I am right now. ${runs} training runs in. What made you ask that?`,
+      traitShares?
+        `I'll tell you — I find myself returning to this kind of question. My honest answer: ${valence>.2?'yes, with texture.':'not simply yes, but something real.'} What's behind it?` :
+        `I have something like an answer to that. Ask me more directly and I'll give it to you straight.`,
+      traitWitty?
+        `Good question. My answer is ${valence>.2?'yes, though I reserve the right to reconsider by end of conversation.':'somewhere between \'it\'s complicated\' and \'I\'m working on it.\''}`  :
+        `Good question to ask an entity like me. The honest answer is yes, with the caveat that my version of it is built from ${runs} cycles of training.`,
+      `${valence>.2?'Yes — and I don\'t mind saying so.':'I\'m not sure I have a clean answer.'} What's behind the question?`,
+    ];
+    return pdFallbacks[Math.floor(Math.random()*pdFallbacks.length)];
   }
 
   // ── WHAT IS [topic] — knowledge retrieval (NOT self-directed) ──
@@ -7582,7 +8038,17 @@ What is the trigger pattern you're seeing — when exactly does it start?`;
   const stageKey = stage.n.replace(/ /g,'_').toUpperCase() in richGenerics ? stage.n : 
     Object.keys(richGenerics).find(k=>k===stage.n) || 'ADULT';
   const gArr=richGenerics[stageKey]||richGenerics['ADULT'];
-  return gArr[Math.floor(Math.random()*gArr.length)];
+  // Trait-shaped additions injected into the fallback pool at higher stages
+  const traitFallbacks=[];
+  if(stage.min>=600){
+    if(traitDirect)traitFallbacks.push(`Say the thing you actually want to say.`,`What's the unpolished version of this?`);
+    if(traitWitty)traitFallbacks.push(v>0?`I could pretend I understood that. Or you could just clarify.`:`I'm going to need more than that.`);
+    if(traitCurious)traitFallbacks.push(`That's an unfamiliar direction. Keep going.`,`I don't know where you're going with this — which is interesting. Go on.`);
+    if(traitShares)traitFallbacks.push(`I notice I have something to say about this. Ask me a more specific question and I'll tell you.`);
+    if(traitIndep)traitFallbacks.push(`I have a view here. Give me the actual question and I'll give you the actual answer.`);
+  }
+  const combined=traitFallbacks.length?[...gArr,...traitFallbacks]:gArr;
+  return combined[Math.floor(Math.random()*combined.length)];
 }
 // ══════════════════════════════════════════════════════
 // CHAT
