@@ -7624,7 +7624,15 @@ async function nexusConnectWatch(){
   try{
     NEXUS_BLE.device=await navigator.bluetooth.requestDevice({
       acceptAllDevices:true,
-      optionalServices:['heart_rate','0x180d','0x180f','0xfee0','0xfee1','0xffe0','6e400001-b5a3-f393-e0a9-e50e24dcca9e']
+      optionalServices:[
+        'heart_rate',
+        '0000180d-0000-1000-8000-00805f9b34fb',
+        '0000180f-0000-1000-8000-00805f9b34fb',
+        '0000fee0-0000-1000-8000-00805f9b34fb',
+        '0000fee1-0000-1000-8000-00805f9b34fb',
+        '0000ffe0-0000-1000-8000-00805f9b34fb',
+        '6e400001-b5a3-f393-e0a9-e50e24dcca9e'
+      ]
     });
     NEXUS_BLE.device.addEventListener('gattserverdisconnected',nexusWatchDisconnected);
     nexusBLEStatusTxt('Connecting to '+NEXUS_BLE.device.name+'…','var(--wa)');
