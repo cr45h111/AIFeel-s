@@ -953,13 +953,30 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
       <div class="hw-hook-title">HARDWARE INTEGRATION POINTS</div>
       <div class="hw-hook-item ready">Web Geolocation API (GPS) — READY</div>
       <div class="hw-hook-item ready">DeviceMotion API (fall detection) — READY</div>
-      <div class="hw-hook-item">BLE Heart Rate Monitor (GATT 0x2A37) — STUB</div>
+      <div class="hw-hook-item" id="bleHookHR">BLE Heart Rate Monitor (GATT 0x2A37) — NOT CONNECTED</div>
       <div class="hw-hook-item">BLE SpO2 Sensor — STUB</div>
       <div class="hw-hook-item">BLE GSR / Stress Sensor — STUB</div>
-      <div class="hw-hook-item">BLE Temperature Sensor — STUB</div>
-      <div class="hw-hook-item">Satellite Messenger API (Garmin inReach) — STUB</div>
-      <div class="hw-hook-item">SMS Gateway (Twilio) — STUB</div>
-      <div class="hw-hook-item" style="color:var(--si);">Replace STUB items by calling injectVital(key,value) from hardware driver</div>
+    </div>
+
+    <div class="sec" style="margin-top:8px;">◈ WATCH CONNECTION</div>
+    <div style="display:flex;flex-direction:column;gap:5px;">
+      <div style="font-family:var(--mo);font-size:6px;color:var(--td);letter-spacing:.5px;" id="nexusBLEStatus">No watch connected · simulation mode</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;">
+        <button class="smb" id="nexusBLEBtn" onclick="nexusConnectWatch()">📡 CONNECT WATCH</button>
+        <button class="smb" id="nexusBLEDisBtn" onclick="nexusDisconnectWatch()" style="display:none;">✕ DISCONNECT</button>
+      </div>
+      <div style="font-family:var(--mo);font-size:5.5px;color:#445566;line-height:1.6;margin-top:2px;">
+        Scans for BLE devices · connects to standard GATT Heart Rate Service (0x180D) · requires Chrome on Android.<br>
+        GloryFit uses a proprietary protocol — if connected but no data, use manual entry below.
+      </div>
+      <div style="display:flex;align-items:center;gap:5px;margin-top:4px;">
+        <span style="font-family:var(--mo);font-size:6px;color:var(--td);">MANUAL HR</span>
+        <input id="nexusManualHR" type="number" min="30" max="220" placeholder="BPM"
+          style="width:50px;background:var(--p2);border:1px solid var(--b1);color:var(--neu);font-family:var(--mo);font-size:7px;padding:2px 4px;">
+        <button class="smb" onclick="nexusInjectHR()">INJECT</button>
+        <button class="smb" onclick="nexusClearHR()" style="color:var(--dng);">CLEAR</button>
+      </div>
+      <div style="font-family:var(--mo);font-size:5.5px;color:var(--td);" id="nexusHRLive">HR: — · source: —</div>
     </div>
   </div>
 </div>
@@ -1076,6 +1093,14 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
   </div>
   <div class="tc" id="rt-maze">
     <div class="mwrap">
+      <div style="display:flex;align-items:center;gap:5px;padding:2px 0 4px 0;position:sticky;top:0;background:var(--p1);z-index:10;border-bottom:1px solid var(--b0);margin-bottom:4px;">
+        <span style="font-family:var(--mo);font-size:7px;color:var(--td);flex-shrink:0;">⌕</span>
+        <input id="mazeSearch" type="text" placeholder="search mazes…" oninput="filterMazes(this.value)"
+          style="flex:1;background:var(--p2);border:1px solid var(--b1);color:var(--neu);font-family:var(--mo);font-size:7px;padding:3px 6px;border-radius:2px;outline:none;letter-spacing:.4px;"
+          onfocus="this.style.borderColor='var(--pu)'" onblur="this.style.borderColor='var(--b1)'">
+        <button onclick="filterMazes('');document.getElementById('mazeSearch').value=''"
+          style="background:transparent;border:1px solid var(--b1);color:var(--td);font-family:var(--mo);font-size:6px;padding:2px 5px;cursor:pointer;border-radius:2px;flex-shrink:0;" title="Clear search">✕</button>
+      </div>
       <div id="mazeCats"></div>
       <div class="mlb"><div class="mlt" id="mlTitle">— SELECT A MAZE —</div><div class="mlb2" id="mlBody">Select a training maze above to begin.</div><div class="mlsense" id="mlSense"></div></div>
       <canvas id="mc" width="264" height="264"></canvas>
@@ -4576,6 +4601,45 @@ function buildMazeCats(){
   // Scroll selected maze button into view
   setTimeout(()=>{const am=document.querySelector('#mazeCats .mzb.am');if(am)am.scrollIntoView({block:'nearest',behavior:'smooth'});},80);
 }
+
+// ── MAZE SEARCH ──────────────────────────────────────────────────
+// Filters maze buttons in real-time by name, domain, or lesson text.
+// Category headers hide when all their mazes are filtered out.
+// Empty query restores all.
+function filterMazes(query){
+  const q=(query||'').trim().toLowerCase();
+  const cats=document.getElementById('mazeCats');
+  if(!cats)return;
+  if(!q){
+    // Show everything, restore collapsed state from MZ_CAT
+    cats.querySelectorAll('.msel').forEach((sel,i)=>{
+      const cat=MZ_CAT[i];
+      sel.classList.toggle('hidden',!!(cat&&cat.isUpgrade&&cat.collapsed));
+    });
+    cats.querySelectorAll('.mcat').forEach(lbl=>lbl.style.display='');
+    cats.querySelectorAll('.mzb').forEach(b=>b.style.display='');
+    return;
+  }
+  // Query active — show all category containers so filtered buttons are visible
+  cats.querySelectorAll('.msel').forEach(sel=>sel.classList.remove('hidden'));
+  // Filter each button
+  let totalVisible=0;
+  cats.querySelectorAll('.msel').forEach(sel=>{
+    let visInCat=0;
+    sel.querySelectorAll('.mzb').forEach(b=>{
+      const id=b.dataset.mid||'';
+      const maze=allMazes().find(m=>m.id===id);
+      const text=(b.textContent+' '+(maze?.domain||'')+' '+(maze?.lesson||'')+' '+(maze?.lessonDesc||'')).toLowerCase();
+      const match=text.includes(q);
+      b.style.display=match?'':'none';
+      if(match)visInCat++;
+    });
+    // Hide the category label when none of its mazes match
+    const lbl=sel.previousElementSibling;
+    if(lbl&&lbl.classList.contains('mcat')){lbl.style.display=visInCat?'':'none';}
+    totalVisible+=visInCat;
+  });
+}
 function selectMaze(id){
   S.currentMazeId=id;curMaze=allMazes().find(x=>x.id===id);
   if(!curMaze)return;
@@ -7529,6 +7593,110 @@ document.getElementById('chatIn').addEventListener('keydown',e=>{if(e.key==='Ent
 // ══════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+// NEXUS WATCH (BLE) — Heart Rate via GATT standard profile
+// Mirrors juliette-field BLE integration. Injects HR into HEALTH.
+// ══════════════════════════════════════════════════════════════════
+const NEXUS_BLE={device:null,server:null,hrChar:null,connected:false,manualHR:null,manualExpiry:null};
+
+function nexusBLEStatusTxt(txt,col){
+  const el=document.getElementById('nexusBLEStatus');
+  if(el){el.textContent=txt;if(col)el.style.color=col;}
+}
+function nexusHRLiveTxt(){
+  const el=document.getElementById('nexusHRLive');
+  if(!el)return;
+  if(NEXUS_BLE.connected&&HEALTH.hr){el.textContent=`HR: ${HEALTH.hr} BPM · source: WATCH (live)`;el.style.color='var(--pos)';}
+  else if(NEXUS_BLE.manualHR){el.textContent=`HR: ${NEXUS_BLE.manualHR} BPM · source: manual (expires ${new Date(NEXUS_BLE.manualExpiry).toLocaleTimeString()})`;el.style.color='var(--wa)';}
+  else{el.textContent='HR: — · source: simulation';el.style.color='var(--td)';}
+  // Update hook status
+  const hook=document.getElementById('bleHookHR');
+  if(hook){
+    if(NEXUS_BLE.connected){hook.textContent='BLE Heart Rate Monitor (GATT 0x2A37) — LIVE';hook.className='hw-hook-item ready';}
+    else if(NEXUS_BLE.manualHR){hook.textContent='BLE Heart Rate Monitor — MANUAL ENTRY';hook.className='hw-hook-item ready';}
+    else{hook.textContent='BLE Heart Rate Monitor (GATT 0x2A37) — NOT CONNECTED';hook.className='hw-hook-item';}
+  }
+}
+
+async function nexusConnectWatch(){
+  if(!navigator.bluetooth){nexusBLEStatusTxt('Web Bluetooth not available — requires Chrome on Android 6+','var(--neg)');return;}
+  nexusBLEStatusTxt('Scanning… select watch from the list','var(--wa)');
+  try{
+    NEXUS_BLE.device=await navigator.bluetooth.requestDevice({
+      acceptAllDevices:true,
+      optionalServices:['heart_rate','0x180d','0x180f','0xfee0','0xfee1','0xffe0','6e400001-b5a3-f393-e0a9-e50e24dcca9e']
+    });
+    NEXUS_BLE.device.addEventListener('gattserverdisconnected',nexusWatchDisconnected);
+    nexusBLEStatusTxt('Connecting to '+NEXUS_BLE.device.name+'…','var(--wa)');
+    NEXUS_BLE.server=await NEXUS_BLE.device.gatt.connect();
+    NEXUS_BLE.connected=true;
+    document.getElementById('nexusBLEBtn').style.display='none';
+    document.getElementById('nexusBLEDisBtn').style.display='';
+    nexusBLEStatusTxt('✓ '+NEXUS_BLE.device.name+' connected — reading HR service…','var(--pos)');
+    // Try standard GATT heart rate
+    try{
+      const svc=await NEXUS_BLE.server.getPrimaryService('heart_rate');
+      NEXUS_BLE.hrChar=await svc.getCharacteristic('heart_rate_measurement');
+      await NEXUS_BLE.hrChar.startNotifications();
+      NEXUS_BLE.hrChar.addEventListener('characteristicvaluechanged',nexusOnHRData);
+      nexusBLEStatusTxt('✓ '+NEXUS_BLE.device.name+' · Heart Rate streaming','var(--pos)');
+      log(`[BLE] watch connected: ${NEXUS_BLE.device.name} · HR streaming`,'sys');
+    }catch(e){
+      nexusBLEStatusTxt('✓ '+NEXUS_BLE.device.name+' connected · no standard HR profile — use Manual HR below','var(--wa)');
+      log('[BLE] watch connected but no standard GATT HR service — proprietary protocol. Use manual entry.','sys');
+    }
+    nexusHRLiveTxt();
+  }catch(e){
+    if(e.name==='NotFoundError'){nexusBLEStatusTxt('Scan cancelled','var(--td)');}
+    else{nexusBLEStatusTxt('Connection failed: '+e.message,'var(--neg)');log('[BLE] error: '+e.message,'sys');}
+  }
+}
+
+function nexusOnHRData(e){
+  const val=e.target.value;
+  const flags=val.getUint8(0);
+  const hr=(flags&0x01)?val.getUint16(1,true):val.getUint8(1);
+  HEALTH.hr=hr;HEALTH.hwHR=true;
+  nexusHRLiveTxt();
+  // Reflect in health display
+  const el=document.getElementById('hmHR');if(el)el.textContent=hr+' BPM';
+  updateHealthHUD();
+}
+
+function nexusWatchDisconnected(){
+  NEXUS_BLE.connected=false;NEXUS_BLE.hrChar=null;
+  if(!NEXUS_BLE.manualHR)HEALTH.hwHR=false;
+  document.getElementById('nexusBLEBtn').style.display='';
+  document.getElementById('nexusBLEDisBtn').style.display='none';
+  nexusBLEStatusTxt('Watch disconnected','var(--td)');
+  nexusHRLiveTxt();
+  log('[BLE] watch disconnected','sys');
+}
+
+function nexusDisconnectWatch(){
+  if(NEXUS_BLE.device&&NEXUS_BLE.device.gatt.connected)NEXUS_BLE.device.gatt.disconnect();
+  else nexusWatchDisconnected();
+}
+
+function nexusInjectHR(){
+  const val=parseInt(document.getElementById('nexusManualHR').value,10);
+  if(isNaN(val)||val<30||val>220){log('[BLE] manual HR out of range (30-220)','sys');return;}
+  NEXUS_BLE.manualHR=val;NEXUS_BLE.manualExpiry=Date.now()+300000;
+  HEALTH.hr=val;HEALTH.hwHR=true;
+  nexusHRLiveTxt();
+  const el=document.getElementById('hmHR');if(el)el.textContent=val+' BPM';
+  updateHealthHUD();
+  setTimeout(()=>{if(NEXUS_BLE.manualHR===val){nexusClearHR();}},300000);
+  log(`[BLE] manual HR injected: ${val} BPM (5 min expiry)`,'sys');
+}
+
+function nexusClearHR(){
+  NEXUS_BLE.manualHR=null;NEXUS_BLE.manualExpiry=null;
+  if(!NEXUS_BLE.connected)HEALTH.hwHR=false;
+  nexusHRLiveTxt();
+  log('[BLE] manual HR cleared — simulation resumed','sys');
+}
+
 // ══════════════════════════════════════════════════════════════════
 // HEALTH MONITOR & EMERGENCY PROTOCOL SYSTEM
 // Hardware-ready: real GPS + DeviceMotion APIs active in browser.
