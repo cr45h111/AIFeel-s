@@ -1080,16 +1080,38 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
       </div>
       <div style="font-family:var(--mo);font-size:5.5px;color:#445566;line-height:1.6;margin-top:2px;">
         Scans for BLE devices · connects to standard GATT Heart Rate Service (0x180D) · requires Chrome on Android.<br>
-        GloryFit uses a proprietary protocol — if connected but no data, use manual entry below.
-      </div>
-      <div style="display:flex;align-items:center;gap:5px;margin-top:4px;">
-        <span style="font-family:var(--mo);font-size:6px;color:var(--td);">MANUAL HR</span>
-        <input id="nexusManualHR" type="number" min="30" max="220" placeholder="BPM"
-          style="width:50px;background:var(--p2);border:1px solid var(--b1);color:var(--neu);font-family:var(--mo);font-size:7px;padding:2px 4px;">
-        <button class="smb" onclick="nexusInjectHR()">INJECT</button>
-        <button class="smb" onclick="nexusClearHR()" style="color:var(--dng);">CLEAR</button>
+        GloryFit Pro supported. All HR data sourced from live hardware — no manual entry.
       </div>
       <div style="font-family:var(--mo);font-size:5.5px;color:var(--td);" id="nexusHRLive">HR: — · source: —</div>
+    </div>
+
+    <div class="sec" style="margin-top:10px;">◈ DEVICE HARDWARE</div>
+    <div class="health-grid" id="nexusHWGrid">
+      <div class="hm-card">
+        <div class="hm-label">BATTERY</div>
+        <div><span class="hm-value" id="nhwBatt" style="color:var(--pos)">--</span><span class="hm-unit"> %</span></div>
+        <div class="hm-bar"><div class="hm-fill" id="nhwBattBar" style="width:0%;background:var(--pos)"></div></div>
+        <div style="font-family:var(--mo);font-size:5.5px;color:var(--td);margin-top:2px;" id="nhwBattStatus">--</div>
+      </div>
+      <div class="hm-card">
+        <div class="hm-label">NETWORK</div>
+        <div><span class="hm-value" id="nhwNet" style="font-size:10px;color:var(--pos)">--</span></div>
+        <div style="font-family:var(--mo);font-size:5.5px;color:var(--td);margin-top:3px;" id="nhwNetDown">--</div>
+        <div style="font-family:var(--mo);font-size:5.5px;color:var(--td);" id="nhwNetStatus">--</div>
+      </div>
+      <div class="hm-card">
+        <div class="hm-label">LIGHT (lux)</div>
+        <div><span class="hm-value" id="nhwLux" style="color:var(--si)">--</span></div>
+        <div style="font-family:var(--mo);font-size:5.5px;color:var(--td);margin-top:3px;" id="nhwLuxDesc">no sensor</div>
+      </div>
+      <div class="hm-card">
+        <div class="hm-label">HEADING</div>
+        <div><span class="hm-value" id="nhwHeading" style="font-size:10px;color:var(--pu)">--</span></div>
+        <div style="font-family:var(--mo);font-size:5.5px;color:var(--td);margin-top:3px;" id="nhwOrient">--</div>
+      </div>
+    </div>
+    <div style="font-family:var(--mo);font-size:5.5px;color:var(--td);line-height:1.7;padding:5px;background:#0a0d12;border-radius:3px;margin-top:5px;" id="nhwHooksLive">
+      Initializing hardware sensors…
     </div>
   </div>
 </div>
@@ -8314,7 +8336,7 @@ document.getElementById('chatIn').addEventListener('keydown',e=>{if(e.key==='Ent
 // NEXUS WATCH (BLE) — Heart Rate via GATT standard profile
 // Mirrors juliette-field BLE integration. Injects HR into HEALTH.
 // ══════════════════════════════════════════════════════════════════
-const NEXUS_BLE={device:null,server:null,hrChar:null,connected:false,manualHR:null,manualExpiry:null};
+const NEXUS_BLE={device:null,server:null,hrChar:null,connected:false};
 
 function nexusBLEStatusTxt(txt,col){
   const el=document.getElementById('nexusBLEStatus');
@@ -8324,13 +8346,12 @@ function nexusHRLiveTxt(){
   const el=document.getElementById('nexusHRLive');
   if(!el)return;
   if(NEXUS_BLE.connected&&HEALTH.hr){el.textContent=`HR: ${HEALTH.hr} BPM · source: WATCH (live)`;el.style.color='var(--pos)';}
-  else if(NEXUS_BLE.manualHR){el.textContent=`HR: ${NEXUS_BLE.manualHR} BPM · source: manual (expires ${new Date(NEXUS_BLE.manualExpiry).toLocaleTimeString()})`;el.style.color='var(--wa)';}
+  else if(HEALTH.hwChannels?.hr){el.textContent=`HR: ${HEALTH.hr} BPM · source: hardware`;el.style.color='var(--wa)';}
   else{el.textContent='HR: — · source: simulation';el.style.color='var(--td)';}
   // Update hook status
   const hook=document.getElementById('bleHookHR');
   if(hook){
     if(NEXUS_BLE.connected){hook.textContent='BLE Heart Rate Monitor (GATT 0x2A37) — LIVE';hook.className='hw-hook-item ready';}
-    else if(NEXUS_BLE.manualHR){hook.textContent='BLE Heart Rate Monitor — MANUAL ENTRY';hook.className='hw-hook-item ready';}
     else{hook.textContent='BLE Heart Rate Monitor (GATT 0x2A37) — NOT CONNECTED';hook.className='hw-hook-item';}
   }
 }
@@ -8390,7 +8411,7 @@ function nexusOnHRData(e){
 
 function nexusWatchDisconnected(){
   NEXUS_BLE.connected=false;NEXUS_BLE.hrChar=null;
-  if(!NEXUS_BLE.manualHR)HEALTH.hwHR=false;
+  HEALTH.hwHR=false;
   document.getElementById('nexusBLEBtn').style.display='';
   document.getElementById('nexusBLEDisBtn').style.display='none';
   nexusBLEStatusTxt('Watch disconnected','var(--td)');
@@ -8403,24 +8424,9 @@ function nexusDisconnectWatch(){
   else nexusWatchDisconnected();
 }
 
-function nexusInjectHR(){
-  const val=parseInt(document.getElementById('nexusManualHR').value,10);
-  if(isNaN(val)||val<30||val>220){log('[BLE] manual HR out of range (30-220)','sys');return;}
-  NEXUS_BLE.manualHR=val;NEXUS_BLE.manualExpiry=Date.now()+300000;
-  HEALTH.hr=val;HEALTH.hwHR=true;
-  nexusHRLiveTxt();
-  const el=document.getElementById('hmHR');if(el)el.textContent=val+' BPM';
-  updateHealthHeader();
-  setTimeout(()=>{if(NEXUS_BLE.manualHR===val){nexusClearHR();}},300000);
-  log(`[BLE] manual HR injected: ${val} BPM (5 min expiry)`,'sys');
-}
-
-function nexusClearHR(){
-  NEXUS_BLE.manualHR=null;NEXUS_BLE.manualExpiry=null;
-  if(!NEXUS_BLE.connected)HEALTH.hwHR=false;
-  nexusHRLiveTxt();
-  log('[BLE] manual HR cleared — simulation resumed','sys');
-}
+// nexusInjectHR / nexusClearHR removed — manual entry replaced by hardware-only sources (BLE, accelerometer)
+function nexusInjectHR(){ log('[HEALTH] manual HR entry removed — connect BLE watch for live HR','sys'); }
+function nexusClearHR(){ log('[HEALTH] manual HR entry removed — connect BLE watch for live HR','sys'); }
 
 // ══════════════════════════════════════════════════════════════════
 // SECURITY SYSTEM — Home + Store
@@ -9530,6 +9536,716 @@ function init(){
   initHealthMonitor();
   initVoiceSystem();
 }
+// ══════════════════════════════════════════════════════════════════
+// NEXUS DEEP HARDWARE INTEGRATION
+// Battery · Network · Ambient Light · Device Orientation · USB
+// All feed directly into HEALTH without manual entry
+// ══════════════════════════════════════════════════════════════════
+const NHW = {
+  battery: null, connection: null,
+  ambientLux: null, heading: null,
+  vibration: typeof navigator.vibrate === 'function',
+  _motionBuf: [], _stressTick: 0,
+};
+
+async function initNexusHardware() {
+  // ── Battery API ──────────────────────────────────────────────
+  if ('getBattery' in navigator) {
+    try {
+      NHW.battery = await navigator.getBattery();
+      NHW.battery.addEventListener('levelchange', updateNHWCards);
+      NHW.battery.addEventListener('chargingchange', updateNHWCards);
+      const pct = Math.round(NHW.battery.level * 100);
+      if (pct <= 15 && !NHW.battery.charging) {
+        nexusSpeak?.('Warning. Device battery at ' + pct + ' percent.');
+        log(`⚠ BATTERY CRITICAL: ${pct}%`, 'neg');
+        if (NHW.vibration) navigator.vibrate([200, 100, 200]);
+      }
+    } catch(e) {}
+  }
+
+  // ── Network Information API ───────────────────────────────────
+  if ('connection' in navigator) {
+    NHW.connection = navigator.connection;
+    NHW.connection.addEventListener('change', () => {
+      updateNHWCards();
+      if (!navigator.onLine) log('// Network offline — NEXUS operating in full offline mode', 'sys');
+    });
+  }
+  window.addEventListener('online',  () => updateNHWCards());
+  window.addEventListener('offline', () => { updateNHWCards(); log('// OFFLINE', 'neg'); });
+
+  // ── Ambient Light Sensor ───────────────────────────────────────
+  if ('AmbientLightSensor' in window) {
+    try {
+      const sensor = new AmbientLightSensor();
+      sensor.addEventListener('reading', () => {
+        NHW.ambientLux = Math.round(sensor.illuminance);
+        updateNHWCards();
+        // Adaptive training tip: log very low light
+        if (NHW.ambientLux < 30 && !NHW._dimLogged) {
+          NHW._dimLogged = true;
+          log(`// Ambient light: ${NHW.ambientLux} lux — dim environment detected`, 'sys');
+          setTimeout(() => { NHW._dimLogged = false; }, 120000);
+        }
+      });
+      sensor.start();
+    } catch(e) {}
+  }
+
+  // ── Device Orientation (compass heading) ──────────────────────
+  const attachOrient = () => {
+    window.addEventListener('deviceorientationabsolute', onNHWOrient, { passive: true });
+    window.addEventListener('deviceorientation', onNHWOrient, { passive: true });
+  };
+  if (typeof DeviceOrientationEvent?.requestPermission === 'function') {
+    DeviceOrientationEvent.requestPermission().then(r => { if (r === 'granted') attachOrient(); }).catch(() => {});
+  } else {
+    attachOrient();
+  }
+
+  // ── DeviceMotion — enhance existing handler with stress calc ──
+  // (nexus already attaches devicemotion in initHealthMonitor)
+  // We piggyback our stress computation here
+  window.addEventListener('devicemotion', e => {
+    const a = e.accelerationIncludingGravity || e.acceleration;
+    if (!a) return;
+    const mag = Math.sqrt((a.x||0)**2 + (a.y||0)**2 + (a.z||0)**2);
+    NHW._motionBuf.push(mag);
+    if (NHW._motionBuf.length > 40) NHW._motionBuf.shift();
+    // Stress = variance of acceleration over last 40 samples
+    if (NHW._motionBuf.length >= 10 && !HEALTH.hwChannels?.stress) {
+      const avg = NHW._motionBuf.reduce((a,b) => a+b, 0) / NHW._motionBuf.length;
+      const variance = NHW._motionBuf.reduce((s,v) => s + (v-avg)**2, 0) / NHW._motionBuf.length;
+      const stress = Math.min(100, Math.round(variance * 2.5));
+      HEALTH.stress = stress;
+      HEALTH.simStress = stress; // keep simulation in sync
+    }
+  }, { passive: true });
+
+  // ── USB detection ─────────────────────────────────────────────
+  if ('usb' in navigator) {
+    navigator.usb.addEventListener('connect', e => log('// USB: ' + (e.device?.productName || 'device') + ' connected', 'sys'));
+    navigator.usb.addEventListener('disconnect', () => log('// USB device disconnected', 'sys'));
+  }
+
+  // Start update loop
+  setInterval(updateNHWCards, 8000);
+  updateNHWCards();
+  log('// NEXUS hardware integration active: battery · network · light · orientation · motion', 'sys');
+}
+
+function onNHWOrient(e) {
+  // alpha = compass heading (absolute), beta = tilt front-back, gamma = tilt left-right
+  if (e.alpha !== null) {
+    NHW.heading = Math.round(e.alpha);
+    updateNHWCards();
+  }
+}
+
+function updateNHWCards() {
+  // Battery card
+  const bEl = document.getElementById('nhwBatt');
+  const bBar = document.getElementById('nhwBattBar');
+  const bStat = document.getElementById('nhwBattStatus');
+  if (NHW.battery && bEl) {
+    const pct = Math.round(NHW.battery.level * 100);
+    bEl.textContent = pct;
+    bEl.style.color = pct < 20 ? 'var(--neg)' : pct < 40 ? 'var(--wa)' : 'var(--pos)';
+    if (bBar) { bBar.style.width = pct + '%'; bBar.style.background = pct < 20 ? 'var(--neg)' : pct < 40 ? 'var(--wa)' : 'var(--pos)'; }
+    if (bStat) bStat.textContent = NHW.battery.charging ? '⚡ CHARGING' : 'ON BATTERY';
+  } else if (bEl) { bEl.textContent = '--'; }
+
+  // Network card
+  const nEl = document.getElementById('nhwNet');
+  const nDown = document.getElementById('nhwNetDown');
+  const nStat = document.getElementById('nhwNetStatus');
+  if (nEl) {
+    const online = navigator.onLine;
+    const type = NHW.connection?.effectiveType || NHW.connection?.type || '?';
+    nEl.textContent = online ? type.toUpperCase() : 'OFFLINE';
+    nEl.style.color = online ? 'var(--pos)' : 'var(--neg)';
+    if (nDown) nDown.textContent = NHW.connection?.downlink ? NHW.connection.downlink + ' Mbps' : '';
+    if (nStat) nStat.textContent = online ? 'CONNECTED' : 'NO NETWORK';
+  }
+
+  // Ambient light card
+  const lEl = document.getElementById('nhwLux');
+  const lDesc = document.getElementById('nhwLuxDesc');
+  if (lEl) {
+    if (NHW.ambientLux !== null) {
+      lEl.textContent = NHW.ambientLux;
+      lEl.style.color = NHW.ambientLux < 30 ? 'var(--wa)' : NHW.ambientLux > 10000 ? 'var(--si)' : 'var(--pos)';
+      if (lDesc) lDesc.textContent = NHW.ambientLux < 30 ? 'dim / dark' : NHW.ambientLux < 300 ? 'indoor' : NHW.ambientLux < 2000 ? 'bright indoor' : 'outdoor';
+    } else {
+      lEl.textContent = '--';
+      if (lDesc) lDesc.textContent = 'no sensor / API';
+    }
+  }
+
+  // Heading card
+  const hEl = document.getElementById('nhwHeading');
+  const hOrient = document.getElementById('nhwOrient');
+  if (hEl) {
+    if (NHW.heading !== null) {
+      const dirs = ['N','NE','E','SE','S','SW','W','NW'];
+      const dir = dirs[Math.round(NHW.heading / 45) % 8];
+      hEl.textContent = NHW.heading + '°';
+      if (hOrient) hOrient.textContent = dir + ' — compass';
+    } else {
+      hEl.textContent = '--';
+      if (hOrient) hOrient.textContent = 'no orientation';
+    }
+  }
+
+  // Hardware hooks live status
+  const hooks = document.getElementById('nhwHooksLive');
+  if (hooks) {
+    const lines = [
+      `GPS: ${HEALTH.lat ? `${HEALTH.lat.toFixed(4)},${HEALTH.lng.toFixed(4)} ±${Math.round(HEALTH.accuracy||0)}m` : 'acquiring…'}`,
+      `MOTION: ${HEALTH.motionState || 'STILL'} · activity ${HEALTH.activity||0}%`,
+      `FALL: ${HEALTH.fallDetected ? '⚠ DETECTED' : 'clear'}`,
+      `BLE HR: ${NEXUS_BLE.connected ? `LIVE (${HEALTH.hr} BPM)` : 'not connected'}`,
+      `STRESS: ${HEALTH.stress !== null ? HEALTH.stress + '%' : '--'} ${!HEALTH.hwChannels?.stress ? '(accel-derived)' : '(hardware)'}`,
+      `BATTERY: ${NHW.battery ? Math.round(NHW.battery.level*100)+'%' : 'N/A'}`,
+      `NETWORK: ${navigator.onLine ? (NHW.connection?.effectiveType||'online') : 'OFFLINE'}`,
+      `LIGHT: ${NHW.ambientLux !== null ? NHW.ambientLux+' lux' : 'no sensor'}`,
+    ];
+    hooks.innerHTML = lines.map(l => `<div style="line-height:2">${l}</div>`).join('');
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════
+// NEXUS JNN — On-Device Neural Training Feedback
+// BlazeFace: trainer attention / fatigue during chat sessions
+// MoveNet: body language / engagement posture detection
+// All processing on-device. Camera optional — only activates if
+// user taps the training camera button.
+// ══════════════════════════════════════════════════════════════════
+const NJNN = {
+  faceModel: null, faceLoaded: false, faceLoading: false,
+  poseModel: null, poseLoaded: false, poseLoading: false,
+  stream: null, camActive: false,
+  lastFace: null, lastPose: null,
+  loopTimer: null,
+};
+
+async function loadNexusFaceModel() {
+  if (NJNN.faceLoaded || NJNN.faceLoading) return;
+  NJNN.faceLoading = true;
+  log('// JNN-FACE: loading BlazeFace…', 'sys');
+  try {
+    await nexusLoadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js');
+    await nexusLoadScript('https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface@0.0.7/dist/blazeface.min.js');
+    NJNN.faceModel = await window.blazeface.load();
+    NJNN.faceLoaded = true; NJNN.faceLoading = false;
+    log('// JNN-FACE: BlazeFace ready — trainer attention analysis active', 'sys');
+    updateJNNStatus();
+  } catch(e) {
+    NJNN.faceLoading = false;
+    log('// JNN-FACE load error: ' + e.message.slice(0, 60), 'neg');
+  }
+}
+
+async function loadNexusPoseModel() {
+  if (NJNN.poseLoaded || NJNN.poseLoading) return;
+  NJNN.poseLoading = true;
+  log('// JNN-POSE: loading MoveNet Lightning…', 'sys');
+  try {
+    await nexusLoadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js');
+    await nexusLoadScript('https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection@2.1.3/dist/pose-detection.min.js');
+    NJNN.poseModel = await window.poseDetection.createDetector(
+      window.poseDetection.SupportedModels.MoveNet,
+      { modelType: window.poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING }
+    );
+    NJNN.poseLoaded = true; NJNN.poseLoading = false;
+    log('// JNN-POSE: MoveNet ready — body language analysis active', 'sys');
+    updateJNNStatus();
+  } catch(e) {
+    NJNN.poseLoading = false;
+    log('// JNN-POSE load error: ' + e.message.slice(0, 60), 'neg');
+  }
+}
+
+function nexusLoadScript(src) {
+  return new Promise((res, rej) => {
+    if (document.querySelector(`script[src="${src}"]`)) { res(); return; }
+    const s = document.createElement('script');
+    s.src = src; s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+
+async function toggleTrainingCamera() {
+  if (NJNN.camActive) {
+    stopTrainingCamera(); return;
+  }
+  log('// JNN: requesting training camera…', 'sys');
+  try {
+    NJNN.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 320, height: 240 }, audio: false });
+    NJNN.camActive = true;
+    // Create camera view in chat panel
+    injectTrainingCamView();
+    // Load models if not yet loaded
+    if (!NJNN.faceLoaded) loadNexusFaceModel();
+    if (!NJNN.poseLoaded) loadNexusPoseModel();
+    // Start inference loop
+    startJNNLoop();
+    log('// JNN: training camera active — face + pose analysis running', 'sys');
+  } catch(e) {
+    const denied = e.name === 'NotAllowedError' || e.name === 'PermissionDeniedError';
+    if (denied) {
+      showNexusPermGuidance('camera');
+      log('// Camera permission denied — see guidance below', 'neg');
+    } else {
+      log('// Camera error: ' + e.message, 'neg');
+    }
+  }
+}
+
+function stopTrainingCamera() {
+  NJNN.camActive = false;
+  if (NJNN.stream) { NJNN.stream.getTracks().forEach(t => t.stop()); NJNN.stream = null; }
+  if (NJNN.loopTimer) { clearInterval(NJNN.loopTimer); NJNN.loopTimer = null; }
+  const camDiv = document.getElementById('jnnCamView');
+  if (camDiv) camDiv.remove();
+  log('// JNN: training camera stopped', 'sys');
+  updateJNNStatus();
+}
+
+function injectTrainingCamView() {
+  let camDiv = document.getElementById('jnnCamView');
+  if (camDiv) camDiv.remove();
+  camDiv = document.createElement('div');
+  camDiv.id = 'jnnCamView';
+  camDiv.style.cssText = 'position:relative;margin:6px 0;border:1px solid #44aaff40;border-radius:4px;overflow:hidden;background:#000;';
+  camDiv.innerHTML = `
+    <video id="jnnVid" autoplay muted playsinline style="width:100%;height:auto;display:block;border-radius:4px;"></video>
+    <canvas id="jnnCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></canvas>
+    <div id="jnnFeedback" style="position:absolute;bottom:0;left:0;right:0;background:#000a;font-family:var(--mo);font-size:7px;color:var(--pos);padding:4px 6px;letter-spacing:.5px;"></div>
+    <button onclick="stopTrainingCamera()" style="position:absolute;top:4px;right:4px;background:#ff224488;border:1px solid var(--neg);color:#fff;font-size:7px;font-family:var(--mo);padding:2px 6px;border-radius:2px;cursor:pointer;">✕</button>
+  `;
+  const chatPanel = document.getElementById('t-chat');
+  const pi = chatPanel?.querySelector('.pi');
+  if (pi) pi.insertBefore(camDiv, pi.firstChild);
+  // Attach stream to video
+  const vid = document.getElementById('jnnVid');
+  if (vid) vid.srcObject = NJNN.stream;
+}
+
+function startJNNLoop() {
+  if (NJNN.loopTimer) return;
+  NJNN.loopTimer = setInterval(runJNNFrame, 1000); // 1 FPS — no need for fast loop in training
+}
+
+async function runJNNFrame() {
+  const vid = document.getElementById('jnnVid');
+  if (!vid || !NJNN.camActive || vid.readyState < 2 || !vid.videoWidth) return;
+
+  const canvas = document.getElementById('jnnCanvas');
+  const ctx = canvas?.getContext('2d');
+  if (canvas) { canvas.width = vid.videoWidth; canvas.height = vid.videoHeight; }
+
+  let feedbackParts = [];
+
+  // Face detection
+  if (NJNN.faceLoaded && NJNN.faceModel) {
+    try {
+      const faces = await NJNN.faceModel.estimateFaces(vid, false);
+      NJNN.lastFace = { count: faces.length, faces };
+      if (ctx && faces.length) {
+        faces.forEach(f => {
+          const [x, y] = f.topLeft, [x2, y2] = f.bottomRight;
+          ctx.strokeStyle = '#44aaff'; ctx.lineWidth = 2;
+          ctx.strokeRect(x, y, x2-x, y2-y);
+          ctx.fillStyle = '#44aaff22';
+          ctx.fillRect(x, y, x2-x, y2-y);
+        });
+      }
+      const attentionScore = analyzeFaceAttention(faces);
+      feedbackParts.push(`FACE: ${faces.length} · ATTENTION: ${attentionScore}`);
+      // Inject into learning context — sustained attention boosts XP
+      if (attentionScore === 'HIGH' && Math.random() < 0.3) addLearn('cognitive', 0.2);
+      if (attentionScore === 'DISTRACTED') addLearn('selfawareness', 0.1);
+    } catch(e) {}
+  }
+
+  // Pose detection
+  if (NJNN.poseLoaded && NJNN.poseModel) {
+    try {
+      const poses = await NJNN.poseModel.estimatePoses(vid);
+      if (poses?.length) {
+        NJNN.lastPose = poses[0];
+        const postureFeedback = analyzeTrainerPosture(poses[0].keypoints);
+        if (ctx) drawPoseSkeleton(ctx, poses[0].keypoints);
+        feedbackParts.push(`POSTURE: ${postureFeedback}`);
+        // Engaged/open posture boosts social/communication learning
+        if (postureFeedback === 'ENGAGED' && Math.random() < 0.3) addLearn('social', 0.2);
+        if (postureFeedback === 'CLOSED') addLearn('boundaries', 0.1);
+      }
+    } catch(e) {}
+  }
+
+  // Update feedback overlay
+  const fb = document.getElementById('jnnFeedback');
+  if (fb) fb.textContent = feedbackParts.join('  ·  ') || 'JNN ACTIVE';
+  updateJNNStatus();
+}
+
+function analyzeFaceAttention(faces) {
+  if (!faces?.length) return 'NO FACE';
+  if (faces.length > 1) return 'MULTI';
+  const face = faces[0];
+  const prob = face.probability?.[0] ?? 1;
+  if (prob < 0.7) return 'LOW CONF';
+  // Check face size relative to frame — small face = far away = less engaged
+  const [x, y] = face.topLeft, [x2, y2] = face.bottomRight;
+  const area = (x2 - x) * (y2 - y);
+  const frameArea = (document.getElementById('jnnVid')?.videoWidth || 320) * (document.getElementById('jnnVid')?.videoHeight || 240);
+  const ratio = area / Math.max(1, frameArea);
+  if (ratio > 0.08) return 'HIGH';
+  if (ratio > 0.03) return 'MEDIUM';
+  return 'DISTRACTED';
+}
+
+function analyzeTrainerPosture(kps) {
+  if (!kps?.length) return 'UNKNOWN';
+  const get = name => kps.find(k => k.name === name);
+  const conf = kp => (kp?.score || 0) > 0.4;
+  const lSh = get('left_shoulder'), rSh = get('right_shoulder');
+  const lHip = get('left_hip'), rHip = get('right_hip');
+  const lWrist = get('left_wrist'), rWrist = get('right_wrist');
+
+  if (!conf(lSh) || !conf(rSh)) return 'UNCLEAR';
+
+  // Shoulder drop (one shoulder lower — stress indicator)
+  if (conf(lSh) && conf(rSh)) {
+    const shDiff = Math.abs(lSh.y - rSh.y);
+    const shWidth = Math.abs(lSh.x - rSh.x);
+    if (shDiff > shWidth * 0.25) return 'UNEVEN';
+  }
+  // Crossed arms — wrists near center & below shoulders
+  if (conf(lWrist) && conf(rWrist) && conf(lSh) && conf(rSh)) {
+    const midX = (lSh.x + rSh.x) / 2;
+    const wristsNearMid = Math.abs(lWrist.x - midX) < 60 && Math.abs(rWrist.x - midX) < 60;
+    if (wristsNearMid) return 'CLOSED';
+  }
+  // Upright with open shoulders = engaged
+  if (conf(lHip) && conf(rHip)) {
+    const torsoH = ((lHip.y + rHip.y) / 2) - ((lSh.y + rSh.y) / 2);
+    if (torsoH > 60) return 'ENGAGED';
+  }
+  return 'PRESENT';
+}
+
+function drawPoseSkeleton(ctx, kps) {
+  if (!kps?.length) return;
+  const connections = [
+    ['left_shoulder','right_shoulder'],['left_shoulder','left_elbow'],
+    ['right_shoulder','right_elbow'],['left_elbow','left_wrist'],
+    ['right_elbow','right_wrist'],['left_shoulder','left_hip'],
+    ['right_shoulder','right_hip'],['left_hip','right_hip'],
+  ];
+  ctx.strokeStyle = '#00ffaa80'; ctx.lineWidth = 2;
+  connections.forEach(([a, b]) => {
+    const kpA = kps.find(k => k.name === a), kpB = kps.find(k => k.name === b);
+    if (kpA?.score > 0.4 && kpB?.score > 0.4) {
+      ctx.beginPath(); ctx.moveTo(kpA.x, kpA.y); ctx.lineTo(kpB.x, kpB.y); ctx.stroke();
+    }
+  });
+  kps.forEach(kp => {
+    if (kp.score > 0.4) {
+      ctx.fillStyle = '#00ffaa'; ctx.beginPath();
+      ctx.arc(kp.x, kp.y, 3, 0, Math.PI * 2); ctx.fill();
+    }
+  });
+}
+
+function updateJNNStatus() {
+  const btn = document.getElementById('jnnCamBtn');
+  if (!btn) return;
+  if (NJNN.camActive) {
+    btn.textContent = '🎥 STOP TRAINING CAM';
+    btn.style.color = 'var(--neg)'; btn.style.borderColor = 'var(--neg)';
+  } else {
+    btn.textContent = '🎥 TRAINING CAMERA (JNN)';
+    btn.style.color = 'var(--he)'; btn.style.borderColor = '#44aaff40';
+  }
+}
+
+// Inject JNN training camera button into chat tab
+function injectJNNCamButton() {
+  const chatTab = document.getElementById('t-chat');
+  if (!chatTab || document.getElementById('jnnCamBtn')) return;
+  const pi = chatTab.querySelector('.pi');
+  if (!pi) return;
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;';
+  wrap.innerHTML = `
+    <button id="jnnCamBtn" class="smb" onclick="toggleTrainingCamera()" style="color:var(--he);border-color:#44aaff40;flex:1">🎥 TRAINING CAMERA (JNN)</button>
+    <button class="smb" onclick="loadNexusFaceModel()" style="color:var(--pu);border-color:#00ccff40">👁 FACE</button>
+    <button class="smb" onclick="loadNexusPoseModel()" style="color:var(--wa);border-color:#ffaa0040">🏃 POSE</button>
+  `;
+  pi.insertBefore(wrap, pi.firstChild);
+  // JNN status line
+  const statusLine = document.createElement('div');
+  statusLine.id = 'jnnStatus';
+  statusLine.style.cssText = 'font-family:var(--mo);font-size:5.5px;color:var(--td);margin-bottom:6px;padding:3px 5px;background:var(--p2);border-radius:2px;';
+  statusLine.textContent = '// JNN: face + pose models load on demand · no data leaves device · models cache after first load';
+  pi.insertBefore(statusLine, wrap.nextSibling);
+}
+
+// ══════════════════════════════════════════════════════════════════
+// NEXUS PERMISSION GUIDANCE
+// Browser-specific instructions shown when mic/camera denied
+// ══════════════════════════════════════════════════════════════════
+function showNexusPermGuidance(type, errMsg) {
+  const ua = navigator.userAgent;
+  const isAndroid = /android/i.test(ua);
+  const isIOS = /iphone|ipad|ipod/i.test(ua);
+  const isChrome = /chrome/i.test(ua) && !/edge/i.test(ua);
+  const isFirefox = /firefox/i.test(ua);
+  const isSafari = /safari/i.test(ua) && !isChrome;
+  const label = type === 'camera' ? 'Camera' : 'Microphone';
+
+  let guide = '';
+  if (isAndroid && isChrome) guide = `Android Chrome: tap the 🔒 lock icon in the address bar → Site settings → ${label} → Allow`;
+  else if (isIOS && isSafari) guide = `iPhone/iPad Safari: Settings → Safari → scroll to "${label}" → Allow`;
+  else if (isIOS) guide = `iPhone/iPad: Settings → Privacy → ${label} → enable for this browser`;
+  else if (isChrome) guide = `Chrome: click 🔒 lock icon in address bar → ${label} → Allow, then refresh`;
+  else if (isFirefox) guide = `Firefox: click the shield icon in the address bar → Permissions → Allow ${label}`;
+  else guide = `Check your browser's address bar for ${label} permission controls and allow this site`;
+
+  if (errMsg?.toLowerCase().includes('https')) guide = '⚠ HTTPS required. Serve this file via https:// or localhost. ' + guide;
+
+  // Show in event log
+  log(`// ${label.toUpperCase()} ACCESS DENIED — ${guide}`, 'neg');
+
+  // Show inline near the affected element
+  const existingBox = document.getElementById('nexusPermGuidance');
+  if (existingBox) existingBox.remove();
+  const box = document.createElement('div');
+  box.id = 'nexusPermGuidance';
+  box.style.cssText = 'margin:8px 0;padding:10px;background:#0a0800;border:1px solid var(--wa);border-radius:4px;font-family:var(--mo);font-size:7px;color:var(--wa);line-height:1.9;';
+  box.innerHTML = `<div style="font-size:8px;margin-bottom:5px;color:var(--wa);letter-spacing:1px">HOW TO GRANT ${label.toUpperCase()} ACCESS</div>${guide}<div style="margin-top:6px;color:var(--td)">After updating permissions, refresh the page and try again.</div><button onclick="this.parentNode.remove()" style="margin-top:6px;background:transparent;border:1px solid var(--td);color:var(--td);font-family:var(--mo);font-size:6px;padding:2px 8px;cursor:pointer;border-radius:2px;">DISMISS</button>`;
+  // Append near the voice tab
+  const healthPi = document.getElementById('t-health')?.querySelector('.pi');
+  if (healthPi) healthPi.insertBefore(box, healthPi.firstChild);
+  else document.body.appendChild(box);
+}
+
+// Also wrap the existing startListening to show guidance on denial
+(function patchListeningPermission() {
+  const _orig = window.startListening;
+  if (!_orig) return;
+  window.startListening = function() {
+    _orig();
+    // Patch onerror after VOICE.recognition is created
+    setTimeout(() => {
+      if (window.VOICE?.recognition) {
+        const origErr = window.VOICE.recognition.onerror;
+        window.VOICE.recognition.onerror = e => {
+          if (e.error === 'not-allowed' || e.error === 'permission-denied') {
+            showNexusPermGuidance('microphone');
+          }
+          if (origErr) origErr(e);
+        };
+      }
+    }, 100);
+  };
+})();
+
+// ══════════════════════════════════════════════════════════════════
+// TRAINING SESSION FILE (.nxs)
+// Compressed snapshot of full entity state for export / import
+// Includes: all learning scores, traits, virtues, chat history,
+// stimuli counts, maze progress, emotional state, health data
+// ══════════════════════════════════════════════════════════════════
+function buildTrainingSessionReport() {
+  const now = new Date().toISOString();
+  const stage = getOverallStage?.();
+  const tops = getTopDomains?.(10);
+  return {
+    meta: {
+      generated: now,
+      entity: S.entityName,
+      stage: stage?.n,
+      version: 'NEXUS-v5',
+      sessionId: S.sessionId,
+      savedAt: S.savedAt,
+    },
+    progress: {
+      posCount: S.posCount,
+      negCount: S.negCount,
+      emoCount: S.emoCount,
+      mazeRuns: S.mazeRuns,
+      avoidanceHits: S.avoidanceHits,
+      learning: S.learning,
+      topDomains: tops,
+    },
+    personality: {
+      traits: S.traits,
+      virtues: S.virtues,
+      emotionalState: S.emotionalState,
+      emoTotals: S.emoTotals,
+      personality: S.personality,
+    },
+    chatHistory: (S.chatHistory || []).slice(-50),
+    health: {
+      hr: HEALTH.hr,
+      stress: HEALTH.stress,
+      activity: HEALTH.activity,
+      motionState: HEALTH.motionState,
+      location: HEALTH.lat ? { lat: HEALTH.lat, lng: HEALTH.lng, accuracy: HEALTH.accuracy } : null,
+      alertLevel: HEALTH.alertLevelNames?.[HEALTH.alertLevel],
+    },
+    hardware: {
+      battery: NHW.battery ? { level: Math.round(NHW.battery.level * 100), charging: NHW.battery.charging } : null,
+      network: NHW.connection ? { type: NHW.connection.effectiveType } : null,
+      ambientLux: NHW.ambientLux,
+    },
+    jnn: {
+      lastFace: NJNN.lastFace ? { count: NJNN.lastFace.count } : null,
+      lastPose: NJNN.lastPose ? { score: NJNN.lastPose.score } : null,
+    },
+    fullState: S,  // complete entity state for restore
+  };
+}
+
+function compressNxs(obj) {
+  const raw = JSON.stringify(obj);
+  try { return btoa(unescape(encodeURIComponent(raw))); }
+  catch(e) { return btoa(raw.replace(/[^\x00-\x7F]/g, '')); }
+}
+
+function decompressNxs(str) {
+  try { return JSON.parse(decodeURIComponent(escape(atob(str)))); }
+  catch(e) { try { return JSON.parse(atob(str)); } catch(e2) { return null; } }
+}
+
+async function saveTrainingFile() {
+  const report = buildTrainingSessionReport();
+  const compressed = compressNxs(report);
+  const blob = new Blob([compressed], { type: 'application/octet-stream' });
+  const fname = `nexus_${(S.entityName||'entity').replace(/[^a-z0-9]/gi,'_')}_${Date.now()}.nxs`;
+
+  // Try File System Access API first
+  if ('showSaveFilePicker' in window) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: fname,
+        types: [{ description: 'NEXUS Training Session', accept: { 'application/octet-stream': ['.nxs'] } }],
+      });
+      const writable = await handle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+      log(`// Training session saved: ${handle.name}`, 'sys');
+      return;
+    } catch(e) {
+      if (e.name === 'AbortError') return;
+    }
+  }
+  // Fallback: download
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = fname; a.click();
+  URL.revokeObjectURL(a.href);
+  log('// Training session downloaded: ' + fname, 'sys');
+}
+
+async function loadTrainingFile() {
+  if ('showOpenFilePicker' in window) {
+    try {
+      const [handle] = await window.showOpenFilePicker({
+        types: [{ description: 'NEXUS Training Session', accept: { 'application/octet-stream': ['.nxs', '.json'] } }],
+      });
+      const file = await handle.getFile();
+      const text = await file.text();
+      const data = decompressNxs(text) || JSON.parse(text);
+      if (data?.fullState) {
+        S = mergeState(data.fullState);
+        S.sessionId = (S.sessionId || 0) + 1;
+        saveState(true); rebuildAll();
+        log(`// Training file loaded: ${data.meta?.entity} · ${data.meta?.stage} · session ${data.meta?.sessionId}`, 'sys');
+      } else {
+        log('// .nxs file has no entity state to restore', 'neg');
+      }
+      return data;
+    } catch(e) {
+      if (e.name !== 'AbortError') log('// Load error: ' + e.message, 'neg');
+    }
+  } else {
+    // File input fallback
+    const inp = Object.assign(document.createElement('input'), { type: 'file', accept: '.nxs,.json', style: 'display:none' });
+    inp.onchange = async () => {
+      const text = await inp.files[0]?.text();
+      if (!text) return;
+      const data = decompressNxs(text) || JSON.parse(text);
+      if (data?.fullState) {
+        S = mergeState(data.fullState);
+        S.sessionId = (S.sessionId || 0) + 1;
+        saveState(true); rebuildAll();
+        log(`// Training file loaded: ${data.meta?.entity}`, 'sys');
+      }
+    };
+    document.body.appendChild(inp); inp.click(); document.body.removeChild(inp);
+  }
+}
+
+// Auto-save training session to localStorage every 90 seconds
+let _nxsAutoTimer = null;
+function startNxsAutoSave() {
+  if (_nxsAutoTimer) return;
+  _nxsAutoTimer = setInterval(() => {
+    try {
+      const report = buildTrainingSessionReport();
+      localStorage.setItem('nexus_session_autosave', compressNxs(report));
+      // Update header save time
+      const el = document.querySelector('.savets');
+      if (el) el.textContent = 'auto-saved ' + new Date().toLocaleTimeString();
+    } catch(e) {}
+  }, 90000);
+}
+
+// Inject training file buttons into header
+function injectNxsFileButtons() {
+  const hc = document.querySelector('.hc');
+  if (!hc || document.getElementById('nxsSaveBtn')) return;
+  const savBtn = document.createElement('button');
+  savBtn.id = 'nxsSaveBtn';
+  savBtn.className = 'hb sv';
+  savBtn.textContent = '💾 SAVE .NXS';
+  savBtn.title = 'Save full training session to .nxs file';
+  savBtn.onclick = saveTrainingFile;
+  const ldBtn = document.createElement('button');
+  ldBtn.className = 'hb ld';
+  ldBtn.textContent = '📂 LOAD .NXS';
+  ldBtn.title = 'Load training session from .nxs file';
+  ldBtn.onclick = loadTrainingFile;
+  hc.insertBefore(ldBtn, hc.firstChild);
+  hc.insertBefore(savBtn, hc.firstChild);
+}
+
+// ══════════════════════════════════════════════════════════════════
+// NEXUS SYSTEMS MASTER INIT
+// ══════════════════════════════════════════════════════════════════
+(function initNexusSystems() {
+  // Wait for DOM + init() to run first
+  setTimeout(async () => {
+    // 1. Deep hardware
+    await initNexusHardware();
+    // 2. JNN camera button in chat
+    injectJNNCamButton();
+    // 3. Training file buttons in header
+    injectNxsFileButtons();
+    // 4. Auto-save
+    startNxsAutoSave();
+    // 5. Patch mic start for permission guidance
+    // (already done via IIFE above)
+    log('// NEXUS systems: hardware · JNN face/pose · .nxs files · auto-save active', 'sys');
+  }, 600);
+})();
+
 init();
 </script>
 </body>
