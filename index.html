@@ -229,6 +229,18 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
 .mzb.sh{border-color:#ff224440!important;color:#ff4466!important;font-style:italic;}
 .mzb.sh:hover{border-color:var(--neg)!important;color:var(--neg)!important}
 .mzb.sh.am{border-color:var(--neg)!important;color:var(--neg)!important;background:var(--nd)!important}
+/* DELETE / PAUSE controls */
+.mzb-wrap{position:relative;display:inline-flex;align-items:center;}
+.mzb-del{position:absolute;top:-3px;right:-3px;width:10px;height:10px;border-radius:50%;background:#ff2244;color:#fff;font-size:6px;line-height:10px;text-align:center;cursor:pointer;display:none;z-index:5;border:none;padding:0;font-family:var(--mo);}
+.mzb-wrap:hover .mzb-del{display:block;}
+.mzb-del:hover{background:#ff0022;box-shadow:0 0 6px #ff2244;}
+.mcat-pause{font-size:7px;background:transparent;border:1px solid #ff440040;color:#ff6644;font-family:var(--mo);padding:1px 5px;border-radius:2px;cursor:pointer;letter-spacing:.5px;flex-shrink:0;transition:all .12s;margin-left:4px;}
+.mcat-pause:hover{border-color:#ff4400;color:#ff4400;background:var(--dd);}
+.mcat-pause.paused-on{border-color:#ffaa0080;color:#ffaa00;background:#1a0800;}
+.mcat-pause.paused-on:hover{border-color:#ffdd00;color:#ffdd00;}
+.mcat.grp-paused .mzb{opacity:.35;pointer-events:none;}
+.mcat.grp-paused{border-bottom-color:#ff440030!important;}
+.msel.grp-paused-sel .mzb{opacity:.35;pointer-events:none;}
 .mzb.l2u{border-color:#ffdd4440!important;color:#ffdd88!important;}
 .mzb.l2u:hover,.mzb.l2u.am{border-color:#ffdd44!important;color:#ffdd44!important;background:#ffdd4410!important;}
 .mzb.l3u{border-color:#ff884440!important;color:#ffaa88!important;}
@@ -1346,6 +1358,7 @@ input[type=range].smr::-webkit-slider-thumb{background:var(--sm)}
         <button class="smb" onclick="resetMaze()">↺ RESET</button>
         <button class="tgl ac" id="acBtn" onclick="toggleAutoCycle()">AUTO-CYCLE: OFF</button>
         <button class="tgl as" id="asBtn" onclick="toggleAutoStim()">AUTO-STIM: OFF</button>
+        <button class="smb" onclick="restoreAllMazes()" title="Restore all deleted training subjects" style="color:#ffaa44;border-color:#ffaa4440;margin-left:4px;">↩ RESTORE</button>
         <span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;font-family:var(--mo);font-size:7px;color:var(--td);">SKIP ≥<input id="cycleSkipInput" type="number" min="0" step="1000" value="50000" title="During auto-cycle, skip any maze whose domain XP is at or above this value. Set to 0 to skip nothing extra." style="width:64px;background:#0a1a2a;border:1px solid #1e3a5a;color:#88ccff;font-family:var(--mo);font-size:7px;padding:1px 3px;margin-left:2px;">XP</span>
       </div>
       <!-- 3D PHYSICAL MAZE STATS -->
@@ -3901,6 +3914,8 @@ const DEF=()=>({
     correct:false,
     skills:[],          // skills that contributed most
   },
+  deletedMazes:[],   // array of maze IDs hidden from the maze list
+  pausedGroups:[],   // array of category .cat strings whose mazes skip auto-cycle
   sessionId:1,currentMazeId:'touch',
   savedAt:null,
   security:{
@@ -4022,6 +4037,8 @@ function mergeState(d){
     if(!base.security.persons)base.security.persons=[];
     if(!base.security.incidents)base.security.incidents=[];
   }
+  if(!base.deletedMazes)base.deletedMazes=[];
+  if(!base.pausedGroups)base.pausedGroups=[];
   return base;
 }
 function checkOldKeys(){
@@ -4623,7 +4640,10 @@ let agent={x:0,y:0},visited=[],stack=[],runSteps=0,dangerHits=0,stuckTicks=0;
 let curMaze=null,mzListIdx=0,mazePaused=false;
 // Virtue state per run
 let virtueState={allyHealth:100,nearAllySteps:0,farAllySteps:0,phase:1,phaseStep:0,enemyApproached:false,traitGrowthGiven:false};
-function allMazes(){return [...ALL_MAZES,...(S.customMazes||[])];}
+function allMazes(){
+  const deleted=S.deletedMazes||[];
+  return [...ALL_MAZES,...(S.customMazes||[])].filter(m=>!deleted.includes(m.id));
+}
 
 // ══════════════════════════════════════════════════════
 // CONVERSATION MAZE ENGINE
@@ -5093,9 +5113,12 @@ function bumpTrait(traits,amount=0.025){
 function buildMazeCats(){
   const c=document.getElementById('mazeCats');c.innerHTML='';
   const lvCols={2:'#ffdd44',3:'#ff8844',4:'#ff2244'};
+  const deleted=S.deletedMazes||[];
+  const paused=S.pausedGroups||[];
   MZ_CAT.forEach(cat=>{
     const lbl=document.createElement('div');
     const isUpgrade=cat.isUpgrade;
+    const isGroupPaused=paused.includes(cat.cat);
     lbl.className='mcat'+(isUpgrade?' collapsible':'');
     if(cat.cat.startsWith('SHADOW')){lbl.style.cssText='color:#ff4466;border-bottom-color:#ff224430;';}
     else if(cat.cat.startsWith('◈ VIRTUE')){lbl.className='mcat virtue';}
@@ -5104,22 +5127,42 @@ function buildMazeCats(){
     else if(cat.cat.startsWith('PHYSICAL TRAINING · 3D')){lbl.className='mcat p3d';}
     else if(cat.cat==='ANALYSIS & OBSERVATION'||cat.cat.startsWith('LANGUAGE & LING')||cat.cat==='ANALYTICAL REASONING'||cat.cat==='INVESTIGATIVE & CYBER'){lbl.className='mcat langadd';}
     else if(isUpgrade){const col=lvCols[cat.level]||'#ffdd44';lbl.style.color=col;lbl.style.borderBottomColor=col+'30';}
-    const sel=document.createElement('div');sel.className='msel'+(isUpgrade&&cat.collapsed?' hidden':'');
+    const sel=document.createElement('div');sel.className='msel'+(isUpgrade&&cat.collapsed?' hidden':'')+(isGroupPaused?' grp-paused-sel':'');
+    if(isGroupPaused)lbl.classList.add('grp-paused');
+
+    // Build pause button for the group
+    const pauseBtn=document.createElement('button');
+    pauseBtn.className='mcat-pause'+(isGroupPaused?' paused-on':'');
+    pauseBtn.textContent=isGroupPaused?'▶ RESUME':'⏸ PAUSE';
+    pauseBtn.title=isGroupPaused?'Resume this group in auto-cycle':'Pause this group in auto-cycle';
+    pauseBtn.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      toggleGroupPause(cat.cat);
+    });
 
     if(isUpgrade){
       // Collapsible header with arrow
-      const span=document.createElement('span');span.textContent=cat.cat;lbl.appendChild(span);
+      const span=document.createElement('span');span.style.flex='1';span.textContent=cat.cat;lbl.appendChild(span);
+      lbl.appendChild(pauseBtn);
       const arrow=document.createElement('span');arrow.className='mcat-arrow';arrow.textContent='▾';lbl.appendChild(arrow);
       if(cat.collapsed)lbl.classList.add('collapsed');
-      lbl.addEventListener('click',()=>{
+      lbl.addEventListener('click',(e)=>{
+        if(e.target===pauseBtn)return;
         cat.collapsed=!cat.collapsed;
         sel.classList.toggle('hidden',cat.collapsed);
         lbl.classList.toggle('collapsed',cat.collapsed);
         arrow.textContent=cat.collapsed?'▾':'▴';
       });
-    }else{lbl.textContent=cat.cat;}
+    }else{
+      const span=document.createElement('span');span.style.flex='1';span.textContent=cat.cat;
+      lbl.style.display='flex';lbl.style.alignItems='center';lbl.style.justifyContent='space-between';
+      lbl.appendChild(span);
+      lbl.appendChild(pauseBtn);
+    }
 
     cat.mazes.forEach(m=>{
+      if(deleted.includes(m.id))return; // skip deleted subjects
+      const wrap=document.createElement('div');wrap.className='mzb-wrap';
       const b=document.createElement('button');
       let cls='mzb';
       if(m.type==='physical3d')cls+=' p3d';
@@ -5148,7 +5191,12 @@ function buildMazeCats(){
         b.style.display='flex';b.style.alignItems='center';b.style.justifyContent='space-between';b.style.gap='3px';
         b.innerHTML=`<span style="flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.name}</span><span style="font-size:4.5px;padding:1px 3px;border-radius:1px;border:1px solid #ff884440;color:#ff8844;flex-shrink:0;letter-spacing:.3px">3D</span>`;
       }else{b.textContent=m.name;}
-      sel.appendChild(b);
+      // Delete button (×) — appears on hover via CSS
+      const del=document.createElement('button');
+      del.className='mzb-del';del.textContent='×';del.title=`Delete "${m.name}" from list`;
+      del.addEventListener('click',(e)=>{e.stopPropagation();deleteMaze(m.id,m.name);});
+      wrap.appendChild(b);wrap.appendChild(del);
+      sel.appendChild(wrap);
     });
     c.appendChild(lbl);c.appendChild(sel);
   });
@@ -5306,11 +5354,15 @@ function nextCycleMaze(){
   const all=allMazes();
   if(!all.length)return null;
   const threshold=getCycleSkipThreshold();
+  const paused=S.pausedGroups||[];
   let attempts=0;
   let idx=(mzListIdx+1)%all.length;
   while(attempts<all.length){
     const candidate=all[idx];
     const dom=candidate.domain;
+    // Check if candidate belongs to a paused group
+    const inPaused=paused.length&&MZ_CAT.some(cat=>paused.includes(cat.cat)&&cat.mazes.some(m=>m.id===candidate.id));
+    if(inPaused){log(`↷ skip "${candidate.name}" (group paused)`,'sys');idx=(idx+1)%all.length;attempts++;continue;}
     // Sum XP across ALL stores — grid mazes use S.learning, conv mazes use
     // S.commProgress / S.appliedProgress, 3D mazes use S.physProgress
     const xp=(S.learning[dom]||0)
@@ -5326,6 +5378,31 @@ function nextCycleMaze(){
   return all[(mzListIdx+1)%all.length];
 }
 function toggleAutoStim(){S.autoStim=!S.autoStim;const b=document.getElementById('asBtn');b.className='tgl as'+(S.autoStim?' on':'');b.textContent='AUTO-STIM: '+(S.autoStim?'ON':'OFF');log(`auto-stim: ${S.autoStim?'ON':'OFF'}`,'sys');}
+
+// ── DELETE / PAUSE-GROUP ──────────────────────────────
+function deleteMaze(id,name){
+  if(!confirm(`Remove "${name}" from the training list?\n\nIt will be hidden and skipped in auto-cycle. You can restore all deleted mazes via Restore Deleted.`))return;
+  if(!S.deletedMazes)S.deletedMazes=[];
+  if(!S.deletedMazes.includes(id))S.deletedMazes.push(id);
+  // If it was the active maze, deselect
+  if(S.currentMazeId===id){stopMaze();S.currentMazeId='';curMaze=null;}
+  saveState();buildMazeCats();
+  log(`✕ maze removed: "${name}"  ·  ${S.deletedMazes.length} hidden total`,'sys');
+}
+function restoreAllMazes(){
+  if(!S.deletedMazes||!S.deletedMazes.length){log('// No deleted mazes to restore','sys');return;}
+  const n=S.deletedMazes.length;
+  S.deletedMazes=[];
+  saveState();buildMazeCats();
+  log(`✓ restored ${n} deleted maze(s)`,'sys');
+}
+function toggleGroupPause(catName){
+  if(!S.pausedGroups)S.pausedGroups=[];
+  const idx=S.pausedGroups.indexOf(catName);
+  if(idx===-1){S.pausedGroups.push(catName);log(`⏸ group paused: "${catName}"`,'sys');}
+  else{S.pausedGroups.splice(idx,1);log(`▶ group resumed: "${catName}"`,'sys');}
+  saveState();buildMazeCats();
+}
 function getMazeSpeed(){
   const v=S.emotionalState.valence;
   const ew=S.emotionWeight??1.0;
